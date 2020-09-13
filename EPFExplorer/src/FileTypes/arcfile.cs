@@ -664,6 +664,11 @@ namespace EPFExplorer
             Console.WriteLine("Arc rebuild complete!");
             filecount = (uint)archivedfiles.Count;
 
+            foreach (archivedfile f in archivedfiles)  //so that they don't register as read if we start editing the file again right away. Otherwise, when it next rebuilds, it will think the files are still decompressed, even though they were compressed by the previous export!
+            {
+                f.filebytes = null;
+                }
+
             
         }
 
