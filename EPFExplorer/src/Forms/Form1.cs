@@ -886,8 +886,11 @@ namespace EPFExplorer
 
             for (int i = 0; i < selectedFile.RDTSpriteNumFrames; i++)
                 {
+                if (selectedFile.spriteEditor.images[i].image == null)
+                    {
                     selectedFile.spriteEditor.images[i].LoadImage(selectedFile.GetPalette(selectedFile.spriteEditor.palettes[i].filebytes, 1, selectedFile.RDTSpriteBPP));
-                    selectedFile.spriteEditor.images[i].image.Save(filename.Replace(".png", "") + "_" + (i + 1) + ".png");
+                    }
+                selectedFile.spriteEditor.images[i].image.Save(filename.Replace(".png", "") + "_" + (i + 1) + ".png");
                 }
 
             if (OpenedSpriteEditorJustForThis)

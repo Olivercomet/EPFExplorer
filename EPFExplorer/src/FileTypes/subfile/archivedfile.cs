@@ -49,7 +49,6 @@ namespace EPFExplorer
         public byte RDTSpriteBPP = 4;
         public List<ushort> RDTSpriteFrameDurations = new List<ushort>();
 
-
         public void ExportToFile() {        //when you export an individual file (so that it asks where you want to save it)
 
             if (filebytes == null || filebytes.Length == 0)
@@ -639,35 +638,38 @@ namespace EPFExplorer
                     offset += 2;
                 }
             }
-
-
             return palette;
         }
 
 
         public Bitmap NBFCtoImage(Byte[] input, int offset, int width, int height, Color[] palette, byte bpp)  //palettes aren't always the same length, this function is designed for the image in the downloadable newsletter
         {
-
             Bitmap bm = new Bitmap(width,height);
             
             int curOffset = offset;    
 
             if (bpp == 4)
                 {
-                while (width % 2 != 0)
-                    {
-                    width++;
-                    }
+
                 bm = new Bitmap(width, height);
 
                 for (int y = 0; y < height; y++)
                     {
                     for (int x = 0; x < width; x++)
                         { //each nibble is one pixel
+
+                        //first nibble
                         Color c = palette[input[curOffset] & 0x0F];
                         bm.SetPixel(x, y, c);
                         x++;
+ 
+                        if (x >= width) //check whether or not the line ended midway through the byte (i.e. if the width is odd). If so, don't read the second nibble, it's unused
+                            {
+                            curOffset++;
+                            continue;
+                            }
 
+                        //second nibble
                         c = palette[(input[curOffset] & 0xF0) >> 4];
                         bm.SetPixel(x, y, c);
                         curOffset++;
@@ -686,7 +688,6 @@ namespace EPFExplorer
                         }
                     }
                 }
-           
 
 
             return bm;

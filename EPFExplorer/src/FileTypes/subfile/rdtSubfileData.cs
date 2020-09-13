@@ -11,6 +11,26 @@ namespace EPFExplorer
 {
     public class rdtSubfileData
     {
+        public rdtSubfileData()
+            {
+            }
+
+       public rdtSubfileData(rdtSubfileData basis)
+            {
+            parentfile = basis.parentfile;
+            filebytes = basis.filebytes;
+            IndexInList = basis.IndexInList;
+            subfileType = basis.subfileType;
+            spriteSettings = basis.spriteSettings;
+
+            graphicsType = basis.graphicsType;
+
+            width = basis.width;
+            height = basis.height;
+
+            image = basis.image;
+            }
+
         public archivedfile parentfile;
 
         //can be a centre bounds file, a sprite, a palette, etc
@@ -42,8 +62,6 @@ namespace EPFExplorer
 
         public void LoadSpriteSettings() {    //load sprite settings file (centre, bounds, etc)
 
-            Console.WriteLine("???");
-
             int curOffset = 6;
 
             ushort settingCount = BitConverter.ToUInt16(filebytes, curOffset);
@@ -68,7 +86,6 @@ namespace EPFExplorer
                 switch (newSetting.type)
                     {
                     case 0x03:  //bool
-                        Console.WriteLine("hey a bool");
                         if (filebytes[curOffset] == 0x01)
                             {
                             Console.WriteLine(newSetting.name + " true");
@@ -146,7 +163,6 @@ namespace EPFExplorer
             if (subfileType == 2)
                 {
                 LoadSpriteSettings();
-                
                 }
             }
 

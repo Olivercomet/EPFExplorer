@@ -31,6 +31,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.BPP_8_radioButton = new System.Windows.Forms.RadioButton();
+            this.BPP_4_radioButton = new System.Windows.Forms.RadioButton();
+            this.labelBPP = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.boundsY2 = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -49,6 +52,12 @@
             this.loopingCheckbox = new System.Windows.Forms.CheckBox();
             this.OAMSpriteCheckbox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.exportFrame = new System.Windows.Forms.Button();
+            this.label8 = new System.Windows.Forms.Label();
+            this.durationBox = new System.Windows.Forms.NumericUpDown();
+            this.replaceFrame = new System.Windows.Forms.Button();
+            this.addFrame = new System.Windows.Forms.Button();
+            this.deleteFrame = new System.Windows.Forms.Button();
             this.curFrameDisplay = new System.Windows.Forms.Label();
             this.nextFrame = new System.Windows.Forms.Button();
             this.prevFrame = new System.Windows.Forms.Button();
@@ -62,6 +71,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.centreY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.centreX)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.durationBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -84,6 +94,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.BPP_8_radioButton);
+            this.groupBox1.Controls.Add(this.BPP_4_radioButton);
+            this.groupBox1.Controls.Add(this.labelBPP);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.boundsY2);
             this.groupBox1.Controls.Add(this.label7);
@@ -103,10 +116,41 @@
             this.groupBox1.Controls.Add(this.OAMSpriteCheckbox);
             this.groupBox1.Location = new System.Drawing.Point(616, 42);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(266, 204);
+            this.groupBox1.Size = new System.Drawing.Size(266, 246);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Settings";
+            // 
+            // BPP_8_radioButton
+            // 
+            this.BPP_8_radioButton.AutoSize = true;
+            this.BPP_8_radioButton.Location = new System.Drawing.Point(168, 214);
+            this.BPP_8_radioButton.Name = "BPP_8_radioButton";
+            this.BPP_8_radioButton.Size = new System.Drawing.Size(61, 21);
+            this.BPP_8_radioButton.TabIndex = 20;
+            this.BPP_8_radioButton.TabStop = true;
+            this.BPP_8_radioButton.Text = "8bpp";
+            this.BPP_8_radioButton.UseVisualStyleBackColor = true;
+            // 
+            // BPP_4_radioButton
+            // 
+            this.BPP_4_radioButton.AutoSize = true;
+            this.BPP_4_radioButton.Location = new System.Drawing.Point(101, 214);
+            this.BPP_4_radioButton.Name = "BPP_4_radioButton";
+            this.BPP_4_radioButton.Size = new System.Drawing.Size(61, 21);
+            this.BPP_4_radioButton.TabIndex = 19;
+            this.BPP_4_radioButton.TabStop = true;
+            this.BPP_4_radioButton.Text = "4bpp";
+            this.BPP_4_radioButton.UseVisualStyleBackColor = true;
+            // 
+            // labelBPP
+            // 
+            this.labelBPP.AutoSize = true;
+            this.labelBPP.Location = new System.Drawing.Point(6, 216);
+            this.labelBPP.Name = "labelBPP";
+            this.labelBPP.Size = new System.Drawing.Size(89, 17);
+            this.labelBPP.TabIndex = 18;
+            this.labelBPP.Text = "Colour depth";
             // 
             // label6
             // 
@@ -315,20 +359,88 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.exportFrame);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.durationBox);
+            this.groupBox2.Controls.Add(this.replaceFrame);
+            this.groupBox2.Controls.Add(this.addFrame);
+            this.groupBox2.Controls.Add(this.deleteFrame);
             this.groupBox2.Controls.Add(this.curFrameDisplay);
             this.groupBox2.Controls.Add(this.nextFrame);
             this.groupBox2.Controls.Add(this.prevFrame);
-            this.groupBox2.Location = new System.Drawing.Point(616, 252);
+            this.groupBox2.Location = new System.Drawing.Point(616, 294);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(266, 262);
+            this.groupBox2.Size = new System.Drawing.Size(266, 255);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Animation";
             // 
+            // exportFrame
+            // 
+            this.exportFrame.Location = new System.Drawing.Point(54, 109);
+            this.exportFrame.Name = "exportFrame";
+            this.exportFrame.Size = new System.Drawing.Size(156, 30);
+            this.exportFrame.TabIndex = 8;
+            this.exportFrame.Text = "Export frame";
+            this.exportFrame.UseVisualStyleBackColor = true;
+            this.exportFrame.Click += new System.EventHandler(this.exportFrame_Click);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(60, 67);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(62, 17);
+            this.label8.TabIndex = 7;
+            this.label8.Text = "Duration";
+            // 
+            // durationBox
+            // 
+            this.durationBox.Location = new System.Drawing.Point(128, 67);
+            this.durationBox.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.durationBox.Name = "durationBox";
+            this.durationBox.Size = new System.Drawing.Size(82, 22);
+            this.durationBox.TabIndex = 6;
+            this.durationBox.ValueChanged += new System.EventHandler(this.durationBox_ValueChanged);
+            // 
+            // replaceFrame
+            // 
+            this.replaceFrame.Location = new System.Drawing.Point(54, 145);
+            this.replaceFrame.Name = "replaceFrame";
+            this.replaceFrame.Size = new System.Drawing.Size(156, 30);
+            this.replaceFrame.TabIndex = 5;
+            this.replaceFrame.Text = "Replace frame";
+            this.replaceFrame.UseVisualStyleBackColor = true;
+            this.replaceFrame.Click += new System.EventHandler(this.replaceFrame_Click);
+            // 
+            // addFrame
+            // 
+            this.addFrame.Location = new System.Drawing.Point(54, 217);
+            this.addFrame.Name = "addFrame";
+            this.addFrame.Size = new System.Drawing.Size(156, 30);
+            this.addFrame.TabIndex = 4;
+            this.addFrame.Text = "Add new frame";
+            this.addFrame.UseVisualStyleBackColor = true;
+            this.addFrame.Click += new System.EventHandler(this.addFrame_Click);
+            // 
+            // deleteFrame
+            // 
+            this.deleteFrame.Location = new System.Drawing.Point(54, 181);
+            this.deleteFrame.Name = "deleteFrame";
+            this.deleteFrame.Size = new System.Drawing.Size(156, 30);
+            this.deleteFrame.TabIndex = 3;
+            this.deleteFrame.Text = "Delete frame";
+            this.deleteFrame.UseVisualStyleBackColor = true;
+            this.deleteFrame.Click += new System.EventHandler(this.deleteFrame_Click);
+            // 
             // curFrameDisplay
             // 
             this.curFrameDisplay.AutoSize = true;
-            this.curFrameDisplay.Location = new System.Drawing.Point(99, 41);
+            this.curFrameDisplay.Location = new System.Drawing.Point(99, 18);
             this.curFrameDisplay.Name = "curFrameDisplay";
             this.curFrameDisplay.Size = new System.Drawing.Size(60, 17);
             this.curFrameDisplay.TabIndex = 2;
@@ -336,7 +448,7 @@
             // 
             // nextFrame
             // 
-            this.nextFrame.Location = new System.Drawing.Point(135, 61);
+            this.nextFrame.Location = new System.Drawing.Point(135, 38);
             this.nextFrame.Name = "nextFrame";
             this.nextFrame.Size = new System.Drawing.Size(75, 23);
             this.nextFrame.TabIndex = 1;
@@ -346,7 +458,7 @@
             // 
             // prevFrame
             // 
-            this.prevFrame.Location = new System.Drawing.Point(54, 61);
+            this.prevFrame.Location = new System.Drawing.Point(54, 38);
             this.prevFrame.Name = "prevFrame";
             this.prevFrame.Size = new System.Drawing.Size(75, 23);
             this.prevFrame.TabIndex = 0;
@@ -359,7 +471,7 @@
             this.ImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             this.ImageBox.Location = new System.Drawing.Point(12, 42);
             this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(598, 472);
+            this.ImageBox.Size = new System.Drawing.Size(598, 505);
             this.ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImageBox.TabIndex = 4;
             this.ImageBox.TabStop = false;
@@ -368,7 +480,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(894, 536);
+            this.ClientSize = new System.Drawing.Size(894, 561);
             this.Controls.Add(this.ImageBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -388,6 +500,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.centreX)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.durationBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -420,5 +533,14 @@
         public System.Windows.Forms.NumericUpDown boundsY;
         public System.Windows.Forms.NumericUpDown boundsX2;
         public System.Windows.Forms.NumericUpDown boundsY2;
+        private System.Windows.Forms.Button addFrame;
+        private System.Windows.Forms.Button deleteFrame;
+        private System.Windows.Forms.Button replaceFrame;
+        private System.Windows.Forms.Label labelBPP;
+        private System.Windows.Forms.RadioButton BPP_4_radioButton;
+        private System.Windows.Forms.RadioButton BPP_8_radioButton;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.NumericUpDown durationBox;
+        private System.Windows.Forms.Button exportFrame;
     }
 }
