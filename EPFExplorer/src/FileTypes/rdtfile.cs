@@ -293,6 +293,7 @@ namespace EPFExplorer
                         {
                         if (subfiledata.graphicsType == "palette")
                             {
+                            subfiledata.DecompressLZ10IfCompressed();
                             palettes.Add(subfiledata.filebytes);
                             savedPalettes.Add(subfiledata);
                             }
@@ -301,7 +302,7 @@ namespace EPFExplorer
                     int imageIndex = 0;
                     List<int> skipIndices = new List<int>();
 
-                    
+                    bool is_modified = false;
 
                     foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList) //get images
                         {
@@ -310,8 +311,8 @@ namespace EPFExplorer
                             if (subfiledata.image != null) //if it was modified or viewed by the user, use the modified one
                                 {
                                 images.Add(subfiledata.image);
-                                subfiledata.image.Save("img"); //temp
                                 savedImages.Add(subfiledata);
+                                is_modified = true;
                                 }
                             else          //otherwise, just read the existing image for the first time and apply the existing palette
                                 {
@@ -338,63 +339,82 @@ namespace EPFExplorer
                     }
 
                     file.rdtSubfileDataList.RemoveRange(indexOfFirstImageOrPalette, file.rdtSubfileDataList.Count - indexOfFirstImageOrPalette);
-                   
+
 
                     //now we add the updated images back to the list
 
 
+                    //make global palette for sprite
+
+                    rdtSubfileData newPalette = new rdtSubfileData();
+
+
+                    // read individual frames
+
                     for (int j = 0; j < images.Count; j++)
                             {
+                            //make palette 
+
+                            newPalette = new rdtSubfileData();
+
                             if (skipIndices.Contains(j))   //no need to reread image data, as the user didn't edit or view it
                                 {
-                                file.rdtSubfileDataList.Add(savedPalettes[j]);
+                                savedPalettes[0].DecompressLZ10IfCompressed();
+                                newPalette = savedPalettes[0];
+                                newPalette.DecompressLZ10IfCompressed();
+                                file.rdtSubfileDataList.Add(newPalette);
                                 file.rdtSubfileDataList.Add(savedImages[j]);
-                                Console.WriteLine(file.rdtSubfileDataList.Count - 1 + ": index of unmodified image subfiledata");
-                            }
+                                }
                             else                   //the user edited or viewed this file, so rebuild the image and palette
                                 {
                                 //make palette
+                                newPalette = new rdtSubfileData();
                                 Color[] palette = new Color[0];
 
                                 if (file.RDTSpriteBPP == 4)
-                                    {
+                                {
                                     palette = new Color[16];
-                                    }
+                                }
                                 else if (file.RDTSpriteBPP == 8)
-                                    {
+                                {
                                     palette = new Color[256];
-                                    }
+                                }
 
                                 //put image colours in palette
 
-                                Color[] coloursToAdd = Get_Unique_Colours(images[j]);
+                                if (file.RDTSpriteAlphaColour.A == 0 && file.RDTSpriteAlphaColour.R == 0 && file.RDTSpriteAlphaColour.G == 0 && file.RDTSpriteAlphaColour.B == 0)
+                                    {
+                                    file.RDTSpriteAlphaColour = file.GetPalette(palettes[j], 1, file.RDTSpriteBPP)[0];
+                                    }
+                                    
+                                Color[] coloursToAdd = Get_Unique_Colours(images, palette.Length);
                                 Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
-                                Console.WriteLine("number of unique colours: "+ coloursToAdd.Length);
+                                Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
 
                                 //now make sure the alpha colour is at index 0
                                 if (palette[0] != file.RDTSpriteAlphaColour)
-                                    {
+                                {
                                     int checkIndex = 0;
 
                                     while (checkIndex < palette.Length) //go through the palette looking for the alpha colour's current position
-                                        {
+                                    {
                                         if (palette[checkIndex] == file.RDTSpriteAlphaColour)
-                                            {
-                                            break;    
-                                            }
-                                        checkIndex++;
+                                        {
+                                            break;
                                         }
+                                        checkIndex++;
+                                    }
 
                                     //swap the alpha colour into index 0, and the index 0 colour to where the alpha colour used to be
                                     palette[checkIndex] = palette[0];
                                     palette[0] = file.RDTSpriteAlphaColour;
-                                    }
+                                }
 
                                 //CREATE BINARY NBFC IMAGE AND PALETTE, THEN MAKE SUBFILEDATAS FOR THEM AND ADD THEM TO LIST
 
                                 //create binary palette
 
-                                rdtSubfileData newPalette = new rdtSubfileData();
+                            
                                 newPalette.subfileType = 0x04;
 
                                 newPalette.filebytes = new byte[1 + (palette.Length * 2)];
@@ -402,15 +422,15 @@ namespace EPFExplorer
                                 int colorindex = 0;
 
                                 foreach (Color c in palette)
-                                    {
+                                {
                                     ushort ABGR1555Color = form1.ColorToABGR1555(c);
                                     newPalette.filebytes[1 + (colorindex * 2)] = (byte)(ABGR1555Color & 0x00FF);
                                     newPalette.filebytes[2 + (colorindex * 2)] = (byte)((ABGR1555Color & 0xFF00) >> 8);
 
                                     colorindex++;
-                                    }
-                                
-                                File.WriteAllBytes("palette",newPalette.filebytes); //temp
+                                }
+
+                                File.WriteAllBytes("palette", newPalette.filebytes); //temp
 
                                 file.rdtSubfileDataList.Add(newPalette);
 
@@ -433,10 +453,8 @@ namespace EPFExplorer
 
                                 form1.WriteU16ToArray(newImage.filebytes, 0, (ushort)images[j].Width);
                                 form1.WriteU16ToArray(newImage.filebytes, 2, (ushort)images[j].Height);
-                                form1.WriteU16ToArray(newImage.filebytes, 4, (ushort)(0x0D));   //writing a placeholder, but I don't know what this actually is! baked movement?
-                                form1.WriteU16ToArray(newImage.filebytes, 6, (ushort)0x02);    //writing a placeholder, but I don't know what this actually is! baked movement?
-
-
+                                form1.WriteU16ToArray(newImage.filebytes, 4, (ushort)(0x00));   //writing a placeholder, but I don't know what this actually is! baked movement?
+                                form1.WriteU16ToArray(newImage.filebytes, 6, (ushort)0x00);    //writing a placeholder, but I don't know what this actually is! baked movement?
 
                                 int curOffset = 8;
 
@@ -451,16 +469,12 @@ namespace EPFExplorer
                                             for (int x = 0; x < imageTemp.Width; x++)
                                                 {
                                                 newPixel = imageTemp.GetPixel(x, y);
-                                                newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)FindIndexOfColorInPalette(palette, newPixel)); 
-                                                if (newImage.filebytes[curOffset] != 0x00)
-                                                    {
-                                                    Console.WriteLine("break");
-                                                    }
+                                                newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8))); 
                                                 if (x < imageTemp.Width - 1)
                                                     {
                                                     x++;
                                                     newPixel = imageTemp.GetPixel(x, y);
-                                                    newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)(FindIndexOfColorInPalette(palette,newPixel) << 4));
+                                                    newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)(FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8)) << 4));
                                                     }
                                             
                                                 curOffset++;
@@ -474,9 +488,6 @@ namespace EPFExplorer
                                     }
 
                                 file.rdtSubfileDataList.Add(newImage);
-                                Console.WriteLine(file.rdtSubfileDataList.Count - 1 + ": index of edited image subfiledata");
-                                file.NBFCtoImage(file.rdtSubfileDataList[file.rdtSubfileDataList.Count-1].filebytes, 8, images[j].Width, images[j].Height, palette, 4).Save("img2.png"); //temp
-                                File.WriteAllBytes("test",file.rdtSubfileDataList[file.rdtSubfileDataList.Count - 1].filebytes);
                                 }
                             }
 
@@ -534,7 +545,7 @@ namespace EPFExplorer
                         data.Add((byte)subfiledata.subfileType);
                         data.Add((byte)0);
 
-                        if (subfiledata.subfileType == 0x04)
+                        if (subfiledata.subfileType == 0x04 && subfiledata.filebytes[0] != 0x10)    //Not quite a fix. This if statement stops repeated palettes from being compressed multiple times by accident, but it wouldn't detect a file that just happens to begin with 0x10 in its uncompressed state.
                             {
                             subfiledata.filebytes = DSDecmp.NewestProgram.Compress(subfiledata.filebytes, new DSDecmp.Formats.Nitro.LZ10());
                             }
@@ -567,34 +578,63 @@ namespace EPFExplorer
 
             for (int i = 0; i < p.Length; i++)
             {
-                if (c.A == p[i].A && c.R == p[i].R && c.G == p[i].G && c.B == p[i].B)
+                if ((c.R & 0xF8)  == (p[i].R & 0xF8) && (c.G & 0xF8) == p[i].G && (c.B & 0xF8) == (p[i].B & 0xF8))
                 {
                     return i;
                 }
             }
-            return -1;
+            return 0; //if it wasn't found
         }
 
 
-        public Color[] Get_Unique_Colours(Image input) {
+        public Color[] Get_Unique_Colours(List<Image> input, int maxColours) {
 
             List<Color> output = new List<Color>();
 
             Color potentialNewColour;
 
-            for (int y = 0; y < input.Height; y++)
+            foreach (Image img in input)
             {
-                for (int x = 0; x < input.Width; x++)
+                for (int y = 0; y < img.Height; y++)
                 {
-                    potentialNewColour = ((Bitmap)input).GetPixel(x, y);
-
-                    if (!output.Contains(potentialNewColour))
+                    for (int x = 0; x < img.Width; x++)
                     {
-                        output.Add(potentialNewColour);
+                        potentialNewColour = ((Bitmap)img).GetPixel(x, y);
+
+                        if (!ListAlreadyContainsColour(output, potentialNewColour))
+                        {
+                            if (output.Count >= maxColours)
+                            {
+                                MessageBox.Show("The frames in this animation do not all share the same palette.\nImport will continue, but the extra colours will be discarded and will be transparent in-game.",
+                                "Warning");
+
+                                return output.ToArray();
+                            }
+
+                            output.Add(potentialNewColour);
+                        }
                     }
                 }
             }
+
             return output.ToArray();
         }
+
+
+        public bool ListAlreadyContainsColour(List<Color> list, Color checkColour)
+            {
+        
+            foreach (Color c in list)
+                {
+                if ((checkColour.R & 0xF8) == (c.R & 0xF8) && (checkColour.G & 0xF8) == (c.G & 0xF8) && (checkColour.B & 0xF8) == (c.B & 0xF8))
+                    {
+                    return true;
+                    }
+                }
+
+            return false;
+            }
+
     }
+
 }

@@ -243,7 +243,8 @@ namespace EPFExplorer
                         newSubfile.parentfile = this;
                         newSubfile.ReadRawData(parentrdtfile.filebytes,BitConverter.ToInt32(subfileTable.filebytes,curOffset));
                         overallIndex++;
-                        
+
+                        File.WriteAllBytes("graphics_subfile_" + newSubfile.IndexInList, newSubfile.filebytes);
 
                         if (f == 0) { newSubfile.graphicsType = "GraphicsMetadata";}
                         else if (f == 1) { newSubfile.graphicsType = "GraphicsFrameDurations";}

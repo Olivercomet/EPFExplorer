@@ -41,6 +41,7 @@ namespace EPFExplorer
 
             for (int i = 0; i < images.Count; i++)  //load all other images if not already loaded
             {
+                palettes[i].DecompressLZ10IfCompressed();
                 if (images[i].image == null && i != frame)
                 {
                     tempPalette = sprite.GetPalette(palettes[i].filebytes, 1, sprite.RDTSpriteBPP).ToList();
@@ -52,6 +53,7 @@ namespace EPFExplorer
 
             if (images[frame].image == null)        //load selected image if not already loaded
             {
+                palettes[frame].DecompressLZ10IfCompressed();
                 tempPalette = sprite.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
                 sprite.RDTSpriteAlphaColour = tempPalette[0];
                 images[frame].LoadImage(tempPalette.ToArray());
@@ -321,5 +323,22 @@ namespace EPFExplorer
         
         }
 
+        private void exportRawFilesButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog openFileDialog1 = new SaveFileDialog();
+
+            openFileDialog1.Title = "Save raw files";
+            openFileDialog1.FileName = "Save here";
+            openFileDialog1.CheckPathExists = true;
+
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                foreach (rdtSubfileData f in sprite.rdtSubfileDataList)
+                    {
+                    File.WriteAllBytes(openFileDialog1.FileName + "_" + sprite.rdtSubfileDataList.IndexOf(f), f.filebytes);
+                    }
+                }
+        }
     }
 }

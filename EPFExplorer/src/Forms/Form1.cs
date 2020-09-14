@@ -278,10 +278,9 @@ namespace EPFExplorer
 
             Console.WriteLine(input);
 
-            if ((input & 0x0080) == 0x0080)
-            {
-                a = 0xFF;
-            }
+        
+            a = 0xFF;
+            
 
             Console.WriteLine("r " + r);
             Console.WriteLine("g " + g);

@@ -153,10 +153,7 @@ namespace EPFExplorer
             Array.Copy(bytes,offset+6,filebytes,0,size);
             Console.WriteLine("RDT data found: type " + subfileType);
 
-            if (filebytes[0] == 0x10 && BitConverter.ToInt32(filebytes, 1) > 0)
-                {
-                filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ10());
-                }
+            DecompressLZ10IfCompressed();
 
             //File.WriteAllBytes(IndexInList.ToString(), filebytes);
 
@@ -166,6 +163,13 @@ namespace EPFExplorer
                 }
             }
 
+
+        public void DecompressLZ10IfCompressed() {
+            if (filebytes[0] == 0x10 && BitConverter.ToInt32(filebytes, 1) > 0)
+            {
+                filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ10());
+            }
+        }
         public void Parse() { 
 
             if (graphicsType == "GraphicsMetadata")
