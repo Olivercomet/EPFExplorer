@@ -62,6 +62,10 @@
             this.nextFrame = new System.Windows.Forms.Button();
             this.prevFrame = new System.Windows.Forms.Button();
             this.ImageBox = new RedCell.UI.Controls.PixelBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.alphacolourdisplay = new System.Windows.Forms.PictureBox();
+            this.alphaColourPrev = new System.Windows.Forms.Button();
+            this.alphaColourNext = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.boundsY2)).BeginInit();
@@ -73,6 +77,7 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.alphacolourdisplay)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -359,6 +364,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.alphaColourNext);
+            this.groupBox2.Controls.Add(this.alphaColourPrev);
+            this.groupBox2.Controls.Add(this.alphacolourdisplay);
+            this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.exportFrame);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.durationBox);
@@ -370,14 +379,14 @@
             this.groupBox2.Controls.Add(this.prevFrame);
             this.groupBox2.Location = new System.Drawing.Point(616, 294);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(266, 255);
+            this.groupBox2.Size = new System.Drawing.Size(266, 296);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Animation";
             // 
             // exportFrame
             // 
-            this.exportFrame.Location = new System.Drawing.Point(54, 109);
+            this.exportFrame.Location = new System.Drawing.Point(57, 109);
             this.exportFrame.Name = "exportFrame";
             this.exportFrame.Size = new System.Drawing.Size(156, 30);
             this.exportFrame.TabIndex = 8;
@@ -388,7 +397,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(60, 67);
+            this.label8.Location = new System.Drawing.Point(63, 67);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(62, 17);
             this.label8.TabIndex = 7;
@@ -396,7 +405,7 @@
             // 
             // durationBox
             // 
-            this.durationBox.Location = new System.Drawing.Point(128, 67);
+            this.durationBox.Location = new System.Drawing.Point(131, 67);
             this.durationBox.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -409,7 +418,7 @@
             // 
             // replaceFrame
             // 
-            this.replaceFrame.Location = new System.Drawing.Point(54, 145);
+            this.replaceFrame.Location = new System.Drawing.Point(57, 145);
             this.replaceFrame.Name = "replaceFrame";
             this.replaceFrame.Size = new System.Drawing.Size(156, 30);
             this.replaceFrame.TabIndex = 5;
@@ -419,7 +428,7 @@
             // 
             // addFrame
             // 
-            this.addFrame.Location = new System.Drawing.Point(54, 217);
+            this.addFrame.Location = new System.Drawing.Point(57, 217);
             this.addFrame.Name = "addFrame";
             this.addFrame.Size = new System.Drawing.Size(156, 30);
             this.addFrame.TabIndex = 4;
@@ -429,7 +438,7 @@
             // 
             // deleteFrame
             // 
-            this.deleteFrame.Location = new System.Drawing.Point(54, 181);
+            this.deleteFrame.Location = new System.Drawing.Point(57, 181);
             this.deleteFrame.Name = "deleteFrame";
             this.deleteFrame.Size = new System.Drawing.Size(156, 30);
             this.deleteFrame.TabIndex = 3;
@@ -440,7 +449,7 @@
             // curFrameDisplay
             // 
             this.curFrameDisplay.AutoSize = true;
-            this.curFrameDisplay.Location = new System.Drawing.Point(99, 18);
+            this.curFrameDisplay.Location = new System.Drawing.Point(102, 18);
             this.curFrameDisplay.Name = "curFrameDisplay";
             this.curFrameDisplay.Size = new System.Drawing.Size(60, 17);
             this.curFrameDisplay.TabIndex = 2;
@@ -448,7 +457,7 @@
             // 
             // nextFrame
             // 
-            this.nextFrame.Location = new System.Drawing.Point(135, 38);
+            this.nextFrame.Location = new System.Drawing.Point(138, 38);
             this.nextFrame.Name = "nextFrame";
             this.nextFrame.Size = new System.Drawing.Size(75, 23);
             this.nextFrame.TabIndex = 1;
@@ -458,7 +467,7 @@
             // 
             // prevFrame
             // 
-            this.prevFrame.Location = new System.Drawing.Point(54, 38);
+            this.prevFrame.Location = new System.Drawing.Point(57, 38);
             this.prevFrame.Name = "prevFrame";
             this.prevFrame.Size = new System.Drawing.Size(75, 23);
             this.prevFrame.TabIndex = 0;
@@ -471,16 +480,54 @@
             this.ImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             this.ImageBox.Location = new System.Drawing.Point(12, 42);
             this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(598, 505);
+            this.ImageBox.Size = new System.Drawing.Size(598, 548);
             this.ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImageBox.TabIndex = 4;
             this.ImageBox.TabStop = false;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(54, 250);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(47, 34);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "Alpha\r\ncolour";
+            // 
+            // alphacolourdisplay
+            // 
+            this.alphacolourdisplay.Location = new System.Drawing.Point(138, 253);
+            this.alphacolourdisplay.Name = "alphacolourdisplay";
+            this.alphacolourdisplay.Size = new System.Drawing.Size(36, 31);
+            this.alphacolourdisplay.TabIndex = 10;
+            this.alphacolourdisplay.TabStop = false;
+            this.alphacolourdisplay.Click += new System.EventHandler(this.alphacolourdisplay_Click);
+            // 
+            // alphaColourPrev
+            // 
+            this.alphaColourPrev.Location = new System.Drawing.Point(105, 253);
+            this.alphaColourPrev.Name = "alphaColourPrev";
+            this.alphaColourPrev.Size = new System.Drawing.Size(27, 31);
+            this.alphaColourPrev.TabIndex = 11;
+            this.alphaColourPrev.Text = "<";
+            this.alphaColourPrev.UseVisualStyleBackColor = true;
+            this.alphaColourPrev.Click += new System.EventHandler(this.alphaColourPrev_Click);
+            // 
+            // alphaColourNext
+            // 
+            this.alphaColourNext.Location = new System.Drawing.Point(180, 253);
+            this.alphaColourNext.Name = "alphaColourNext";
+            this.alphaColourNext.Size = new System.Drawing.Size(27, 31);
+            this.alphaColourNext.TabIndex = 12;
+            this.alphaColourNext.Text = ">";
+            this.alphaColourNext.UseVisualStyleBackColor = true;
+            this.alphaColourNext.Click += new System.EventHandler(this.alphaColourNext_Click);
             // 
             // SpriteEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(894, 561);
+            this.ClientSize = new System.Drawing.Size(894, 602);
             this.Controls.Add(this.ImageBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -502,6 +549,7 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.durationBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.alphacolourdisplay)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -542,5 +590,9 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown durationBox;
         private System.Windows.Forms.Button exportFrame;
+        private System.Windows.Forms.PictureBox alphacolourdisplay;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Button alphaColourNext;
+        private System.Windows.Forms.Button alphaColourPrev;
     }
 }

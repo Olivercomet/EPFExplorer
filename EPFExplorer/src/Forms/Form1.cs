@@ -294,6 +294,23 @@ namespace EPFExplorer
             return output;
         }
 
+
+
+        public ushort ColorToABGR1555(Color input)
+        {
+            ushort output = 0;
+
+           
+
+            output |= (ushort)(input.B >> 3);
+            output |= (ushort)((input.G >> 3) << 5);
+            output |= (ushort)((input.R >> 3) << 10);
+
+            //and set the high bit too?
+
+            return output;
+        }
+
         public void WriteU32ToArray(Byte[] array, int offset, uint input)
         {
             array[offset] = (byte)(input & 0x000000FF);
@@ -829,9 +846,9 @@ namespace EPFExplorer
             }
             else if(mode == "rdt")
             {
-                MessageBox.Show("RDT saving not implemented", "Can't go there right now.");
+                //MessageBox.Show("RDT saving not implemented", "Can't go there right now.");
 
-               //activeRdt.RebuildRDT();
+               activeRdt.RebuildRDT();
             }
         }
 

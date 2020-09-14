@@ -48,7 +48,7 @@ namespace EPFExplorer
         public ushort RDTSpriteHeight = 0;
         public byte RDTSpriteBPP = 4;
         public List<ushort> RDTSpriteFrameDurations = new List<ushort>();
-
+        public Color RDTSpriteAlphaColour;
         public void ExportToFile() {        //when you export an individual file (so that it asks where you want to save it)
 
             if (filebytes == null || filebytes.Length == 0)
@@ -387,8 +387,6 @@ namespace EPFExplorer
         }
 
 
-
-
         public void CompressFileLZ10()
         {
             filebytes = DSDecmp.NewestProgram.Compress(filebytes, new DSDecmp.Formats.Nitro.LZ10());
@@ -439,7 +437,6 @@ namespace EPFExplorer
 
         public void checkfilemagic()
         {
-
             filemagic = 99999999;   //unset
 
             if (filename != "FILENAME_NOT_SET")
@@ -589,25 +586,22 @@ namespace EPFExplorer
                                 parentarcfile.uniquefilemagicsandfreq[filemagic] += 1;
                             }
                             break;
-                        
-
                     }
 
                     if (!parentarcfile.uniquefilemagicsandfreq.ContainsKey(filemagic))//if it still hasn't been assigned
-
-                    {
+                        {
                         filemagic = BitConverter.ToUInt32(new byte[] { filebytes[0], filebytes[1], filebytes[2], filebytes[3] }, 0);
 
                         if (!parentarcfile.uniquefilemagicsandfreq.ContainsKey(filemagic))
-                        {
+                            {
                             //creating file magic entry in the dictionary
                             parentarcfile.uniquefilemagicsandfreq.Add(filemagic, 1);
-                        }
+                            }
                         else
-                        {
+                            {
                             //do not need to create entry
                             parentarcfile.uniquefilemagicsandfreq[filemagic] += 1;
-                        }
+                            }
                     }
                 }  
             }
@@ -650,7 +644,6 @@ namespace EPFExplorer
 
             if (bpp == 4)
                 {
-
                 bm = new Bitmap(width, height);
 
                 for (int y = 0; y < height; y++)
@@ -689,50 +682,10 @@ namespace EPFExplorer
                     }
                 }
 
-
             return bm;
             }
 
 
-        public Byte[] ConvertSpriteToRAW(Byte[] input)
-        {
-            List<Byte> inputaslist = new List<Byte>(input.ToList());
-            Byte[] temp = new Byte[inputaslist.Count - 0x240];
-
-
-            Dictionary<int, List<Byte>> imagerowsandbytelists = new Dictionary<int, List<Byte>>();
-
-            int numberofchunks = (inputaslist.Count - 0x240) / 64;
-
-            //imagerowtowriteto will temporarily be set to stop after something reasonable, just until I look at the results more and figure out a way to know what it is ahead of time
-
-            int width = 384;
-            int currenthorizontalpixel = 0;
-
-            int currentline = 0;
-
-            List<int> keysinorder = new List<int>();
-
-            for (int j = 0; j < numberofchunks; j++)     // for each chunk
-                {
-                for (int i = 0; i < 8; i++)   //for each line in each chunk
-                    {
-                    for (int byteinrow = 0; byteinrow < 8; byteinrow++)
-                        {
-                        temp[(currentline * width) + currenthorizontalpixel] = inputaslist[0x240 + (j * 64) + (i * 8) + byteinrow];  //offset of data -> correct chunk -> correct row -> correct byte in row
-                        currenthorizontalpixel++;
-                        }
-
-                    if (currenthorizontalpixel > width)
-                        {
-                        currentline++;
-                        currenthorizontalpixel = 0;
-                        }
-                    }
-                }
-
-            return temp;
-        }
 
 
         public void ReadTextFileEPF() {

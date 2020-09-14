@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,9 @@ namespace EPFExplorer
 
         int posInNodeTree; //for writing
         List<TreeNode> NullNodesInArchivedFileOrder; //for writing
+        Byte[] nodeTree = new byte[0];
+        List<Byte> data = new List<Byte>(); //for writing
+
 
         bool isHR = false;
         public void ReadRdt()
@@ -197,13 +202,66 @@ namespace EPFExplorer
 
             //make byte array version of node tree
 
-            Byte[] nodeTree = new byte[nodeTreeSize];
+            nodeTree = new byte[nodeTreeSize];
+            data = new List<byte>();
 
             posInNodeTree = 0;
 
             AddSubNodesToByteArray(root, nodeTree);
 
-            File.WriteAllBytes("nodetree", nodeTree);   //temp
+
+            //now combine all the elements to make a new rdt file
+
+            List<Byte> output = new List<Byte>();
+
+            //add header
+            output.Add(0x52);   //R
+            output.Add(0x44);   //D
+            output.Add(0x54);   //T
+            output.Add(0x01);   //01
+            output.Add(0x01);   //01
+            output.Add(0xEF);   //is corrected to total filesize later
+            output.Add(0xEF);   //is corrected to total filesize later
+            output.Add(0xEF);   //is corrected to total filesize later
+            output.Add(0xEF);   //is corrected to total filesize later
+            output.Add(0x01);   //01
+            output.Add(0x00);   //00
+            output.Add((byte)((0x11 + nodeTree.Length) & 0xFF));
+            output.Add((byte)(((0x11 + nodeTree.Length) >> 8) & 0xFF));
+            output.Add((byte)(((0x11 + nodeTree.Length) >> 16) & 0xFF));
+            output.Add((byte)(((0x11 + nodeTree.Length) >> 24) & 0xFF));
+            output.Add((byte)(archivedfiles.Count & 0xFF));
+            output.Add((byte)((archivedfiles.Count >> 8) & 0xFF));
+
+            for (int i = 0; i < nodeTree.Length; i++)
+                {
+                output.Add(nodeTree[i]);
+                }
+
+            for (int i = 0; i < data.Count; i++)
+                {
+                output.Add(data[i]);
+                }
+
+            output[5] = (byte)(output.Count & 0xFF);
+            output[6] = (byte)((output.Count >> 8) & 0xFF);
+            output[7] = (byte)((output.Count >> 16) & 0xFF);
+            output[8] = (byte)((output.Count >> 24) & 0xFF);
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.FileName = Path.GetFileName(filename);
+
+            saveFileDialog1.Title = "Save rdt file";
+            saveFileDialog1.CheckPathExists = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                filename = saveFileDialog1.FileName;
+                File.WriteAllBytes(saveFileDialog1.FileName, output.ToArray());
+                form1.ParseRdt(filename);
+                }
+
         }
 
 
@@ -219,10 +277,277 @@ namespace EPFExplorer
                 if (node.Nodes[i].Text == "nullNode")
                     {
                     nodeTree[basePos + (i * 5)] = 0x00;
-                    archivedfile file = archivedfiles[NullNodesInArchivedFileOrder.IndexOf(node)];  //and then do something with it
-                    //REBUILD FILE AND ADD TO DATA LIST HERE 
+                    archivedfile file = archivedfiles[NullNodesInArchivedFileOrder.IndexOf(node.Nodes[i])];  
 
-                    form1.WriteU32ToArray(nodeTree, basePos + (i * 5) + 1, 0x3F3F3F3F); //not done yet, will be the offset of the file
+                    //prepare data for import
+
+                    List<Image> images = new List<Image>();
+                    List<Byte[]> palettes = new List<Byte[]>();
+
+                    List<rdtSubfileData> savedImages = new List<rdtSubfileData>();
+                    List<rdtSubfileData> savedPalettes = new List<rdtSubfileData>();
+
+                 
+
+                    foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList) //get palettes
+                        {
+                        if (subfiledata.graphicsType == "palette")
+                            {
+                            palettes.Add(subfiledata.filebytes);
+                            savedPalettes.Add(subfiledata);
+                            }
+                        }
+
+                    int imageIndex = 0;
+                    List<int> skipIndices = new List<int>();
+
+                    
+
+                    foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList) //get images
+                        {
+                        if (subfiledata.graphicsType == "image")
+                            {   
+                            if (subfiledata.image != null) //if it was modified or viewed by the user, use the modified one
+                                {
+                                images.Add(subfiledata.image);
+                                subfiledata.image.Save("img"); //temp
+                                savedImages.Add(subfiledata);
+                                }
+                            else          //otherwise, just read the existing image for the first time and apply the existing palette
+                                {
+                                subfiledata.LoadImage(file.GetPalette(palettes[imageIndex], 1, file.RDTSpriteBPP));
+                                images.Add(subfiledata.image);
+                                skipIndices.Add(images.Count - 1); //so that we know not to bother rereading it and its palette
+                                savedImages.Add(subfiledata);
+                                }
+                            imageIndex++;
+                            }
+                        }
+
+                    //remove the existing images and palette subfiledata in the archivedfile
+                    int indexOfFirstImageOrPalette = 0;
+
+                    foreach (rdtSubfileData f in file.rdtSubfileDataList)
+                    {
+                        if (f.graphicsType != "image" && f.graphicsType != "palette")
+                        {
+                            indexOfFirstImageOrPalette++;
+                            continue;
+                        }
+                        break;
+                    }
+
+                    file.rdtSubfileDataList.RemoveRange(indexOfFirstImageOrPalette, file.rdtSubfileDataList.Count - indexOfFirstImageOrPalette);
+                   
+
+                    //now we add the updated images back to the list
+
+
+                    for (int j = 0; j < images.Count; j++)
+                            {
+                            if (skipIndices.Contains(j))   //no need to reread image data, as the user didn't edit or view it
+                                {
+                                file.rdtSubfileDataList.Add(savedPalettes[j]);
+                                file.rdtSubfileDataList.Add(savedImages[j]);
+                                Console.WriteLine(file.rdtSubfileDataList.Count - 1 + ": index of unmodified image subfiledata");
+                            }
+                            else                   //the user edited or viewed this file, so rebuild the image and palette
+                                {
+                                //make palette
+                                Color[] palette = new Color[0];
+
+                                if (file.RDTSpriteBPP == 4)
+                                    {
+                                    palette = new Color[16];
+                                    }
+                                else if (file.RDTSpriteBPP == 8)
+                                    {
+                                    palette = new Color[256];
+                                    }
+
+                                //put image colours in palette
+
+                                Color[] coloursToAdd = Get_Unique_Colours(images[j]);
+                                Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
+
+                                //now make sure the alpha colour is at index 0
+                                if (palette[0] != file.RDTSpriteAlphaColour)
+                                    {
+                                    int checkIndex = 0;
+
+                                    while (checkIndex < palette.Length) //go through the palette looking for the alpha colour's current position
+                                        {
+                                        if (palette[checkIndex] == file.RDTSpriteAlphaColour)
+                                            {
+                                            break;    
+                                            }
+                                        checkIndex++;
+                                        }
+
+                                    //swap the alpha colour into index 0, and the index 0 colour to where the alpha colour used to be
+                                    palette[checkIndex] = palette[0];
+                                    palette[0] = file.RDTSpriteAlphaColour;
+                                    }
+
+                                //CREATE BINARY NBFC IMAGE AND PALETTE, THEN MAKE SUBFILEDATAS FOR THEM AND ADD THEM TO LIST
+
+                                //create binary palette
+
+                                rdtSubfileData newPalette = new rdtSubfileData();
+                                newPalette.subfileType = 0x04;
+
+                                newPalette.filebytes = new byte[1 + (palette.Length * 2)];
+
+                                int colorindex = 0;
+
+                                foreach (Color c in palette)
+                                    {
+                                    ushort ABGR1555Color = form1.ColorToABGR1555(c);
+                                    newPalette.filebytes[1 + (colorindex * 2)] = (byte)(ABGR1555Color & 0x00FF);
+                                newPalette.filebytes[2 + (colorindex * 2)] = (byte)((ABGR1555Color & 0xFF00) >> 8);
+
+                                colorindex++;
+                                    }
+                                
+                                File.WriteAllBytes("palette",newPalette.filebytes);
+                                file.rdtSubfileDataList.Add(newPalette);
+
+                                //create binary image here
+
+                                rdtSubfileData newImage = new rdtSubfileData();
+                                newImage.subfileType = 0x04;
+                            
+                                int fakeWidth = images[j].Width;   //fakewidth should only be used when setting the size of the byte array, and nowhere else!
+
+                                if (file.RDTSpriteBPP == 4)
+                                    {
+                                     while (fakeWidth % 2 != 0)
+                                        {
+                                        fakeWidth++;
+                                        }
+                                    }
+
+                                newImage.filebytes = new byte[8 + (fakeWidth * images[j].Height)];
+
+                                form1.WriteU16ToArray(newImage.filebytes, 0, (ushort)images[j].Width);
+                                form1.WriteU16ToArray(newImage.filebytes, 2, (ushort)images[j].Height);
+                                form1.WriteU16ToArray(newImage.filebytes, 4, (ushort)0);    //writing zero, but I don't know what this actually is! baked movement?
+                                form1.WriteU16ToArray(newImage.filebytes, 6, (ushort)0);    //writing zero, but I don't know what this actually is! baked movement?
+
+
+
+                                int curOffset = 8;
+
+                                Bitmap imageTemp = (Bitmap)images[j];
+
+                                Color newPixel;
+
+                                if (file.RDTSpriteBPP == 4)
+                                    {
+                                    for (int y = 0; y < imageTemp.Height; y++)
+                                        {
+                                            for (int x = 0; x < imageTemp.Width; x++)
+                                                {
+                                                newPixel = imageTemp.GetPixel(x, y);
+                                                newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)FindIndexOfColorInPalette(palette, newPixel)); 
+                                                if (newImage.filebytes[curOffset] != 0x00)
+                                                    {
+                                                    Console.WriteLine("break");
+                                                    }
+                                                if (x < imageTemp.Width - 1)
+                                                    {
+                                                    x++;
+                                                    newPixel = imageTemp.GetPixel(x, y);
+                                                    newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)(FindIndexOfColorInPalette(palette,newPixel) << 4));
+                                                    }
+                                            
+                                                curOffset++;
+                                                }
+                                        }
+                                    }
+                                else
+                                    {
+                                    MessageBox.Show("8BPP image reimport not yet implemented.",
+                                        "Not yet implemented");
+                                    }
+
+                                file.rdtSubfileDataList.Add(newImage);
+                                Console.WriteLine(file.rdtSubfileDataList.Count - 1 + ": index of edited image subfiledata");
+                                file.NBFCtoImage(file.rdtSubfileDataList[file.rdtSubfileDataList.Count-1].filebytes, 8, images[j].Width, images[j].Height, palette, 4).Save("img2.png"); //temp
+                                File.WriteAllBytes("test",file.rdtSubfileDataList[file.rdtSubfileDataList.Count - 1].filebytes);
+                                }
+                            }
+
+                        form1.WriteU16ToArray(file.rdtSubfileDataList[2].filebytes, 0, file.RDTSpriteNumFrames);
+                        form1.WriteU16ToArray(file.rdtSubfileDataList[2].filebytes, 2, file.RDTSpriteWidth);
+                        form1.WriteU16ToArray(file.rdtSubfileDataList[2].filebytes, 4, file.RDTSpriteHeight);
+                        file.rdtSubfileDataList[2].filebytes[6] = (byte)file.RDTSpriteBPP;
+
+                        file.rdtSubfileDataList[3].filebytes = new byte[file.RDTSpriteNumFrames * 2];
+
+                        for (int j = 0; j < file.RDTSpriteFrameDurations.Count; j++)
+                            {
+                            form1.WriteU16ToArray(file.rdtSubfileDataList[3].filebytes, j * 2, file.RDTSpriteFrameDurations[j]);
+                            }
+
+
+                    //also need to update the centre bounds config file (TO BE COMPLETED)
+
+
+                    int offsetOfSubfileTable = 0x11 + nodeTree.Length + data.Count;
+
+                    file.rdtSubfileDataList[0].filebytes = new Byte[8 + ((file.rdtSubfileDataList.Count - 1) * 4)];  //make space in the subfile table
+
+                    file.rdtSubfileDataList[0].filebytes[0] = 2;
+                    file.rdtSubfileDataList[0].filebytes[4] = 1;
+                    form1.WriteU16ToArray(file.rdtSubfileDataList[0].filebytes, 0x0A, (ushort)(file.rdtSubfileDataList.Count - 2));
+
+                    int pos_in_subfiletable = 0x0C;
+
+
+                    //a lot of things need to be updated before the following happens! I don't know if they all read into their filebytes in the first place, so you need to rebuild them first!
+
+                    
+                    foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList)
+                        {
+                        if (file.rdtSubfileDataList.IndexOf(subfiledata) > 0)   //if it's not the subfile table, add an entry to the subfile table
+                            {
+                            int offsetOfThisSubfile = 0x11 + nodeTree.Length + data.Count;
+                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable] = (byte)(offsetOfThisSubfile & 0x000000FF);
+                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 1] = (byte)((offsetOfThisSubfile & 0x0000FF00) >> 8);
+                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 2] = (byte)((offsetOfThisSubfile & 0x00FF0000) >> 16);
+                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 3] = (byte)((offsetOfThisSubfile & 0xFF000000) >> 24);
+
+                            if (pos_in_subfiletable == 0x0C)
+                                {
+                                pos_in_subfiletable += 2;
+                                }
+
+                            pos_in_subfiletable += 4;
+                            }
+
+                        //now write the subfile file into data
+
+                        data.Add((byte)subfiledata.subfileType);
+                        data.Add((byte)0);
+
+                        if (subfiledata.subfileType == 0x04)
+                            {
+                            subfiledata.filebytes = DSDecmp.NewestProgram.Compress(subfiledata.filebytes, new DSDecmp.Formats.Nitro.LZ10());
+                            }
+
+                        data.Add((byte)(subfiledata.filebytes.Length & 0x000000FF));
+                        data.Add((byte)((subfiledata.filebytes.Length & 0x0000FF00) >> 8));
+                        data.Add((byte)((subfiledata.filebytes.Length & 0x00FF0000) >> 16));
+                        data.Add((byte)((subfiledata.filebytes.Length & 0xFF000000) >> 24));
+
+                        foreach (Byte b in subfiledata.filebytes)
+                            {
+                            data.Add(b);
+                            }
+                        }
+                    
+                    form1.WriteU32ToArray(nodeTree, basePos + (i * 5) + 1, (uint)offsetOfSubfileTable); //write offset of the subfile table to the last node in the string
                     }
                 else
                     {
@@ -234,12 +559,39 @@ namespace EPFExplorer
         }
 
 
+        public int FindIndexOfColorInPalette(Color[] p, Color c)
+        {
+
+            for (int i = 0; i < p.Length; i++)
+            {
+                if (c.A == p[i].A && c.R == p[i].R && c.G == p[i].G && c.B == p[i].B)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
 
+        public Color[] Get_Unique_Colours(Image input) {
 
+            List<Color> output = new List<Color>();
 
+            Color potentialNewColour;
 
+            for (int y = 0; y < input.Height; y++)
+            {
+                for (int x = 0; x < input.Width; x++)
+                {
+                    potentialNewColour = ((Bitmap)input).GetPixel(x, y);
 
-
+                    if (!output.Contains(potentialNewColour))
+                    {
+                        output.Add(potentialNewColour);
+                    }
+                }
+            }
+            return output.ToArray();
+        }
     }
 }

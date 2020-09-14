@@ -183,7 +183,6 @@ namespace EPFExplorer
             {
                 case 0x02:
                     graphicsType = null;
-                    Console.WriteLine("TEST");
                     LoadSpriteSettings();
                     break;
                 case 0x03:
@@ -226,8 +225,6 @@ namespace EPFExplorer
             Console.WriteLine("going to create image of width " + width + " and height " + height);
 
             image = parentfile.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
-
         }
-
     }
 }

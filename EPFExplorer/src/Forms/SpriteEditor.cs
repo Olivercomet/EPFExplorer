@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Drawing2D;
+
 
 namespace EPFExplorer
 {
@@ -33,11 +35,16 @@ namespace EPFExplorer
         public List<rdtSubfileData> images = new List<rdtSubfileData>();
         public List<rdtSubfileData> palettes = new List<rdtSubfileData>();
 
+        public List<Color> tempPalette;
+
         public void RequestSpriteEditorImage(int frame) {
 
             if (images[frame].image == null)
                 {
-                images[frame].LoadImage(sprite.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP));
+                tempPalette = sprite.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
+                sprite.RDTSpriteAlphaColour = tempPalette[0];
+                images[frame].LoadImage(tempPalette.ToArray());
+                SetAlphaColourDisplay();
                 }
             
             if (sprite.RDTSpriteBPP == 8)
@@ -115,7 +122,7 @@ namespace EPFExplorer
 
             foreach (rdtSubfileData f in sprite.rdtSubfileDataList)
             {
-                if (f.graphicsType != "image" || f.graphicsType != "palette")
+                if (f.graphicsType != "image" && f.graphicsType != "palette")
                 {
                     indexOfFirstImageOrPalette++;
                     continue;
@@ -158,14 +165,64 @@ namespace EPFExplorer
             openFileDialog1.CheckPathExists = true;
             openFileDialog1.Filter = "png (*.png)|*.png";
 
+            bool failed = false;
+
+            rdtSubfileData oldImage = new rdtSubfileData(images[curFrame]);
+            List<Color> oldPalette = new List<Color>(tempPalette);
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                 images[curFrame].image = Image.FromFile(openFileDialog1.FileName);
-                //need to set palette as well
+
+                //make palette
+                tempPalette = new List<Color>();
+
+                Color potentialNewColour;
+
+                for (int y = 0; y < images[curFrame].image.Height; y++)
+                    {
+                    for (int x = 0; x < images[curFrame].image.Width; x++)
+                        {
+                        potentialNewColour = ((Bitmap)images[curFrame].image).GetPixel(x,y);
+
+                        if (!tempPalette.Contains(potentialNewColour))
+                            {
+                            tempPalette.Add(potentialNewColour);
+                            }
+                        
+                        if (tempPalette.Count > 256)
+                            {
+                            break;
+                            }
+                        }
+                    }
+
+                if (sprite.RDTSpriteBPP == 4 && tempPalette.Count > 16)
+                    {
+                    MessageBox.Show("For a 4BPP sprite, you should have a maximum of 16 colours.\nYou had: "+tempPalette.Count + " colours.", "Too many colours!", MessageBoxButtons.OK);
+                    failed = true;
+                    }
+                else if (sprite.RDTSpriteBPP == 8 && tempPalette.Count > 256)
+                    {
+                    MessageBox.Show("For an 8BPP sprite, you should have a maximum of 256 colours.\nYou had: " + tempPalette.Count+" colours.", "Too many colours!", MessageBoxButtons.OK);
+                    failed = true;
+                    }
+
+                if (!failed)
+                    {
+                    //guess alpha colour
+                    sprite.RDTSpriteAlphaColour = ((Bitmap)images[curFrame].image).GetPixel(0, 0);   //assume the top left corner is the alpha colour. The user can change this later if they wish
+                    SetAlphaColourDisplay();
+                    }
                 }
             else
                 {
-                if (addingFrame)    //if the file dialog was aborted, we undo the addition of the new frame here
+                failed = true;
+                }
+
+            if (failed)
+                {
+                if (addingFrame)    //undo the addition of the new frame
                     {
                     images.RemoveAt(curFrame);
                     palettes.RemoveAt(curFrame);
@@ -173,7 +230,13 @@ namespace EPFExplorer
                     sprite.RDTSpriteNumFrames--;
                     curFrame--;
                     }
+                else                //revert to the old frame
+                    {
+                    images[curFrame] = oldImage;
+                    tempPalette = oldPalette;
+                    }
                 }
+
 
             SendUpdateToRDT();
         }
@@ -207,5 +270,45 @@ namespace EPFExplorer
                 images[curFrame].image.Save(saveFileDialog1.FileName);
             }
         }
+
+        private void alphaColourPrev_Click(object sender, EventArgs e)
+        {
+            if (tempPalette.IndexOf(sprite.RDTSpriteAlphaColour) > 0)
+                {
+                sprite.RDTSpriteAlphaColour = tempPalette[tempPalette.IndexOf(sprite.RDTSpriteAlphaColour) - 1];
+                }
+            else
+                {
+                sprite.RDTSpriteAlphaColour = tempPalette[tempPalette.Count - 1];
+                }
+
+            SetAlphaColourDisplay();
+        }
+
+        private void alphaColourNext_Click(object sender, EventArgs e)
+        {
+            if (tempPalette.IndexOf(sprite.RDTSpriteAlphaColour) < tempPalette.Count - 1)
+            {
+                sprite.RDTSpriteAlphaColour = tempPalette[tempPalette.IndexOf(sprite.RDTSpriteAlphaColour) + 1];
+            }
+            else
+            {
+                sprite.RDTSpriteAlphaColour = tempPalette[0];
+            }
+
+            SetAlphaColourDisplay();
+        }
+
+        private void alphacolourdisplay_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void SetAlphaColourDisplay() {
+
+            alphacolourdisplay.BackColor = tempPalette[tempPalette.IndexOf(sprite.RDTSpriteAlphaColour)];
+        
+        }
+
     }
 }
