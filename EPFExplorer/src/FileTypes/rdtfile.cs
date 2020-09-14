@@ -369,6 +369,7 @@ namespace EPFExplorer
 
                                 Color[] coloursToAdd = Get_Unique_Colours(images[j]);
                                 Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
+                                Console.WriteLine("number of unique colours: "+ coloursToAdd.Length);
 
                                 //now make sure the alpha colour is at index 0
                                 if (palette[0] != file.RDTSpriteAlphaColour)
@@ -404,12 +405,13 @@ namespace EPFExplorer
                                     {
                                     ushort ABGR1555Color = form1.ColorToABGR1555(c);
                                     newPalette.filebytes[1 + (colorindex * 2)] = (byte)(ABGR1555Color & 0x00FF);
-                                newPalette.filebytes[2 + (colorindex * 2)] = (byte)((ABGR1555Color & 0xFF00) >> 8);
+                                    newPalette.filebytes[2 + (colorindex * 2)] = (byte)((ABGR1555Color & 0xFF00) >> 8);
 
-                                colorindex++;
+                                    colorindex++;
                                     }
                                 
-                                File.WriteAllBytes("palette",newPalette.filebytes);
+                                File.WriteAllBytes("palette",newPalette.filebytes); //temp
+
                                 file.rdtSubfileDataList.Add(newPalette);
 
                                 //create binary image here
@@ -431,8 +433,8 @@ namespace EPFExplorer
 
                                 form1.WriteU16ToArray(newImage.filebytes, 0, (ushort)images[j].Width);
                                 form1.WriteU16ToArray(newImage.filebytes, 2, (ushort)images[j].Height);
-                                form1.WriteU16ToArray(newImage.filebytes, 4, (ushort)0);    //writing zero, but I don't know what this actually is! baked movement?
-                                form1.WriteU16ToArray(newImage.filebytes, 6, (ushort)0);    //writing zero, but I don't know what this actually is! baked movement?
+                                form1.WriteU16ToArray(newImage.filebytes, 4, (ushort)(0x0D));   //writing a placeholder, but I don't know what this actually is! baked movement?
+                                form1.WriteU16ToArray(newImage.filebytes, 6, (ushort)0x02);    //writing a placeholder, but I don't know what this actually is! baked movement?
 
 
 
@@ -507,6 +509,7 @@ namespace EPFExplorer
 
                     //a lot of things need to be updated before the following happens! I don't know if they all read into their filebytes in the first place, so you need to rebuild them first!
 
+                    Console.WriteLine("o is " + offsetOfSubfileTable);    //temp
                     
                     foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList)
                         {

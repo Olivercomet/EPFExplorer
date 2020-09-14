@@ -225,6 +225,7 @@ namespace EPFExplorer
             Console.WriteLine("going to create image of width " + width + " and height " + height);
 
             image = parentfile.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
+        
         }
     }
 }

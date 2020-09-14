@@ -300,13 +300,10 @@ namespace EPFExplorer
         {
             ushort output = 0;
 
-           
-
-            output |= (ushort)(input.B >> 3);
+            output |= (ushort)(input.R >> 3);
             output |= (ushort)((input.G >> 3) << 5);
-            output |= (ushort)((input.R >> 3) << 10);
+            output |= (ushort)((input.B >> 3) << 10);
 
-            //and set the high bit too?
 
             return output;
         }

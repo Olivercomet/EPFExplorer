@@ -39,14 +39,25 @@ namespace EPFExplorer
 
         public void RequestSpriteEditorImage(int frame) {
 
-            if (images[frame].image == null)
+            for (int i = 0; i < images.Count; i++)  //load all other images if not already loaded
+            {
+                if (images[i].image == null && i != frame)
                 {
+                    tempPalette = sprite.GetPalette(palettes[i].filebytes, 1, sprite.RDTSpriteBPP).ToList();
+                    sprite.RDTSpriteAlphaColour = tempPalette[0];
+                    images[i].LoadImage(tempPalette.ToArray());
+                    SetAlphaColourDisplay();
+                }
+            }
+
+            if (images[frame].image == null)        //load selected image if not already loaded
+            {
                 tempPalette = sprite.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
                 sprite.RDTSpriteAlphaColour = tempPalette[0];
                 images[frame].LoadImage(tempPalette.ToArray());
                 SetAlphaColourDisplay();
-                }
-            
+            }
+
             if (sprite.RDTSpriteBPP == 8)
                 {
                 BPP_8_radioButton.Checked = true;    
