@@ -116,9 +116,9 @@ namespace EPFExplorer
                 {
                         if (file.filebytes != null)
                         {
-                            File.WriteAllBytes(filename + file.offset + ".voxadpcm", file.filebytes);
+                            file.ConvertToWAV();
+                            File.WriteAllBytes(filename + file.offset + ".wav", file.filebytes);
                         }
-                    
                 }
             }
         }

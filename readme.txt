@@ -6,4 +6,4 @@ Current features:
 Opening and editing ARC files (Both EPF and HR)
 Opening and editing RDT files (EPF. HR is viewing/exporting only, and lacks filenames)
 Editing save files. (Both EPF and HR)
-Dumping audio clips.
+Dumping audio clips to wav (you will need to open them in Audacity with FFMPEG installed)
