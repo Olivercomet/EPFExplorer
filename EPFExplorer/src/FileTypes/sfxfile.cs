@@ -66,8 +66,8 @@ namespace EPFExplorer
             output[0x1E] = 0x00;
             output[0x1F] = 0x00;
 
-            output[0x20] = (byte)(0xFF); //data block size, apparently, but this works
-            output[0x21] = (byte)(0xFF);
+            output[0x20] = 0xFF;    //data block size apparently, but this works
+            output[0x21] = 0xFF;
 
             output[0x22] = 0x04;    //bits per sample
             output[0x23] = 0x00;
