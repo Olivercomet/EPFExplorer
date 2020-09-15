@@ -119,6 +119,101 @@ namespace EPFExplorer
         }
 
 
+        public void RebuildFilebytesFromSettings() {
+
+            int size = 8;
+
+            foreach (setting s in spriteSettings)
+                {
+                size += 8;
+                size += s.name.Length;
+                switch(s.type)
+                    {
+                    case 0x03:
+                        size += 1;
+                        break;
+                    case 0x04:
+                        size += 8;
+                        break;
+                    case 0x05:
+                        size += 16;
+                        break;
+                    }
+                }
+
+            filebytes = new byte[size];
+
+            int curOffset = 6;
+
+            parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)spriteSettings.Count);   //write setting count
+            curOffset += 2;
+          
+
+            foreach (setting s in spriteSettings)
+                {
+                parentfile.form1.WriteU16ToArray(filebytes,curOffset,(ushort)s.name.Length);    //write name length
+                curOffset += 2;
+
+                for (int c = 0; c < s.name.Length; c++) //write name
+                    {
+                    filebytes[curOffset] = (byte)s.name[c];
+                    curOffset++;
+                    }
+
+                parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)s.type);     //write setting type
+                curOffset += 2;
+
+                parentfile.form1.WriteU32ToArray(filebytes, curOffset, 0xFFFFFFFF);     //write padding
+                curOffset += 4;
+
+                switch (s.type)
+                {
+                    case 0x03:
+                        if (s.trueOrFalse == true)
+                            {
+                            filebytes[curOffset] = 0x01;
+                            }
+                        curOffset++;
+                        break;
+                    case 0x04:
+                        filebytes[curOffset] = (byte)(s.X);
+                        filebytes[curOffset + 1] = (byte)(s.X >> 8);
+                        filebytes[curOffset + 2] = (byte)(s.X >> 16);
+                        filebytes[curOffset + 3] = (byte)(s.X >> 24);
+                        curOffset += 4;
+                        filebytes[curOffset] = (byte)(s.Y);
+                        filebytes[curOffset + 1] = (byte)(s.Y >> 8);
+                        filebytes[curOffset + 2] = (byte)(s.Y >> 16);
+                        filebytes[curOffset + 3] = (byte)(s.Y >> 24);
+                        curOffset += 4;
+                        break;
+                    case 0x05:
+                        filebytes[curOffset] = (byte)(s.X);
+                        filebytes[curOffset + 1] = (byte)(s.X >> 8);
+                        filebytes[curOffset + 2] = (byte)(s.X >> 16);
+                        filebytes[curOffset + 3] = (byte)(s.X >> 24);
+                        curOffset += 4;
+                        filebytes[curOffset] = (byte)(s.Y);
+                        filebytes[curOffset + 1] = (byte)(s.Y >> 8);
+                        filebytes[curOffset + 2] = (byte)(s.Y >> 16);
+                        filebytes[curOffset + 3] = (byte)(s.Y >> 24);
+                        curOffset += 4;
+                        filebytes[curOffset] = (byte)(s.X2);
+                        filebytes[curOffset + 1] = (byte)(s.X2 >> 8);
+                        filebytes[curOffset + 2] = (byte)(s.X2 >> 16);
+                        filebytes[curOffset + 3] = (byte)(s.X2 >> 24);
+                        curOffset += 4;
+                        filebytes[curOffset] = (byte)(s.Y2);
+                        filebytes[curOffset + 1] = (byte)(s.Y2 >> 8);
+                        filebytes[curOffset + 2] = (byte)(s.Y2 >> 16);
+                        filebytes[curOffset + 3] = (byte)(s.Y2 >> 24);
+                        curOffset += 4;
+                        break;
+                }
+            }
+        }
+
+
 
         //stuff for graphics
 
@@ -126,6 +221,8 @@ namespace EPFExplorer
 
         ushort width = 0;
         ushort height = 0;
+        public ushort offsetX = 0;
+        public ushort offsetY = 0;
 
         public Image image = null;
 
@@ -223,6 +320,8 @@ namespace EPFExplorer
 
             width = BitConverter.ToUInt16(filebytes, 0);
             height = BitConverter.ToUInt16(filebytes, 2);
+            offsetX = BitConverter.ToUInt16(filebytes, 4);
+            offsetY = BitConverter.ToUInt16(filebytes, 6);
 
             image = parentfile.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
         

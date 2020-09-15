@@ -307,7 +307,8 @@ namespace EPFExplorer
                     }
 
                 spriteEditor.RequestSpriteEditorImage(spriteEditor.curFrame);
-            
+
+                spriteEditor.ready = false;
             foreach (rdtSubfileData.setting s in rdtSubfileDataList[1].spriteSettings)
                 {   
                 switch (s.name)
@@ -337,6 +338,7 @@ namespace EPFExplorer
                         break;
                     }
                 }
+                spriteEditor.ready = true;
             }
         else
             {

@@ -55,11 +55,11 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label10 = new System.Windows.Forms.Label();
             this.alphaColourNext = new System.Windows.Forms.Button();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.offsetYUpDown = new System.Windows.Forms.NumericUpDown();
             this.alphaColourPrev = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.alphacolourdisplay = new System.Windows.Forms.PictureBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.offsetXUpDown = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.exportFrame = new System.Windows.Forms.Button();
@@ -81,9 +81,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.centreY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.centreX)).BeginInit();
             this.groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.offsetYUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphacolourdisplay)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.offsetXUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.durationBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).BeginInit();
             this.SuspendLayout();
@@ -203,6 +203,7 @@
             this.boundsY2.Name = "boundsY2";
             this.boundsY2.Size = new System.Drawing.Size(59, 22);
             this.boundsY2.TabIndex = 16;
+            this.boundsY2.ValueChanged += new System.EventHandler(this.boundsY2_ValueChanged);
             // 
             // label7
             // 
@@ -229,6 +230,7 @@
             this.boundsX2.Name = "boundsX2";
             this.boundsX2.Size = new System.Drawing.Size(65, 22);
             this.boundsX2.TabIndex = 14;
+            this.boundsX2.ValueChanged += new System.EventHandler(this.boundsX2_ValueChanged);
             // 
             // label4
             // 
@@ -255,6 +257,7 @@
             this.boundsY.Name = "boundsY";
             this.boundsY.Size = new System.Drawing.Size(59, 22);
             this.boundsY.TabIndex = 12;
+            this.boundsY.ValueChanged += new System.EventHandler(this.boundsY_ValueChanged);
             // 
             // label5
             // 
@@ -281,6 +284,7 @@
             this.boundsX.Name = "boundsX";
             this.boundsX.Size = new System.Drawing.Size(65, 22);
             this.boundsX.TabIndex = 10;
+            this.boundsX.ValueChanged += new System.EventHandler(this.boundsX_ValueChanged);
             // 
             // label3
             // 
@@ -316,6 +320,7 @@
             this.centreY.Name = "centreY";
             this.centreY.Size = new System.Drawing.Size(59, 22);
             this.centreY.TabIndex = 7;
+            this.centreY.ValueChanged += new System.EventHandler(this.centreY_ValueChanged);
             // 
             // label1
             // 
@@ -342,6 +347,7 @@
             this.centreX.Name = "centreX";
             this.centreX.Size = new System.Drawing.Size(65, 22);
             this.centreX.TabIndex = 4;
+            this.centreX.ValueChanged += new System.EventHandler(this.centreX_ValueChanged);
             // 
             // Centre
             // 
@@ -361,6 +367,7 @@
             this.rotatableCheckbox.TabIndex = 2;
             this.rotatableCheckbox.Text = "Rotatable";
             this.rotatableCheckbox.UseVisualStyleBackColor = true;
+            this.rotatableCheckbox.CheckedChanged += new System.EventHandler(this.rotatableCheckbox_CheckedChanged);
             // 
             // loopingCheckbox
             // 
@@ -371,6 +378,7 @@
             this.loopingCheckbox.TabIndex = 1;
             this.loopingCheckbox.Text = "Looping";
             this.loopingCheckbox.UseVisualStyleBackColor = true;
+            this.loopingCheckbox.CheckedChanged += new System.EventHandler(this.loopingCheckbox_CheckedChanged);
             // 
             // OAMSpriteCheckbox
             // 
@@ -387,11 +395,11 @@
             // 
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.alphaColourNext);
-            this.groupBox2.Controls.Add(this.numericUpDown1);
+            this.groupBox2.Controls.Add(this.offsetYUpDown);
             this.groupBox2.Controls.Add(this.alphaColourPrev);
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.alphacolourdisplay);
-            this.groupBox2.Controls.Add(this.numericUpDown2);
+            this.groupBox2.Controls.Add(this.offsetXUpDown);
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.exportFrame);
@@ -429,22 +437,23 @@
             this.alphaColourNext.UseVisualStyleBackColor = true;
             this.alphaColourNext.Click += new System.EventHandler(this.alphaColourNext_Click);
             // 
-            // numericUpDown1
+            // offsetYUpDown
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(188, 118);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.offsetYUpDown.Location = new System.Drawing.Point(188, 118);
+            this.offsetYUpDown.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.numericUpDown1.Minimum = new decimal(new int[] {
+            this.offsetYUpDown.Minimum = new decimal(new int[] {
             -2147483648,
             0,
             0,
             -2147483648});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(59, 22);
-            this.numericUpDown1.TabIndex = 25;
+            this.offsetYUpDown.Name = "offsetYUpDown";
+            this.offsetYUpDown.Size = new System.Drawing.Size(59, 22);
+            this.offsetYUpDown.TabIndex = 25;
+            this.offsetYUpDown.ValueChanged += new System.EventHandler(this.offsetYUpDown_ValueChanged);
             // 
             // alphaColourPrev
             // 
@@ -474,22 +483,23 @@
             this.alphacolourdisplay.TabStop = false;
             this.alphacolourdisplay.Click += new System.EventHandler(this.alphacolourdisplay_Click);
             // 
-            // numericUpDown2
+            // offsetXUpDown
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(94, 120);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
+            this.offsetXUpDown.Location = new System.Drawing.Point(94, 120);
+            this.offsetXUpDown.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
-            this.numericUpDown2.Minimum = new decimal(new int[] {
+            this.offsetXUpDown.Minimum = new decimal(new int[] {
             -2147483648,
             0,
             0,
             -2147483648});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(65, 22);
-            this.numericUpDown2.TabIndex = 23;
+            this.offsetXUpDown.Name = "offsetXUpDown";
+            this.offsetXUpDown.Size = new System.Drawing.Size(65, 22);
+            this.offsetXUpDown.TabIndex = 23;
+            this.offsetXUpDown.ValueChanged += new System.EventHandler(this.offsetXUpDown_ValueChanged);
             // 
             // label12
             // 
@@ -634,9 +644,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.centreX)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.offsetYUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphacolourdisplay)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.offsetXUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.durationBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).EndInit();
             this.ResumeLayout(false);
@@ -685,9 +695,9 @@
         private System.Windows.Forms.Button alphaColourPrev;
         private System.Windows.Forms.Button exportRawFilesButton;
         private System.Windows.Forms.Label label10;
-        public System.Windows.Forms.NumericUpDown numericUpDown1;
+        public System.Windows.Forms.NumericUpDown offsetYUpDown;
         private System.Windows.Forms.Label label11;
-        public System.Windows.Forms.NumericUpDown numericUpDown2;
+        public System.Windows.Forms.NumericUpDown offsetXUpDown;
         private System.Windows.Forms.Label label12;
     }
 }

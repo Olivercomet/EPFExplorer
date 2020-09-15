@@ -304,6 +304,9 @@ namespace EPFExplorer
 
                     bool is_modified = false;
 
+                    List<ushort> offsetsX = new List<ushort>();
+                    List<ushort> offsetsY = new List<ushort>();
+
                     foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList) //get images
                         {
                         if (subfiledata.graphicsType == "image")
@@ -321,6 +324,9 @@ namespace EPFExplorer
                                 skipIndices.Add(images.Count - 1); //so that we know not to bother rereading it and its palette
                                 savedImages.Add(subfiledata);
                                 }
+                            offsetsX.Add(subfiledata.offsetX);
+                            offsetsY.Add(subfiledata.offsetY);
+
                             imageIndex++;
                             }
                         }
@@ -455,8 +461,8 @@ namespace EPFExplorer
 
                                 form1.WriteU16ToArray(newImage.filebytes, 0, (ushort)images[j].Width);
                                 form1.WriteU16ToArray(newImage.filebytes, 2, (ushort)images[j].Height);
-                                form1.WriteU16ToArray(newImage.filebytes, 4, (ushort)(0x00));   //writing a placeholder, but I don't know what this actually is! baked movement?
-                                form1.WriteU16ToArray(newImage.filebytes, 6, (ushort)0x00);    //writing a placeholder, but I don't know what this actually is! baked movement?
+                                form1.WriteU16ToArray(newImage.filebytes, 4, offsetsX[j]);   
+                                form1.WriteU16ToArray(newImage.filebytes, 6, offsetsY[j]);    
 
                                 int curOffset = 8;
 
@@ -513,7 +519,8 @@ namespace EPFExplorer
                             }
 
 
-                    //also need to update the centre bounds config file (TO BE COMPLETED)
+
+                    file.rdtSubfileDataList[1].RebuildFilebytesFromSettings();  //rebuild centre bounds etc config
 
 
                     int offsetOfSubfileTable = 0x11 + nodeTree.Length + data.Count;

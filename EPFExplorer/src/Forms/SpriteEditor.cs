@@ -37,7 +37,10 @@ namespace EPFExplorer
 
         public List<Color> tempPalette;
 
+        public bool ready = false;
         public void RequestSpriteEditorImage(int frame) {
+
+            ready = false;
 
             for (int i = 0; i < images.Count; i++)  //load all other images if not already loaded
             {
@@ -69,14 +72,16 @@ namespace EPFExplorer
                 BPP_4_radioButton.Checked = true;
                 }
 
+            offsetXUpDown.Value = images[frame].offsetX;
+            offsetYUpDown.Value = images[frame].offsetY;
+
             ImageBox.Image = images[frame].image;
             curFrameDisplay.Text = "Frame " + (frame+1) + " / "+sprite.RDTSpriteNumFrames;
             durationBox.Value = sprite.RDTSpriteFrameDurations[curFrame];
-        }
-        private void OAMSpriteCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
 
+            ready = true;
         }
+      
 
   
         private void ImageBox_Click(object sender, EventArgs e)
@@ -131,6 +136,8 @@ namespace EPFExplorer
 
         public void SendUpdateToRDT() {
 
+            ready = false;
+
             //remove the existing images and palettes in the archivedfile
             int indexOfFirstImageOrPalette = 0;
 
@@ -156,6 +163,8 @@ namespace EPFExplorer
             }
 
             RequestSpriteEditorImage(curFrame);
+
+            ready = true;
         }
 
         private void durationBox_ValueChanged(object sender, EventArgs e)
@@ -350,6 +359,174 @@ namespace EPFExplorer
         private void BPP_8_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             sprite.RDTSpriteBPP = 8;
+        }
+
+        private void offsetXUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            images[curFrame].offsetX = (ushort)offsetXUpDown.Value;
+            SendUpdateToRDT();
+        }
+
+        private void offsetYUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            images[curFrame].offsetY = (ushort)offsetYUpDown.Value;
+            SendUpdateToRDT();
+        }
+
+        private void centreX_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            ChangeSpriteSetting("center",(int)centreX.Value, (int)centreY.Value, 0, 0);
+            SendUpdateToRDT();
+        }
+
+
+        public void ChangeSpriteSetting(string settingName, int value1, int value2, int value3, int value4) {
+
+            List<rdtSubfileData.setting> spriteSettings = sprite.rdtSubfileDataList[1].spriteSettings;
+
+            if (spriteSettings == null || !ready)
+                {
+                return;
+                }
+
+            foreach (rdtSubfileData.setting s in spriteSettings)
+                {
+                if (s.name == settingName)
+                    {
+                    switch (s.type)
+                        {
+                        case 0x03: //bool
+                            if (value1 == 1)
+                                {
+                                s.trueOrFalse = true;
+                                }
+                            else
+                                {
+                                s.trueOrFalse = false;
+                                }
+                            break;
+                        case 0x04: //vector2
+                            s.X = value1;
+                            s.Y = value2;
+                            break;
+
+                        case 0x05: //2d rect
+                            s.X = value1;
+                            s.Y = value2;
+                            s.X2 = value3;
+                            s.Y2 = value4;
+                            break;
+                        }
+                    return;
+                    }
+                }
+
+            //if it gets to this point, then the setting wasn't found, so create it, then run the function again.
+
+            rdtSubfileData.setting newSetting = new rdtSubfileData.setting();
+            newSetting.name = settingName;
+
+            switch (settingName)
+                {
+                case "looping":
+                case "rotatable":
+                case "isOAMSprite":
+                    newSetting.type = 0x03;
+                    break;
+                case "center":
+                    newSetting.type = 0x04;
+                    break;
+                case "bounds":
+                    newSetting.type = 0x05;
+                    break;
+                }
+
+            spriteSettings.Add(newSetting);
+
+            ChangeSpriteSetting(settingName, value1, value2, value3, value4);
+            }
+
+        private void centreY_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            ChangeSpriteSetting( "center", (int)centreX.Value, (int)centreY.Value, 0, 0);
+            SendUpdateToRDT();
+        }
+
+        private void boundsX_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            SendUpdateToRDT();
+        }
+
+        private void boundsX2_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            SendUpdateToRDT();
+        }
+
+        private void boundsY_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            SendUpdateToRDT();
+        }
+
+        private void boundsY2_ValueChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            SendUpdateToRDT();
+        }
+
+        private void OAMSpriteCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+
+            if (OAMSpriteCheckbox.Checked)
+            {
+                ChangeSpriteSetting( "isOAMSprite", 1, 0, 0, 0);
+            }
+            else
+            {
+                ChangeSpriteSetting( "isOAMSprite", 0, 0, 0, 0);
+            }
+            SendUpdateToRDT();
+        }
+
+        private void loopingCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!ready) { return; }
+
+            if (loopingCheckbox.Checked)
+            {
+                ChangeSpriteSetting( "looping", 1, 0, 0, 0);
+            }
+            else
+            {
+                ChangeSpriteSetting( "looping", 0, 0, 0, 0);
+            }
+            SendUpdateToRDT();
+        }
+
+        private void rotatableCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(!ready){return;}
+
+            if (rotatableCheckbox.Checked)
+            {
+                ChangeSpriteSetting( "rotatable", 1, 0, 0, 0);
+            }
+            else
+            {
+                ChangeSpriteSetting( "rotatable", 0, 0, 0, 0);
+            }
+            SendUpdateToRDT();
         }
     }
 }
