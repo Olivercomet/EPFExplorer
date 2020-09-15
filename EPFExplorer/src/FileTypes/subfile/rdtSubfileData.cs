@@ -88,7 +88,6 @@ namespace EPFExplorer
                     case 0x03:  //bool
                         if (filebytes[curOffset] == 0x01)
                             {
-                            Console.WriteLine(newSetting.name + " true");
                             newSetting.trueOrFalse = true;  
                             }
                         curOffset++;
@@ -115,7 +114,6 @@ namespace EPFExplorer
                         MessageBox.Show("Unknown sprite setting with ID \""+newSetting.type+"\"", "Unrecognised item", MessageBoxButtons.OK);
                         break;
                     }
-                Console.WriteLine(newSetting.name);
                 spriteSettings.Add(newSetting);
                 }
         }
@@ -130,6 +128,8 @@ namespace EPFExplorer
         ushort height = 0;
 
         public Image image = null;
+
+        public int writeAddress = 0; //for writing
 
 
         //generic functions follow
@@ -151,11 +151,8 @@ namespace EPFExplorer
 
             filebytes = new byte[size];
             Array.Copy(bytes,offset+6,filebytes,0,size);
-            Console.WriteLine("RDT data found: type " + subfileType);
 
             DecompressLZ10IfCompressed();
-
-            //File.WriteAllBytes(IndexInList.ToString(), filebytes);
 
             if (subfileType == 2)
                 {
@@ -226,7 +223,6 @@ namespace EPFExplorer
 
             width = BitConverter.ToUInt16(filebytes, 0);
             height = BitConverter.ToUInt16(filebytes, 2);
-            Console.WriteLine("going to create image of width " + width + " and height " + height);
 
             image = parentfile.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
         

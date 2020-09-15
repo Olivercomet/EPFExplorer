@@ -31,6 +31,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.exportRawFilesButton = new System.Windows.Forms.Button();
             this.BPP_8_radioButton = new System.Windows.Forms.RadioButton();
             this.BPP_4_radioButton = new System.Windows.Forms.RadioButton();
             this.labelBPP = new System.Windows.Forms.Label();
@@ -52,9 +53,14 @@
             this.loopingCheckbox = new System.Windows.Forms.CheckBox();
             this.OAMSpriteCheckbox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.alphaColourNext = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.alphaColourPrev = new System.Windows.Forms.Button();
+            this.label11 = new System.Windows.Forms.Label();
             this.alphacolourdisplay = new System.Windows.Forms.PictureBox();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.exportFrame = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
@@ -66,7 +72,6 @@
             this.nextFrame = new System.Windows.Forms.Button();
             this.prevFrame = new System.Windows.Forms.Button();
             this.ImageBox = new RedCell.UI.Controls.PixelBox();
-            this.exportRawFilesButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.boundsY2)).BeginInit();
@@ -76,7 +81,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.centreY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.centreX)).BeginInit();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphacolourdisplay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.durationBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).BeginInit();
             this.SuspendLayout();
@@ -128,6 +135,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Settings";
             // 
+            // exportRawFilesButton
+            // 
+            this.exportRawFilesButton.Location = new System.Drawing.Point(124, 69);
+            this.exportRawFilesButton.Name = "exportRawFilesButton";
+            this.exportRawFilesButton.Size = new System.Drawing.Size(123, 31);
+            this.exportRawFilesButton.TabIndex = 21;
+            this.exportRawFilesButton.Text = "Export raw files";
+            this.exportRawFilesButton.UseVisualStyleBackColor = true;
+            this.exportRawFilesButton.Click += new System.EventHandler(this.exportRawFilesButton_Click);
+            // 
             // BPP_8_radioButton
             // 
             this.BPP_8_radioButton.AutoSize = true;
@@ -138,6 +155,7 @@
             this.BPP_8_radioButton.TabStop = true;
             this.BPP_8_radioButton.Text = "8bpp";
             this.BPP_8_radioButton.UseVisualStyleBackColor = true;
+            this.BPP_8_radioButton.CheckedChanged += new System.EventHandler(this.BPP_8_radioButton_CheckedChanged);
             // 
             // BPP_4_radioButton
             // 
@@ -149,6 +167,7 @@
             this.BPP_4_radioButton.TabStop = true;
             this.BPP_4_radioButton.Text = "4bpp";
             this.BPP_4_radioButton.UseVisualStyleBackColor = true;
+            this.BPP_4_radioButton.CheckedChanged += new System.EventHandler(this.BPP_4_radioButton_CheckedChanged);
             // 
             // labelBPP
             // 
@@ -366,9 +385,14 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.alphaColourNext);
+            this.groupBox2.Controls.Add(this.numericUpDown1);
             this.groupBox2.Controls.Add(this.alphaColourPrev);
+            this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.alphacolourdisplay);
+            this.groupBox2.Controls.Add(this.numericUpDown2);
+            this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.exportFrame);
             this.groupBox2.Controls.Add(this.label8);
@@ -381,14 +405,23 @@
             this.groupBox2.Controls.Add(this.prevFrame);
             this.groupBox2.Location = new System.Drawing.Point(616, 294);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(266, 296);
+            this.groupBox2.Size = new System.Drawing.Size(266, 340);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Animation";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(165, 118);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(17, 17);
+            this.label10.TabIndex = 26;
+            this.label10.Text = "Y";
+            // 
             // alphaColourNext
             // 
-            this.alphaColourNext.Location = new System.Drawing.Point(180, 253);
+            this.alphaColourNext.Location = new System.Drawing.Point(180, 301);
             this.alphaColourNext.Name = "alphaColourNext";
             this.alphaColourNext.Size = new System.Drawing.Size(27, 31);
             this.alphaColourNext.TabIndex = 12;
@@ -396,9 +429,26 @@
             this.alphaColourNext.UseVisualStyleBackColor = true;
             this.alphaColourNext.Click += new System.EventHandler(this.alphaColourNext_Click);
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(188, 118);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(59, 22);
+            this.numericUpDown1.TabIndex = 25;
+            // 
             // alphaColourPrev
             // 
-            this.alphaColourPrev.Location = new System.Drawing.Point(105, 253);
+            this.alphaColourPrev.Location = new System.Drawing.Point(105, 301);
             this.alphaColourPrev.Name = "alphaColourPrev";
             this.alphaColourPrev.Size = new System.Drawing.Size(27, 31);
             this.alphaColourPrev.TabIndex = 11;
@@ -406,19 +456,54 @@
             this.alphaColourPrev.UseVisualStyleBackColor = true;
             this.alphaColourPrev.Click += new System.EventHandler(this.alphaColourPrev_Click);
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(71, 120);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(17, 17);
+            this.label11.TabIndex = 24;
+            this.label11.Text = "X";
+            // 
             // alphacolourdisplay
             // 
-            this.alphacolourdisplay.Location = new System.Drawing.Point(138, 253);
+            this.alphacolourdisplay.Location = new System.Drawing.Point(138, 301);
             this.alphacolourdisplay.Name = "alphacolourdisplay";
             this.alphacolourdisplay.Size = new System.Drawing.Size(36, 31);
             this.alphacolourdisplay.TabIndex = 10;
             this.alphacolourdisplay.TabStop = false;
             this.alphacolourdisplay.Click += new System.EventHandler(this.alphacolourdisplay_Click);
             // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(94, 120);
+            this.numericUpDown2.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.numericUpDown2.Minimum = new decimal(new int[] {
+            -2147483648,
+            0,
+            0,
+            -2147483648});
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(65, 22);
+            this.numericUpDown2.TabIndex = 23;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(16, 120);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(46, 17);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "Offset";
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(54, 250);
+            this.label9.Location = new System.Drawing.Point(54, 298);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 34);
             this.label9.TabIndex = 9;
@@ -426,7 +511,7 @@
             // 
             // exportFrame
             // 
-            this.exportFrame.Location = new System.Drawing.Point(57, 109);
+            this.exportFrame.Location = new System.Drawing.Point(57, 157);
             this.exportFrame.Name = "exportFrame";
             this.exportFrame.Size = new System.Drawing.Size(156, 30);
             this.exportFrame.TabIndex = 8;
@@ -437,15 +522,15 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(63, 67);
+            this.label8.Location = new System.Drawing.Point(62, 72);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(62, 17);
+            this.label8.Size = new System.Drawing.Size(60, 34);
             this.label8.TabIndex = 7;
-            this.label8.Text = "Duration";
+            this.label8.Text = "Frame\r\nduration";
             // 
             // durationBox
             // 
-            this.durationBox.Location = new System.Drawing.Point(131, 67);
+            this.durationBox.Location = new System.Drawing.Point(131, 79);
             this.durationBox.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -458,7 +543,7 @@
             // 
             // replaceFrame
             // 
-            this.replaceFrame.Location = new System.Drawing.Point(57, 145);
+            this.replaceFrame.Location = new System.Drawing.Point(57, 193);
             this.replaceFrame.Name = "replaceFrame";
             this.replaceFrame.Size = new System.Drawing.Size(156, 30);
             this.replaceFrame.TabIndex = 5;
@@ -468,7 +553,7 @@
             // 
             // addFrame
             // 
-            this.addFrame.Location = new System.Drawing.Point(57, 217);
+            this.addFrame.Location = new System.Drawing.Point(57, 265);
             this.addFrame.Name = "addFrame";
             this.addFrame.Size = new System.Drawing.Size(156, 30);
             this.addFrame.TabIndex = 4;
@@ -478,7 +563,7 @@
             // 
             // deleteFrame
             // 
-            this.deleteFrame.Location = new System.Drawing.Point(57, 181);
+            this.deleteFrame.Location = new System.Drawing.Point(57, 229);
             this.deleteFrame.Name = "deleteFrame";
             this.deleteFrame.Size = new System.Drawing.Size(156, 30);
             this.deleteFrame.TabIndex = 3;
@@ -520,26 +605,16 @@
             this.ImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             this.ImageBox.Location = new System.Drawing.Point(12, 42);
             this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(598, 548);
+            this.ImageBox.Size = new System.Drawing.Size(598, 592);
             this.ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImageBox.TabIndex = 4;
             this.ImageBox.TabStop = false;
-            // 
-            // exportRawFilesButton
-            // 
-            this.exportRawFilesButton.Location = new System.Drawing.Point(124, 69);
-            this.exportRawFilesButton.Name = "exportRawFilesButton";
-            this.exportRawFilesButton.Size = new System.Drawing.Size(123, 31);
-            this.exportRawFilesButton.TabIndex = 21;
-            this.exportRawFilesButton.Text = "Export raw files";
-            this.exportRawFilesButton.UseVisualStyleBackColor = true;
-            this.exportRawFilesButton.Click += new System.EventHandler(this.exportRawFilesButton_Click);
             // 
             // SpriteEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(894, 602);
+            this.ClientSize = new System.Drawing.Size(894, 646);
             this.Controls.Add(this.ImageBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -559,7 +634,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.centreX)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.alphacolourdisplay)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.durationBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ImageBox)).EndInit();
             this.ResumeLayout(false);
@@ -607,5 +684,10 @@
         private System.Windows.Forms.Button alphaColourNext;
         private System.Windows.Forms.Button alphaColourPrev;
         private System.Windows.Forms.Button exportRawFilesButton;
+        private System.Windows.Forms.Label label10;
+        public System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Label label11;
+        public System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.Label label12;
     }
 }

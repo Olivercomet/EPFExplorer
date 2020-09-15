@@ -227,24 +227,20 @@ namespace EPFExplorer
                 //From what I can tell, the file offsets in an RDT initially lead to a table (beginning with ID 0x03),
                 //which contains lists of file types. The first one tends to be a centre bounds etc file, describing the
                 //sprite. The next list tends to contain LZ10 compressed stuff, where the first file is the offset of 
-                //some metadata thing? Maybe contains dimensions of image? Then after that, it's the offsets of alternating 
+                //animation metadata. Then, frame durations. Then after that, it's the offsets of alternating 
                 //palettes and sprites. All these offsets are relative to the start of the RDT, which is a pain...
 
                 for (int i = 0; i < numlists; i++)
                     {
-                    Console.WriteLine("list "+i);
                     int countInList = BitConverter.ToUInt16(subfileTable.filebytes,curOffset);
                     curOffset += 2;
                     for (int f = 0; f < countInList; f++)
                         {
                         rdtSubfileData newSubfile = new rdtSubfileData();
-                        Console.WriteLine(curOffset);
                         newSubfile.IndexInList = overallIndex;
                         newSubfile.parentfile = this;
                         newSubfile.ReadRawData(parentrdtfile.filebytes,BitConverter.ToInt32(subfileTable.filebytes,curOffset));
                         overallIndex++;
-
-                        File.WriteAllBytes("graphics_subfile_" + newSubfile.IndexInList, newSubfile.filebytes);
 
                         if (f == 0) { newSubfile.graphicsType = "GraphicsMetadata";}
                         else if (f == 1) { newSubfile.graphicsType = "GraphicsFrameDurations";}
@@ -254,12 +250,10 @@ namespace EPFExplorer
                             if (f % 2 == 0)
                                 {
                                 newSubfile.graphicsType = "palette";
-                                Console.WriteLine("made a palette");
                                 }
                             else
                                 {
                                 newSubfile.graphicsType = "image";
-                                Console.WriteLine("made an image");
                                 }
                             }
 

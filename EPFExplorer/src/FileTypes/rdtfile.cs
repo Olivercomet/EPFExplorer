@@ -359,8 +359,8 @@ namespace EPFExplorer
 
                             if (skipIndices.Contains(j))   //no need to reread image data, as the user didn't edit or view it
                                 {
-                                savedPalettes[0].DecompressLZ10IfCompressed();
                                 newPalette = savedPalettes[0];
+                                newPalette.graphicsType = "palette";
                                 newPalette.DecompressLZ10IfCompressed();
                                 file.rdtSubfileDataList.Add(newPalette);
                                 file.rdtSubfileDataList.Add(savedImages[j]);
@@ -416,6 +416,7 @@ namespace EPFExplorer
 
                             
                                 newPalette.subfileType = 0x04;
+                                newPalette.graphicsType = "palette";
 
                                 newPalette.filebytes = new byte[1 + (palette.Length * 2)];
 
@@ -429,8 +430,6 @@ namespace EPFExplorer
 
                                     colorindex++;
                                 }
-
-                                File.WriteAllBytes("palette", newPalette.filebytes); //temp
 
                                 file.rdtSubfileDataList.Add(newPalette);
 
@@ -520,13 +519,38 @@ namespace EPFExplorer
 
                     //a lot of things need to be updated before the following happens! I don't know if they all read into their filebytes in the first place, so you need to rebuild them first!
 
-                    Console.WriteLine("o is " + offsetOfSubfileTable);    //temp
-                    
+                    int spritePaletteOffset = 0; //global palette for the sprite so that it can just be pasted around
+
                     foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList)
                         {
+                        subfiledata.writeAddress = 0;
+
+                        int offsetOfThisSubfile = 0;
+                        bool dontWrite = false;
+
+
                         if (file.rdtSubfileDataList.IndexOf(subfiledata) > 0)   //if it's not the subfile table, add an entry to the subfile table
                             {
-                            int offsetOfThisSubfile = 0x11 + nodeTree.Length + data.Count;
+                            if (offsetOfThisSubfile == 0)   //if it wasn't written to by the previous check
+                                {
+                                offsetOfThisSubfile = 0x11 + nodeTree.Length + data.Count;
+                                subfiledata.writeAddress = offsetOfThisSubfile;
+                                }
+
+                            if (subfiledata.graphicsType == "palette" && spritePaletteOffset != 0)  //if it's not the first palette to be processed, just store a reference to the earlier palette
+                                {
+                                dontWrite = true;
+                                offsetOfThisSubfile = spritePaletteOffset;
+                                }
+                            else if (subfiledata.graphicsType == "palette") //but if it is the first one, store its offset so we can reference it later
+                                {
+                                spritePaletteOffset = offsetOfThisSubfile;
+                                }
+
+
+                            subfiledata.writeAddress = offsetOfThisSubfile;
+
+
                             data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable] = (byte)(offsetOfThisSubfile & 0x000000FF);
                             data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 1] = (byte)((offsetOfThisSubfile & 0x0000FF00) >> 8);
                             data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 2] = (byte)((offsetOfThisSubfile & 0x00FF0000) >> 16);
@@ -542,10 +566,17 @@ namespace EPFExplorer
 
                         //now write the subfile file into data
 
+                        if (dontWrite)  //if it's just an instance of an existing subfile, don't write a new one
+                            {
+                            continue;
+                            }
+
+                        //otherwise, write subfiletype and size, then write filebytes
+
                         data.Add((byte)subfiledata.subfileType);
                         data.Add((byte)0);
 
-                        if (subfiledata.subfileType == 0x04 && subfiledata.filebytes[0] != 0x10)    //Not quite a fix. This if statement stops repeated palettes from being compressed multiple times by accident, but it wouldn't detect a file that just happens to begin with 0x10 in its uncompressed state.
+                        if (subfiledata.subfileType == 0x04)   
                             {
                             subfiledata.filebytes = DSDecmp.NewestProgram.Compress(subfiledata.filebytes, new DSDecmp.Formats.Nitro.LZ10());
                             }
@@ -573,9 +604,25 @@ namespace EPFExplorer
         }
 
 
+        public bool ByteArraysAreEqual(Byte[] array1, Byte[] array2) {
+
+        if (array1.Length != array2.Length)
+            {
+           return false;
+            }
+
+        for (int i = 0; i < array1.Length; i++)
+            {
+            if (array2[i] != array1[i])
+                {
+                return false;
+                }
+            }
+
+        return true;
+        }
         public int FindIndexOfColorInPalette(Color[] p, Color c)
         {
-
             for (int i = 0; i < p.Length; i++)
             {
                 if ((c.R & 0xF8)  == (p[i].R & 0xF8) && (c.G & 0xF8) == p[i].G && (c.B & 0xF8) == (p[i].B & 0xF8))

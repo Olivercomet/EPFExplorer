@@ -272,23 +272,10 @@ namespace EPFExplorer
             int b = ((input & 0x7C00) >> 7);
             int g = ((input & 0x03E0) >> 2);
             int r = ((input & 0x001F) << 3);
-         
 
-            int a = 0;
-
-            Console.WriteLine(input);
-
-        
-            a = 0xFF;
-            
-
-            Console.WriteLine("r " + r);
-            Console.WriteLine("g " + g);
-            Console.WriteLine("b " + b);
+            int a = 0xFF;
 
             Color output = Color.FromArgb(0xFF, r, g, b);
-
-            Console.WriteLine(output.R);
 
             return output;
         }

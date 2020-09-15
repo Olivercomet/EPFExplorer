@@ -68,6 +68,7 @@ namespace EPFExplorer
                 {
                 BPP_4_radioButton.Checked = true;
                 }
+
             ImageBox.Image = images[frame].image;
             curFrameDisplay.Text = "Frame " + (frame+1) + " / "+sprite.RDTSpriteNumFrames;
             durationBox.Value = sprite.RDTSpriteFrameDurations[curFrame];
@@ -328,7 +329,7 @@ namespace EPFExplorer
             SaveFileDialog openFileDialog1 = new SaveFileDialog();
 
             openFileDialog1.Title = "Save raw files";
-            openFileDialog1.FileName = "Save here";
+            openFileDialog1.FileName = Path.GetFileName(sprite.filename);
             openFileDialog1.CheckPathExists = true;
 
 
@@ -339,6 +340,16 @@ namespace EPFExplorer
                     File.WriteAllBytes(openFileDialog1.FileName + "_" + sprite.rdtSubfileDataList.IndexOf(f), f.filebytes);
                     }
                 }
+        }
+
+        private void BPP_4_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            sprite.RDTSpriteBPP = 4;
+        }
+
+        private void BPP_8_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            sprite.RDTSpriteBPP = 8;
         }
     }
 }
