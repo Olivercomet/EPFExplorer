@@ -389,7 +389,7 @@ namespace EPFExplorer
                                     
                                 Color[] coloursToAdd = Get_Unique_Colours(images, palette.Length);
                                 Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
-                                Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
+                                //Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
 
                                 //now make sure the alpha colour is at index 0
                                 if (palette[0] != file.RDTSpriteAlphaColour)
@@ -446,9 +446,12 @@ namespace EPFExplorer
                                         {
                                         fakeWidth++;
                                         }
+                                    newImage.filebytes = new byte[8 + ((fakeWidth / 2) * images[j].Height)];
                                     }
-
-                                newImage.filebytes = new byte[8 + (fakeWidth * images[j].Height)];
+                                else
+                                    {
+                                    newImage.filebytes = new byte[8 + (fakeWidth * images[j].Height)];
+                                    }
 
                                 form1.WriteU16ToArray(newImage.filebytes, 0, (ushort)images[j].Width);
                                 form1.WriteU16ToArray(newImage.filebytes, 2, (ushort)images[j].Height);
@@ -482,8 +485,15 @@ namespace EPFExplorer
                                     }
                                 else
                                     {
-                                    MessageBox.Show("8BPP image reimport not yet implemented.",
-                                        "Not yet implemented");
+                                        for (int y = 0; y < imageTemp.Height; y++)
+                                        {
+                                            for (int x = 0; x < imageTemp.Width; x++)
+                                            {
+                                                newPixel = imageTemp.GetPixel(x, y);
+                                                newImage.filebytes[curOffset] = (byte)FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8));
+                                                curOffset++;
+                                            }
+                                        }
                                     }
 
                                 file.rdtSubfileDataList.Add(newImage);
