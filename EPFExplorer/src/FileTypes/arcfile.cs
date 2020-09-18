@@ -410,6 +410,7 @@ namespace EPFExplorer
 
         public void ReadArc()
         {
+
             number_of_filenames_successfully_applied = 0;
 
                 filecount = form1.readU32FromArray(filebytes,0);

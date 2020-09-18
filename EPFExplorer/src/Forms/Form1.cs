@@ -651,6 +651,23 @@ namespace EPFExplorer
             }
         }
 
+        private void renameToolStripMenuItem_Click(object sender, EventArgs e)  //RENAME FILE
+        {
+            if (FileTree.SelectedNode != null && FileTree.SelectedNode.Parent != null)
+            {
+                FileTree.LabelEdit = true;
+
+                if (!FileTree.SelectedNode.IsEditing)
+                {
+                    FileTree.SelectedNode.BeginEdit();
+                }
+            }
+            else
+            {
+                MessageBox.Show("You cannot rename that file.", "Invalid selection");
+            }
+        }
+
         private void exportToolStripMenuItem_Click(object sender, EventArgs e)  //EXPORT FILE
         {
                 treeNodesAndArchivedFiles[FileTree.SelectedNode].ExportToFile();
@@ -741,8 +758,11 @@ namespace EPFExplorer
             if (FileTree.SelectedNode != null && FileTree.SelectedNode.Parent != null)
             {
                 FileTree.LabelEdit = true;
+                Console.WriteLine("ah");
+
                 if (!FileTree.SelectedNode.IsEditing)
                 {
+                    Console.WriteLine("beginEdit");
                     FileTree.SelectedNode.BeginEdit();
                 }
             }
@@ -1137,5 +1157,7 @@ namespace EPFExplorer
                     }
                 }
         }
+
+        
     }
 }
