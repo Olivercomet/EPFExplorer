@@ -60,12 +60,7 @@ namespace EPFExplorer
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
 
-            if (parentrdtfile != null) //if rdt related
-                {
-                saveFileDialog1.Filter = "Resource files (*.res)|*.res|All files (*.*)|*.*";
-                saveFileDialog1.FileName = Path.GetFileName(filename) + ".res";
-                }   //otherwise, assume it's arc related
-            else if (filename == "FILENAME_NOT_SET")
+            if (filename == "FILENAME_NOT_SET")
                 {
                 saveFileDialog1.FileName = hash + "." + filemagic;
                 }
@@ -99,12 +94,7 @@ namespace EPFExplorer
 
         public void Export(string path) //if doing a batch export, this will get called directly (so that it doesn't open a savefiledialog for every individual file)
         {
-            if (parentrdtfile != null)
-            {
-                Console.WriteLine("NEED TO REBUILD RDT SUBFILE HERE FROM ANY CHANGES THE USER HAS MADE");
-                File.WriteAllBytes(path, filebytes);
-            }
-            else if (Path.GetExtension(path).ToLower() == ".txt")
+            if (Path.GetExtension(path).ToLower() == ".txt")
             {
                 File.WriteAllLines(path, STstrings);
             }
@@ -914,84 +904,5 @@ namespace EPFExplorer
                 parentarcfile.form1.WriteIntToArray(filebytes, 5 + (4 * formattedStrings.Count), currentPos);
             }
         }
-
-
-        public Byte[] ExportToCustomSpriteArchive() {       //export RDT sprite subfiles in custom container format
-
-            List<Byte> output = new List<Byte>();
-
-            int count_of_graphics_metadata_files = 0;
-
-            foreach (rdtSubfileData subfile in rdtSubfileDataList)
-                {
-                switch (subfile.subfileType)
-                    {
-                    case 0x02:  //sprite settings
-                        subfile.RebuildFilebytesFromSettings();
-                        output.Add((byte)'S');
-                        output.Add((byte)'E');
-                        output.Add((byte)'T');
-                        output.Add((byte)'T');
-                        break;
-                    case 0x03:  //subfile table, it doesn't need to be correct but we need to keep a dummy at least
-                        output.Add((byte)'T');
-                        output.Add((byte)'A');
-                        output.Add((byte)'B');
-                        output.Add((byte)'L');
-                        break;
-                    case 0x04:
-                        if (subfile.graphicsType == "palette")
-                            {
-                            output.Add((byte)'P');
-                            output.Add((byte)'A');
-                            output.Add((byte)'L');
-                            output.Add((byte)'L');
-                            }
-                        else if (subfile.graphicsType == "image")
-                            {
-                            output.Add((byte)'I');
-                            output.Add((byte)'M');
-                            output.Add((byte)'A');
-                            output.Add((byte)'G');
-                            }
-                        else
-                            {
-                            output.Add((byte)'G');
-                            output.Add((byte)'R');
-                            output.Add((byte)'P');
-                            output.Add((byte)'H');
-
-                            if(count_of_graphics_metadata_files == 0)
-                                {
-                                //then it's the other thing
-                                }
-                            else
-                                {
-                                //then it's the frame durations
-                                }
-                            count_of_graphics_metadata_files++;
-                            }
-                        break;
-                    }
-
-                output.Add((byte)subfile.filebytes.Length);
-                output.Add((byte)(subfile.filebytes.Length >> 8));
-                output.Add((byte)(subfile.filebytes.Length >> 16));
-                output.Add((byte)(subfile.filebytes.Length >> 24));
-
-                foreach (Byte b in subfile.filebytes)
-                    {
-                    output.Add(b);
-                    }
-            }
-
-
-
-            return output.ToArray();
-        }
-
-
-
-
     }
 }

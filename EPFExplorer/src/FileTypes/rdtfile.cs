@@ -268,10 +268,13 @@ namespace EPFExplorer
                 {
                     filename = saveFileDialog1.FileName;
                     File.WriteAllBytes(saveFileDialog1.FileName, output.ToArray());
+
                     if (!is_only_sprite_container)
                         {
+                        Console.WriteLine("test");
                         form1.ParseRdt(filename);
-                        }
+                        form1.MakeFileTree();
+                    }
                 }
         }
 
@@ -709,6 +712,76 @@ namespace EPFExplorer
 
             return false;
             }
+
+
+        List<TreeNode> NodesForBatchExport = new List<TreeNode>();
+        public void ExportFolder(TreeNode topnode)
+        {
+            NodesForBatchExport = new List<TreeNode>();
+
+            NodesForBatchExport.Add(topnode);
+
+            RecursivelyAddChildrenToExportList(topnode);
+
+            //now we should have all child, grandchild, etc folders
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.FileName = "Save here";
+
+            saveFileDialog1.Title = "Choose folder";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "Directory |directory";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine(saveFileDialog1.FileName);
+                foreach (TreeNode folder in NodesForBatchExport)
+                {
+                    foreach (TreeNode child in folder.Nodes)
+                    {
+                        if (form1.treeNodesAndArchivedFiles.ContainsKey(child)) //if it's a file
+                        {
+                            archivedfile file = form1.treeNodesAndArchivedFiles[child];
+
+                            string path;
+                            if (file.filename[0] == '/')
+                            {
+                                path = Path.GetDirectoryName(saveFileDialog1.FileName) + file.filename.Replace('/', '\\');
+                            }
+                            else
+                            {
+                                path = Path.GetDirectoryName(saveFileDialog1.FileName) + "\\" + file.filename.Replace('/', '\\');
+                            }
+
+                            if (file.filename == "FILENAME_NOT_SET")
+                            {
+                                path = Path.GetDirectoryName(saveFileDialog1.FileName) + "\\Names_not_found\\" + file.hash + "." + file.filemagic;
+                            }
+
+                            Console.WriteLine(path);
+                            file.ReadFile();
+                            File.WriteAllBytes(form1.GetOrMakeDirectoryForFileName(path.Replace('/', '\\')), file.filebytes);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void RecursivelyAddChildrenToExportList(TreeNode node)
+        {
+            foreach (TreeNode child in node.Nodes)  //for each child of this node
+            {
+                if (!form1.treeNodesAndArchivedFiles.ContainsKey(node)) //if it's a folder
+                {
+                    NodesForBatchExport.Add(child);
+                    RecursivelyAddChildrenToExportList(child);
+                }
+            }
+        }
+
+
+
 
     }
 

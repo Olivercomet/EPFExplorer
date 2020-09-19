@@ -75,7 +75,6 @@ namespace EPFExplorer
                 { 
                 if (!form1.treeNodesAndArchivedFiles.ContainsKey(node)) //if it's a folder
                     {
-                    Console.WriteLine("ok");
                     NodesForBatchExport.Add(child);
                     RecursivelyAddChildrenToExportList(child);
                     }
@@ -131,7 +130,7 @@ namespace EPFExplorer
 
                             Console.WriteLine(path);
                             file.ReadFile();
-                            File.WriteAllBytes(GetOrMakeDirectoryForFileName(path.Replace('/', '\\')), file.filebytes);
+                            File.WriteAllBytes(form1.GetOrMakeDirectoryForFileName(path.Replace('/', '\\')), file.filebytes);
                             }
                     }
                 }
@@ -144,26 +143,7 @@ namespace EPFExplorer
 
 
 
-        public string GetOrMakeDirectoryForFileName(string path)  //recursively make directories so that a given path exists
-            {
-            path = path.Replace("/","\\");
-
-            string[] splitPath = path.Split('\\');
-
-            string workingPath = "";
-
-            for (int i = 0; i < splitPath.Length - 1; i++)   //it's -1 because we don't want to create a directory for the last part of the path, because that's the file.
-                {
-                workingPath += splitPath[i] + "\\";
-
-                if (!Directory.Exists(workingPath))
-                    {
-                    Directory.CreateDirectory(workingPath);
-                    }
-                }
-
-            return path;
-            }
+       
 
 
         public archivedfile GetFileByName(string filename) {
@@ -217,7 +197,7 @@ namespace EPFExplorer
                         if (file.filename != "FILENAME_NOT_SET")
                             {
                             
-                            File.WriteAllBytes(GetOrMakeDirectoryForFileName(RootFolderName + "\\" + file.filename), file.filebytes);
+                            File.WriteAllBytes(form1.GetOrMakeDirectoryForFileName(RootFolderName + "\\" + file.filename), file.filebytes);
                             }
                         else
                             {
@@ -236,7 +216,7 @@ namespace EPFExplorer
                     {
                         if (file.filename != "FILENAME_NOT_SET")
                             {
-                            File.WriteAllBytes(GetOrMakeDirectoryForFileName(RootFolderName + "\\" + file.filename), file.filebytes);
+                            File.WriteAllBytes(form1.GetOrMakeDirectoryForFileName(RootFolderName + "\\" + file.filename), file.filebytes);
                             }
                         else
                             {

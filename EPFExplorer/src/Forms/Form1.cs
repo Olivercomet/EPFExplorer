@@ -311,6 +311,26 @@ namespace EPFExplorer
         }
 
 
+        public string GetOrMakeDirectoryForFileName(string path)  //recursively make directories so that a given path exists
+        {
+            path = path.Replace("/", "\\");
+
+            string[] splitPath = path.Split('\\');
+
+            string workingPath = "";
+
+            for (int i = 0; i < splitPath.Length - 1; i++)   //it's -1 because we don't want to create a directory for the last part of the path, because that's the file.
+            {
+                workingPath += splitPath[i] + "\\";
+
+                if (!Directory.Exists(workingPath))
+                {
+                    Directory.CreateDirectory(workingPath);
+                }
+            }
+
+            return path;
+        }
 
 
 
@@ -735,9 +755,80 @@ namespace EPFExplorer
                         newfile.parentarcfile = activeArc;
                         newfile.ReadFile();
 
-                        treeNodesAndArchivedFiles.Add(parentNode.Nodes.Add(Path.GetFileName(openedFileName)), newfile);
+                        TreeNode newNode = parentNode.Nodes.Add(Path.GetFileName(openedFileName));
+                        newNode.ImageIndex = 1;
+                        newNode.SelectedImageIndex = 1;
+
+                        newfile.treeNode = newNode;
+
+                        treeNodesAndArchivedFiles.Add(newNode, newfile);
 
                         activeArc.archivedfiles.Add(newfile);
+
+                        
+
+                    }
+                }
+                else if (mode == "rdt")
+                {
+                    foreach (string openedFileName in openFileDialog1.FileNames)
+                    {
+                        bool AbortThisParticularFile = false;
+
+                        foreach (TreeNode child in parentNode.Nodes)    //check to see if this file already exists and ask the user if they want to replace it or not
+                        {
+                            if (child.Text == Path.GetFileNameWithoutExtension(openedFileName) && treeNodesAndArchivedFiles.ContainsKey(child))
+                            {
+                                DialogResult dialogResult = MessageBox.Show("There is already a file with the name \n\"" + child.Text + "\" in that directory.\nWould you like to replace it?", "File already exists", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                                if (dialogResult == DialogResult.Yes)
+                                {
+                                    activeRdt.archivedfiles.Remove(treeNodesAndArchivedFiles[child]);
+                                    treeNodesAndArchivedFiles.Remove(child);
+                                    parentNode.Nodes.Remove(child);
+                                }
+                                else
+                                {
+                                    AbortThisParticularFile = true;
+                                }
+                                break;
+                            }
+                        }
+
+                        if (AbortThisParticularFile)
+                        {
+                            continue;
+                        }
+
+                        rdtfile newSprite = new rdtfile();
+
+                        newSprite.filename = parentNode.FullPath.Replace(FileTree.Nodes[0].Text, "").Replace("\\", "/");  //erase name of root folder (i.e. the rdt name) but keep the rest of the path
+
+                        if (newSprite.filename.Length > 0 && newSprite.filename[newSprite.filename.Length - 1] != '/')
+                        {
+                            newSprite.filename += "/";        //add a slash at the end if needed
+                        }
+
+                        newSprite.filename += Path.GetFileNameWithoutExtension(openedFileName);   //add new filename to end of directory string
+
+                        if (newSprite.filename[0] == '/')
+                        {
+                            newSprite.filename = newSprite.filename.Substring(1, newSprite.filename.Length - 1);  //if the first character in the filename is '/', remove that character
+                        }
+
+                        newSprite.filebytes = File.ReadAllBytes(openedFileName);
+                        newSprite.form1 = this;
+                        newSprite.ReadRdt();
+
+                        TreeNode newNode = parentNode.Nodes.Add(Path.GetFileNameWithoutExtension(openedFileName));
+                        newNode.ImageIndex = 1;
+                        newNode.SelectedImageIndex = 1;
+                        newSprite.archivedfiles[0].treeNode = newNode;
+                        newSprite.archivedfiles[0].filename = newSprite.filename;
+
+
+                        treeNodesAndArchivedFiles.Add(newNode, newSprite.archivedfiles[0]);
+
+                        activeRdt.archivedfiles.Add(newSprite.archivedfiles[0]);
                     }
                 }
             }
@@ -790,6 +881,10 @@ namespace EPFExplorer
             {
                 activeArc.ExportFolder(FileTree.SelectedNode);
             }
+            else if(mode == "rdt")
+            {
+                MessageBox.Show("Folder exports are not supported for RDT files.", "Not supported", MessageBoxButtons.OK);
+            }
         }
 
 
@@ -811,9 +906,22 @@ namespace EPFExplorer
         {
             foreach (TreeNode child in node.Nodes)
             {
+                if (child == null)
+                    {
+                    continue;
+                    }
+
                 if (treeNodesAndArchivedFiles.ContainsKey(child))        //if it's a file
                 {
-                    activeArc.archivedfiles.Remove(treeNodesAndArchivedFiles[child]);
+                    if (mode == "arc")
+                        {
+                        activeArc.archivedfiles.Remove(treeNodesAndArchivedFiles[child]);
+                        }
+                    else if (mode == "rdt")
+                        {
+                        activeRdt.archivedfiles.Remove(treeNodesAndArchivedFiles[child]);
+                        }
+                    
                     treeNodesAndArchivedFiles.Remove(child);
                 }
                 else                                                     //if it's a folder
@@ -1250,10 +1358,7 @@ namespace EPFExplorer
 
         private void rawDataToolStripMenuItem_Click(object sender, EventArgs e) //EXPORT RDT SPRITE RAW DATA
         {
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-
             archivedfile targetfile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
-
             rdtfile forExport = new rdtfile();
             forExport.form1 = this;
             forExport.archivedfiles = new List<archivedfile>();

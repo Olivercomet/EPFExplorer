@@ -50,12 +50,6 @@
             this.renameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.rdtFolderContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.addChildFolderRDT = new System.Windows.Forms.ToolStripMenuItem();
-            this.renameToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.renameRDTarchivedfile = new System.Windows.Forms.ToolStripMenuItem();
             this.exportRDTSpriteToPNGs = new System.Windows.Forms.ToolStripMenuItem();
             this.RDTExportRawData = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,7 +65,6 @@
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
-            this.rdtFolderContextMenu.SuspendLayout();
             this.rdtSubfileContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +76,7 @@
             this.toolsToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
-            this.menuStrip2.Size = new System.Drawing.Size(981, 28);
+            this.menuStrip2.Size = new System.Drawing.Size(981, 30);
             this.menuStrip2.TabIndex = 1;
             this.menuStrip2.Text = "menuStrip2";
             // 
@@ -93,7 +86,7 @@
             this.Toolstrip_Open,
             this.saveToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // Toolstrip_Open
@@ -116,7 +109,7 @@
             this.saveFileExtractorToolStripMenuItem,
             this.massRDTExportToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 26);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // saveFileExtractorToolStripMenuItem
@@ -190,7 +183,7 @@
             this.exportToolStripMenuItem1,
             this.deleteFolder});
             this.archivedFolderContextMenu.Name = "archivedFolderContextMenu";
-            this.archivedFolderContextMenu.Size = new System.Drawing.Size(133, 100);
+            this.archivedFolderContextMenu.Size = new System.Drawing.Size(211, 128);
             // 
             // addToolStripMenuItem1
             // 
@@ -198,7 +191,7 @@
             this.addFileToFolder,
             this.addFolderToFolder});
             this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
-            this.addToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.addToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.addToolStripMenuItem1.Text = "Add";
             // 
             // addFileToFolder
@@ -218,67 +211,23 @@
             // renameFolderToolStripMenuItem
             // 
             this.renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
-            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
             this.renameFolderToolStripMenuItem.Text = "Rename";
             this.renameFolderToolStripMenuItem.Click += new System.EventHandler(this.renameFolderToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem1
             // 
             this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
-            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem1.Text = "Export";
             this.exportToolStripMenuItem1.Click += new System.EventHandler(this.exportToolStripMenuItem1_Click);
             // 
             // deleteFolder
             // 
             this.deleteFolder.Name = "deleteFolder";
-            this.deleteFolder.Size = new System.Drawing.Size(132, 24);
+            this.deleteFolder.Size = new System.Drawing.Size(210, 24);
             this.deleteFolder.Text = "Delete";
             this.deleteFolder.Click += new System.EventHandler(this.deleteFolder_Click);
-            // 
-            // rdtFolderContextMenu
-            // 
-            this.rdtFolderContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.rdtFolderContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.addToolStripMenuItem,
-            this.renameToolStripMenuItem1,
-            this.deleteToolStripMenuItem1});
-            this.rdtFolderContextMenu.Name = "contextMenuStrip1";
-            this.rdtFolderContextMenu.Size = new System.Drawing.Size(133, 76);
-            // 
-            // addToolStripMenuItem
-            // 
-            this.addToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem1,
-            this.addChildFolderRDT});
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
-            this.addToolStripMenuItem.Text = "Add";
-            // 
-            // fileToolStripMenuItem1
-            // 
-            this.fileToolStripMenuItem1.Name = "fileToolStripMenuItem1";
-            this.fileToolStripMenuItem1.Size = new System.Drawing.Size(134, 26);
-            this.fileToolStripMenuItem1.Text = "File";
-            // 
-            // addChildFolderRDT
-            // 
-            this.addChildFolderRDT.Name = "addChildFolderRDT";
-            this.addChildFolderRDT.Size = new System.Drawing.Size(134, 26);
-            this.addChildFolderRDT.Text = "Folder";
-            this.addChildFolderRDT.Click += new System.EventHandler(this.addChildFolderRDT_Click);
-            // 
-            // renameToolStripMenuItem1
-            // 
-            this.renameToolStripMenuItem1.Name = "renameToolStripMenuItem1";
-            this.renameToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
-            this.renameToolStripMenuItem1.Text = "Rename";
-            // 
-            // deleteToolStripMenuItem1
-            // 
-            this.deleteToolStripMenuItem1.Name = "deleteToolStripMenuItem1";
-            this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
-            this.deleteToolStripMenuItem1.Text = "Delete";
             // 
             // renameRDTarchivedfile
             // 
@@ -321,26 +270,26 @@
             this.deleteRDTarchivedfile});
             this.rdtSubfileContextMenu.Name = "contextMenuStrip1";
             this.rdtSubfileContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(211, 152);
+            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(133, 124);
             // 
             // openRDTarchivedfile
             // 
             this.openRDTarchivedfile.Name = "openRDTarchivedfile";
-            this.openRDTarchivedfile.Size = new System.Drawing.Size(210, 24);
+            this.openRDTarchivedfile.Size = new System.Drawing.Size(132, 24);
             this.openRDTarchivedfile.Text = "Open";
             this.openRDTarchivedfile.Click += new System.EventHandler(this.openRDTarchivedfile_Click);
             // 
             // replaceToolStripMenuItem1
             // 
             this.replaceToolStripMenuItem1.Name = "replaceToolStripMenuItem1";
-            this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
+            this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
             this.replaceToolStripMenuItem1.Text = "Replace";
             this.replaceToolStripMenuItem1.Click += new System.EventHandler(this.replaceToolStripMenuItem1_Click);
             // 
             // renameRDTarchfile
             // 
             this.renameRDTarchfile.Name = "renameRDTarchfile";
-            this.renameRDTarchfile.Size = new System.Drawing.Size(210, 24);
+            this.renameRDTarchfile.Size = new System.Drawing.Size(132, 24);
             this.renameRDTarchfile.Text = "Rename";
             this.renameRDTarchfile.Click += new System.EventHandler(this.renameRDTarchfile_Click);
             // 
@@ -350,27 +299,27 @@
             this.rdtSpriteToPNGs,
             this.rawDataToolStripMenuItem});
             this.exportToolStripMenuItem2.Name = "exportToolStripMenuItem2";
-            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
+            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(132, 24);
             this.exportToolStripMenuItem2.Text = "Export";
             // 
             // rdtSpriteToPNGs
             // 
             this.rdtSpriteToPNGs.Name = "rdtSpriteToPNGs";
-            this.rdtSpriteToPNGs.Size = new System.Drawing.Size(224, 26);
+            this.rdtSpriteToPNGs.Size = new System.Drawing.Size(173, 26);
             this.rdtSpriteToPNGs.Text = "PNG images";
             this.rdtSpriteToPNGs.Click += new System.EventHandler(this.rdtSpriteToPNGs_Click);
             // 
             // rawDataToolStripMenuItem
             // 
             this.rawDataToolStripMenuItem.Name = "rawDataToolStripMenuItem";
-            this.rawDataToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.rawDataToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
             this.rawDataToolStripMenuItem.Text = "Raw data";
             this.rawDataToolStripMenuItem.Click += new System.EventHandler(this.rawDataToolStripMenuItem_Click);
             // 
             // deleteRDTarchivedfile
             // 
             this.deleteRDTarchivedfile.Name = "deleteRDTarchivedfile";
-            this.deleteRDTarchivedfile.Size = new System.Drawing.Size(210, 24);
+            this.deleteRDTarchivedfile.Size = new System.Drawing.Size(132, 24);
             this.deleteRDTarchivedfile.Text = "Delete";
             this.deleteRDTarchivedfile.Click += new System.EventHandler(this.deleteRDTarchivedfile_Click);
             // 
@@ -390,7 +339,6 @@
             this.menuStrip2.PerformLayout();
             this.archivedFileContextMenu.ResumeLayout(false);
             this.archivedFolderContextMenu.ResumeLayout(false);
-            this.rdtFolderContextMenu.ResumeLayout(false);
             this.rdtSubfileContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -418,12 +366,6 @@
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteFolder;
         private System.Windows.Forms.ToolStripMenuItem massRDTExportToolStripMenuItem;
-        private System.Windows.Forms.ContextMenuStrip rdtFolderContextMenu;
-        private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem addChildFolderRDT;
-        private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem renameRDTarchivedfile;
         private System.Windows.Forms.ToolStripMenuItem exportRDTSpriteToPNGs;
         private System.Windows.Forms.ToolStripMenuItem RDTExportRawData;
