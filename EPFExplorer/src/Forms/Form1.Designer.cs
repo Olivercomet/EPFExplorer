@@ -99,14 +99,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -356,15 +356,16 @@
             // rdtSpriteToPNGs
             // 
             this.rdtSpriteToPNGs.Name = "rdtSpriteToPNGs";
-            this.rdtSpriteToPNGs.Size = new System.Drawing.Size(173, 26);
+            this.rdtSpriteToPNGs.Size = new System.Drawing.Size(224, 26);
             this.rdtSpriteToPNGs.Text = "PNG images";
             this.rdtSpriteToPNGs.Click += new System.EventHandler(this.rdtSpriteToPNGs_Click);
             // 
             // rawDataToolStripMenuItem
             // 
             this.rawDataToolStripMenuItem.Name = "rawDataToolStripMenuItem";
-            this.rawDataToolStripMenuItem.Size = new System.Drawing.Size(173, 26);
+            this.rawDataToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.rawDataToolStripMenuItem.Text = "Raw data";
+            this.rawDataToolStripMenuItem.Click += new System.EventHandler(this.rawDataToolStripMenuItem_Click);
             // 
             // deleteRDTarchivedfile
             // 

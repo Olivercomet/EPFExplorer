@@ -669,8 +669,6 @@ namespace EPFExplorer
                 {
                 f.filebytes = null;
                 }
-
-            
         }
 
         public void ViewArcInFileTree() {

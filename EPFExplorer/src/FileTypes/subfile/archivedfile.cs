@@ -916,37 +916,82 @@ namespace EPFExplorer
         }
 
 
+        public Byte[] ExportToCustomSpriteArchive() {       //export RDT sprite subfiles in custom container format
 
-        public void count_unique_colours(Byte[] filebytes)  //quite old, probably obsolete
-            {
-            List<Byte> uniquebytes = new List<byte>();
+            List<Byte> output = new List<Byte>();
 
-            List<Byte> filebyteswithoutheader = new List<Byte>(filebytes.ToList().GetRange(0x240,filebytes.Length - 0x240));
+            int count_of_graphics_metadata_files = 0;
 
-            foreach (Byte b in filebyteswithoutheader)
+            foreach (rdtSubfileData subfile in rdtSubfileDataList)
                 {
-                if (!uniquebytes.Contains(b))
+                switch (subfile.subfileType)
                     {
-                    uniquebytes.Add(b);
+                    case 0x02:  //sprite settings
+                        subfile.RebuildFilebytesFromSettings();
+                        output.Add((byte)'S');
+                        output.Add((byte)'E');
+                        output.Add((byte)'T');
+                        output.Add((byte)'T');
+                        break;
+                    case 0x03:  //subfile table, it doesn't need to be correct but we need to keep a dummy at least
+                        output.Add((byte)'T');
+                        output.Add((byte)'A');
+                        output.Add((byte)'B');
+                        output.Add((byte)'L');
+                        break;
+                    case 0x04:
+                        if (subfile.graphicsType == "palette")
+                            {
+                            output.Add((byte)'P');
+                            output.Add((byte)'A');
+                            output.Add((byte)'L');
+                            output.Add((byte)'L');
+                            }
+                        else if (subfile.graphicsType == "image")
+                            {
+                            output.Add((byte)'I');
+                            output.Add((byte)'M');
+                            output.Add((byte)'A');
+                            output.Add((byte)'G');
+                            }
+                        else
+                            {
+                            output.Add((byte)'G');
+                            output.Add((byte)'R');
+                            output.Add((byte)'P');
+                            output.Add((byte)'H');
+
+                            if(count_of_graphics_metadata_files == 0)
+                                {
+                                //then it's the other thing
+                                }
+                            else
+                                {
+                                //then it's the frame durations
+                                }
+                            count_of_graphics_metadata_files++;
+                            }
+                        break;
                     }
-                }
 
-            Console.WriteLine(uniquebytes.Count);
-            Console.WriteLine("Min: " + uniquebytes.Min().ToString());
-            Console.WriteLine("Max: " + uniquebytes.Max().ToString());
+                output.Add((byte)subfile.filebytes.Length);
+                output.Add((byte)(subfile.filebytes.Length >> 8));
+                output.Add((byte)(subfile.filebytes.Length >> 16));
+                output.Add((byte)(subfile.filebytes.Length >> 24));
 
-            for (int i = 0; i < 255; i++)
-            {
-                if (!uniquebytes.Contains(BitConverter.GetBytes(i)[0]))
-                {
-                    Console.WriteLine("The image doesn't contain byte " + i + "!");
-                }
+                foreach (Byte b in subfile.filebytes)
+                    {
+                    output.Add(b);
+                    }
             }
 
-            Console.WriteLine("breakpoint");
-            }
+
+
+            return output.ToArray();
+        }
+
+
+
+
     }
-
-
-   
 }

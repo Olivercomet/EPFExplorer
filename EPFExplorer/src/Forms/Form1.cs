@@ -146,6 +146,7 @@ namespace EPFExplorer
                     case ".rdt":
                         mode = "rdt";
                         ParseRdt(openFileDialog1.FileName);
+                        MakeFileTree();
                         break;
                 }
             }
@@ -860,9 +861,7 @@ namespace EPFExplorer
             }
             else if (mode == "rdt")
             {
-                //MessageBox.Show("RDT saving not implemented", "Can't go there right now.");
-
-                activeRdt.RebuildRDT();
+                activeRdt.RebuildRDT(false);
             }
         }
 
@@ -1216,6 +1215,11 @@ namespace EPFExplorer
 
         private void replaceToolStripMenuItem1_Click(object sender, EventArgs e)    //REPLACE RDT SPRITE
         {
+            TreeNode node = FileTree.SelectedNode;
+            archivedfile fileToBeReplaced = treeNodesAndArchivedFiles[FileTree.SelectedNode];
+
+            string oldName = fileToBeReplaced.filename;
+
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
             openFileDialog1.Title = "Select sprite file";
@@ -1224,9 +1228,37 @@ namespace EPFExplorer
             openFileDialog1.Filter = "1PP sprite data (*.sprite)|*.sprite";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                MessageBox.Show("A system for exporting rdt subfiles in a bespoke format needs to be implemented before they can be reimported!", "Not yet implemented");
-            }
+                {
+                rdtfile newSprite = new rdtfile();
+
+                if (fileToBeReplaced.spriteEditor != null)
+                    {
+                    fileToBeReplaced.spriteEditor.Close();
+                    }
+                
+                newSprite.arcname = Path.GetFileName(openFileDialog1.FileName);
+                newSprite.filename = openFileDialog1.FileName;
+                newSprite.filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                newSprite.form1 = this;
+                newSprite.ReadRdt();
+                newSprite.archivedfiles[0].filename = oldName;
+                treeNodesAndArchivedFiles.Remove(node);
+                activeRdt.archivedfiles[activeRdt.archivedfiles.IndexOf(fileToBeReplaced)] = newSprite.archivedfiles[0];
+                treeNodesAndArchivedFiles.Add(node,activeRdt.archivedfiles[activeRdt.archivedfiles.IndexOf(newSprite.archivedfiles[0])]);
+                }
+        }
+
+        private void rawDataToolStripMenuItem_Click(object sender, EventArgs e) //EXPORT RDT SPRITE RAW DATA
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            archivedfile targetfile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
+
+            rdtfile forExport = new rdtfile();
+            forExport.form1 = this;
+            forExport.archivedfiles = new List<archivedfile>();
+            forExport.archivedfiles.Add(targetfile);
+            forExport.RebuildRDT(true);
         }
     }
 }

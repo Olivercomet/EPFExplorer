@@ -35,17 +35,15 @@ namespace EPFExplorer
         {
             filecount = BitConverter.ToUInt16(filebytes,0x0F);
             
-            if (BitConverter.ToUInt32(filebytes,0x12) > filebytes.Length)
+            if (BitConverter.ToUInt32(filebytes,0x13) > filebytes.Length)
                 {
                 isHR = true;
                 }
 
             if (isHR)
                 {
-                MessageBox.Show("HR RDT files are annoying. There won't be any filenames.",
-                          "Filenames will not be shown");
+                //MessageBox.Show("HR RDT files are annoying. There won't be any filenames.","Filenames will not be shown");
                 RDTBlagger3000();
-                form1.MakeFileTree();
                 return;
                 }
 
@@ -71,7 +69,7 @@ namespace EPFExplorer
                 Console.WriteLine("ERROR! Either some files were missed, or we overcounted!");
                 }
 
-            form1.MakeFileTree();
+         
         }
 
         public void RDTBlagger3000() { //attempts to scrape likely file offsets from the index table. Intended for HR RDTs, where the file tree is in an annoying format
@@ -135,7 +133,7 @@ namespace EPFExplorer
 
 
 
-        public void RebuildRDT() {
+        public void RebuildRDT(bool is_only_sprite_container) {
 
         int longestFilenameLength = 0;
 
@@ -248,20 +246,33 @@ namespace EPFExplorer
             output[7] = (byte)((output.Count >> 16) & 0xFF);
             output[8] = (byte)((output.Count >> 24) & 0xFF);
 
+            
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            saveFileDialog1.FileName = Path.GetFileName(filename);
+            if (!is_only_sprite_container)
+                {
+                saveFileDialog1.FileName = Path.GetFileName(filename);
+                saveFileDialog1.Title = "Save rdt file";
+                saveFileDialog1.Filter = "1PP resource data (*.rdt)|*.rdt";
+            }
+            else
+                {
+                saveFileDialog1.FileName = Path.GetFileName(archivedfiles[0].filename);
+                saveFileDialog1.Title = "Save sprite";
+                saveFileDialog1.Filter = "1PP sprite data (*.sprite)|*.sprite";
+                }
 
-            saveFileDialog1.Title = "Save rdt file";
             saveFileDialog1.CheckPathExists = true;
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                filename = saveFileDialog1.FileName;
-                File.WriteAllBytes(saveFileDialog1.FileName, output.ToArray());
-                form1.ParseRdt(filename);
+                    filename = saveFileDialog1.FileName;
+                    File.WriteAllBytes(saveFileDialog1.FileName, output.ToArray());
+                    if (!is_only_sprite_container)
+                        {
+                        form1.ParseRdt(filename);
+                        }
                 }
-
         }
 
 
