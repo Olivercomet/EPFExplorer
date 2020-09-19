@@ -42,7 +42,7 @@ namespace EPFExplorer
 
             if (isHR)
                 {
-                //MessageBox.Show("HR RDT files are annoying. There won't be any filenames.","Filenames will not be shown");
+                MessageBox.Show("HR RDT files are annoying. There won't be any filenames.","Filenames will not be shown");
                 RDTBlagger3000();
                 return;
                 }
@@ -80,7 +80,7 @@ namespace EPFExplorer
                 {
                 int possibleOffset = BitConverter.ToInt32(filebytes,i);
 
-                if (possibleOffset >= endOfIndexTable && possibleOffset < filebytes.Length && filebytes[possibleOffset] == 0x03 && BitConverter.ToInt32(filebytes, possibleOffset+1) > 0)
+                if (possibleOffset >= endOfIndexTable && possibleOffset < filebytes.Length && filebytes[possibleOffset] == 0x03 && BitConverter.ToInt32(filebytes, possibleOffset+1) > 0 && BitConverter.ToUInt16(filebytes, possibleOffset+1) < 65535)
                     {
                     archivedfile newFile = new archivedfile();
                     newFile.offset = possibleOffset;
@@ -274,7 +274,7 @@ namespace EPFExplorer
                         Console.WriteLine("test");
                         form1.ParseRdt(filename);
                         form1.MakeFileTree();
-                    }
+                        }
                 }
         }
 
@@ -291,7 +291,10 @@ namespace EPFExplorer
                 if (node.Nodes[i].Text == "nullNode")
                     {
                     nodeTree[basePos + (i * 5)] = 0x00;
-                    archivedfile file = archivedfiles[NullNodesInArchivedFileOrder.IndexOf(node.Nodes[i])];  
+                    archivedfile file = archivedfiles[NullNodesInArchivedFileOrder.IndexOf(node.Nodes[i])];
+
+
+                    List<rdtSubfileData> backuplist = new List<rdtSubfileData>(file.rdtSubfileDataList);
 
                     //prepare data for import
 
@@ -624,6 +627,8 @@ namespace EPFExplorer
                         }
                     
                     form1.WriteU32ToArray(nodeTree, basePos + (i * 5) + 1, (uint)offsetOfSubfileTable); //write offset of the subfile table to the last node in the string
+
+                    file.rdtSubfileDataList = backuplist;
                     }
                 else
                     {

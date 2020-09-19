@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace EPFExplorer
 {
+
+    
+
     public class archivedfile
     {
         public Form1 form1;
@@ -49,6 +52,51 @@ namespace EPFExplorer
         public byte RDTSpriteBPP = 4;
         public List<ushort> RDTSpriteFrameDurations = new List<ushort>();
         public Color RDTSpriteAlphaColour;
+
+
+        public archivedfile()
+        {
+
+        }
+
+        public archivedfile(archivedfile basis)
+        {
+        form1 = basis.form1;
+        spriteEditor = basis.spriteEditor;
+
+        hash = basis.hash;
+        offset = basis.offset;
+        size = basis.size;
+        filebytes = basis.filebytes;
+        filemagic = basis.filemagic;
+        filename = basis.filename;
+
+        parentarcfile = basis.parentarcfile;
+        parentrdtfile = basis.parentrdtfile;
+
+        treeNode = basis.treeNode;
+
+        should_this_file_be_decompressed__and_compressed_when_read = basis.should_this_file_be_decompressed__and_compressed_when_read;
+
+        has_LZ11_filesize = basis.has_LZ11_filesize;
+
+        was_LZ10_compressed = basis.was_LZ10_compressed;
+        was_LZ11_compressed = basis.was_LZ11_compressed;
+
+        STstrings = basis.STstrings;
+
+        textFileStringType = basis.textFileStringType;
+        
+        rdtSubfileDataList = basis.rdtSubfileDataList;  
+
+        RDTSpriteNumFrames = basis.RDTSpriteNumFrames;
+            RDTSpriteWidth = basis.RDTSpriteWidth;
+            RDTSpriteHeight = basis.RDTSpriteHeight;
+            RDTSpriteBPP = basis.RDTSpriteBPP;
+            RDTSpriteFrameDurations = basis.RDTSpriteFrameDurations;
+            RDTSpriteAlphaColour = basis.RDTSpriteAlphaColour;
+        }
+
         public void ExportToFile() {        //when you export an individual file (so that it asks where you want to save it)
 
             if (filebytes == null || filebytes.Length == 0)
@@ -262,8 +310,11 @@ namespace EPFExplorer
         
         if (spriteEditor == null)   //if this hasn't been opened in the spriteeditor before, read the file
             {
-                ReadFile();
-            
+
+                if (rdtSubfileDataList.Count == 0)
+                    {
+                    ReadFile();
+                    }
 
                 spriteEditor = new SpriteEditor();
                 spriteEditor.sprite = this;

@@ -1358,12 +1358,20 @@ namespace EPFExplorer
 
         private void rawDataToolStripMenuItem_Click(object sender, EventArgs e) //EXPORT RDT SPRITE RAW DATA
         {
-            archivedfile targetfile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
+            TreeNode selectedNode = FileTree.SelectedNode;
+            int indexOfArchivedFileInRdt = activeRdt.archivedfiles.IndexOf(treeNodesAndArchivedFiles[selectedNode]);
+            archivedfile targetfile = treeNodesAndArchivedFiles[selectedNode];
+
+            archivedfile BackupArchivedfile = new archivedfile(targetfile);
+
             rdtfile forExport = new rdtfile();
             forExport.form1 = this;
             forExport.archivedfiles = new List<archivedfile>();
             forExport.archivedfiles.Add(targetfile);
             forExport.RebuildRDT(true);
+
+            targetfile = BackupArchivedfile;
+            
         }
     }
 }

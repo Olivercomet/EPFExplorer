@@ -15,10 +15,11 @@ namespace EPFExplorer
             {
             }
 
-       public rdtSubfileData(rdtSubfileData basis)
-            {
+        public rdtSubfileData(rdtSubfileData basis)
+        {
             parentfile = basis.parentfile;
-            filebytes = basis.filebytes;
+            filebytes = new byte[basis.filebytes.Length];
+            Array.Copy(basis.filebytes,0,filebytes,0,basis.filebytes.Length);
             IndexInList = basis.IndexInList;
             subfileType = basis.subfileType;
             spriteSettings = basis.spriteSettings;
@@ -28,7 +29,12 @@ namespace EPFExplorer
             width = basis.width;
             height = basis.height;
 
+            offsetX = basis.offsetX;
+            offsetY = basis.offsetY;
+
             image = basis.image;
+
+            writeAddress = basis.writeAddress;
             }
 
         public archivedfile parentfile;
