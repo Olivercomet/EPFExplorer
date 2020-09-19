@@ -40,6 +40,12 @@ namespace EPFExplorer
         public bool ready = false;
         public void RequestSpriteEditorImage(int frame) {
 
+            if (sprite.RDTSpriteBPP == 3)
+                {
+                Close();
+                return;
+                }
+
             ready = false;
 
             for (int i = 0; i < images.Count; i++)  //load all other images if not already loaded

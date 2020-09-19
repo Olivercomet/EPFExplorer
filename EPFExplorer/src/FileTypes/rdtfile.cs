@@ -29,8 +29,8 @@ namespace EPFExplorer
         Byte[] nodeTree = new byte[0];
         List<Byte> data = new List<Byte>(); //for writing
 
+        public bool isHR = false;
 
-        bool isHR = false;
         public void ReadRdt()
         {
             filecount = BitConverter.ToUInt16(filebytes,0x0F);

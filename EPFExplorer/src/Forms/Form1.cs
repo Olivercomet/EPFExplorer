@@ -1039,6 +1039,13 @@ namespace EPFExplorer
                 return;
             }
 
+            if (selectedFile.RDTSpriteBPP == 3)
+                {
+                Console.WriteLine("3BPP? oof. aborting.");
+                selectedFile.spriteEditor.Close();
+                return;
+                }
+
             string filename = Path.GetFileName(selectedFile.filename);
 
             if (askDir)
@@ -1306,6 +1313,8 @@ namespace EPFExplorer
             {
                 foreach (archivedfile f in activeRdt.archivedfiles)
                 {
+                    
+                    Console.WriteLine(f.filename);
                     ExportRdtSpriteAsPNG(f, false);
                 }
             }

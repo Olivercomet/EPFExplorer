@@ -180,7 +180,7 @@ namespace EPFExplorer
                     {
                     case ".lua":
                     case ".luc":
-                        openFileDialog1.Filter = "Compiled lua files (*.luc, *.luac)|*.luc;*.luac";
+                        openFileDialog1.Filter = "Compiled lua files (*.luc, *.luac, *.out)|*.luc;*.luac;*.out";
                         
                         if (openFileDialog1.ShowDialog() == DialogResult.OK)
                             {
@@ -310,7 +310,6 @@ namespace EPFExplorer
         
         if (spriteEditor == null)   //if this hasn't been opened in the spriteeditor before, read the file
             {
-
                 if (rdtSubfileDataList.Count == 0)
                     {
                     ReadFile();
@@ -323,7 +322,12 @@ namespace EPFExplorer
                 spriteEditor.images = new List<rdtSubfileData>();
                 spriteEditor.palettes = new List<rdtSubfileData>();
 
-
+                if (RDTSpriteBPP == 3)
+                    {
+                    Console.WriteLine("3BPP? oof. aborting.");
+                    spriteEditor.Close();
+                    return;
+                    }
 
                 foreach (rdtSubfileData file in rdtSubfileDataList) //get all the images and all the palettes
                     {
