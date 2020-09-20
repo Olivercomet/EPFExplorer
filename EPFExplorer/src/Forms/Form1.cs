@@ -1382,5 +1382,18 @@ namespace EPFExplorer
             targetfile = BackupArchivedfile;
             
         }
+
+        private void deleteArchivedFile_Click(object sender, EventArgs e)
+        {
+            TreeNode node = FileTree.SelectedNode;
+
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to delete the file \"" + node.Text + "\"?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (dialogResult == DialogResult.Yes)
+            {
+                activeArc.archivedfiles.Remove(treeNodesAndArchivedFiles[node]);
+                treeNodesAndArchivedFiles.Remove(node);
+                node.Remove();
+            }
+        }
     }
 }
