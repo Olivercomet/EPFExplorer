@@ -29,6 +29,7 @@ namespace EPFExplorer
             openFileDialog1.Title = "Select file";
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.CheckPathExists = true;
+            openFileDialog1.InitialDirectory = Properties.Settings.Default.DSSaveFileDir;
             openFileDialog1.Filter = "DS Save (*.sav,*.dsv)|*.sav;*.dsv";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -36,6 +37,7 @@ namespace EPFExplorer
                 activeSaveFile = new savefile();
                 activeSaveFile.saveFileEditor = this;
                 activeSaveFile.LoadFromFile(openFileDialog1.FileName);
+                Properties.Settings.Default.DSSaveFileDir = Path.GetDirectoryName(openFileDialog1.FileName);
                 }
         }
 
@@ -94,12 +96,14 @@ namespace EPFExplorer
 
             saveFileDialog1.FileName = Path.GetFileName(activeSaveFile.embeddedArc.filename);
 
+            saveFileDialog1.InitialDirectory = Properties.Settings.Default.DLCArcsDir;
             saveFileDialog1.Title = "Export file";
             saveFileDialog1.CheckPathExists = true;
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                 File.WriteAllBytes(saveFileDialog1.FileName, activeSaveFile.embeddedArc.filebytes);
+                Properties.Settings.Default.DLCArcsDir = Path.GetDirectoryName(saveFileDialog1.FileName);
                 }
 
         }
@@ -111,10 +115,13 @@ namespace EPFExplorer
             openFileDialog1.Title = "Select .arc file";
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.CheckPathExists = true;
+            openFileDialog1.InitialDirectory = Properties.Settings.Default.DLCArcsDir;
             openFileDialog1.Filter = "1PP archives (*.arc)|*.arc";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
+                Properties.Settings.Default.DLCArcsDir = Path.GetDirectoryName(openFileDialog1.FileName);
+
                 byte[] potentialFile = File.ReadAllBytes(openFileDialog1.FileName);
                 
                     activeSaveFile.embeddedArc = new arcfile();
