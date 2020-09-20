@@ -1395,5 +1395,11 @@ namespace EPFExplorer
                 node.Remove();
             }
         }
+
+        private void generateTuxedoDLObjectEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TuxedoDLObjectEntryForm TuxedoDLForm = new TuxedoDLObjectEntryForm();
+            TuxedoDLForm.Show();
+        }
     }
 }
