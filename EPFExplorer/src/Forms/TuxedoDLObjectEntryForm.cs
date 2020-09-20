@@ -102,8 +102,8 @@ namespace EPFExplorer
             LockedCheckBox.Checked = false;
             destposX.Value = 0;
             destposY.Value = 0;
-            UnkBool2CheckBox.Checked = false;
-            UnkBool3CheckBox.Checked = false;
+            FlipXCheckBox.Checked = false;
+            FlipYCheckBox.Checked = false;
         }
 
         private void GenerateOutput_Button_Click(object sender, EventArgs e)
@@ -214,7 +214,7 @@ namespace EPFExplorer
             output += "L14 = " + destposX.Value.ToString() + "\n";
             output += "L15 = " + destposY.Value.ToString() + "\n";
 
-            if (UnkBool2CheckBox.Checked)
+            if (FlipXCheckBox.Checked)
             {
                 output += "L16 = true\n";
             }
@@ -223,7 +223,7 @@ namespace EPFExplorer
                 output += "L16 = false\n";
             }
 
-            if (UnkBool3CheckBox.Checked)
+            if (FlipYCheckBox.Checked)
             {
                 output += "L17 = true\n";
             }

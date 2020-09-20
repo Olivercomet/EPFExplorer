@@ -34,8 +34,8 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.FillWithExampleValuesButton = new System.Windows.Forms.Button();
             this.GenerateOutput_Button = new System.Windows.Forms.Button();
-            this.UnkBool3CheckBox = new System.Windows.Forms.CheckBox();
-            this.UnkBool2CheckBox = new System.Windows.Forms.CheckBox();
+            this.FlipYCheckBox = new System.Windows.Forms.CheckBox();
+            this.FlipXCheckBox = new System.Windows.Forms.CheckBox();
             this.destposY = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
             this.destposX = new System.Windows.Forms.NumericUpDown();
@@ -83,7 +83,7 @@
             this.outputBox.Location = new System.Drawing.Point(17, 33);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(593, 552);
+            this.outputBox.Size = new System.Drawing.Size(593, 578);
             this.outputBox.TabIndex = 0;
             this.outputBox.Text = "";
             // 
@@ -92,7 +92,7 @@
             this.groupBox1.Controls.Add(this.outputBox);
             this.groupBox1.Location = new System.Drawing.Point(399, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(626, 601);
+            this.groupBox1.Size = new System.Drawing.Size(626, 617);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Output";
@@ -103,8 +103,8 @@
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.FillWithExampleValuesButton);
             this.groupBox2.Controls.Add(this.GenerateOutput_Button);
-            this.groupBox2.Controls.Add(this.UnkBool3CheckBox);
-            this.groupBox2.Controls.Add(this.UnkBool2CheckBox);
+            this.groupBox2.Controls.Add(this.FlipYCheckBox);
+            this.groupBox2.Controls.Add(this.FlipXCheckBox);
             this.groupBox2.Controls.Add(this.destposY);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.destposX);
@@ -135,14 +135,14 @@
             this.groupBox2.Controls.Add(this.ObjectIDUpDown);
             this.groupBox2.Location = new System.Drawing.Point(13, 13);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(380, 600);
+            this.groupBox2.Size = new System.Drawing.Size(380, 616);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
             // 
             // FillWithExampleValuesButton
             // 
-            this.FillWithExampleValuesButton.Location = new System.Drawing.Point(11, 544);
+            this.FillWithExampleValuesButton.Location = new System.Drawing.Point(11, 545);
             this.FillWithExampleValuesButton.Name = "FillWithExampleValuesButton";
             this.FillWithExampleValuesButton.Size = new System.Drawing.Size(178, 30);
             this.FillWithExampleValuesButton.TabIndex = 34;
@@ -152,7 +152,7 @@
             // 
             // GenerateOutput_Button
             // 
-            this.GenerateOutput_Button.Location = new System.Drawing.Point(195, 544);
+            this.GenerateOutput_Button.Location = new System.Drawing.Point(195, 545);
             this.GenerateOutput_Button.Name = "GenerateOutput_Button";
             this.GenerateOutput_Button.Size = new System.Drawing.Size(166, 30);
             this.GenerateOutput_Button.TabIndex = 33;
@@ -160,31 +160,31 @@
             this.GenerateOutput_Button.UseVisualStyleBackColor = true;
             this.GenerateOutput_Button.Click += new System.EventHandler(this.GenerateOutput_Button_Click);
             // 
-            // UnkBool3CheckBox
+            // FlipYCheckBox
             // 
-            this.UnkBool3CheckBox.AutoSize = true;
-            this.UnkBool3CheckBox.Location = new System.Drawing.Point(147, 495);
-            this.UnkBool3CheckBox.Name = "UnkBool3CheckBox";
-            this.UnkBool3CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.UnkBool3CheckBox.Size = new System.Drawing.Size(120, 21);
-            this.UnkBool3CheckBox.TabIndex = 32;
-            this.UnkBool3CheckBox.Text = "Unknown Bool";
-            this.UnkBool3CheckBox.UseVisualStyleBackColor = true;
+            this.FlipYCheckBox.AutoSize = true;
+            this.FlipYCheckBox.Location = new System.Drawing.Point(85, 496);
+            this.FlipYCheckBox.Name = "FlipYCheckBox";
+            this.FlipYCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.FlipYCheckBox.Size = new System.Drawing.Size(65, 21);
+            this.FlipYCheckBox.TabIndex = 32;
+            this.FlipYCheckBox.Text = "Flip Y";
+            this.FlipYCheckBox.UseVisualStyleBackColor = true;
             // 
-            // UnkBool2CheckBox
+            // FlipXCheckBox
             // 
-            this.UnkBool2CheckBox.AutoSize = true;
-            this.UnkBool2CheckBox.Location = new System.Drawing.Point(14, 495);
-            this.UnkBool2CheckBox.Name = "UnkBool2CheckBox";
-            this.UnkBool2CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.UnkBool2CheckBox.Size = new System.Drawing.Size(120, 21);
-            this.UnkBool2CheckBox.TabIndex = 31;
-            this.UnkBool2CheckBox.Text = "Unknown Bool";
-            this.UnkBool2CheckBox.UseVisualStyleBackColor = true;
+            this.FlipXCheckBox.AutoSize = true;
+            this.FlipXCheckBox.Location = new System.Drawing.Point(14, 496);
+            this.FlipXCheckBox.Name = "FlipXCheckBox";
+            this.FlipXCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.FlipXCheckBox.Size = new System.Drawing.Size(65, 21);
+            this.FlipXCheckBox.TabIndex = 31;
+            this.FlipXCheckBox.Text = "Flip X";
+            this.FlipXCheckBox.UseVisualStyleBackColor = true;
             // 
             // destposY
             // 
-            this.destposY.Location = new System.Drawing.Point(293, 456);
+            this.destposY.Location = new System.Drawing.Point(293, 457);
             this.destposY.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -197,7 +197,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(156, 458);
+            this.label14.Location = new System.Drawing.Point(156, 459);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(17, 17);
             this.label14.TabIndex = 29;
@@ -205,7 +205,7 @@
             // 
             // destposX
             // 
-            this.destposX.Location = new System.Drawing.Point(179, 456);
+            this.destposX.Location = new System.Drawing.Point(179, 457);
             this.destposX.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -218,7 +218,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(11, 458);
+            this.label13.Location = new System.Drawing.Point(11, 459);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(126, 17);
             this.label13.TabIndex = 27;
@@ -227,7 +227,7 @@
             // LockedCheckBox
             // 
             this.LockedCheckBox.AutoSize = true;
-            this.LockedCheckBox.Location = new System.Drawing.Point(9, 425);
+            this.LockedCheckBox.Location = new System.Drawing.Point(9, 426);
             this.LockedCheckBox.Name = "LockedCheckBox";
             this.LockedCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.LockedCheckBox.Size = new System.Drawing.Size(76, 21);
@@ -239,7 +239,7 @@
             // 
             this.DestinationRoomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DestinationRoomComboBox.FormattingEnabled = true;
-            this.DestinationRoomComboBox.Location = new System.Drawing.Point(158, 393);
+            this.DestinationRoomComboBox.Location = new System.Drawing.Point(158, 394);
             this.DestinationRoomComboBox.Name = "DestinationRoomComboBox";
             this.DestinationRoomComboBox.Size = new System.Drawing.Size(142, 24);
             this.DestinationRoomComboBox.TabIndex = 25;
@@ -247,7 +247,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 393);
+            this.label12.Location = new System.Drawing.Point(11, 394);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(141, 17);
             this.label12.TabIndex = 24;
@@ -264,7 +264,7 @@
             // 
             // Unk3UpDown
             // 
-            this.Unk3UpDown.Location = new System.Drawing.Point(109, 360);
+            this.Unk3UpDown.Location = new System.Drawing.Point(109, 361);
             this.Unk3UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -277,7 +277,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(11, 360);
+            this.label11.Location = new System.Drawing.Point(11, 361);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(78, 17);
             this.label11.TabIndex = 21;
@@ -466,7 +466,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(270, 458);
+            this.label15.Location = new System.Drawing.Point(270, 459);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(17, 17);
             this.label15.TabIndex = 35;
@@ -491,7 +491,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1039, 623);
+            this.ClientSize = new System.Drawing.Size(1039, 641);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -545,8 +545,8 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown destposY;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.CheckBox UnkBool3CheckBox;
-        private System.Windows.Forms.CheckBox UnkBool2CheckBox;
+        private System.Windows.Forms.CheckBox FlipYCheckBox;
+        private System.Windows.Forms.CheckBox FlipXCheckBox;
         private System.Windows.Forms.Button GenerateOutput_Button;
         private System.Windows.Forms.Button FillWithExampleValuesButton;
         private System.Windows.Forms.Label label15;
