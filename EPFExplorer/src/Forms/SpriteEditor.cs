@@ -40,11 +40,11 @@ namespace EPFExplorer
         public bool ready = false;
         public void RequestSpriteEditorImage(int frame) {
 
-            if (sprite.RDTSpriteBPP == 3)
-                {
-                Close();
-                return;
-                }
+            //if (sprite.RDTSpriteBPP == 3)
+              //  {
+               // Close();
+              //  return;
+              //  }
 
             ready = false;
 

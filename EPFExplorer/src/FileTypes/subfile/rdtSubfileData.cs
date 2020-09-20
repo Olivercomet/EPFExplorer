@@ -253,7 +253,9 @@ namespace EPFExplorer
                 }
 
             filebytes = new byte[size];
-            Array.Copy(bytes,offset+6,filebytes,0,size);
+            
+
+           Array.Copy(bytes,offset+6,filebytes,0,size);
 
             DecompressLZ10IfCompressed();
 
@@ -304,6 +306,11 @@ namespace EPFExplorer
         }
 
         public void LoadGraphicsMetadata() {
+            if (filebytes == null || filebytes.Length == 0)
+                {
+                return;
+                }
+
             parentfile.RDTSpriteNumFrames = BitConverter.ToUInt16(filebytes,0);
             parentfile.RDTSpriteWidth = BitConverter.ToUInt16(filebytes, 2);
             parentfile.RDTSpriteHeight = BitConverter.ToUInt16(filebytes, 4);

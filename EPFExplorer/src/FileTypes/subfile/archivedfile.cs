@@ -322,12 +322,12 @@ namespace EPFExplorer
                 spriteEditor.images = new List<rdtSubfileData>();
                 spriteEditor.palettes = new List<rdtSubfileData>();
 
-                if (RDTSpriteBPP == 3)
-                    {
-                    Console.WriteLine("3BPP? oof. aborting.");
-                    spriteEditor.Close();
-                    return;
-                    }
+                //if (RDTSpriteBPP == 3)
+                 //   {
+                 //   Console.WriteLine("3BPP? oof. aborting.");
+                 //   spriteEditor.Close();
+                 //   return;
+                 //   }
 
                 foreach (rdtSubfileData file in rdtSubfileDataList) //get all the images and all the palettes
                     {
@@ -674,6 +674,32 @@ namespace EPFExplorer
                     offset += 2;
                 }
             }
+            else if (bpp == 3)
+            {
+                palette = new Color[8];
+
+                Console.WriteLine("3BPP");
+
+                for (int i = 0; i < 8; i++)
+                {
+                    palette[i] = form1.ABGR1555_to_RGBA32(BitConverter.ToUInt16(input, offset));
+                    offset += 2;
+                }
+            }
+            else if (bpp == 5)
+            {
+                palette = new Color[32];
+
+                Console.WriteLine("5BPP");
+
+                for (int i = 0; i < 32; i++)
+                {
+                    palette[i] = form1.ABGR1555_to_RGBA32(BitConverter.ToUInt16(input, offset));
+                    offset += 2;
+                }
+            }
+
+
             return palette;
         }
 
@@ -682,49 +708,82 @@ namespace EPFExplorer
         {
             Bitmap bm = new Bitmap(width,height);
             
-            int curOffset = offset;    
+            int curOffset = offset;
 
             if (bpp == 4)
-                {
+            {
                 bm = new Bitmap(width, height);
 
                 for (int y = 0; y < height; y++)
-                    {
+                {
                     for (int x = 0; x < width; x++)
-                        { //each nibble is one pixel
+                    { //each nibble is one pixel
 
                         //first nibble
                         Color c = palette[input[curOffset] & 0x0F];
                         bm.SetPixel(x, y, c);
                         x++;
- 
+
                         if (x >= width) //check whether or not the line ended midway through the byte (i.e. if the width is odd). If so, don't read the second nibble, it's unused
-                            {
+                        {
                             curOffset++;
                             continue;
-                            }
+                        }
 
                         //second nibble
                         c = palette[(input[curOffset] & 0xF0) >> 4];
                         bm.SetPixel(x, y, c);
                         curOffset++;
-                        }
                     }
                 }
+            }
             else if (bpp == 8)
-                {
+            {
                 for (int y = 0; y < height; y++)
-                    {
+                {
                     for (int x = 0; x < width; x++)
-                        {
-                        Color c = palette[input[offset+(y*width)+x]];
+                    {
+                        Color c = palette[input[offset + (y * width) + x]];
                         bm.SetPixel(x, y, c);
 
-                        }
                     }
                 }
+            }
+            else if (bpp == 3) //it seems this doesn't produce the correct image. However, it at least allows for 3BPP and prevents an exception
+            {
+                bm = new Bitmap(width, height);
 
-            return bm;
+                int currentBitInByte = 0;
+
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        if (x >= width) //check whether or not the line ended midway through the byte
+                        {
+                            curOffset++;
+                            continue;
+                        }
+
+                        if (currentBitInByte > 7)
+                        {
+                            currentBitInByte = 0 + (currentBitInByte - 7);
+                            curOffset++;
+                        }
+
+                        //3 bits
+                        Color c = palette[(input[curOffset] >> currentBitInByte) & 0x07];
+                        bm.SetPixel(x, y, c);
+                        currentBitInByte += 3;
+                    }
+                }
+            }
+            else if (bpp == 5) //nothing yet
+            {
+                Console.WriteLine("5BPP image not yet handled");
+            }
+
+                return bm;
             }
 
 
