@@ -34,6 +34,9 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quickLaunchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.quickLaunchButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChooseQuickLaunchRom = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.currentMissionChooser = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -119,7 +122,8 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.quickLaunchToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(788, 28);
@@ -148,6 +152,29 @@
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // quickLaunchToolStripMenuItem
+            // 
+            this.quickLaunchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.quickLaunchButton,
+            this.ChooseQuickLaunchRom});
+            this.quickLaunchToolStripMenuItem.Name = "quickLaunchToolStripMenuItem";
+            this.quickLaunchToolStripMenuItem.Size = new System.Drawing.Size(110, 24);
+            this.quickLaunchToolStripMenuItem.Text = "Quick Launch";
+            // 
+            // quickLaunchButton
+            // 
+            this.quickLaunchButton.Name = "quickLaunchButton";
+            this.quickLaunchButton.Size = new System.Drawing.Size(224, 26);
+            this.quickLaunchButton.Text = "Gooooooo!";
+            this.quickLaunchButton.Click += new System.EventHandler(this.quickLaunchButton_Click);
+            // 
+            // ChooseQuickLaunchRom
+            // 
+            this.ChooseQuickLaunchRom.Name = "ChooseQuickLaunchRom";
+            this.ChooseQuickLaunchRom.Size = new System.Drawing.Size(224, 26);
+            this.ChooseQuickLaunchRom.Text = "Choose rom";
+            this.ChooseQuickLaunchRom.Click += new System.EventHandler(this.ChooseQuickLaunchRom_Click);
             // 
             // label1
             // 
@@ -872,5 +899,8 @@
         public System.Windows.Forms.GroupBox inventoryGroupBox;
         public System.Windows.Forms.Label downloadableMissionNameDisplay;
         public System.Windows.Forms.Button exportDownloadArc;
+        private System.Windows.Forms.ToolStripMenuItem quickLaunchToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem quickLaunchButton;
+        private System.Windows.Forms.ToolStripMenuItem ChooseQuickLaunchRom;
     }
 }

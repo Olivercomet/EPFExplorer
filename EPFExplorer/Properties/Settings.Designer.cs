@@ -46,5 +46,17 @@ namespace EPFExplorer.Properties {
                 this["DLCArcsDir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string QuickLaunchRomPath {
+            get {
+                return ((string)(this["QuickLaunchRomPath"]));
+            }
+            set {
+                this["QuickLaunchRomPath"] = value;
+            }
+        }
     }
 }
