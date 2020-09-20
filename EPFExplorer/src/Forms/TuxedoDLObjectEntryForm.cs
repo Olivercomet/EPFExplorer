@@ -37,9 +37,9 @@ namespace EPFExplorer
             rooms.Add(new Room("Lighthouse", "LIGHTHOUSE0", 82));
             rooms.Add(new Room("Lodge Attic", "ATTIC0", 109));
             rooms.Add(new Room("Lounge", "LOUNGE0", 106));
-            rooms.Add(new Room("Mine Shed", "MINESHED0", 72));
-            rooms.Add(new Room("Mine Shack", "MINESHACK0", 68));
             rooms.Add(new Room("Mine", "MINEINTERIOR0", 69));
+            rooms.Add(new Room("Mine Shack", "MINESHACK0", 68));
+            rooms.Add(new Room("Mine Shed", "MINESHED0", 72));
             rooms.Add(new Room("Night Club", "NIGHTCLUB0", 94));
             rooms.Add(new Room("Pet Shop", "PETSHOP0", 74));
             rooms.Add(new Room("Pizza Parlor", "PIZZAPARLOR0", 75));

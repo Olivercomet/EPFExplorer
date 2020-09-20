@@ -83,7 +83,7 @@
             this.outputBox.Location = new System.Drawing.Point(17, 33);
             this.outputBox.Name = "outputBox";
             this.outputBox.ReadOnly = true;
-            this.outputBox.Size = new System.Drawing.Size(593, 578);
+            this.outputBox.Size = new System.Drawing.Size(593, 543);
             this.outputBox.TabIndex = 0;
             this.outputBox.Text = "";
             // 
@@ -92,7 +92,7 @@
             this.groupBox1.Controls.Add(this.outputBox);
             this.groupBox1.Location = new System.Drawing.Point(399, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(626, 617);
+            this.groupBox1.Size = new System.Drawing.Size(626, 594);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Output";
@@ -135,14 +135,14 @@
             this.groupBox2.Controls.Add(this.ObjectIDUpDown);
             this.groupBox2.Location = new System.Drawing.Point(13, 13);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(380, 616);
+            this.groupBox2.Size = new System.Drawing.Size(380, 593);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
             // 
             // FillWithExampleValuesButton
             // 
-            this.FillWithExampleValuesButton.Location = new System.Drawing.Point(11, 545);
+            this.FillWithExampleValuesButton.Location = new System.Drawing.Point(15, 545);
             this.FillWithExampleValuesButton.Name = "FillWithExampleValuesButton";
             this.FillWithExampleValuesButton.Size = new System.Drawing.Size(178, 30);
             this.FillWithExampleValuesButton.TabIndex = 34;
@@ -152,7 +152,7 @@
             // 
             // GenerateOutput_Button
             // 
-            this.GenerateOutput_Button.Location = new System.Drawing.Point(195, 545);
+            this.GenerateOutput_Button.Location = new System.Drawing.Point(199, 545);
             this.GenerateOutput_Button.Name = "GenerateOutput_Button";
             this.GenerateOutput_Button.Size = new System.Drawing.Size(166, 30);
             this.GenerateOutput_Button.TabIndex = 33;
@@ -163,7 +163,7 @@
             // FlipYCheckBox
             // 
             this.FlipYCheckBox.AutoSize = true;
-            this.FlipYCheckBox.Location = new System.Drawing.Point(85, 496);
+            this.FlipYCheckBox.Location = new System.Drawing.Point(85, 136);
             this.FlipYCheckBox.Name = "FlipYCheckBox";
             this.FlipYCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.FlipYCheckBox.Size = new System.Drawing.Size(65, 21);
@@ -174,7 +174,7 @@
             // FlipXCheckBox
             // 
             this.FlipXCheckBox.AutoSize = true;
-            this.FlipXCheckBox.Location = new System.Drawing.Point(14, 496);
+            this.FlipXCheckBox.Location = new System.Drawing.Point(14, 136);
             this.FlipXCheckBox.Name = "FlipXCheckBox";
             this.FlipXCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.FlipXCheckBox.Size = new System.Drawing.Size(65, 21);
@@ -184,7 +184,7 @@
             // 
             // destposY
             // 
-            this.destposY.Location = new System.Drawing.Point(293, 457);
+            this.destposY.Location = new System.Drawing.Point(293, 489);
             this.destposY.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -197,7 +197,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(156, 459);
+            this.label14.Location = new System.Drawing.Point(156, 491);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(17, 17);
             this.label14.TabIndex = 29;
@@ -205,7 +205,7 @@
             // 
             // destposX
             // 
-            this.destposX.Location = new System.Drawing.Point(179, 457);
+            this.destposX.Location = new System.Drawing.Point(179, 489);
             this.destposX.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -218,7 +218,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(11, 459);
+            this.label13.Location = new System.Drawing.Point(11, 491);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(126, 17);
             this.label13.TabIndex = 27;
@@ -227,7 +227,7 @@
             // LockedCheckBox
             // 
             this.LockedCheckBox.AutoSize = true;
-            this.LockedCheckBox.Location = new System.Drawing.Point(9, 426);
+            this.LockedCheckBox.Location = new System.Drawing.Point(9, 458);
             this.LockedCheckBox.Name = "LockedCheckBox";
             this.LockedCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.LockedCheckBox.Size = new System.Drawing.Size(76, 21);
@@ -239,7 +239,7 @@
             // 
             this.DestinationRoomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.DestinationRoomComboBox.FormattingEnabled = true;
-            this.DestinationRoomComboBox.Location = new System.Drawing.Point(158, 394);
+            this.DestinationRoomComboBox.Location = new System.Drawing.Point(158, 426);
             this.DestinationRoomComboBox.Name = "DestinationRoomComboBox";
             this.DestinationRoomComboBox.Size = new System.Drawing.Size(142, 24);
             this.DestinationRoomComboBox.TabIndex = 25;
@@ -247,7 +247,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 394);
+            this.label12.Location = new System.Drawing.Point(11, 426);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(141, 17);
             this.label12.TabIndex = 24;
@@ -257,14 +257,14 @@
             // 
             this.RoomComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.RoomComboBox.FormattingEnabled = true;
-            this.RoomComboBox.Location = new System.Drawing.Point(139, 329);
+            this.RoomComboBox.Location = new System.Drawing.Point(139, 361);
             this.RoomComboBox.Name = "RoomComboBox";
             this.RoomComboBox.Size = new System.Drawing.Size(161, 24);
             this.RoomComboBox.TabIndex = 23;
             // 
             // Unk3UpDown
             // 
-            this.Unk3UpDown.Location = new System.Drawing.Point(109, 361);
+            this.Unk3UpDown.Location = new System.Drawing.Point(109, 393);
             this.Unk3UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -277,7 +277,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(11, 361);
+            this.label11.Location = new System.Drawing.Point(11, 393);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(78, 17);
             this.label11.TabIndex = 21;
@@ -285,7 +285,7 @@
             // 
             // Unk2UpDown
             // 
-            this.Unk2UpDown.Location = new System.Drawing.Point(109, 298);
+            this.Unk2UpDown.Location = new System.Drawing.Point(109, 330);
             this.Unk2UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -303,7 +303,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(11, 332);
+            this.label10.Location = new System.Drawing.Point(11, 364);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(122, 17);
             this.label10.TabIndex = 18;
@@ -312,7 +312,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(11, 298);
+            this.label9.Location = new System.Drawing.Point(11, 330);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(78, 17);
             this.label9.TabIndex = 17;
@@ -321,7 +321,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(11, 259);
+            this.label7.Location = new System.Drawing.Point(11, 291);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(102, 17);
             this.label7.TabIndex = 16;
@@ -329,14 +329,14 @@
             // 
             // LuaScriptPath
             // 
-            this.LuaScriptPath.Location = new System.Drawing.Point(119, 259);
+            this.LuaScriptPath.Location = new System.Drawing.Point(119, 291);
             this.LuaScriptPath.Name = "LuaScriptPath";
             this.LuaScriptPath.Size = new System.Drawing.Size(255, 22);
             this.LuaScriptPath.TabIndex = 15;
             // 
             // Unk1UpDown
             // 
-            this.Unk1UpDown.Location = new System.Drawing.Point(109, 222);
+            this.Unk1UpDown.Location = new System.Drawing.Point(109, 254);
             this.Unk1UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -349,7 +349,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(11, 222);
+            this.label8.Location = new System.Drawing.Point(11, 254);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(78, 17);
             this.label8.TabIndex = 13;
@@ -358,7 +358,7 @@
             // unkBool1CheckBox
             // 
             this.unkBool1CheckBox.AutoSize = true;
-            this.unkBool1CheckBox.Location = new System.Drawing.Point(9, 182);
+            this.unkBool1CheckBox.Location = new System.Drawing.Point(9, 214);
             this.unkBool1CheckBox.Name = "unkBool1CheckBox";
             this.unkBool1CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.unkBool1CheckBox.Size = new System.Drawing.Size(120, 21);
@@ -369,7 +369,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 143);
+            this.label6.Location = new System.Drawing.Point(11, 175);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(110, 17);
             this.label6.TabIndex = 9;
@@ -466,7 +466,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(270, 459);
+            this.label15.Location = new System.Drawing.Point(270, 491);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(17, 17);
             this.label15.TabIndex = 35;
@@ -482,7 +482,7 @@
             "Inventory Item",
             "Uninteractable",
             "Normal Object"});
-            this.interactionTypeComboBox.Location = new System.Drawing.Point(139, 140);
+            this.interactionTypeComboBox.Location = new System.Drawing.Point(139, 172);
             this.interactionTypeComboBox.Name = "interactionTypeComboBox";
             this.interactionTypeComboBox.Size = new System.Drawing.Size(161, 24);
             this.interactionTypeComboBox.TabIndex = 36;
@@ -491,7 +491,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1039, 641);
+            this.ClientSize = new System.Drawing.Size(1039, 614);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
