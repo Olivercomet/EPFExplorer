@@ -34,13 +34,13 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.FillWithExampleValuesButton = new System.Windows.Forms.Button();
             this.GenerateOutput_Button = new System.Windows.Forms.Button();
-            this.UnkBool4CheckBox = new System.Windows.Forms.CheckBox();
             this.UnkBool3CheckBox = new System.Windows.Forms.CheckBox();
+            this.UnkBool2CheckBox = new System.Windows.Forms.CheckBox();
             this.destposY = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
             this.destposX = new System.Windows.Forms.NumericUpDown();
             this.label13 = new System.Windows.Forms.Label();
-            this.UnkBool2CheckBox = new System.Windows.Forms.CheckBox();
+            this.LockedCheckBox = new System.Windows.Forms.CheckBox();
             this.DestinationRoomComboBox = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.RoomComboBox = new System.Windows.Forms.ComboBox();
@@ -54,7 +54,6 @@
             this.Unk1UpDown = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.unkBool1CheckBox = new System.Windows.Forms.CheckBox();
-            this.PriorityUpDown = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -66,6 +65,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ObjectIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
+            this.interactionTypeComboBox = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).BeginInit();
@@ -73,7 +73,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.Unk3UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk2UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk1UpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PriorityUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosXUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).BeginInit();
@@ -100,16 +99,17 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.interactionTypeComboBox);
             this.groupBox2.Controls.Add(this.label15);
             this.groupBox2.Controls.Add(this.FillWithExampleValuesButton);
             this.groupBox2.Controls.Add(this.GenerateOutput_Button);
-            this.groupBox2.Controls.Add(this.UnkBool4CheckBox);
             this.groupBox2.Controls.Add(this.UnkBool3CheckBox);
+            this.groupBox2.Controls.Add(this.UnkBool2CheckBox);
             this.groupBox2.Controls.Add(this.destposY);
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.destposX);
             this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Controls.Add(this.UnkBool2CheckBox);
+            this.groupBox2.Controls.Add(this.LockedCheckBox);
             this.groupBox2.Controls.Add(this.DestinationRoomComboBox);
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.RoomComboBox);
@@ -123,7 +123,6 @@
             this.groupBox2.Controls.Add(this.Unk1UpDown);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.unkBool1CheckBox);
-            this.groupBox2.Controls.Add(this.PriorityUpDown);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Controls.Add(this.label4);
@@ -161,27 +160,27 @@
             this.GenerateOutput_Button.UseVisualStyleBackColor = true;
             this.GenerateOutput_Button.Click += new System.EventHandler(this.GenerateOutput_Button_Click);
             // 
-            // UnkBool4CheckBox
-            // 
-            this.UnkBool4CheckBox.AutoSize = true;
-            this.UnkBool4CheckBox.Location = new System.Drawing.Point(147, 495);
-            this.UnkBool4CheckBox.Name = "UnkBool4CheckBox";
-            this.UnkBool4CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.UnkBool4CheckBox.Size = new System.Drawing.Size(120, 21);
-            this.UnkBool4CheckBox.TabIndex = 32;
-            this.UnkBool4CheckBox.Text = "Unknown Bool";
-            this.UnkBool4CheckBox.UseVisualStyleBackColor = true;
-            // 
             // UnkBool3CheckBox
             // 
             this.UnkBool3CheckBox.AutoSize = true;
-            this.UnkBool3CheckBox.Location = new System.Drawing.Point(14, 495);
+            this.UnkBool3CheckBox.Location = new System.Drawing.Point(147, 495);
             this.UnkBool3CheckBox.Name = "UnkBool3CheckBox";
             this.UnkBool3CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.UnkBool3CheckBox.Size = new System.Drawing.Size(120, 21);
-            this.UnkBool3CheckBox.TabIndex = 31;
+            this.UnkBool3CheckBox.TabIndex = 32;
             this.UnkBool3CheckBox.Text = "Unknown Bool";
             this.UnkBool3CheckBox.UseVisualStyleBackColor = true;
+            // 
+            // UnkBool2CheckBox
+            // 
+            this.UnkBool2CheckBox.AutoSize = true;
+            this.UnkBool2CheckBox.Location = new System.Drawing.Point(14, 495);
+            this.UnkBool2CheckBox.Name = "UnkBool2CheckBox";
+            this.UnkBool2CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.UnkBool2CheckBox.Size = new System.Drawing.Size(120, 21);
+            this.UnkBool2CheckBox.TabIndex = 31;
+            this.UnkBool2CheckBox.Text = "Unknown Bool";
+            this.UnkBool2CheckBox.UseVisualStyleBackColor = true;
             // 
             // destposY
             // 
@@ -225,16 +224,16 @@
             this.label13.TabIndex = 27;
             this.label13.Text = "Dest entry position";
             // 
-            // UnkBool2CheckBox
+            // LockedCheckBox
             // 
-            this.UnkBool2CheckBox.AutoSize = true;
-            this.UnkBool2CheckBox.Location = new System.Drawing.Point(9, 425);
-            this.UnkBool2CheckBox.Name = "UnkBool2CheckBox";
-            this.UnkBool2CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.UnkBool2CheckBox.Size = new System.Drawing.Size(120, 21);
-            this.UnkBool2CheckBox.TabIndex = 26;
-            this.UnkBool2CheckBox.Text = "Unknown Bool";
-            this.UnkBool2CheckBox.UseVisualStyleBackColor = true;
+            this.LockedCheckBox.AutoSize = true;
+            this.LockedCheckBox.Location = new System.Drawing.Point(9, 425);
+            this.LockedCheckBox.Name = "LockedCheckBox";
+            this.LockedCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.LockedCheckBox.Size = new System.Drawing.Size(76, 21);
+            this.LockedCheckBox.TabIndex = 26;
+            this.LockedCheckBox.Text = "Locked";
+            this.LockedCheckBox.UseVisualStyleBackColor = true;
             // 
             // DestinationRoomComboBox
             // 
@@ -367,26 +366,14 @@
             this.unkBool1CheckBox.Text = "Unknown Bool";
             this.unkBool1CheckBox.UseVisualStyleBackColor = true;
             // 
-            // PriorityUpDown
-            // 
-            this.PriorityUpDown.Location = new System.Drawing.Point(128, 143);
-            this.PriorityUpDown.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.PriorityUpDown.Name = "PriorityUpDown";
-            this.PriorityUpDown.Size = new System.Drawing.Size(101, 22);
-            this.PriorityUpDown.TabIndex = 10;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(11, 143);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(60, 17);
+            this.label6.Size = new System.Drawing.Size(110, 17);
             this.label6.TabIndex = 9;
-            this.label6.Text = "Priority?";
+            this.label6.Text = "Interaction Type";
             // 
             // label5
             // 
@@ -485,6 +472,21 @@
             this.label15.TabIndex = 35;
             this.label15.Text = "Y";
             // 
+            // interactionTypeComboBox
+            // 
+            this.interactionTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.interactionTypeComboBox.FormattingEnabled = true;
+            this.interactionTypeComboBox.Items.AddRange(new object[] {
+            "NPC",
+            "Door",
+            "Inventory Item",
+            "Uninteractable",
+            "Normal Object"});
+            this.interactionTypeComboBox.Location = new System.Drawing.Point(139, 140);
+            this.interactionTypeComboBox.Name = "interactionTypeComboBox";
+            this.interactionTypeComboBox.Size = new System.Drawing.Size(161, 24);
+            this.interactionTypeComboBox.TabIndex = 36;
+            // 
             // TuxedoDLObjectEntryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -503,7 +505,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.Unk3UpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk2UpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk1UpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PriorityUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosXUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).EndInit();
@@ -526,7 +527,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown PriorityUpDown;
         private System.Windows.Forms.CheckBox unkBool1CheckBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.NumericUpDown Unk1UpDown;
@@ -540,15 +540,16 @@
         private System.Windows.Forms.ComboBox RoomComboBox;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox DestinationRoomComboBox;
-        private System.Windows.Forms.CheckBox UnkBool2CheckBox;
+        private System.Windows.Forms.CheckBox LockedCheckBox;
         private System.Windows.Forms.NumericUpDown destposX;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.NumericUpDown destposY;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.CheckBox UnkBool4CheckBox;
         private System.Windows.Forms.CheckBox UnkBool3CheckBox;
+        private System.Windows.Forms.CheckBox UnkBool2CheckBox;
         private System.Windows.Forms.Button GenerateOutput_Button;
         private System.Windows.Forms.Button FillWithExampleValuesButton;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox interactionTypeComboBox;
     }
 }

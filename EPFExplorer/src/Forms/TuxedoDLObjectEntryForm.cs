@@ -91,7 +91,7 @@ namespace EPFExplorer
             RDTSpritePathBox.Text = "NPC/Rookie/Rookie";
             PosXUpDown.Value = 816;
             PosYUpDown.Value = 166;
-            PriorityUpDown.Value = 1;
+            interactionTypeComboBox.SelectedItem = "NPC";
             unkBool1CheckBox.Checked = true;
             Unk1UpDown.Value = 0;
             LuaScriptPath.Text = "chunks/HQ0_NPC_Rookie.luc";
@@ -99,11 +99,11 @@ namespace EPFExplorer
             RoomComboBox.SelectedItem = "HQ";
             Unk3UpDown.Value = 0;
             DestinationRoomComboBox.SelectedIndex = 0;
-            UnkBool2CheckBox.Checked = false;
+            LockedCheckBox.Checked = false;
             destposX.Value = 0;
             destposY.Value = 0;
+            UnkBool2CheckBox.Checked = false;
             UnkBool3CheckBox.Checked = false;
-            UnkBool4CheckBox.Checked = false;
         }
 
         private void GenerateOutput_Button_Click(object sender, EventArgs e)
@@ -124,7 +124,30 @@ namespace EPFExplorer
             output += "L3 = " + PosXUpDown.Value.ToString() + "\n";
             output += "L4 = " + PosYUpDown.Value.ToString() + "\n";
 
-            output += "L5 = " + PriorityUpDown.Value.ToString() + "\n";
+            output += "L5 = ";
+
+            switch ((string)interactionTypeComboBox.SelectedItem)
+                {
+                case "NPC":
+                    output += "1";
+                    break;
+                case "Door":
+                    output += "2";
+                    break;
+                case "Inventory Item":
+                    output += "3";
+                    break;
+                case "Uninteractable":
+                    output += "4";
+                    break;
+                case "Normal Object":
+                    output += "5";
+                    break;
+                default:
+                    output += "4";
+                    break;
+                }
+            output += "\n";
 
             if (unkBool1CheckBox.Checked)
                 {
@@ -148,7 +171,7 @@ namespace EPFExplorer
                 if (r.DisplayName == (string)RoomComboBox.SelectedItem)
                     {
                     output += r.ID_for_objects;
-                    continue;
+                    break;
                     }
                 }
 
@@ -168,18 +191,18 @@ namespace EPFExplorer
                 if (r.DisplayName == (string)DestinationRoomComboBox.SelectedItem)
                 {
                     output += "\""+r.InternalName+"\"";
-                    continue;
+                    break;
                 }
             }
 
-            if (output[output.Length - 1] == ' ') //if the room didn't find a match
+            if (output[output.Length - 1] == ' ') //if the destination room didn't find a match
             {
                 output += "\"\""; //just put it as none
             }
 
             output += "\n";
 
-            if (UnkBool2CheckBox.Checked)
+            if (LockedCheckBox.Checked)
             {
                 output += "L13 = true\n";
             }
@@ -191,7 +214,7 @@ namespace EPFExplorer
             output += "L14 = " + destposX.Value.ToString() + "\n";
             output += "L15 = " + destposY.Value.ToString() + "\n";
 
-            if (UnkBool3CheckBox.Checked)
+            if (UnkBool2CheckBox.Checked)
             {
                 output += "L16 = true\n";
             }
@@ -200,7 +223,7 @@ namespace EPFExplorer
                 output += "L16 = false\n";
             }
 
-            if (UnkBool4CheckBox.Checked)
+            if (UnkBool3CheckBox.Checked)
             {
                 output += "L17 = true\n";
             }

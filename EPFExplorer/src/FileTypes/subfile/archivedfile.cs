@@ -463,7 +463,6 @@ namespace EPFExplorer
             input = input.Replace(((char)0xAC) + "", "[endtextbox]");  //our placeholder for null
             input = input.Replace(((char)0x0A) + "", "[newline]");
             input = input.Replace(((char)0x0B) + "", "[playername]");
-
             return input;
         }
 
@@ -472,7 +471,11 @@ namespace EPFExplorer
             input = input.Replace("[endtextbox]", (char)0xAC+ "");   //our placeholder for null, because if we use 0x00, it counts it as string termination
             input = input.Replace("[newline]", (char)0x0A + "");
             input = input.Replace("[playername]", (char)0x0B + "");
-
+            input = input.Replace('’', '\'');
+            input = input.Replace('‘', '\'');
+            input = input.Replace('“', '\"');
+            input = input.Replace('”', '\"');
+            input = input.Replace("…", "...");
             return input;
         }
 
