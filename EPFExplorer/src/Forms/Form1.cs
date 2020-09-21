@@ -970,6 +970,7 @@ namespace EPFExplorer
 
                 saveFileDialog1.Title = "Save arc file";
                 saveFileDialog1.CheckPathExists = true;
+                openFileDialog1.Filter = "arc (*.arc)|*.arc|All files (*.*)|*.*";
 
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
