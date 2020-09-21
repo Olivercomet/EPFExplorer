@@ -414,6 +414,14 @@ namespace EPFExplorer
                                 Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
                                 //Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
 
+                                if (file.RDTSpriteBPP == 4)
+                                    {
+                                    for (int c = 0; c < palette.Length; c++)
+                                        {
+                                        palette[c] = Color.FromArgb(0xFF, palette[c].R & 0xF8, palette[c].G & 0xF8, palette[c].B & 0xF8);
+                                        }
+                                    }
+
                                 //now make sure the alpha colour is at index 0
                                 if (palette[0] != file.RDTSpriteAlphaColour)
                                 {
@@ -666,6 +674,11 @@ namespace EPFExplorer
                     return i;
                 }
             }
+            Console.WriteLine("hmm, not found");
+            Console.WriteLine("Image R "+c.R);
+            Console.WriteLine("Image G " + c.G);
+            Console.WriteLine("Image B " + c.B);
+
             return 0; //if it wasn't found
         }
 

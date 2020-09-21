@@ -178,6 +178,7 @@ namespace EPFExplorer
 
         public void QuickLaunch()
         {
+            activeSaveFile.SaveToFile();
             System.Diagnostics.Process.Start(@Properties.Settings.Default.QuickLaunchRomPath);
         }
 

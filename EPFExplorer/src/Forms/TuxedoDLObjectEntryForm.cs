@@ -34,12 +34,16 @@ namespace EPFExplorer
             rooms.Add(new Room("Gift Shop Office", "GIFTOFFICE0", 99));
             rooms.Add(new Room("Gift Shop Roof", "GIFTROOF0", 100));
             rooms.Add(new Room("HQ", "HEADQUARTERS0", 67));
+            rooms.Add(new Room("Ice Rink", "ICERINK0", 91));
+            rooms.Add(new Room("Iceberg", "ICEBERG0", 103));
             rooms.Add(new Room("Lighthouse", "LIGHTHOUSE0", 82));
             rooms.Add(new Room("Lodge Attic", "ATTIC0", 109));
             rooms.Add(new Room("Lounge", "LOUNGE0", 106));
             rooms.Add(new Room("Mine", "MINEINTERIOR0", 69));
             rooms.Add(new Room("Mine Shack", "MINESHACK0", 68));
             rooms.Add(new Room("Mine Shed", "MINESHED0", 72));
+            rooms.Add(new Room("Mine Crash Site", "MINECRASH0", 70));
+            rooms.Add(new Room("Mine Lair", "MINELAIR0", 71));
             rooms.Add(new Room("Night Club", "NIGHTCLUB0", 94));
             rooms.Add(new Room("Pet Shop", "PETSHOP0", 74));
             rooms.Add(new Room("Pizza Parlor", "PIZZAPARLOR0", 75));
@@ -48,8 +52,10 @@ namespace EPFExplorer
             rooms.Add(new Room("Ski Hill", "SKIHILL0", 73));
             rooms.Add(new Room("Ski Lodge", "LODGE0", 90));
             rooms.Add(new Room("Ski Village", "SKIVILLAGE0", 78));
+            rooms.Add(new Room("Snow Forts", "SNOWFORTS0", 79));
             rooms.Add(new Room("Sport Shop", "SPORTSHOP0", 80));
             rooms.Add(new Room("Stage", "STAGE0", 95));
+            rooms.Add(new Room("Tallest Mountain", "TALLESTMOUNTAINTOP0", 96));
             rooms.Add(new Room("Town", "TOWN0", 81));
             rooms.Add(new Room("Underground Pool", "POOL0", 92));
 

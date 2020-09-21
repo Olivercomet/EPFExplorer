@@ -121,6 +121,16 @@ namespace EPFExplorer
             openFileDialog1.Title = "Select file";
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.CheckPathExists = true;
+
+            if (mode == "arc" && activeArc != null)
+                {
+                openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeArc.filename);
+                }
+            else if (mode == "rdt" && activeRdt != null)
+            {
+                openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeRdt.filename);
+            }
+
             openFileDialog1.Filter = "1PP archives (*.arc,*.rdt)|*.arc;*.rdt|1PP sfx binary (*.bin)|*.bin";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
