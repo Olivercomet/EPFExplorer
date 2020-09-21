@@ -414,14 +414,6 @@ namespace EPFExplorer
                                 Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
                                 //Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
 
-                                if (file.RDTSpriteBPP == 4)
-                                    {
-                                    for (int c = 0; c < palette.Length; c++)
-                                        {
-                                        palette[c] = Color.FromArgb(0xFF, palette[c].R & 0xF8, palette[c].G & 0xF8, palette[c].B & 0xF8);
-                                        }
-                                    }
-
                                 //now make sure the alpha colour is at index 0
                                 if (palette[0] != file.RDTSpriteAlphaColour)
                                 {
@@ -696,6 +688,7 @@ namespace EPFExplorer
                     for (int x = 0; x < img.Width; x++)
                     {
                         potentialNewColour = ((Bitmap)img).GetPixel(x, y);
+                        potentialNewColour = Color.FromArgb(0x00,potentialNewColour.R & 0xF8, potentialNewColour.G & 0xF8, potentialNewColour.B & 0xF8);
 
                         if (!ListAlreadyContainsColour(output, potentialNewColour))
                         {

@@ -213,6 +213,7 @@ namespace EPFExplorer
                     for (int x = 0; x < images[curFrame].image.Width; x++)
                         {
                         potentialNewColour = ((Bitmap)images[curFrame].image).GetPixel(x,y);
+                        potentialNewColour = Color.FromArgb(0x00, potentialNewColour.R & 0xF8, potentialNewColour.G & 0xF8, potentialNewColour.B & 0xF8);
 
                         if (!tempPalette.Contains(potentialNewColour))
                             {
@@ -241,6 +242,7 @@ namespace EPFExplorer
                     {
                     //guess alpha colour
                     sprite.RDTSpriteAlphaColour = ((Bitmap)images[curFrame].image).GetPixel(0, 0);   //assume the top left corner is the alpha colour. The user can change this later if they wish
+                    sprite.RDTSpriteAlphaColour = Color.FromArgb(0x00, sprite.RDTSpriteAlphaColour.R & 0xF8, sprite.RDTSpriteAlphaColour.G & 0xF8, sprite.RDTSpriteAlphaColour.B & 0xF8);
                     SetAlphaColourDisplay();
                     }
                 }
