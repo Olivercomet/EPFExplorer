@@ -50,6 +50,11 @@ namespace EPFExplorer
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (activeSaveFile == null)
+                {
+                MessageBox.Show("You need to open a valid save file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+                }
             activeSaveFile.SaveToFile();
         }
 

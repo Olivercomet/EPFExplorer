@@ -589,10 +589,22 @@ namespace EPFExplorer
                     }
 
                 }
+                else
+                {
+                    filepath = null;
+                    filebytes = null;
+                MessageBox.Show("That is not a Club Penguin DS save file!", "File magic not recognised", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
         public void SaveToFile(){  //========================== WRITING TO A NEW FILE FOLLOWS ==========================
+
+            if (filepath == null)
+                {
+                MessageBox.Show("You need to open a valid save file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+                }
 
             Byte[] checksumArea;
             uint checksum;
