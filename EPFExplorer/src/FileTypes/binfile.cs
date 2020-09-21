@@ -64,7 +64,7 @@ namespace EPFExplorer
                 {
                     if (file.filebytes != null)
                     {
-                        File.WriteAllBytes(filename + file.offset + ".xm", file.filebytes.ToArray());
+                        File.WriteAllBytes(filename + file.offset + ".sequence", file.filebytes.ToArray());
                     }
 
                 }
