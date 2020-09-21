@@ -40,11 +40,6 @@ namespace EPFExplorer
         public bool ready = false;
         public void RequestSpriteEditorImage(int frame) {
 
-            //if (sprite.RDTSpriteBPP == 3)
-              //  {
-               // Close();
-              //  return;
-              //  }
 
             ready = false;
 
@@ -54,6 +49,12 @@ namespace EPFExplorer
                 if (images[i].image == null && i != frame)
                 {
                     tempPalette = sprite.GetPalette(palettes[i].filebytes, 1, sprite.RDTSpriteBPP).ToList();
+
+                    //for (int c = 0; c < tempPalette.Count; c++)
+                      //  {
+                        //tempPalette[c] = Color.FromArgb(0x00, tempPalette[c].R & 0xF8, tempPalette[c].G & 0xF8, tempPalette[c].B & 0xF8);
+                        //}
+
                     sprite.RDTSpriteAlphaColour = tempPalette[0];
                     images[i].LoadImage(tempPalette.ToArray());
                     SetAlphaColourDisplay();
@@ -64,6 +65,12 @@ namespace EPFExplorer
             {
                 palettes[frame].DecompressLZ10IfCompressed();
                 tempPalette = sprite.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
+                
+                //for (int c = 0; c < tempPalette.Count; c++)
+                //{
+                 //   tempPalette[c] = Color.FromArgb(0x00, tempPalette[c].R & 0xF8, tempPalette[c].G & 0xF8, tempPalette[c].B & 0xF8);
+                //}
+
                 sprite.RDTSpriteAlphaColour = tempPalette[0];
                 images[frame].LoadImage(tempPalette.ToArray());
                 SetAlphaColourDisplay();

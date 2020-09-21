@@ -412,7 +412,9 @@ namespace EPFExplorer
                                     
                                 Color[] coloursToAdd = Get_Unique_Colours(images, palette.Length);
                                 Array.Copy(coloursToAdd, 0, palette, 0, coloursToAdd.Length);
-                                //Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
+                            //Console.WriteLine("number of unique colours: " + coloursToAdd.Length);
+
+                            file.RDTSpriteAlphaColour = Color.FromArgb(0x00, file.RDTSpriteAlphaColour.R, file.RDTSpriteAlphaColour.G, file.RDTSpriteAlphaColour.B); //make sure the dummy A value is 0x00
 
                                 //now make sure the alpha colour is at index 0
                                 if (palette[0] != file.RDTSpriteAlphaColour)
