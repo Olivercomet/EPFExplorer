@@ -336,7 +336,7 @@ namespace EPFExplorer
             offsetX = BitConverter.ToUInt16(filebytes, 4);
             offsetY = BitConverter.ToUInt16(filebytes, 6);
 
-            image = parentfile.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
+            image = parentfile.form1.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
         
         }
     }

@@ -75,9 +75,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\FileTypes\arcfile.cs" />
+    <Compile Include="src\FileTypes\mpbfile.cs" />
     <Compile Include="src\FileTypes\subfile\archivedfile.cs" />
     <Compile Include="src\FileTypes\binfile.cs" />
     <Compile Include="src\FileTypes\subfile\rdtSubfileData.cs" />
+    <Compile Include="src\FileTypes\tsbfile.cs" />
+    <Compile Include="src\Forms\MPB_TSB_EditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\MPB_TSB_EditorForm.Designer.cs">
+      <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Forms\SpriteEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +130,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="src\Forms\MPB_TSB_EditorForm.resx">
+      <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\SaveFileEditor.resx">
       <DependentUpon>SaveFileEditor.cs</DependentUpon>
     </EmbeddedResource>
