@@ -1050,12 +1050,6 @@ namespace EPFExplorer
                 return;
             }
 
-           // if (selectedFile.RDTSpriteBPP == 3)
-              //  {
-              //  Console.WriteLine("3BPP? oof. aborting.");
-             //   selectedFile.spriteEditor.Close();
-               // return;
-               // }
 
             string filename = Path.GetFileName(selectedFile.filename);
 
@@ -1244,6 +1238,86 @@ namespace EPFExplorer
 
             return bm;
         }
+
+
+
+
+        public Byte[] ImageToNBFC(Bitmap input, byte BPP, Color[] palette) {
+
+            Byte[] output = new byte[0];
+
+            int offset = 0;
+
+            if (BPP == 4)
+            {
+                output = new byte[(input.Width * input.Height) / 2]; 
+
+            }
+            else if (BPP == 8)
+            {
+                output = new byte[(input.Width * input.Height)];
+            }
+
+
+            Color newPixel;
+
+            if (BPP == 4)
+            {
+                for (int y = 0; y < input.Height; y++)
+                {
+                    for (int x = 0; x < input.Width; x++)
+                    {
+                        newPixel = input.GetPixel(x, y);
+                        output[offset] = (byte)(output[offset] | (byte)FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8)));
+                        if (x < input.Width - 1)
+                        {
+                            x++;
+                            newPixel = input.GetPixel(x, y);
+                            output[offset] = (byte)(output[offset] | (byte)(FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8)) << 4));
+                        }
+
+                        offset++;
+                    }
+                }
+            }
+            else
+            {
+                for (int y = 0; y < input.Height; y++)
+                {
+                    for (int x = 0; x < input.Width; x++)
+                    {
+                        newPixel = input.GetPixel(x, y);
+                        output[offset] = (byte)FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8));
+                        offset++;
+                    }
+                }
+            }
+
+            return output;
+        }
+
+
+        public int FindIndexOfColorInPalette(Color[] p, Color c)
+        {
+            for (int i = 0; i < p.Length; i++)
+            {
+                if ((c.R & 0xF8) == (p[i].R & 0xF8) && (c.G & 0xF8) == p[i].G && (c.B & 0xF8) == (p[i].B & 0xF8))
+                {
+                    return i;
+                }
+            }
+            Console.WriteLine("hmm, not found");
+            Console.WriteLine("Image R " + c.R);
+            Console.WriteLine("Image G " + c.G);
+            Console.WriteLine("Image B " + c.B);
+
+            return 0; //if it wasn't found
+        }
+
+
+
+
+
 
         //==============================================================================
         //==============================================================================

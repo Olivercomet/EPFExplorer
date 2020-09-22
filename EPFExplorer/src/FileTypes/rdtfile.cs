@@ -496,12 +496,12 @@ namespace EPFExplorer
                                             for (int x = 0; x < imageTemp.Width; x++)
                                                 {
                                                 newPixel = imageTemp.GetPixel(x, y);
-                                                newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8))); 
+                                                newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)form1.FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8))); 
                                                 if (x < imageTemp.Width - 1)
                                                     {
                                                     x++;
                                                     newPixel = imageTemp.GetPixel(x, y);
-                                                    newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)(FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8)) << 4));
+                                                    newImage.filebytes[curOffset] = (byte)(newImage.filebytes[curOffset] | (byte)(form1.FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8)) << 4));
                                                     }
                                             
                                                 curOffset++;
@@ -515,7 +515,7 @@ namespace EPFExplorer
                                             for (int x = 0; x < imageTemp.Width; x++)
                                             {
                                                 newPixel = imageTemp.GetPixel(x, y);
-                                                newImage.filebytes[curOffset] = (byte)FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8));
+                                                newImage.filebytes[curOffset] = (byte)form1.FindIndexOfColorInPalette(palette, Color.FromArgb(newPixel.A, newPixel.R & 0xF8, newPixel.G & 0xF8, newPixel.B & 0xF8));
                                                 curOffset++;
                                             }
                                         }
@@ -659,22 +659,7 @@ namespace EPFExplorer
 
         return true;
         }
-        public int FindIndexOfColorInPalette(Color[] p, Color c)
-        {
-            for (int i = 0; i < p.Length; i++)
-            {
-                if ((c.R & 0xF8)  == (p[i].R & 0xF8) && (c.G & 0xF8) == p[i].G && (c.B & 0xF8) == (p[i].B & 0xF8))
-                {
-                    return i;
-                }
-            }
-            Console.WriteLine("hmm, not found");
-            Console.WriteLine("Image R "+c.R);
-            Console.WriteLine("Image G " + c.G);
-            Console.WriteLine("Image B " + c.B);
-
-            return 0; //if it wasn't found
-        }
+       
 
 
         public Color[] Get_Unique_Colours(List<Image> input, int maxColours) {

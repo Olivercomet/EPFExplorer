@@ -32,6 +32,8 @@
             this.outputBox = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.interactionTypeComboBox = new System.Windows.Forms.ComboBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.FillWithExampleValuesButton = new System.Windows.Forms.Button();
             this.GenerateOutput_Button = new System.Windows.Forms.Button();
             this.FlipYCheckBox = new System.Windows.Forms.CheckBox();
@@ -64,8 +66,6 @@
             this.RDTSpritePathBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.ObjectIDUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label15 = new System.Windows.Forms.Label();
-            this.interactionTypeComboBox = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).BeginInit();
@@ -139,6 +139,30 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Input";
+            // 
+            // interactionTypeComboBox
+            // 
+            this.interactionTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.interactionTypeComboBox.FormattingEnabled = true;
+            this.interactionTypeComboBox.Items.AddRange(new object[] {
+            "NPC",
+            "Door",
+            "Inventory Item",
+            "Uninteractable",
+            "Normal Object"});
+            this.interactionTypeComboBox.Location = new System.Drawing.Point(139, 172);
+            this.interactionTypeComboBox.Name = "interactionTypeComboBox";
+            this.interactionTypeComboBox.Size = new System.Drawing.Size(161, 24);
+            this.interactionTypeComboBox.TabIndex = 36;
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(270, 491);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(17, 17);
+            this.label15.TabIndex = 35;
+            this.label15.Text = "Y";
             // 
             // FillWithExampleValuesButton
             // 
@@ -463,30 +487,6 @@
             this.ObjectIDUpDown.Size = new System.Drawing.Size(101, 22);
             this.ObjectIDUpDown.TabIndex = 0;
             // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(270, 491);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(17, 17);
-            this.label15.TabIndex = 35;
-            this.label15.Text = "Y";
-            // 
-            // interactionTypeComboBox
-            // 
-            this.interactionTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.interactionTypeComboBox.FormattingEnabled = true;
-            this.interactionTypeComboBox.Items.AddRange(new object[] {
-            "NPC",
-            "Door",
-            "Inventory Item",
-            "Uninteractable",
-            "Normal Object"});
-            this.interactionTypeComboBox.Location = new System.Drawing.Point(139, 172);
-            this.interactionTypeComboBox.Name = "interactionTypeComboBox";
-            this.interactionTypeComboBox.Size = new System.Drawing.Size(161, 24);
-            this.interactionTypeComboBox.TabIndex = 36;
-            // 
             // TuxedoDLObjectEntryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -494,6 +494,7 @@
             this.ClientSize = new System.Drawing.Size(1039, 614);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TuxedoDLObjectEntryForm";
             this.Text = "Object Entry Generator";

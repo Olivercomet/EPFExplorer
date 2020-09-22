@@ -31,19 +31,26 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MPB_TSB_EditorForm));
             this.pixelBox1 = new RedCell.UI.Controls.PixelBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.LOAD = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ImageWidthInTiles = new System.Windows.Forms.NumericUpDown();
             this.chooseTilemap = new System.Windows.Forms.Button();
             this.chooseTileset = new System.Windows.Forms.Button();
+            this.SaveToTSBAndMPB = new System.Windows.Forms.Button();
+            this.importFromPNG = new System.Windows.Forms.Button();
             this.exportToPNG = new System.Windows.Forms.Button();
-            this.LOAD = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageWidthInTiles)).BeginInit();
-            this.panel1.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // pixelBox1
@@ -65,25 +72,43 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Image";
             // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pixelBox1);
+            this.panel1.Location = new System.Drawing.Point(6, 21);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(828, 431);
+            this.panel1.TabIndex = 1;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.LOAD);
-            this.groupBox2.Controls.Add(this.exportToPNG);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.ImageWidthInTiles);
             this.groupBox2.Controls.Add(this.chooseTilemap);
             this.groupBox2.Controls.Add(this.chooseTileset);
             this.groupBox2.Location = new System.Drawing.Point(13, 478);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(849, 128);
+            this.groupBox2.Size = new System.Drawing.Size(345, 128);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Options";
+            this.groupBox2.Text = "Load";
+            // 
+            // LOAD
+            // 
+            this.LOAD.Location = new System.Drawing.Point(196, 78);
+            this.LOAD.Name = "LOAD";
+            this.LOAD.Size = new System.Drawing.Size(134, 34);
+            this.LOAD.TabIndex = 5;
+            this.LOAD.Text = "LOAD DISPLAY";
+            this.LOAD.UseVisualStyleBackColor = true;
+            this.LOAD.Click += new System.EventHandler(this.LOAD_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(198, 30);
+            this.label1.Location = new System.Drawing.Point(204, 30);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(126, 17);
             this.label1.TabIndex = 3;
@@ -91,7 +116,7 @@
             // 
             // ImageWidthInTiles
             // 
-            this.ImageWidthInTiles.Location = new System.Drawing.Point(213, 50);
+            this.ImageWidthInTiles.Location = new System.Drawing.Point(219, 50);
             this.ImageWidthInTiles.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -127,52 +152,79 @@
             this.chooseTileset.UseVisualStyleBackColor = true;
             this.chooseTileset.Click += new System.EventHandler(this.chooseTileset_Click);
             // 
+            // SaveToTSBAndMPB
+            // 
+            this.SaveToTSBAndMPB.Location = new System.Drawing.Point(28, 49);
+            this.SaveToTSBAndMPB.Name = "SaveToTSBAndMPB";
+            this.SaveToTSBAndMPB.Size = new System.Drawing.Size(241, 44);
+            this.SaveToTSBAndMPB.TabIndex = 10;
+            this.SaveToTSBAndMPB.Text = "Save new TSB and MPB";
+            this.SaveToTSBAndMPB.UseVisualStyleBackColor = true;
+            this.SaveToTSBAndMPB.Click += new System.EventHandler(this.SaveToTSBAndMPB_Click);
+            // 
+            // importFromPNG
+            // 
+            this.importFromPNG.Location = new System.Drawing.Point(6, 32);
+            this.importFromPNG.Name = "importFromPNG";
+            this.importFromPNG.Size = new System.Drawing.Size(172, 40);
+            this.importFromPNG.TabIndex = 9;
+            this.importFromPNG.Text = "Import image from PNG";
+            this.importFromPNG.UseVisualStyleBackColor = true;
+            this.importFromPNG.Click += new System.EventHandler(this.importFromPNG_Click);
+            // 
             // exportToPNG
             // 
-            this.exportToPNG.Location = new System.Drawing.Point(574, 78);
+            this.exportToPNG.Location = new System.Drawing.Point(6, 78);
             this.exportToPNG.Name = "exportToPNG";
-            this.exportToPNG.Size = new System.Drawing.Size(260, 44);
-            this.exportToPNG.TabIndex = 4;
-            this.exportToPNG.Text = "Export to PNG";
+            this.exportToPNG.Size = new System.Drawing.Size(172, 34);
+            this.exportToPNG.TabIndex = 8;
+            this.exportToPNG.Text = "Export image to PNG";
             this.exportToPNG.UseVisualStyleBackColor = true;
-            this.exportToPNG.Click += new System.EventHandler(this.exportToPNG_Click);
+            this.exportToPNG.Click += new System.EventHandler(this.exportToPNG_Click_1);
             // 
-            // LOAD
+            // groupBox3
             // 
-            this.LOAD.Location = new System.Drawing.Point(201, 78);
-            this.LOAD.Name = "LOAD";
-            this.LOAD.Size = new System.Drawing.Size(96, 34);
-            this.LOAD.TabIndex = 5;
-            this.LOAD.Text = "LOAD";
-            this.LOAD.UseVisualStyleBackColor = true;
-            this.LOAD.Click += new System.EventHandler(this.LOAD_Click);
+            this.groupBox3.Controls.Add(this.exportToPNG);
+            this.groupBox3.Controls.Add(this.importFromPNG);
+            this.groupBox3.Location = new System.Drawing.Point(364, 478);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(184, 128);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Modify / Extract";
             // 
-            // panel1
+            // groupBox4
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.pixelBox1);
-            this.panel1.Location = new System.Drawing.Point(16, 21);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(818, 431);
-            this.panel1.TabIndex = 1;
+            this.groupBox4.Controls.Add(this.SaveToTSBAndMPB);
+            this.groupBox4.Location = new System.Drawing.Point(554, 479);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(308, 128);
+            this.groupBox4.TabIndex = 12;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Save";
             // 
             // MPB_TSB_EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(874, 619);
+            this.ClientSize = new System.Drawing.Size(876, 619);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MPB_TSB_EditorForm";
             this.Text = "EPFExplorer MPB/TSB Editor";
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageWidthInTiles)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -186,8 +238,13 @@
         private System.Windows.Forms.Button chooseTilemap;
         private System.Windows.Forms.NumericUpDown ImageWidthInTiles;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button exportToPNG;
         private System.Windows.Forms.Button LOAD;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button SaveToTSBAndMPB;
+        private System.Windows.Forms.Button importFromPNG;
+        private System.Windows.Forms.Button exportToPNG;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.ColorDialog colorDialog1;
     }
 }
