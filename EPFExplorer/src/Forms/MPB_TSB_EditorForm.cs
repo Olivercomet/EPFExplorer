@@ -102,7 +102,6 @@ namespace EPFExplorer
                 {
                 for (int x = 0; x < (int)ImageWidthInTiles.Value; x++)
                     {
-                    Console.WriteLine(BitConverter.ToUInt16(activeMpb.filebytes, (y * 2 * (int)ImageWidthInTiles.Value) + (x * 2)));
                     int offset_of_tile_in_tsb = 0x200 + (64 * (0x3FFF & BitConverter.ToUInt16(activeMpb.filebytes, (y*2*(int)ImageWidthInTiles.Value) + (x*2)))); //cut the highest two bits off the tile. They seem to indicate something else (flipping hopefully?)
 
                     for (int i = 0; i < 8; i++)

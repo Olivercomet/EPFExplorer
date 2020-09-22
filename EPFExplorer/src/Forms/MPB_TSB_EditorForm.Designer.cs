@@ -38,23 +38,26 @@
             this.chooseTileset = new System.Windows.Forms.Button();
             this.exportToPNG = new System.Windows.Forms.Button();
             this.LOAD = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageWidthInTiles)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pixelBox1
             // 
-            this.pixelBox1.Location = new System.Drawing.Point(16, 30);
+            this.pixelBox1.Location = new System.Drawing.Point(12, 14);
             this.pixelBox1.Name = "pixelBox1";
-            this.pixelBox1.Size = new System.Drawing.Size(818, 414);
+            this.pixelBox1.Size = new System.Drawing.Size(792, 399);
+            this.pixelBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pixelBox1.TabIndex = 0;
             this.pixelBox1.TabStop = false;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.pixelBox1);
+            this.groupBox1.Controls.Add(this.panel1);
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(849, 458);
@@ -144,6 +147,15 @@
             this.LOAD.UseVisualStyleBackColor = true;
             this.LOAD.Click += new System.EventHandler(this.LOAD_Click);
             // 
+            // panel1
+            // 
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pixelBox1);
+            this.panel1.Location = new System.Drawing.Point(16, 21);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(818, 431);
+            this.panel1.TabIndex = 1;
+            // 
             // MPB_TSB_EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -159,6 +171,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ImageWidthInTiles)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -174,5 +188,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button exportToPNG;
         private System.Windows.Forms.Button LOAD;
+        private System.Windows.Forms.Panel panel1;
     }
 }
