@@ -115,11 +115,62 @@ namespace EPFExplorer
                 {
                 for (int x = 0; x < (int)ImageWidthInTiles.Value; x++)
                     {
-                    int offset_of_tile_in_tsb = 0x200 + (64 * (0x3FFF & BitConverter.ToUInt16(activeMpb.filebytes, (y*2*(int)ImageWidthInTiles.Value) + (x*2)))); //cut the highest two bits off the tile. They seem to indicate something else (flipping hopefully?)
+                    ushort IndexFromMPB = BitConverter.ToUInt16(activeMpb.filebytes, (y * 2 * (int)ImageWidthInTiles.Value) + (x * 2)); ;
+                    
+                    bool flipX = false;
+                    bool flipY = false;
 
-                    for (int i = 0; i < 8; i++)
+                    //if ((IndexFromMPB & 0x8000) == 0x8000)        I don't think this is actually read by the game, or if it is, it might not be Y flipping. So I'm leaving it out for now.
+                    //    {
+                    //    flipY = true;
+                    //    }
+
+                    if ((IndexFromMPB & 0x4000) == 0x4000)
                         {
-                        Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + (i*8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
+                        flipX = true;
+                        }
+
+
+                    int offset_of_tile_in_tsb = 0x200 + (64 * (0x3FFF & IndexFromMPB)); //cut the highest two bits off the index, as they were tile-flipping booleans
+
+
+                    //I'm not sure that flipY is even read in game, so might want to eliminate it here too... not sure.
+
+                    if (!flipX && !flipY)
+                        {
+                        for (int i = 0; i < 8; i++)
+                            {
+                            Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + (i * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
+                            }
+                        }
+                     else if (flipX && flipY)
+                        {
+                        for (int i = 7; i >= 0; i--)
+                            {
+                            for (int j = 0; j < 8; j++)
+                                {
+                                imageForDisplay[pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8) + (7-j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
+                                }
+                            }
+                        }
+                    else if (flipX)
+                        {
+                        Console.WriteLine("flipped tile on X only");
+                        for (int i = 0; i < 8; i++)
+                            {
+                            for (int j = 0; j < 8; j++)
+                                {
+                                imageForDisplay[pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8) + (7-j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
+                                }
+                            }
+                        }
+                    else if (flipY)
+                        {
+                        Console.WriteLine("flipped tile on Y only");
+                        for (int i = 0; i < 8; i++)
+                            {
+                            Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + (i * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
+                            }
                         }
 
                     pos_in_output_image += 8;
@@ -174,6 +225,7 @@ namespace EPFExplorer
             saveFileDialog1.Title = "Save TSB";
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.Filter = "1PP tileset binary (*.tsb)|*.tsb";
+            saveFileDialog1.FileName = "";
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -253,6 +305,10 @@ namespace EPFExplorer
                         }
                     }
 
+                if (palette.Count < 256 && !palette.Contains(Color.FromArgb(0xFF, 0xFF, 0x00, 0xFF)) && !palette.Contains(Color.FromArgb(0x00, 0xFF, 0x00, 0xFF)))  //if there's space for it, sneakily add the magenta alpha anyway
+                    {
+                    palette.Add(Color.FromArgb(0xFF, 0xFF, 0x00, 0xFF));
+                    }
 
                 TSBAlphaColour = Color.FromArgb(0xFF,0xFF,0x00,0xFF);
 
@@ -284,8 +340,9 @@ namespace EPFExplorer
 
                 activeTsb.palette = palette.ToArray();
 
-                Byte[] NBFCimage = form1.ImageToNBFC(image,8,activeTsb.palette);
-                
+               byte[] NBFCimage = (form1.ImageToNBFC(image,8,activeTsb.palette));
+
+                NBFCimage.Reverse();
 
                 List<Tile> tiles = new List<Tile>();
 
@@ -304,7 +361,7 @@ namespace EPFExplorer
                         //make a new tile from the current pos in the image
                         Tile newTile = new Tile();
 
-                        for (int i = 0; i < 8; i++)
+                        for (int i = 7; i >= 0; i--)
                             {
                             Array.Copy(NBFCimage, pos + (image.Width * i), newTile.tileImage, 8 * i, 8);
                             }
@@ -413,12 +470,12 @@ namespace EPFExplorer
 
                         if (tiles[t].flipX)
                         {
-                            tileDescriptor |= 0x8000;
+                            tileDescriptor |= 0x4000;
                         }
 
                         if (tiles[t].flipY)
                         {
-                            tileDescriptor |= 0x4000;
+                            tileDescriptor |= 0x8000;
                         }
 
                     }
@@ -428,7 +485,7 @@ namespace EPFExplorer
                     }
 
                     activeMpb.filebytes[(t * 2)] = (byte)tileDescriptor;
-                    activeMpb.filebytes[(t * 2)+1] = (byte)(tileDescriptor >> 8);
+                    activeMpb.filebytes[(t * 2) + 1] = (byte)(tileDescriptor >> 8);
                 }
 
 
@@ -497,7 +554,7 @@ namespace EPFExplorer
 
             if (YFlippedIdentical)
             {
-                return 3;
+                return 0;   //used to be 3. I'm dummying this out for now. I don't think it's read by the game, so including it here could produce unexpected results.
             }
 
             //test for X and Y flipped identical tiles
@@ -518,7 +575,7 @@ namespace EPFExplorer
 
             if (BothFlippedIdentical)
             {
-                return 4;
+                return 0; //used to be 4. I'm dummying this out for now. I don't think it's read by the game, so including it here could produce unexpected results.
             }
 
             return 0;   //the tiles are not similar
