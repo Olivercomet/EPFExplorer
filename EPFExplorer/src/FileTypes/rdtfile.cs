@@ -31,6 +31,9 @@ namespace EPFExplorer
 
         public bool isHR = false;
 
+        public Dictionary<Byte[], int> AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
+
+
         public void ReadRdt()
         {
             filecount = BitConverter.ToUInt16(filebytes,0x0F);
@@ -136,8 +139,9 @@ namespace EPFExplorer
         public void RebuildRDT(bool is_only_sprite_container) {
 
         int longestFilenameLength = 0;
+        AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
 
-        for (int i = 0; i < archivedfiles.Count; i++)   //make sure filenames use forward slashes, and that they don't start with them
+         for (int i = 0; i < archivedfiles.Count; i++)   //make sure filenames use forward slashes, and that they don't start with them
             {
             if (archivedfiles[i].filebytes == null || archivedfiles[i].filebytes.Length == 0)   //if it hasn't been modified by the user, read it out of the original file
                 {
@@ -197,6 +201,8 @@ namespace EPFExplorer
                     NullNodesInArchivedFileOrder[NullNodesInArchivedFileOrder.Count - 1].Name = "nullNode";
                     nodeTreeSize += 5;
                 }
+
+
 
             //make byte array version of node tree
 
@@ -286,6 +292,8 @@ namespace EPFExplorer
             int basePos = posInNodeTree;
 
             posInNodeTree = basePos + (node.Nodes.Count * 5);
+
+
             for (int i = 0; i < node.Nodes.Count; i++)
             {
                 if (node.Nodes[i].Text == "nullNode")
@@ -370,6 +378,7 @@ namespace EPFExplorer
                     //make global palette for sprite
 
                     rdtSubfileData newPalette = new rdtSubfileData();
+
 
 
                     // read individual frames
@@ -557,6 +566,7 @@ namespace EPFExplorer
 
                     int spritePaletteOffset = 0; //global palette for the sprite so that it can just be pasted around
 
+
                     foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList)
                         {
                         subfiledata.writeAddress = 0;
@@ -564,6 +574,7 @@ namespace EPFExplorer
                         int offsetOfThisSubfile = 0;
                         bool dontWrite = false;
 
+                        int offset_in_subfiletable_where_address_should_be_written = (offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable;
 
                         if (file.rdtSubfileDataList.IndexOf(subfiledata) > 0)   //if it's not the subfile table, add an entry to the subfile table
                             {
@@ -587,10 +598,10 @@ namespace EPFExplorer
                             subfiledata.writeAddress = offsetOfThisSubfile;
 
 
-                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable] = (byte)(offsetOfThisSubfile & 0x000000FF);
-                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 1] = (byte)((offsetOfThisSubfile & 0x0000FF00) >> 8);
-                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 2] = (byte)((offsetOfThisSubfile & 0x00FF0000) >> 16);
-                            data[(offsetOfSubfileTable - (0x11 + nodeTree.Length)) + pos_in_subfiletable + 3] = (byte)((offsetOfThisSubfile & 0xFF000000) >> 24);
+                            data[offset_in_subfiletable_where_address_should_be_written] = (byte)(offsetOfThisSubfile & 0x000000FF);
+                            data[offset_in_subfiletable_where_address_should_be_written + 1] = (byte)((offsetOfThisSubfile & 0x0000FF00) >> 8);
+                            data[offset_in_subfiletable_where_address_should_be_written + 2] = (byte)((offsetOfThisSubfile & 0x00FF0000) >> 16);
+                            data[offset_in_subfiletable_where_address_should_be_written + 3] = (byte)((offsetOfThisSubfile & 0xFF000000) >> 24);
 
                             if (pos_in_subfiletable == 0x0C)
                                 {
@@ -607,15 +618,47 @@ namespace EPFExplorer
                             continue;
                             }
 
-                        //otherwise, write subfiletype and size, then write filebytes
 
-                        data.Add((byte)subfiledata.subfileType);
-                        data.Add((byte)0);
+                        //compress if needed
 
                         if (subfiledata.subfileType == 0x04)   
                             {
                             subfiledata.filebytes = DSDecmp.NewestProgram.Compress(subfiledata.filebytes, new DSDecmp.Formats.Nitro.LZ10());
                             }
+
+                        //check for identical files that were already processed
+
+                        if (file.rdtSubfileDataList.IndexOf(subfiledata) > 0 && subfiledata.graphicsType != "palette")
+                        {
+                            foreach (Byte[] alreadyProcessedFile in AlreadyProcessedFilesAndOffsetsInData.Keys) //if this file is equal to one that was already processed
+                            {
+                                if (ByteArraysAreEqual(alreadyProcessedFile, subfiledata.filebytes))
+                                {
+                                    //this file is identical to one that was already processed, so just store a reference to the existing one
+                                    dontWrite = true;
+
+                                    data[offset_in_subfiletable_where_address_should_be_written] = (byte)AlreadyProcessedFilesAndOffsetsInData[alreadyProcessedFile];
+                                    data[offset_in_subfiletable_where_address_should_be_written + 1] = (byte)(AlreadyProcessedFilesAndOffsetsInData[alreadyProcessedFile] >> 8);
+                                    data[offset_in_subfiletable_where_address_should_be_written + 2] = (byte)(AlreadyProcessedFilesAndOffsetsInData[alreadyProcessedFile] >> 16);
+                                    data[offset_in_subfiletable_where_address_should_be_written + 3] = (byte)(AlreadyProcessedFilesAndOffsetsInData[alreadyProcessedFile] >> 24);
+                                    break;
+                                }
+                            }
+                        }
+
+
+                        if (dontWrite)  //check again for dontwrite
+                        {
+                            continue;
+                        }
+
+                        //otherwise, write subfiletype and size, then write filebytes
+
+                        AlreadyProcessedFilesAndOffsetsInData.Add(subfiledata.filebytes, offsetOfThisSubfile);
+                        Console.WriteLine(AlreadyProcessedFilesAndOffsetsInData.Count);
+
+                        data.Add((byte)subfiledata.subfileType);
+                        data.Add((byte)0);
 
                         data.Add((byte)(subfiledata.filebytes.Length & 0x000000FF));
                         data.Add((byte)((subfiledata.filebytes.Length & 0x0000FF00) >> 8));
@@ -657,6 +700,7 @@ namespace EPFExplorer
                 }
             }
 
+            Console.WriteLine("Byte array match");
         return true;
         }
        
