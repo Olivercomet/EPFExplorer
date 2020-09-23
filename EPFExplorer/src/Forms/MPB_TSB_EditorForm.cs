@@ -120,10 +120,10 @@ namespace EPFExplorer
                     bool flipX = false;
                     bool flipY = false;
 
-                    //if ((IndexFromMPB & 0x8000) == 0x8000)        I don't think this is actually read by the game, or if it is, it might not be Y flipping. So I'm leaving it out for now.
-                    //    {
-                    //    flipY = true;
-                    //    }
+                    if ((IndexFromMPB & 0x8000) == 0x8000)        
+                        {
+                        flipY = true;
+                        }
 
                     if ((IndexFromMPB & 0x4000) == 0x4000)
                         {
@@ -134,8 +134,7 @@ namespace EPFExplorer
                     int offset_of_tile_in_tsb = 0x200 + (64 * (0x3FFF & IndexFromMPB)); //cut the highest two bits off the index, as they were tile-flipping booleans
 
 
-                    //I'm not sure that flipY is even read in game, so might want to eliminate it here too... not sure.
-
+                 
                     if (!flipX && !flipY)
                         {
                         for (int i = 0; i < 8; i++)
@@ -149,7 +148,7 @@ namespace EPFExplorer
                             {
                             for (int j = 0; j < 8; j++)
                                 {
-                                imageForDisplay[pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8) + (7-j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
+                                imageForDisplay[pos_in_output_image + ((7-i) * (int)ImageWidthInTiles.Value * 8) + (7-j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
                                 }
                             }
                         }
@@ -169,7 +168,7 @@ namespace EPFExplorer
                         Console.WriteLine("flipped tile on Y only");
                         for (int i = 0; i < 8; i++)
                             {
-                            Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + (i * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
+                            Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + ((7 - i) * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
                             }
                         }
 
@@ -554,7 +553,7 @@ namespace EPFExplorer
 
             if (YFlippedIdentical)
             {
-                return 0;   //used to be 3. I'm dummying this out for now. I don't think it's read by the game, so including it here could produce unexpected results.
+                return 3;   
             }
 
             //test for X and Y flipped identical tiles
@@ -575,7 +574,7 @@ namespace EPFExplorer
 
             if (BothFlippedIdentical)
             {
-                return 0; //used to be 4. I'm dummying this out for now. I don't think it's read by the game, so including it here could produce unexpected results.
+                return 4; 
             }
 
             return 0;   //the tiles are not similar
