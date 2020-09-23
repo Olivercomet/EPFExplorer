@@ -159,7 +159,7 @@ namespace EPFExplorer
 
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.Title = "Replace with file";
+            openFileDialog1.Title = "Replace "+Path.GetFileName(filename);
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.CheckPathExists = true;
 
