@@ -206,6 +206,70 @@ namespace EPFExplorer
                                 }
                             }
                         break;
+
+                    case ".mpb":
+                        openFileDialog1.Filter = "1PP Map Binary (*.mpb)|*.mpb|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
+                    case ".tsb":
+                        openFileDialog1.Filter = "1PP Tileset Binary (*.tsb)|*.tsb|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
+                    case ".nbfp":
+                        openFileDialog1.Filter = "Nitro Basic File Palette (*.nbfp)|*.nbfp|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
+                    case ".nbfc":
+                        openFileDialog1.Filter = "Nitro tileset (*.nbfc)|*.nbfc|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
+                    case ".nbfs":
+                        openFileDialog1.Filter = "Nitro tilemap (*.nbfs)|*.nbfs|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
+                    case ".ntft":
+                        openFileDialog1.Filter = "Nitro file tiles (*.ntft)|*.ntft|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
+                    case ".ntfp":
+                        openFileDialog1.Filter = "Nitro file palette (*.ntfp)|*.ntfp|All files (*.*)|*.*";
+
+                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        }
+                        break;
+
                     default:
                         openFileDialog1.Title = "Replace "+Path.GetFileName(filename);
                         if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -701,8 +765,6 @@ namespace EPFExplorer
                     offset += 2;
                 }
             }
-
-
             return palette;
         }
 
