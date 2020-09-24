@@ -385,9 +385,9 @@
             this.unkBool1CheckBox.Location = new System.Drawing.Point(9, 214);
             this.unkBool1CheckBox.Name = "unkBool1CheckBox";
             this.unkBool1CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.unkBool1CheckBox.Size = new System.Drawing.Size(120, 21);
+            this.unkBool1CheckBox.Size = new System.Drawing.Size(71, 21);
             this.unkBool1CheckBox.TabIndex = 11;
-            this.unkBool1CheckBox.Text = "Unknown Bool";
+            this.unkBool1CheckBox.Text = "Visible";
             this.unkBool1CheckBox.UseVisualStyleBackColor = true;
             // 
             // label6
