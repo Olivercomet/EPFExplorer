@@ -6,19 +6,284 @@ using System.Threading.Tasks;
 
 namespace EPFExplorer   
 {
-    class xmfile        //Yeah, this isn't really an xm file. It has superficial similarities but that's it.
+    class xmfile        
     {
         public uint offset;
-        public List<Byte> filebytes;
-        public uint filemagic;
+        public Byte[] filebytes;
         public uint size;
-
-        public List<Byte> defaultheader = new List<Byte>(){0x45, 0x78, 0x74, 0x65, 0x6E, 0x64, 0x65, 0x64, 0x20, 0x6D, 0x6F, 0x64, 0x75, 0x6C, 0x65, 0x3A, 0x20, 0x4F, 0x4C, 0x49, 0x56, 0x45, 0x52, 0x43, 0x4F, 0x4D, 0x45, 0x54, 0x5F, 0x57, 0x41, 0x53, 0x5F, 0x48, 0x45, 0x52, 0x45, 0x1A, 0x45, 0x50, 0x46, 0x45, 0x58, 0x50, 0x4C, 0x4F, 0x52, 0x45, 0x52, 0x58, 0x4D, 0x5F, 0x48, 0x45, 0x41, 0x44, 0x45, 0x52, 0x04, 0x01, 0x14, 0x01, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0x18, 0x00, 0x22, 0x00, 0x1F, 0x00, 0x01, 0x00, 0x03, 0x00, 0x80, 0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x08, 0x09, 0x0B, 0x0C, 0x10, 0x0F, 0x0D, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
         public binfile parentbinfile;
 
-        public uint numchannels;
-        public uint numpatterns;
-        public uint numinstruments;
+        string moduleName = "default";
+
+        public int number_of_patterns_in_one_loop;
+        public int restartPosition;
+
+        public int numchannels;
+        public int numpatterns;
+        public int numinstruments;
+
+        public int tempo;
+        public int bpm;
+
+        List<Pattern> patterns = new List<Pattern>();
+        List<Pattern> patternsInPlayingOrder = new List<Pattern>();
+
+        public class Pattern {
+            public int index;
+            public int number_of_rows;
+            public int patternSize;
+
+            public List<Byte[]> rows = new List<Byte[]>();
+        }
+
+        public Pattern GetPatternWithIndex(List<Pattern> patternList, int index) { 
+        
+        foreach (Pattern p in patternList)
+            {
+            if (p.index == index)
+                {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
+
+        public Byte[] GetRow(binfile bin, int pos) {
+
+            Byte[] output = new byte[0x10];
+
+            if (pos == -1)  //idk what this means at the moment, so I'm just going to return a blank array. it might mean repeat the previous one?
+                 {
+                 return output;
+                 }
+
+                for (int i = 0; i < 0x10; i++)
+                {
+                output[i] = bin.filebytes[bin.offsetOfMusicInstructionData + pos + i];
+                }
+
+            return output;
+        }
+
+
+
+        public void ReadSongInfo() {
+
+            if (filebytes.Length == 0)
+                {
+                return;
+                }
+
+            numchannels = 1; // filebytes[0];
+            numpatterns = filebytes[1];
+            number_of_patterns_in_one_loop = filebytes[2];
+
+            restartPosition = filebytes[4];
+
+            tempo = filebytes[5];
+            bpm = filebytes[6];
+
+            numinstruments = filebytes[9];
+
+            int pos = 0x28;
+
+            patterns = new List<Pattern>();
+
+            patternsInPlayingOrder = new List<Pattern>();
+
+            for (int i = 0; i < number_of_patterns_in_one_loop; i++)
+                {
+
+                if (GetPatternWithIndex(patterns,filebytes[pos]) == null)
+                    {
+                    Pattern newPattern = new Pattern();
+
+                    newPattern.index = filebytes[pos];
+
+                    patterns.Add(newPattern);
+
+                    patternsInPlayingOrder.Add(newPattern);
+                    }
+                else
+                    {
+                    patternsInPlayingOrder.Add(GetPatternWithIndex(patterns,filebytes[pos]));
+                    }
+               
+                pos++;
+                }
+
+            while (pos % 4 != 0)
+                {
+                pos++;
+                }
+
+
+            //start of the actual pattern info
+
+
+            foreach(Pattern p in patterns)
+                {
+                p.number_of_rows = BitConverter.ToInt32(filebytes,pos);
+                pos += 4;
+            
+                for (int i = 0; i < p.number_of_rows; i++)
+                    {
+                    p.rows.Add(GetRow(parentbinfile,BitConverter.ToInt32(filebytes, pos)));
+                    p.patternSize += p.rows[p.rows.Count - 1].Length;
+
+                    pos += 4;
+                    }
+                }
+        }
+
+
+
+
+
+
+
+
+
+        public List<Byte> MakeXM() {
+
+            List<Byte> output = new List<byte>();
+
+        foreach (char c in "Extended Module: ")
+            {
+                output.Add((byte)c);
+            }
+
+        foreach (char c in moduleName)
+            {
+                output.Add((byte)c);
+            }
+
+        while (output.Count < 0x25)
+            {
+                output.Add(0x00);
+            }
+
+            output.Add(0x1A);
+
+
+            foreach (char c in "EPFExplorer")
+            {
+                output.Add((byte)c);
+            }
+
+            while (output.Count < 0x3A)
+            {
+                output.Add(0x00);
+            }
+
+            output.Add(0x04);
+            output.Add(0x01);
+
+            output.Add(0x14);
+            output.Add(0x01);
+            output.Add(0x00);
+            output.Add(0x00);
+
+            output.Add((byte)number_of_patterns_in_one_loop);
+            output.Add((byte)(number_of_patterns_in_one_loop >> 8));
+
+            output.Add((byte)restartPosition);
+            output.Add((byte)(restartPosition >> 8));
+
+            output.Add((byte)numchannels);
+            output.Add((byte)(numchannels >> 8));
+
+            output.Add((byte)numpatterns);
+            output.Add((byte)(numpatterns >> 8));
+
+            output.Add((byte)numinstruments);
+            output.Add((byte)(numinstruments >> 8));
+
+            output.Add(0x00);        //skip a bool that describes whether it has an amiga frequency table or not
+            output.Add(0x00);
+
+            output.Add((byte)tempo);
+            output.Add((byte)(tempo >> 8));
+
+            output.Add((byte)bpm);
+            output.Add((byte)(bpm >> 8));
+
+            for (int i = 0; i < patternsInPlayingOrder.Count; i++)
+                {
+                output.Add((byte)patternsInPlayingOrder[i].index);
+                }
+
+            while (output.Count < 0x150)
+                {
+                output.Add(0x00);
+                }
+
+            foreach (Pattern p in patterns)
+                {
+                output.Add(0x09);
+                output.Add(0x00);
+                output.Add(0x00);
+                output.Add(0x00);
+
+                output.Add(0x00);
+
+                output.Add((byte)p.number_of_rows);
+                output.Add((byte)(p.number_of_rows >> 8));
+
+                output.Add((byte)(p.patternSize));
+                output.Add((byte)((p.patternSize) >> 8));
+                
+                foreach (Byte[] row in p.rows)
+                    {
+                    foreach (Byte b in row)
+                        {
+                        output.Add(b);
+                        }
+                    }
+                }
+
+            //write instrument section
+
+            string instrument_name = "instrument_";
+
+            for (int i = 0; i < numinstruments; i++)
+                {
+                output.Add(0x11);
+                output.Add(0x00);
+                output.Add(0x00);
+                output.Add(0x00);
+
+                int namelength = 0;
+
+                foreach (char c in (instrument_name + i.ToString()))
+                    {
+                    output.Add((byte)c);
+                    namelength++;
+                    }
+
+                while (namelength < 0x16)
+                    {
+                    output.Add(0x00);
+                    namelength++;
+                    }
+
+                output.Add(0x00);   //instrument type
+                output.Add(0x00);   //number of samples. I'm hoping I can get away with this being zero...
+                output.Add(0x00);
+                }
+
+           
+
+
+
+
+
+            return output;
+        }
+
+
     }
 }

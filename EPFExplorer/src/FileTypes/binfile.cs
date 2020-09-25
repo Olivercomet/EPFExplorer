@@ -24,6 +24,7 @@ namespace EPFExplorer
 
         public Dictionary<uint, string> knownfilemagic = new Dictionary<uint, string>();
 
+        public uint offsetOfMusicInstructionData;
 
         public void ReadMusicBin()
         {
@@ -33,7 +34,12 @@ namespace EPFExplorer
 
                 reader.BaseStream.Position++;   //skip over what is probably the sample count
                 filecount = reader.ReadByte();  //music file count
-                reader.BaseStream.Position += 0x0C;
+
+                reader.BaseStream.Position = 0x08;
+                offsetOfMusicInstructionData = reader.ReadUInt32();
+
+
+                reader.BaseStream.Position = 0x10;
 
                 Console.WriteLine(filecount);
                 for (int i = 0; i < filecount; i++)
@@ -56,7 +62,7 @@ namespace EPFExplorer
 
                     if (xmfiles[i].size < filebytes.Length)
                     {
-                        xmfiles[i].filebytes = reader.ReadBytes((int)xmfiles[i].size).ToList();
+                        xmfiles[i].filebytes = reader.ReadBytes((int)xmfiles[i].size);
                     }
                 }
 
@@ -64,7 +70,9 @@ namespace EPFExplorer
                 {
                     if (file.filebytes != null)
                     {
-                        File.WriteAllBytes(filename + file.offset + ".sequence", file.filebytes.ToArray());
+                        Console.WriteLine(filename + file.offset + ".brokenxm");
+                        file.ReadSongInfo();
+                        File.WriteAllBytes(filename + file.offset + ".brokenxm", file.MakeXM().ToArray());
                     }
 
                 }
