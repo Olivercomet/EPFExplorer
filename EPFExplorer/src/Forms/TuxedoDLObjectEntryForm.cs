@@ -116,21 +116,18 @@ namespace EPFExplorer
         {
             string output = "";
 
-            output += "L0 = _util\n";
-            output += "L0 = L0.AddDownloadItem\n";
-            output += "L1 = " + ObjectIDUpDown.Value.ToString() + "\n";
+            output += "_util.AddDownloadItem(";
+            output += ObjectIDUpDown.Value.ToString() + ", ";
 
             if (RDTSpritePathBox.Text[0] == '/')
                 {
                 RDTSpritePathBox.Text = RDTSpritePathBox.Text.Substring(1, RDTSpritePathBox.Text.Length - 1);
                 }
 
-            output += "L2 = " + "\"" + RDTSpritePathBox.Text + "\"\n";
+            output += "\"" + RDTSpritePathBox.Text + "\", ";
 
-            output += "L3 = " + PosXUpDown.Value.ToString() + "\n";
-            output += "L4 = " + PosYUpDown.Value.ToString() + "\n";
-
-            output += "L5 = ";
+            output += PosXUpDown.Value.ToString() + ", ";
+            output += PosYUpDown.Value.ToString() + ", ";
 
             switch ((string)interactionTypeComboBox.SelectedItem)
                 {
@@ -153,24 +150,22 @@ namespace EPFExplorer
                     output += "4";
                     break;
                 }
-            output += "\n";
+            output += ",";
 
             if (unkBool1CheckBox.Checked)
                 {
-                output += "L6 = true\n";
+                output += "true, ";
                 }
             else
                 {
-                output += "L6 = false\n";
+                output += "false, ";
                 }
 
-            output += "L7 = " + Unk1UpDown.Value.ToString() + "\n";
+            output += Unk1UpDown.Value.ToString() + ", ";
 
-            output += "L8 = " + "\"" + LuaScriptPath.Text.Replace("chunks/","scripts/").Replace(".luc",".lua").Replace("/","") + "\"\n";
+            output += "\"" + LuaScriptPath.Text.Replace("chunks/","scripts/").Replace(".luc",".lua").Replace("/","") + "\", ";
 
-            output += "L9 = " + Unk2UpDown.Value.ToString() + "\n";
-
-            output += "L10 = ";
+            output += Unk2UpDown.Value.ToString() + ", ";
 
             foreach (Room r in rooms)
                 {
@@ -186,11 +181,9 @@ namespace EPFExplorer
                 output += "67"; //just put it in HQ
                 }
 
-            output += "\n";
+            output += ", ";
 
-            output += "L11 = " + Unk3UpDown.Value.ToString() + "\n";
-
-            output += "L12 = ";
+            output += Unk3UpDown.Value.ToString() + ", ";
 
             foreach (Room r in rooms)
             {
@@ -206,39 +199,37 @@ namespace EPFExplorer
                 output += "\"\""; //just put it as none
             }
 
-            output += "\n";
+            output += ", ";
 
             if (LockedCheckBox.Checked)
             {
-                output += "L13 = true\n";
+                output += "true, ";
             }
             else
             {
-                output += "L13 = false\n";
+                output += "false, ";
             }
 
-            output += "L14 = " + destposX.Value.ToString() + "\n";
-            output += "L15 = " + destposY.Value.ToString() + "\n";
+            output += destposX.Value.ToString() + ", ";
+            output += destposY.Value.ToString() + ", ";
 
             if (FlipXCheckBox.Checked)
             {
-                output += "L16 = true\n";
+                output += "true, ";
             }
             else
             {
-                output += "L16 = false\n";
+                output += "false, ";
             }
 
             if (FlipYCheckBox.Checked)
             {
-                output += "L17 = true\n";
+                output += "true)";
             }
             else
             {
-                output += "L17 = false\n";
+                output += "false)";
             }
-
-            output += "L0(L1, L2, L3, L4, L5, L6, L7, L8, L9, L10, L11, L12, L13, L14, L15, L16, L17)\n";
 
             outputBox.Text = output;
 

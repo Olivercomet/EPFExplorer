@@ -294,6 +294,7 @@ namespace EPFExplorer
                 targetFileIndex = form1.Find_Closest_File_To(form1.CalculateHash(s.Substring(1, s.Length - 1).ToLower()), this); //try lower case without the initial slash
                 if (targetFileIndex < filecount) {  /*Console.WriteLine("method E worked"); */ SetArchivedFileName(targetFileIndex, s.Substring(1, s.Length - 1).ToLower()); } //if we succeeded, go to later on.
 
+
                 if (!s.Contains("."))   //if it doesn't currently have an extension, try some extensions
                 {
 
