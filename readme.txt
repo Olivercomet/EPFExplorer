@@ -13,5 +13,5 @@ Dumping audio clips to wav (openable with Audacity if FFMPEG is installed)
 
 With thanks to
 Fireboyd78 for creating a C# port of unluac (originally by tehtmi)
-No$GBA for being its invaluable debugging tools
+No$GBA for its invaluable debugging tools
 DSDecmp and Ekona for their LZ10/11 compression features
