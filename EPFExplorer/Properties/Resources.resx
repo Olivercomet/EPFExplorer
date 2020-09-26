@@ -127,4 +127,13 @@
   <data name="foldericon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\foldericon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="lua.exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\luacompiler\lua.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lua51.dll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\luacompiler\lua51.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="luac.exe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\luacompiler\luac.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using DSDecmp;
 using Ekona;
 using System.Windows.Forms;
+using UnluacNET;
+using System.Diagnostics;
 
 namespace EPFExplorer
 {
@@ -89,7 +91,7 @@ namespace EPFExplorer
         
         rdtSubfileDataList = basis.rdtSubfileDataList;  
 
-        RDTSpriteNumFrames = basis.RDTSpriteNumFrames;
+            RDTSpriteNumFrames = basis.RDTSpriteNumFrames;
             RDTSpriteWidth = basis.RDTSpriteWidth;
             RDTSpriteHeight = basis.RDTSpriteHeight;
             RDTSpriteBPP = basis.RDTSpriteBPP;
@@ -116,6 +118,10 @@ namespace EPFExplorer
                 {
                 switch (Path.GetExtension(filename).ToLower())
                     {
+                    case ".luc":
+                        saveFileDialog1.Filter = "Lua script (*.lua)|*.lua|Compiled lua script (*.luc)|*.luc|All files (*.*)|*.*";
+                        saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(filename) + ".lua";
+                        break;
                     case ".st":
                         saveFileDialog1.Filter = "txt files (*.txt)|*.txt|st files (*.st)|*.st|All files (*.*)|*.*";
                         saveFileDialog1.FileName = Path.GetFileNameWithoutExtension(filename) + ".txt";
@@ -132,7 +138,7 @@ namespace EPFExplorer
                     }
                 }
 
-            saveFileDialog1.Title = "Export file";
+            saveFileDialog1.Title = "Export "+ saveFileDialog1.FileName;
             saveFileDialog1.CheckPathExists = true;
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -146,10 +152,47 @@ namespace EPFExplorer
             {
                 File.WriteAllLines(path, STstrings);
             }
+            else if (Path.GetExtension(path).ToLower() == ".lua")
+            {
+                DecompileLuc(filebytes,path);
+            }
             else
             {
                 File.WriteAllBytes(path, filebytes);
             }
+        }
+
+
+        public bool LuaUtiliesExist() {
+
+            string LuaCompilerDir = Path.Combine(Application.StartupPath, "LuaCompiler");
+            Console.WriteLine(LuaCompilerDir);
+
+        if (Directory.Exists(LuaCompilerDir))
+            {
+                return true;
+            }
+        else
+            {
+            Directory.CreateDirectory(LuaCompilerDir);
+
+                File.WriteAllBytes(Path.Combine(LuaCompilerDir,"lua51.dll"),Properties.Resources.lua51_dll);
+                File.WriteAllBytes(Path.Combine(LuaCompilerDir, "lua.exe"), Properties.Resources.lua_exe);
+                File.WriteAllBytes(Path.Combine(LuaCompilerDir, "luac.exe"), Properties.Resources.luac_exe);
+            }
+
+            //check if it was created successfully
+
+            if (File.Exists(Path.Combine(LuaCompilerDir,"luac.exe")))
+            {
+                Console.WriteLine("lua dir created!");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+                
         }
 
         public void ReplaceFile()
@@ -180,12 +223,62 @@ namespace EPFExplorer
                     {
                     case ".lua":
                     case ".luc":
-                        openFileDialog1.Filter = "Compiled lua files (*.luc, *.luac, *.out)|*.luc;*.luac;*.out";
-                        
-                        if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                        if (LuaUtiliesExist())
+                        {
+                            openFileDialog1.Filter = "Lua scripts (*.lua)|*.lua|Compiled lua files (*.luc, *.luac, *.out)|*.luc;*.luac;*.out";
+
+                            if (openFileDialog1.ShowDialog() == DialogResult.OK)
                             {
-                            filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                                Byte[] backupbytes = new byte[filebytes.Length];
+
+                                Array.Copy(filebytes, 0, backupbytes, 0, filebytes.Length);
+
+                                filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+
+                                if (filebytes[0] == 0x1B && filebytes[1] == 0x4C && filebytes[2] == 0x75 && filebytes[4] == 0x51)
+                                    {
+                                    //then we imported an already-compiled script, so don't need to change anything
+                                    }
+                                else
+                                    {
+                                    string luaDir = Path.Combine(Application.StartupPath, "LuaCompiler");
+                                    File.WriteAllBytes(Path.Combine(luaDir,"input.lua"),filebytes);
+                                    
+                                    ProcessStartInfo processInfo = new ProcessStartInfo();
+                                    processInfo.FileName = Path.Combine(luaDir, "luac.exe");
+                                    processInfo.ErrorDialog = true;
+                                    processInfo.UseShellExecute = false;
+                                    processInfo.RedirectStandardOutput = true;
+                                    processInfo.RedirectStandardError = true;
+                                    processInfo.Arguments = " -s input.lua";
+                                    processInfo.WorkingDirectory = luaDir;
+
+                                    Process compiler = Process.Start(processInfo);
+                                    compiler.WaitForExit();
+
+                                    if (File.Exists(Path.Combine(luaDir, "luac.out")))
+                                        {
+                                        filebytes = File.ReadAllBytes(Path.Combine(luaDir, "luac.out"));
+                                        File.Delete(Path.Combine(luaDir, "input.lua"));
+                                        File.Delete(Path.Combine(luaDir, "luac.out"));
+                                        }
+                                    else
+                                        {
+                                        filebytes = backupbytes;    //revert to old bytes if we failed to read the lua script
+                                        MessageBox.Show("Bad lua file or file read error. Check your syntax.");
+                                        }
+                                    }
                             }
+                        }
+                        else
+                        {
+                            openFileDialog1.Filter = "Compiled lua files (*.luc, *.luac, *.out)|*.luc;*.luac;*.out";
+
+                            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                            {
+                                filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                            }
+                        }
                         break;
 
                     case ".st":
@@ -368,6 +461,7 @@ namespace EPFExplorer
                 filebytes = new Byte[1];    //set dummy filebytes so that this file registers as read by EPFExplorer
             }
         }
+
 
 
         public void OpenRDTSubfileInEditor() { 
@@ -1002,5 +1096,31 @@ namespace EPFExplorer
                 parentarcfile.form1.WriteIntToArray(filebytes, 5 + (4 * formattedStrings.Count), currentPos);
             }
         }
+
+
+        public string DecompileLuc(Byte[] input, string destfile) {
+
+            Stream stream = new MemoryStream(input);
+
+            var header = new BHeader(stream);
+
+            LFunction lmain = header.Function.Parse(stream, header);
+
+            Decompiler d = new Decompiler(lmain);
+            d.Decompile();
+
+
+            using (var writer = new StreamWriter(destfile, false, new UTF8Encoding(false)))
+                {
+                d.Print(new Output(writer));
+
+                writer.Flush();
+                }
+
+            return (null);   
+
+        }
+
+        
     }
 }

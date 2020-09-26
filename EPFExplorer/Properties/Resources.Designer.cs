@@ -89,5 +89,35 @@ namespace EPFExplorer.Properties {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lua_exe {
+            get {
+                object obj = ResourceManager.GetObject("lua.exe", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] lua51_dll {
+            get {
+                object obj = ResourceManager.GetObject("lua51.dll", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] luac_exe {
+            get {
+                object obj = ResourceManager.GetObject("luac.exe", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

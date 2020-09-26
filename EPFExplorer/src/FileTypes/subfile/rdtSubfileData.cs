@@ -87,7 +87,12 @@ namespace EPFExplorer
                     }
 
                 newSetting.type = BitConverter.ToUInt16(filebytes, curOffset);
-                curOffset += 6; //I don't know if the 0xFFFFFFFF is padding or not, so skip over it for now
+                curOffset += 2;
+
+                while(filebytes[curOffset] == 0xFF)
+                    {
+                    curOffset++;
+                    }
 
                 switch (newSetting.type)
                     {

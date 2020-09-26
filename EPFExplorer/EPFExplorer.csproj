@@ -72,6 +72,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnluacNET">
+      <HintPath>dlls\UnluacNET.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\FileTypes\arcfile.cs" />
@@ -175,6 +178,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="luacompiler\lua.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="luacompiler\lua51.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="luacompiler\luac.exe" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
