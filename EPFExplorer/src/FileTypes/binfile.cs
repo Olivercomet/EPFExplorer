@@ -77,7 +77,6 @@ namespace EPFExplorer
                     {
                         Console.WriteLine(filename + file.offset + ".xm");
                         file.ReadSongInfo();
-                        File.WriteAllBytes(filename + file.offset + ".sequence", file.filebytes);
                         File.WriteAllBytes(filename + file.offset + ".xm", file.MakeXM().ToArray());
                     }
 
