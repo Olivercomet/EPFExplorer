@@ -423,13 +423,15 @@ namespace EPFExplorer
 
                 endOfOriginalFileData += 4; //skip checksum
 
+                byte[] customFilenameTable = null;
+
                 if (filebytes.Length > endOfOriginalFileData)  //if there's more after the end of the checksum, it's a custom names section added by this program on a previous export, we can use this to obtain the file names
                     {
                     Console.WriteLine("Custom filename table activated");
 
                     use_custom_filename_table = true;
 
-                    byte[] customFilenameTable = new byte[filebytes.Length - endOfOriginalFileData];
+                    customFilenameTable = new byte[filebytes.Length - endOfOriginalFileData];
 
                     Array.Copy(filebytes, endOfOriginalFileData, customFilenameTable, 0, filebytes.Length - endOfOriginalFileData);
                     
@@ -439,10 +441,12 @@ namespace EPFExplorer
 
                     string newstring = "";
 
+                if (customFilenameTable != null)
+                    {
                     for (int i = 0; i < customFilenameTable.Length; i++)    //go through the byte array and parse all the strings
                         {
                         char newchar = (char)customFilenameTable[i];
-                            
+
                         if ((byte)newchar == 0x00)
                             {
                             customFilenames.Add(newstring);
@@ -460,11 +464,13 @@ namespace EPFExplorer
                         }
 
                     for (int i = 0; i < archivedfiles.Count; i++)   //then apply the filenames from the table to the archivedfiles
-                        {
+                            {
                         archivedfiles[i].filename = customFilenames[i];
+                            }
                         }
                     }
-                else //otherwise, try to match hashes with the filenames obtained from ARM9
+                
+                if (customFilenameTable == null)//otherwise, try to match hashes with the filenames obtained from ARM9
                     {
                         foreach (string s in form1.stringsEPF)   //go through the potential filenames in the string array and label the files in the arc as best we can
                         {

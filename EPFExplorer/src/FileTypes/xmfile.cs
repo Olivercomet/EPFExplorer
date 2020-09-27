@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EPFExplorer   
 {
-    class xmfile        
+    public class xmfile        
     {
         public uint offset;
         public Byte[] filebytes;
@@ -53,19 +53,129 @@ namespace EPFExplorer
 
         public Byte[] GetRow(binfile bin, int pos) {
 
-            Byte[] output = new byte[0x10];
+            int initialPos = pos;
 
-            if (pos == -1)  //idk what this means at the moment, so I'm just going to return a blank array. it might mean repeat the previous one?
+            List<Byte> output = new List<Byte>();
+
+            if (pos == -1)  //return a blank row
                  {
-                 return output;
+                 for (int i = 0; i < numchannels; i++)
+                    {
+                    output.Add(0x80);    
+                    }
+
+                 return output.ToArray();
                  }
 
-                for (int i = 0; i < 0x10; i++)
-                {
-                output[i] = bin.filebytes[bin.offsetOfMusicInstructionData + pos + i];
-                }
 
-            return output;
+            //extract control bytes from a run-on series of bits, where each section of 5 bits is a control byte
+
+            Byte[] controlBytes = new byte[numchannels];
+
+            int b = 0;
+
+            while (b < numchannels)
+            {
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0xF8) >> 3);
+                b++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x07) << 2);
+                controlBytes[b] |= (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1] & 0xC0) >> 6);
+                b++;
+                pos++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x3E) >> 1);
+                b++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x01) << 4);
+                controlBytes[b] |= (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1] & 0xF0) >> 4);
+                b++;
+                pos++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x0F) << 1);
+                controlBytes[b] |= (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1] & 0x80) >> 7);
+                b++;
+                pos++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x7C) >> 2);
+                b++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x03) << 3);
+                controlBytes[b] |= (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1] & 0xE0) >> 5);
+                b++;
+                pos++;
+                if (b == numchannels) { break; }
+
+                controlBytes[b] = (byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x1F);
+                b++;
+                pos++;
+                if (b == numchannels) { break; }
+            }
+
+
+            pos = initialPos + 8;
+
+
+            for (int i = 0; i < controlBytes.Length; i++)
+                {
+                if (controlBytes[i] == 0x00)
+                {
+                    controlBytes[i] = 0x80;
+                    output.Add(controlBytes[i]);
+                }
+                else
+                {
+                    byte correctedControlByte = 0x80;
+
+                    if ((controlBytes[i] & 0x10) == 0x10)  //note
+                        {
+                        correctedControlByte |= 0x01;
+                        }
+                    if ((controlBytes[i] & 0x08) == 0x08)  //instr
+                    {
+                        correctedControlByte |= 0x02;
+                    }
+                    if ((controlBytes[i] & 0x04) == 0x04)  //vol
+                    {
+                        correctedControlByte |= 0x04;
+                    }
+                    if ((controlBytes[i]  & 0x02) == 0x02)  //effect
+                    {
+                        correctedControlByte |= 0x08;
+                    }
+                    if ((controlBytes[i] & 0x01) == 0x01)  //effect params
+                    {
+                        correctedControlByte |= 0x10;
+                    }
+
+                    //add control byte to output
+                    output.Add(correctedControlByte);
+
+                    //look at its parameters and add those bytes too
+
+                    byte mask = 0x80;
+
+                    while (mask >= 1)
+                    {
+                        if ((controlBytes[i] & mask) == mask)
+                        {
+                            //add byte
+                            output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
+                            pos++;
+                        }
+
+                        mask = (byte)(mask >> 1);
+                    }
+                }
+            }
+
+            return output.ToArray();
         }
 
 
@@ -77,7 +187,7 @@ namespace EPFExplorer
                 return;
                 }
 
-            numchannels = 1; // filebytes[0];
+            numchannels = filebytes[0];
             numpatterns = filebytes[1];
             number_of_patterns_in_one_loop = filebytes[2];
 
@@ -86,7 +196,7 @@ namespace EPFExplorer
             tempo = filebytes[5];
             bpm = filebytes[6];
 
-            numinstruments = filebytes[9];
+            numinstruments = 0x80; //filebytes[9];
 
             int pos = 0x28;
 

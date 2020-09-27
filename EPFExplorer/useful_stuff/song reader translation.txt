@@ -1,0 +1,107 @@
+Byte mask = 0x80;
+
+int byteOfInterest;
+
+int r2;
+int r3;
+
+int lookAheadAmount = 8;
+
+//CHECK FIRST BIT
+if ((rowData[pos] & mask) == mask)		//0x0214C86E in EU EPF
+	{
+	byteOfInterest = rowData[pos + lookAheadAmount];
+	lookAheadAmount++;
+	}
+else
+	{
+	byteOfInterest = 0;			//0x0214C87C
+	}
+
+byteOfInterest = byteOfInterest << 0x18;
+r2 = byteOfInterest >> 0x18;
+
+if (mask <= 1)		//0x0214C882 EU EPF
+	{
+	//0x0214C88A EU EPF
+	mask = 0x80;
+	pos++;
+	}
+else
+	{
+	mask = mask >> 1;	
+	}
+
+
+
+//CHECK SECOND BIT	(but sometimes it's not the second bit?)
+if ((rowData[pos] & mask) == mask)
+	{
+	byteOfInterest = rowData[pos + lookAheadAmount];	//0x0214C89A EU EPF
+	lookAheadAmount++;
+	}
+else
+	{
+	byteOfInterest = 0;
+	}
+
+//0x0214C8A8
+
+byteOfInterest = byteOfInterest << 0x18;
+r3 = byteOfInterest >> 0x18;
+
+
+if (mask <= 1)		//0x0214C8AE EU EPF
+	{
+	//0x0214C8B4 EU EPF
+	mask = 0x80;
+	pos++;
+	}
+else
+	{
+	mask = mask >> 1;	
+	}
+
+//0x0214C8BC
+
+
+//CHECK THIRD BIT	(but sometimes it's not the third bit?)
+if ((rowData[pos] & mask) == mask)
+	{
+	byteOfInterest = rowData[pos + lookAheadAmount];	
+	lookAheadAmount++;
+	}
+else
+	{
+	//0x0214C8D0 EU EPF
+	byteOfInterest = 0;
+	}
+
+then it stores byteOfInterest value at the address in r6
+
+move r12 into 0, or is it 0 into r12?
+
+if (r3 == 0)
+	{
+	//branch to 0x214C986
+
+
+	}
+else
+	{
+	//0x0214C8DC EU EPF
+	r1 = value at address (r5 + 0x0480);
+	r0 = r3 - 1;
+	r0 = r0 << 7;
+	r0 = r1 + r0;
+	r1 = value at address (r0 + 0x0E);
+	r3 = 0x11;
+	//some more stuff
+	}
+
+
+
+
+
+
+

@@ -1,0 +1,70 @@
+So from the following comparisons, it seems that:
+The 0x08 bit indicates the presence of an instrument byte
+
+Comparing this against the the XM specification, it suggests that:
+0x04 bit indicates the presence of a volume byte
+0x02 bit indicates the presence of an effect byte
+0x01 bit indicates the presence of an effect data byte
+
+
+===========NEVER MIND!!!!!!!!!!!!!===========
+
+Never mind! I think I've cracked it!
+
+the C6B58C etc bit at the start... they are NOT separate control bytes. It's a run-on series of bits, and the sections of 5 bits are the actual controls!
+
+which means... in B5, which was analysed (erroneously) above and below...
+
+
+0x08 was actually the 3rd bit, the volume
+0x04 was actually the 4th bit, the effect
+0x01 was actually the note bit of the NEXT control
+
+by the time the bit reader gets to (row + 0x08), it stops reading bits because obviously that's where the parameter data that we've just been reading starts
+
+
+
+
+COMPARISONS (FOR B5 ONLY, SEE ABOVE FOR REAL ANSWER):
+
+
+B5	first main note of EPF theme
+1011 0101
+
+8C
+1000 1100	seemed to change it to a cymbal/percussive instrument
+
+B6
+1011 0110	sounds normal
+
+B7
+1011 0111	does not play a note but has glitchiness afterwards
+
+B8
+1011 1000	infinite repeating
+
+B9
+1011 1001	mini percussive note
+
+BA
+1011 1010	mini percussive note, might be a tiny bit of glitchiness? not sure
+
+BB
+1011 1011	mini percussive note, but later becomes glitchy... ... might have triggered an effect?
+
+BC
+1011 1100	plays a mini percussive note, like a shaker or something
+
+BD
+1011 1101	mini percussive note, but later becomes glitchy... might have triggered an effect?
+
+BE
+1011 1110	mini percussive note, but later becomes glitchy... might have triggered an effect?
+
+BF
+1011 1111	glitched instrument sound
+
+
+
+95
+1001 0101     infinite repeat! don't set the third byte to zero!

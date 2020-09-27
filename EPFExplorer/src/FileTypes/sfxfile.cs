@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EPFExplorer
 {
-    class sfxfile
+    public class sfxfile
     {
 
         public uint offset;

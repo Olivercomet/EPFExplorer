@@ -14,8 +14,6 @@ using System.Diagnostics;
 namespace EPFExplorer
 {
 
-    
-
     public class archivedfile
     {
         public Form1 form1;
@@ -109,7 +107,6 @@ namespace EPFExplorer
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-
             if (filename == "FILENAME_NOT_SET")
                 {
                 saveFileDialog1.FileName = hash + "." + filemagic;
@@ -148,7 +145,7 @@ namespace EPFExplorer
 
         public void Export(string path) //if doing a batch export, this will get called directly (so that it doesn't open a savefiledialog for every individual file)
         {
-            if (Path.GetExtension(path).ToLower() == ".txt")
+            if (Path.GetExtension(path).ToLower() == ".txt" && filename.Contains(".st"))
             {
                 File.WriteAllLines(path, STstrings);
             }

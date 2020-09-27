@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EPFExplorer
 {
-    class binfile
+    public class binfile
     {
         public string binname;
         public string filename;
@@ -54,10 +54,15 @@ namespace EPFExplorer
 
                 for (int i = 0; i < xmfiles.Count; i++)
                 {
-                    if (i != xmfiles.Count - 1)
+                    if (i < xmfiles.Count - 1)
                         {
                         xmfiles[i].size = xmfiles[i + 1].offset - xmfiles[i].offset;
                         }
+                    else
+                        {
+                        xmfiles[i].size = (uint)(filebytes.Length - xmfiles[i].offset); //it might be bigger than its intended size, but it won't matter once it's exported to XM
+                        }
+
                     reader.BaseStream.Position = xmfiles[i].offset;
 
                     if (xmfiles[i].size < filebytes.Length)
@@ -70,9 +75,10 @@ namespace EPFExplorer
                 {
                     if (file.filebytes != null)
                     {
-                        Console.WriteLine(filename + file.offset + ".brokenxm");
+                        Console.WriteLine(filename + file.offset + ".xm");
                         file.ReadSongInfo();
-                        File.WriteAllBytes(filename + file.offset + ".brokenxm", file.MakeXM().ToArray());
+                        File.WriteAllBytes(filename + file.offset + ".sequence", file.filebytes);
+                        File.WriteAllBytes(filename + file.offset + ".xm", file.MakeXM().ToArray());
                     }
 
                 }
