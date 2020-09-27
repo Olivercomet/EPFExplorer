@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EPFExplorer   
 {
@@ -11,6 +13,8 @@ namespace EPFExplorer
         public uint offset;
         public Byte[] filebytes;
         public uint size;
+
+        public string name;
 
         public binfile parentbinfile;
 
@@ -385,14 +389,34 @@ namespace EPFExplorer
                 output.Add(0x00);
                 }
 
-           
-
-
-
 
 
             return output;
         }
+
+
+
+        public void Export()
+        {
+
+            if (filebytes != null)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+                saveFileDialog1.FileName = name;
+
+                saveFileDialog1.Title = "Save XM file";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.Filter = "Extended Module (*.xm)|*.xm|All files (*.*)|*.*";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    ReadSongInfo();
+                    File.WriteAllBytes(saveFileDialog1.FileName, MakeXM().ToArray());
+                }
+            }
+        }
+
 
 
     }

@@ -26,6 +26,12 @@ namespace EPFExplorer
 
         public uint offsetOfMusicInstructionData;
 
+        public string binMode;
+
+
+        public List<string> MusicNamesEPF = new List<string>() { "Main theme", "Unused UI theme", "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Coffee Shop", "Test Robots theme", "Cart Surfer", "Ice Fishing", "Gadget Room", "Night Club", "Dojo", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Jet Pack Adventure", "Snowboarding", "Snow Trekker", "Mission Complete", "Nothing" };
+        public List<string> MusicNamesHR = new List<string>() { "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Ice Fishing", "Gadget room", "Night Club", "Spy Snake", "Boiler room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Grapple Gadget", "Main theme", "Herbert's Base", "Herbert's Base 2", "Herbert behind Ski Lodge", "Herbert's theme", "Geyser theme", "Unused", "Aqua Rescue", "Tallest Mountain", "Tallest Mountain 2", "Puffle Training Caves", "Spy Snake", "Credits" };
+
         public void ReadMusicBin()
         {
             using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
@@ -71,16 +77,22 @@ namespace EPFExplorer
                     }
                 }
 
-                foreach (xmfile file in xmfiles)
-                {
-                    if (file.filebytes != null)
-                    {
-                        Console.WriteLine(filename + file.offset + ".xm");
-                        file.ReadSongInfo();
-                        File.WriteAllBytes(filename + file.offset + ".xm", file.MakeXM().ToArray());
-                    }
 
-                }
+                if (xmfiles[2].offset == 2054556)
+                    {
+                    ApplyEPFMusicFileNames();
+                    }
+                else if (xmfiles[2].offset == 2339468)
+                    {
+                    ApplyHRMusicFileNames();
+                    }
+                else
+                    {
+                    foreach (xmfile xm in xmfiles)
+                        {
+                        xm.name = Path.GetFileName(filename) + xm.offset;
+                        }
+                    }
             }
         }
         public void ReadBin()
@@ -124,16 +136,28 @@ namespace EPFExplorer
                         sfxfiles[i].filebytes = reader.ReadBytes((int)sfxfiles[i].sizedividedby4 * 4);
                     }
                 }
-
-                foreach (sfxfile file in sfxfiles)
-                {
-                        if (file.filebytes != null)
-                        {
-                            file.ConvertToWAV();
-                            File.WriteAllBytes(filename + file.offset + ".wav", file.filebytes);
-                        }
-                }
             }
         }
+
+
+        public void ApplyEPFMusicFileNames() {
+
+            for (int i = 0; i < xmfiles.Count; i++)
+            {
+                xmfiles[i].name = MusicNamesEPF[i] + ".xm";
+            }
+
+        }
+
+        public void ApplyHRMusicFileNames() { 
+        
+            for (int i = 0; i < xmfiles.Count; i++)
+                {
+                xmfiles[i].name = MusicNamesHR[i] + ".xm";
+                }
+
+        }
+
+
     }
 }

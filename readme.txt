@@ -9,6 +9,7 @@ Opening and editing TSB/MPB files. (Both EPF and HR)
 Exporting and reimporting LUA scripts.
 Editing save files. (Both EPF and HR)
 Dumping audio clips to wav (openable with Audacity if FFMPEG is installed)
+Dumping music tracks to .XM
 
 
 With thanks to

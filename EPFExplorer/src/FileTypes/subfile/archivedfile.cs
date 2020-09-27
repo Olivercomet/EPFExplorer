@@ -54,6 +54,11 @@ namespace EPFExplorer
         public Color RDTSpriteAlphaColour;
 
 
+
+        public sfxfile linkedSfx;
+        public xmfile linkedXm;
+
+
         public archivedfile()
         {
 

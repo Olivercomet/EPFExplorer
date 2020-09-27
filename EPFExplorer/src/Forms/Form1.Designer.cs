@@ -38,6 +38,7 @@
             this.saveFileExtractorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.massRDTExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateTuxedoDLObjectEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MPBTSBEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.FileTree = new System.Windows.Forms.TreeView();
             this.archivedFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -64,11 +65,13 @@
             this.rdtSpriteToPNGs = new System.Windows.Forms.ToolStripMenuItem();
             this.rawDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRDTarchivedfile = new System.Windows.Forms.ToolStripMenuItem();
-            this.MPBTSBEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
             this.rdtSubfileContextMenu.SuspendLayout();
+            this.binFileContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip2
@@ -95,14 +98,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -137,6 +140,13 @@
             this.generateTuxedoDLObjectEntryToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
             this.generateTuxedoDLObjectEntryToolStripMenuItem.Text = "TuxedoDL object entry generator";
             this.generateTuxedoDLObjectEntryToolStripMenuItem.Click += new System.EventHandler(this.generateTuxedoDLObjectEntryToolStripMenuItem_Click);
+            // 
+            // MPBTSBEditorToolStripMenuItem
+            // 
+            this.MPBTSBEditorToolStripMenuItem.Name = "MPBTSBEditorToolStripMenuItem";
+            this.MPBTSBEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
+            this.MPBTSBEditorToolStripMenuItem.Text = "MPB/TSB Editor";
+            this.MPBTSBEditorToolStripMenuItem.Click += new System.EventHandler(this.MPBTSBEditorToolStripMenuItem_Click);
             // 
             // button1
             // 
@@ -343,12 +353,20 @@
             this.deleteRDTarchivedfile.Text = "Delete";
             this.deleteRDTarchivedfile.Click += new System.EventHandler(this.deleteRDTarchivedfile_Click);
             // 
-            // MPBTSBEditorToolStripMenuItem
+            // binFileContextMenu
             // 
-            this.MPBTSBEditorToolStripMenuItem.Name = "MPBTSBEditorToolStripMenuItem";
-            this.MPBTSBEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.MPBTSBEditorToolStripMenuItem.Text = "MPB/TSB Editor";
-            this.MPBTSBEditorToolStripMenuItem.Click += new System.EventHandler(this.MPBTSBEditorToolStripMenuItem_Click);
+            this.binFileContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.binFileContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportToolStripMenuItem3});
+            this.binFileContextMenu.Name = "binFileContextMenu";
+            this.binFileContextMenu.Size = new System.Drawing.Size(211, 56);
+            // 
+            // exportToolStripMenuItem3
+            // 
+            this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
+            this.exportToolStripMenuItem3.Text = "Export";
+            this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
             // Form1
             // 
@@ -367,6 +385,7 @@
             this.archivedFileContextMenu.ResumeLayout(false);
             this.archivedFolderContextMenu.ResumeLayout(false);
             this.rdtSubfileContextMenu.ResumeLayout(false);
+            this.binFileContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -408,6 +427,8 @@
         private System.Windows.Forms.ToolStripMenuItem deleteArchivedFile;
         private System.Windows.Forms.ToolStripMenuItem generateTuxedoDLObjectEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MPBTSBEditorToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip binFileContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem3;
     }
 }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EPFExplorer
 {
@@ -18,6 +20,26 @@ namespace EPFExplorer
 
         public binfile parentbinfile;
 
+
+        public void Export() {
+
+            if (filebytes != null)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+                saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + offset+".wav";
+
+                saveFileDialog1.Title = "Save .wav file";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.Filter = "ADPCM WAV (*.wav)|*.wav|All files (*.*)|*.*";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                    ConvertToWAV();
+                    File.WriteAllBytes(saveFileDialog1.FileName, filebytes);
+                    }
+            }
+        }
 
         public void ConvertToWAV() {  
 

@@ -133,7 +133,7 @@ namespace EPFExplorer
                 openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeRdt.filename);
             }
 
-            openFileDialog1.Filter = "1PP archives (*.arc,*.rdt)|*.arc;*.rdt|1PP sfx binary (*.bin)|*.bin";
+            openFileDialog1.Filter = "1PP archives (*.arc,*.rdt,*.bin)|*.arc;*.rdt;*.bin";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 switch (Path.GetExtension(openFileDialog1.FileName))
@@ -144,16 +144,10 @@ namespace EPFExplorer
                         activeArc.ViewArcInFileTree();
                         break;
                     case ".bin":
-                        DialogResult dialogResult = MessageBox.Show("Is this a music archive?", "Music or sfx?", MessageBoxButtons.YesNo);
-                        if (dialogResult == DialogResult.Yes)
-                        {
-                            ParseBin(openFileDialog1.FileName, "music");
-                        }
-                        else if (dialogResult == DialogResult.No)
-                        {
-                            ParseBin(openFileDialog1.FileName, "sfx");
-                        }
                         mode = "bin";
+
+                        ParseBin(openFileDialog1.FileName);
+                        MakeFileTree();
                         break;
                     case ".rdt":
                         mode = "rdt";
@@ -180,7 +174,7 @@ namespace EPFExplorer
             newarc.ReadArc();
         }
 
-        public void ParseBin(string filename, string sfxormusic)
+        public void ParseBin(string filename)
         {
             binfile newbin = new binfile();
 
@@ -189,7 +183,18 @@ namespace EPFExplorer
             newbin.filename = filename;
             newbin.filebytes = File.ReadAllBytes(filename);
 
-            if (sfxormusic == "sfx")
+            DialogResult dialogResult = MessageBox.Show("Is this a music archive?", "Music or sfx?", MessageBoxButtons.YesNo);
+
+            if (dialogResult == DialogResult.Yes)
+            {
+                activeBin.binMode = "music";
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                activeBin.binMode = "sfx";
+            }
+
+            if (activeBin.binMode == "sfx")
             {
                 newbin.ReadBin();
             }
@@ -511,13 +516,38 @@ namespace EPFExplorer
             List<archivedfile> archivedfiles = null;
 
             if (mode == "arc")
-            {
+                {
                 archivedfiles = activeArc.archivedfiles;
-            }
+                }
             else if (mode == "rdt")
-            {
+                {
                 archivedfiles = activeRdt.archivedfiles;
-            }
+                }
+            else if (mode == "bin")
+                {
+                archivedfiles = new List<archivedfile>();
+
+                if (activeBin.binMode == "sfx")
+                    {
+                    foreach (sfxfile sfx in activeBin.sfxfiles)
+                        {
+                        archivedfile newArchivedFile = new archivedfile();
+                        newArchivedFile.filename = Path.GetFileName(activeBin.filename) + sfx.offset;
+                        newArchivedFile.linkedSfx = sfx;
+                        archivedfiles.Add(newArchivedFile);
+                        }
+                    }
+                else
+                    {
+                    foreach (xmfile mus in activeBin.xmfiles)
+                        {
+                        archivedfile newArchivedFile = new archivedfile();
+                        newArchivedFile.filename = mus.name;
+                        newArchivedFile.linkedXm = mus;
+                        archivedfiles.Add(newArchivedFile);
+                        }
+                    }
+                }
 
             foreach (archivedfile file in archivedfiles)
             {
@@ -555,6 +585,10 @@ namespace EPFExplorer
                 else if (mode == "rdt")
                 {
                     tempfilepath = Path.GetFileName(activeRdt.filename).Replace("/", "");
+                }
+                else if (mode == "bin")
+                {
+                    tempfilepath = Path.GetFileName(activeBin.filename).Replace("/", "");
                 }
 
 
@@ -680,6 +714,14 @@ namespace EPFExplorer
                     {
                         //folder
                         archivedFolderContextMenu.Show(Cursor.Position);
+                    }
+                }
+                else if (mode == "bin")
+                {
+                    if (treeNodesAndArchivedFiles.Keys.Contains(FileTree.SelectedNode))
+                    {
+                        //file
+                        binFileContextMenu.Show(Cursor.Position);
                     }
                 }
 
@@ -1671,6 +1713,18 @@ namespace EPFExplorer
             MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
             mpb_tsb_editor.form1 = this;
             mpb_tsb_editor.Show();
+        }
+
+        private void exportToolStripMenuItem3_Click(object sender, EventArgs e) //EXPORT FROM BIN FILE
+        {
+            if (activeBin.binMode == "sfx")
+                {
+                treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedSfx.Export();
+                }
+            else
+                {
+                treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedXm.Export();
+                }
         }
     }
 }
