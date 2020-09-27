@@ -546,6 +546,10 @@ namespace EPFExplorer
                         newArchivedFile.linkedXm = mus;
                         archivedfiles.Add(newArchivedFile);
                         }
+
+                    archivedfile sampleCollection = new archivedfile();
+                    sampleCollection.filename = "SAMPLES.sampleCollection";
+                    archivedfiles.Add(sampleCollection);
                     }
                 }
 
@@ -1717,6 +1721,13 @@ namespace EPFExplorer
 
         private void exportToolStripMenuItem3_Click(object sender, EventArgs e) //EXPORT FROM BIN FILE
         {
+            if (treeNodesAndArchivedFiles[FileTree.SelectedNode].filename.Contains(".sampleCollection"))
+                {
+                activeBin.ExportMusicSamples();
+                return;
+                }
+
+
             if (activeBin.binMode == "sfx")
                 {
                 treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedSfx.Export();

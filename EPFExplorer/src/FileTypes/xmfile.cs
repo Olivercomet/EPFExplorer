@@ -200,7 +200,7 @@ namespace EPFExplorer
             tempo = filebytes[5];
             bpm = filebytes[6];
 
-            numinstruments = 0x80; //filebytes[9];
+            numinstruments = parentbinfile.samplecount; //filebytes[9];
 
             int pos = 0x28;
 

@@ -8,8 +8,8 @@ Opening and editing RDT files (EPF. HR is viewing/exporting only, and lacks file
 Opening and editing TSB/MPB files. (Both EPF and HR)
 Exporting and reimporting LUA scripts.
 Editing save files. (Both EPF and HR)
-Dumping audio clips to wav (openable with Audacity if FFMPEG is installed)
-Dumping music tracks to .XM
+Dumping audio clips to wav
+Dumping music tracks to .XM (you will then need to convert these to midi with OpenMPT or similar to actually listen to them, as the XM files have no sample data)
 
 
 With thanks to

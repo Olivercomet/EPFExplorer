@@ -27,21 +27,21 @@ namespace EPFExplorer
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-                saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + offset+".wav";
+                saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + offset + ".wav";
 
                 saveFileDialog1.Title = "Save .wav file";
                 saveFileDialog1.CheckPathExists = true;
                 saveFileDialog1.Filter = "ADPCM WAV (*.wav)|*.wav|All files (*.*)|*.*";
 
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                    {
+                {
                     ConvertToWAV();
                     File.WriteAllBytes(saveFileDialog1.FileName, filebytes);
-                    }
+                }
             }
         }
 
-        public void ConvertToWAV() {  
+        public void ConvertToWAV() {
 
             byte[] output = new byte[0x3C + filebytes.Length];
 
@@ -78,10 +78,21 @@ namespace EPFExplorer
             output[0x16] = 0x01;    //num channels
             output[0x17] = 0x00;
 
-            output[0x18] = 0x22;    //sample rate
-            output[0x19] = 0x56;
-            output[0x1A] = 0x00;
-            output[0x1B] = 0x00;
+            if (samplerate == 44100)
+            {
+                output[0x18] = 0x44;    //sample rate
+                output[0x19] = 0xAC;
+                output[0x1A] = 0x00;
+                output[0x1B] = 0x00;
+            }
+            else
+            {
+                output[0x18] = 0x22;    //sample rate
+                output[0x19] = 0x56;
+                output[0x1A] = 0x00;
+                output[0x1B] = 0x00;
+            }
+
 
             output[0x1C] = 0xA8;    //data rate
             output[0x1D] = 0x2B;
@@ -131,5 +142,15 @@ namespace EPFExplorer
 
             filebytes = output;
         }
+
+
+
+
+
+
+
+
+
+
     }
 }
