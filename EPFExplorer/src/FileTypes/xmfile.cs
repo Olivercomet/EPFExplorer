@@ -122,9 +122,7 @@ namespace EPFExplorer
                 if (b == numchannels) { break; }
             }
 
-
-            pos = initialPos + 8;
-
+            pos++;
 
             for (int i = 0; i < controlBytes.Length; i++)
                 {
