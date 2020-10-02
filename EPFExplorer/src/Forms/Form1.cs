@@ -218,41 +218,6 @@ namespace EPFExplorer
         }
 
 
-
-        private void mPBMatcherToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Title = "Select mpb files to test";
-            openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;
-            openFileDialog1.Multiselect = true;
-            openFileDialog1.Filter = "1PP MaP Binary (*.mpb)|*.mpb";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                OpenFileDialog openFileDialog2 = new OpenFileDialog();
-
-                openFileDialog2.Title = "Select tsb files to test";
-                openFileDialog2.CheckFileExists = true;
-                openFileDialog2.CheckPathExists = true;
-                openFileDialog2.Multiselect = true;
-                openFileDialog2.Filter = "1PP TileSet Binary (*.tsb)|*.tsb";
-                if (openFileDialog2.ShowDialog() == DialogResult.OK)
-                {
-                    List<Byte[]> MPBfiles = new List<Byte[]>();
-                    foreach (string filename in openFileDialog1.FileNames)
-                    {
-                        MPBfiles.Add(File.ReadAllBytes(filename));
-                    }
-                    List<Byte[]> TSBfiles = new List<Byte[]>();
-                    foreach (string filename in openFileDialog2.FileNames)
-                    {
-                        TSBfiles.Add(File.ReadAllBytes(filename));
-                    }
-                }
-            }
-        }
-
         private void saveFileExtractorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileEditor sfe = new SaveFileEditor();

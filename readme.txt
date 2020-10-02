@@ -9,8 +9,9 @@ Opening and editing TSB/MPB files. (Both EPF and HR)
 Exporting and reimporting LUA scripts.
 Editing save files. (Both EPF and HR)
 Dumping audio clips to wav
-Dumping music tracks to .XM (you will then need to convert these to midi with OpenMPT or similar to actually listen to them, as the XM files have no sample data)
+Exporting and replacing music tracks in .XM format (you will then need to convert these to midi with OpenMPT or similar to actually listen to them, as the XM files have no sample data.)
 
+The music replacing also currently has issues with some tracks (e.g. Dojo and Gadget Room, among others)
 
 With thanks to
 Fireboyd78 for creating a C# port of unluac (originally by tehtmi)
