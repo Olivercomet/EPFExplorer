@@ -1030,6 +1030,10 @@ namespace EPFExplorer
             {
                 activeRdt.RebuildRDT(false);
             }
+            else if (mode == "bin")
+            {
+                activeBin.SaveBin();
+            }
         }
 
 
@@ -1736,6 +1740,31 @@ namespace EPFExplorer
                 {
                 treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedXm.Export();
                 }
+        }
+
+        private void replaceXM_Click(object sender, EventArgs e)
+        {
+            archivedfile selectedFile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
+
+            if (activeBin.binMode == "music")
+            {
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+                openFileDialog1.Title = "Replace "+ Path.GetFileName(selectedFile.filename);
+                openFileDialog1.CheckFileExists = true;
+                openFileDialog1.CheckPathExists = true;
+                openFileDialog1.Filter = "Extended Module (*.xm)|*.xm";
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                    selectedFile.linkedXm.Replace_With_New_XM(openFileDialog1.FileName);
+                    }
+            }
+            else
+            {
+                MessageBox.Show("This feature is only for music.bin!");
+            }
+
         }
     }
 }

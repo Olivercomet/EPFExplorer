@@ -27,11 +27,18 @@ namespace EPFExplorer
         public int numpatterns;
         public int numinstruments;
 
+        public int clipvaluethingy;
+
+        public int unkValue1;
+        public int unkValue2;
+        public int unkValue3;
+        public int unkOffset;
+
         public int tempo;
         public int bpm;
 
-        List<Pattern> patterns = new List<Pattern>();
-        List<Pattern> patternsInPlayingOrder = new List<Pattern>();
+        public List<Pattern> patterns = new List<Pattern>();
+        public List<Pattern> patternsInPlayingOrder = new List<Pattern>();
 
         public class Pattern {
             public int index;
@@ -198,7 +205,12 @@ namespace EPFExplorer
             tempo = filebytes[5];
             bpm = filebytes[6];
 
-            numinstruments = parentbinfile.samplecount; //filebytes[9];
+            clipvaluethingy = filebytes[8];
+            numinstruments = filebytes[9];
+            unkValue1 = filebytes[10];
+            unkValue2 = filebytes[11];
+            unkValue3 = filebytes[12];
+            unkOffset = BitConverter.ToInt32(filebytes,0x13);
 
             int pos = 0x28;
 
@@ -311,10 +323,10 @@ namespace EPFExplorer
             output.Add((byte)numpatterns);
             output.Add((byte)(numpatterns >> 8));
 
-            output.Add((byte)numinstruments);
-            output.Add((byte)(numinstruments >> 8));
+            output.Add((byte)parentbinfile.samplecount);               //would be numinstruments, but that won't work so this is a workaround
+            output.Add((byte)(parentbinfile.samplecount >> 8));        //would be numinstruments, but that won't work so this is a workaround
 
-            output.Add(0x00);        //skip a bool that describes whether it has an amiga frequency table or not
+            output.Add(0x00);     
             output.Add(0x00);
 
             output.Add((byte)tempo);
@@ -409,11 +421,250 @@ namespace EPFExplorer
 
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    ReadSongInfo();
                     File.WriteAllBytes(saveFileDialog1.FileName, MakeXM().ToArray());
                 }
             }
         }
+
+
+        public void Replace_With_New_XM (string filename) {
+
+            byte[] newXMfilebytes = File.ReadAllBytes(filename);
+
+            patterns = new List<Pattern>();
+            patternsInPlayingOrder = new List<Pattern>();
+
+            // read XM from file
+
+            number_of_patterns_in_one_loop = BitConverter.ToUInt16(newXMfilebytes,0x40);
+            restartPosition = BitConverter.ToUInt16(newXMfilebytes, 0x42);
+            numchannels = BitConverter.ToUInt16(newXMfilebytes, 0x44);
+            numpatterns = BitConverter.ToUInt16(newXMfilebytes, 0x46);
+            numinstruments = BitConverter.ToUInt16(newXMfilebytes, 0x48);
+     
+            tempo = BitConverter.ToUInt16(newXMfilebytes, 0x4C);
+            bpm = BitConverter.ToUInt16(newXMfilebytes, 0x4E);
+
+            int pos = 0x50;
+
+            for (int i = 0; i < number_of_patterns_in_one_loop; i++)
+            {
+                if (GetPatternWithIndex(patterns, newXMfilebytes[pos]) == null)
+                {
+                    Pattern newPattern = new Pattern();
+
+                    newPattern.index = newXMfilebytes[pos];
+
+                    patterns.Add(newPattern);
+
+                    patternsInPlayingOrder.Add(newPattern);
+                }
+                else
+                {
+                    patternsInPlayingOrder.Add(GetPatternWithIndex(patterns, newXMfilebytes[pos]));
+                }
+                pos++;
+            }
+
+            while(newXMfilebytes[pos] == 0x00)
+                {
+                pos++;
+                }
+
+            //start of pattern data
+
+            for (int i = 0; i < numpatterns; i++)
+                {
+                pos += 5;
+
+                patterns[i].number_of_rows = BitConverter.ToUInt16(newXMfilebytes,pos);
+                pos += 2;
+                patterns[i].patternSize = BitConverter.ToUInt16(newXMfilebytes, pos);
+                pos += 2;
+
+                patterns[i].rows = new List<byte[]>();
+
+                for (int r = 0; r < patterns[i].number_of_rows; r++)        //add rows
+                    {
+                    patterns[i].rows.Add(GetRegularXMRow(newXMfilebytes,pos));
+                    pos += patterns[i].rows[patterns[i].rows.Count - 1].Length;
+                    }
+                }
+        }
+
+
+        public byte[] GetRegularXMRow(byte[] bytes, int pos) {
+
+            List<byte> output = new List<byte>();
+
+            int channelsProcessed = 0;
+        
+            while (channelsProcessed < numchannels)
+                {
+                if ((bytes[pos] & 0x80) == 0x80)    //if it's a compressed command
+                    {
+                    //then check the number of compressed bytes that follow and add those
+                    int number_of_bytes_to_use = 0;
+
+                    for (int mask = 0x01; mask <= 0x10; mask *= 2)
+                        {
+                        if ((bytes[pos] & mask) == mask)
+                            {
+                            number_of_bytes_to_use++;
+                            }
+                        }
+
+                    output.Add(bytes[pos]);
+                    pos++;
+
+                    for (int i = 0; i < number_of_bytes_to_use; i++)
+                        {
+                        output.Add(bytes[pos]);
+                        pos++;
+                        }
+                    }
+                else
+                    {
+                    //but if it's not a compressed command, just add five bytes
+                    for (int i = 0; i < 5; i++)
+                        {
+                        output.Add(bytes[pos]);
+                        pos++;
+                        }
+                    }
+                channelsProcessed++;
+                }
+
+            return output.ToArray();
+        }
+
+
+        public List<byte> MakeEPFXMHeader() {
+
+            List<byte> output = new List<byte>();
+
+            output.Add((byte)numchannels);              //offset 0
+            output.Add((byte)numpatterns);                  //offset 1
+            output.Add((byte)number_of_patterns_in_one_loop);   //offset 2
+            output.Add(0x00);   //idk what this is!
+            output.Add((byte)restartPosition);          //offset 4
+            output.Add((byte)tempo);            //offset 5
+            output.Add((byte)bpm);                  //offset 6
+            output.Add(0x00);   //idk what this is!
+            output.Add((byte)clipvaluethingy);  //offset 8
+            output.Add((byte)numinstruments);   //offset 9
+            output.Add((byte)unkValue1);
+            output.Add((byte)unkValue2);
+            output.Add((byte)unkValue3);
+            output.Add((byte)unkOffset);
+            output.Add((byte)(unkOffset >> 8));
+            output.Add((byte)(unkOffset >> 16));
+            output.Add((byte)(unkOffset >> 24));
+
+            while (output.Count < 0x28)
+                {
+                output.Add(0x00);
+                }
+
+            foreach (Pattern p in patternsInPlayingOrder)
+                {
+                output.Add((byte)p.index);
+                }
+
+            while (output.Count % 4 != 0)
+                {
+                output.Add(0x00);
+                }
+
+            return output;
+        }
+
+
+        public byte[] ConvertRowToEPFFormat(byte[] input)
+            {
+            List<byte> data = new List<byte>();
+
+            int number_of_bytes_needed_for_control_bytes = (numchannels * 5);   //not done yet
+
+            while (number_of_bytes_needed_for_control_bytes % 8 != 0)
+                {
+                number_of_bytes_needed_for_control_bytes++;
+                }
+
+            number_of_bytes_needed_for_control_bytes /= 8;  //now it is done
+
+            Byte[] ControlBytes = new byte[number_of_bytes_needed_for_control_bytes];
+
+            int current_byte_in_controlbytes = 0;
+            int current_bit_in_byte = 0;
+
+            int pos = 0;
+
+            if(name.Contains("Command") && input.Length == 31 && input[0] == 136)
+                {
+                Console.WriteLine("breakpoint");
+                }    
+
+            for (int channel = 0; channel < numchannels; channel++)
+                {
+                int number_of_data_bytes = 0;
+
+                if (input[pos] == 0x80) //if it's just a blank note
+                    {
+                    for (int i = 0; i < 5; i++) //write zeroes to the bit list
+                        {
+                        current_bit_in_byte++;
+                        if (current_bit_in_byte > 7)
+                            { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
+                        }
+                    pos++;
+                    continue;   //and go to the next control byte in the input
+                    }
+
+                if ((input[pos] & 0x80) == 0x80)
+                {
+                    for (int mask = 0x01; mask <= 0x10; mask *= 2)       //convert control byte to EPF format and add to bit list
+                    {
+                        if ((input[pos] & mask) == mask)    //check note/instr/vol/effect/effect params
+                        {
+                            ControlBytes[current_byte_in_controlbytes] |= (byte)(1 << (7 - current_bit_in_byte));
+                            number_of_data_bytes++;
+                        }
+                        current_bit_in_byte++;
+
+                        if (current_bit_in_byte > 7)
+                        { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
+                    }
+
+                    pos++;
+                }
+                else
+                {
+                    for (int i = 0; i < 5; i++) //write ones to the bit list
+                    {
+                        ControlBytes[current_byte_in_controlbytes] |= (byte)(1 << (7 - current_bit_in_byte));
+                        current_bit_in_byte++;
+                        if (current_bit_in_byte > 7)
+                        { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
+                    }
+                    number_of_data_bytes = 5;
+                }
+
+                //now add its data bytes
+               
+                for (int i = 0; i < number_of_data_bytes; i++)
+                    {
+                    data.Add(input[pos]);
+                    pos++;
+                    }
+                }
+
+            List<byte> output = new List<byte>();
+            output.AddRange(ControlBytes);
+            output.AddRange(data);
+
+            return output.ToArray();
+            }
 
 
 

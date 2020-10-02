@@ -106,6 +106,7 @@ namespace EPFExplorer
                     if (xmfiles[i].size < filebytes.Length)
                     {
                         xmfiles[i].filebytes = reader.ReadBytes((int)xmfiles[i].size);
+                        xmfiles[i].ReadSongInfo();
                     }
                 }
 
@@ -275,6 +276,140 @@ namespace EPFExplorer
                 }
 
         }
+
+
+
+        public void SaveBin() {
+
+            List<byte> musicdataSections = RebuildMusicDataSections();
+
+            List<byte> newFileBytes = new List<byte>();
+
+            for (int i = 0; i < offsetOfMusicInstructionData; i++)
+                {
+                newFileBytes.Add(filebytes[i]);
+                }
+
+            //now add new data
+
+            for (int i = 0; i < musicdataSections.Count; i++)
+                {
+                newFileBytes.Add(musicdataSections[i]);
+                }
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Title = "Save bin file";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "1PP music binary (*.bin)|*.bin|All files (*.*)|*.*";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                File.WriteAllBytes(saveFileDialog1.FileName, newFileBytes.ToArray());
+                }
+            }
+
+
+
+        public List<byte> RebuildMusicDataSections() {
+
+            List<byte> rowData = new List<byte>();
+            List<byte> songInfos = new List<byte>();
+
+            List<int> partialSongInfoOffsets = new List<int>();
+
+            foreach (xmfile xm in xmfiles)
+                {
+                partialSongInfoOffsets.Add(songInfos.Count);
+
+                songInfos.AddRange(xm.MakeEPFXMHeader());
+
+                foreach (xmfile.Pattern p in xm.patterns)
+                    {
+                    songInfos.Add((byte)p.number_of_rows);
+                    songInfos.Add((byte)(p.number_of_rows >> 8));
+                    songInfos.Add((byte)(p.number_of_rows >> 16));
+                    songInfos.Add((byte)(p.number_of_rows >> 24));
+
+                    for (int i = 0; i < p.number_of_rows; i++)
+                        {
+                        bool emptyRow = true;
+
+                        foreach (byte b in p.rows[i])
+                            {
+                            if (b != 0x80)
+                                {
+                                emptyRow = false;
+                                break;
+                                }
+                            }
+
+                        if (emptyRow)   //if the row is empty, just add FFs instead of an offset
+                            {
+                            songInfos.Add(0xFF);
+                            songInfos.Add(0xFF);
+                            songInfos.Add(0xFF);
+                            songInfos.Add(0xFF);
+                            continue;
+                            }
+
+                        //but if the row isn't empty, convert the row data to EPF format, add it to the row data list and store its offset here
+
+                        uint offset_in_row_data = (uint)rowData.Count;
+
+                        byte[] row_in_EPF_format = xm.ConvertRowToEPFFormat(p.rows[i]);
+
+                        rowData.AddRange(row_in_EPF_format);
+
+                        songInfos.Add((byte)offset_in_row_data);
+                        songInfos.Add((byte)(offset_in_row_data >> 8));
+                        songInfos.Add((byte)(offset_in_row_data >> 16));
+                        songInfos.Add((byte)(offset_in_row_data >> 24));
+                    }
+                }
+            }
+
+
+            //correct the row data section size at the start of music.bin
+
+            filebytes[0x0C] = (byte)rowData.Count;
+            filebytes[0x0D] = (byte)(rowData.Count >> 8);
+            filebytes[0x0E] = (byte)(rowData.Count >> 16);
+            filebytes[0x0F] = (byte)(rowData.Count >> 24);
+
+            //correct the song info offsets at the start of music.bin
+
+            for (int i = 0; i < xmfiles.Count; i++)
+                {
+                int offset = 0x10 + (4 * i);
+
+                uint offset_of_songInfo = offsetOfMusicInstructionData + (uint)rowData.Count + (uint)partialSongInfoOffsets[i];
+
+                filebytes[offset] = (byte)offset_of_songInfo;
+                filebytes[offset + 1] = (byte)(offset_of_songInfo >> 8);
+                filebytes[offset + 2] = (byte)(offset_of_songInfo >> 16);
+                filebytes[offset + 3] = (byte)(offset_of_songInfo >> 24);
+                }
+
+
+            List<byte> output = new List<byte>();
+
+            output.AddRange(rowData);
+            output.AddRange(songInfos);
+
+            return output;
+        }
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

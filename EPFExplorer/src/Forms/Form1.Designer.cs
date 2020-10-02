@@ -67,6 +67,7 @@
             this.deleteRDTarchivedfile = new System.Windows.Forms.ToolStripMenuItem();
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -357,9 +358,10 @@
             // 
             this.binFileContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.binFileContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.replaceXM,
             this.exportToolStripMenuItem3});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(211, 56);
+            this.binFileContextMenu.Size = new System.Drawing.Size(211, 80);
             // 
             // exportToolStripMenuItem3
             // 
@@ -367,6 +369,13 @@
             this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
+            // 
+            // replaceXM
+            // 
+            this.replaceXM.Name = "replaceXM";
+            this.replaceXM.Size = new System.Drawing.Size(210, 24);
+            this.replaceXM.Text = "Replace";
+            this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
             // 
             // Form1
             // 
@@ -429,6 +438,7 @@
         private System.Windows.Forms.ToolStripMenuItem MPBTSBEditorToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip binFileContextMenu;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem replaceXM;
     }
 }
 
