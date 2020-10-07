@@ -1731,5 +1731,27 @@ namespace EPFExplorer
             }
 
         }
+
+
+        private void randomizeRDTSpritesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        if (mode == "rdt")
+            {
+                DialogResult result = MessageBox.Show("Randomize the RDT sprites on next save?", "Randomize RDT sprites?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                    {
+                    activeRdt.randomizeOnNextSave = true;
+                    }
+                else if (result == DialogResult.No)
+                    {
+                    activeRdt.randomizeOnNextSave = false;
+                }
+            }
+        else
+            {
+                MessageBox.Show("That feature is only for RDT files!", "RDT file required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

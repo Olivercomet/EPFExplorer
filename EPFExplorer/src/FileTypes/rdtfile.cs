@@ -33,6 +33,10 @@ namespace EPFExplorer
 
         public Dictionary<Byte[], int> AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
 
+        public bool randomizeOnNextSave = false;
+
+        string[] FilenamesBannedFromRando = new string[] {"spygadget", "hud", "microgames", "spypod", "suitcase", "utilityborder", "bttn", "button", "mainmenu" };
+
 
         public void ReadRdt()
         {
@@ -134,18 +138,48 @@ namespace EPFExplorer
 
 
 
+        public bool FilenameAllowedInRando(string input) {
 
+            input = input.ToLower();
+
+            foreach (string s in FilenamesBannedFromRando)
+                {
+                if (input.Contains(s))
+                    {
+                    return false;
+                    }
+                }
+
+            return true;
+        }
 
         public void RebuildRDT(bool is_only_sprite_container) {
 
         int longestFilenameLength = 0;
         AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
 
-         for (int i = 0; i < archivedfiles.Count; i++)   //make sure filenames use forward slashes, and that they don't start with them
+            if (archivedfiles.Count > 1000)
+                {
+                DialogResult result = MessageBox.Show("Warning: This is a huge RDT with " + archivedfiles.Count + " files!\nIt will take a while to save.", "Saving will take a while", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
+                if (result != DialogResult.OK)
+                    {
+                    return;
+                    }
+                }
+
+            List<archivedfile> archivedfiles4BPP = new List<archivedfile>();    //for the randomizer
+
+            for (int i = 0; i < archivedfiles.Count; i++)   //make sure filenames use forward slashes, and that they don't start with them
             {
             if (archivedfiles[i].filebytes == null || archivedfiles[i].filebytes.Length == 0)   //if it hasn't been modified by the user, read it out of the original file
                 {
                 archivedfiles[i].ReadFile();
+                }
+
+            if (randomizeOnNextSave && archivedfiles[i].RDTSpriteBPP == 4 && FilenameAllowedInRando(archivedfiles[i].filename))
+                {
+                archivedfiles4BPP.Add(archivedfiles[i]);
                 }
 
             archivedfiles[i].filename.Replace('\\', '/');
@@ -160,6 +194,29 @@ namespace EPFExplorer
                 longestFilenameLength = archivedfiles[i].filename.Length;
                 }
             }
+
+            if (randomizeOnNextSave)    //randomise the filenames if random mode is on
+                {
+                Random rnd = new Random();
+                string tempName = "";
+                int randomIndex = 0;
+
+                for (int i = 0; i < archivedfiles4BPP.Count; i++)  
+                    {
+                    //swap filenames
+                    randomIndex = rnd.Next(0, archivedfiles4BPP.Count);
+                    tempName = archivedfiles4BPP[randomIndex].filename;
+                    archivedfiles4BPP[randomIndex].filename = archivedfiles4BPP[i].filename;
+                    archivedfiles4BPP[i].filename = tempName;
+
+                    //then swap settings to make sure the new sprite is clickable if it needs to be
+                    List<rdtSubfileData.setting> savedSettings = archivedfiles4BPP[randomIndex].rdtSubfileDataList[1].spriteSettings;
+                    archivedfiles4BPP[randomIndex].rdtSubfileDataList[1].spriteSettings = archivedfiles4BPP[i].rdtSubfileDataList[1].spriteSettings;
+                    archivedfiles4BPP[i].rdtSubfileDataList[1].spriteSettings = savedSettings;
+                    }
+                }
+
+
 
             archivedfiles = archivedfiles.OrderBy(x => x.filename).ToList();    //sort alphabetically
 
@@ -655,7 +712,7 @@ namespace EPFExplorer
                         //otherwise, write subfiletype and size, then write filebytes
 
                         AlreadyProcessedFilesAndOffsetsInData.Add(subfiledata.filebytes, offsetOfThisSubfile);
-                        Console.WriteLine(AlreadyProcessedFilesAndOffsetsInData.Count);
+                       //Console.WriteLine(AlreadyProcessedFilesAndOffsetsInData.Count);
 
                         data.Add((byte)subfiledata.subfileType);
                         data.Add((byte)0);
@@ -700,7 +757,7 @@ namespace EPFExplorer
                 }
             }
 
-            Console.WriteLine("Byte array match");
+          //  Console.WriteLine("Byte array match");
         return true;
         }
        

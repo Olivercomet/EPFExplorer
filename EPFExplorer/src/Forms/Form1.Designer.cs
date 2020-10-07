@@ -66,8 +66,9 @@
             this.rawDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRDTarchivedfile = new System.Windows.Forms.ToolStripMenuItem();
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomizeRDTSpritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -116,7 +117,8 @@
             this.saveFileExtractorToolStripMenuItem,
             this.massRDTExportToolStripMenuItem,
             this.generateTuxedoDLObjectEntryToolStripMenuItem,
-            this.MPBTSBEditorToolStripMenuItem});
+            this.MPBTSBEditorToolStripMenuItem,
+            this.randomizeRDTSpritesToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -361,21 +363,28 @@
             this.replaceXM,
             this.exportToolStripMenuItem3});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(211, 80);
-            // 
-            // exportToolStripMenuItem3
-            // 
-            this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
-            this.exportToolStripMenuItem3.Text = "Export";
-            this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
+            this.binFileContextMenu.Size = new System.Drawing.Size(132, 52);
             // 
             // replaceXM
             // 
             this.replaceXM.Name = "replaceXM";
-            this.replaceXM.Size = new System.Drawing.Size(210, 24);
+            this.replaceXM.Size = new System.Drawing.Size(131, 24);
             this.replaceXM.Text = "Replace";
             this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
+            // 
+            // exportToolStripMenuItem3
+            // 
+            this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(131, 24);
+            this.exportToolStripMenuItem3.Text = "Export";
+            this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
+            // 
+            // randomizeRDTSpritesToolStripMenuItem
+            // 
+            this.randomizeRDTSpritesToolStripMenuItem.Name = "randomizeRDTSpritesToolStripMenuItem";
+            this.randomizeRDTSpritesToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
+            this.randomizeRDTSpritesToolStripMenuItem.Text = "RDT Randomizer";
+            this.randomizeRDTSpritesToolStripMenuItem.Click += new System.EventHandler(this.randomizeRDTSpritesToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -387,6 +396,7 @@
             this.Controls.Add(this.menuStrip2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "EPFExplorer";
             this.menuStrip2.ResumeLayout(false);
@@ -439,6 +449,7 @@
         private System.Windows.Forms.ContextMenuStrip binFileContextMenu;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem replaceXM;
+        private System.Windows.Forms.ToolStripMenuItem randomizeRDTSpritesToolStripMenuItem;
     }
 }
 

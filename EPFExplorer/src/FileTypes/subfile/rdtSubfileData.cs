@@ -61,7 +61,12 @@ namespace EPFExplorer
             public int Y;
 
             public int X2;
-            public int Y2; 
+            public int Y2;
+
+            public byte A;
+            public byte B;
+
+            public int FFcount = 0;
         }
 
        
@@ -86,13 +91,27 @@ namespace EPFExplorer
                     curOffset++;
                     }
 
+
                 newSetting.type = BitConverter.ToUInt16(filebytes, curOffset);
                 curOffset += 2;
 
-                while(filebytes[curOffset] == 0xFF)
+                newSetting.FFcount = 0;
+
+                if (filebytes[curOffset] != 0xFF)
                     {
-                    curOffset++;
+                    newSetting.FFcount = 2;     //Hopefully this holds true for all cases. I've only seen the FFs absent on FFcount 2.
+                    curOffset += 2;
                     }
+                else
+                    {
+                    while (filebytes[curOffset] == 0xFF && newSetting.FFcount < 4)
+                        {
+                        newSetting.FFcount++;
+                        curOffset++;
+                        }
+                 }
+
+                
 
                 switch (newSetting.type)
                     {
@@ -112,6 +131,20 @@ namespace EPFExplorer
                         break;
 
                     case 0x05:  //2D rect
+                        if (newSetting.FFcount == 2)
+                            {
+                            newSetting.A = filebytes[curOffset];
+                            curOffset++;
+                            newSetting.B = filebytes[curOffset];
+                            curOffset++;
+                            }
+
+                        if (newSetting.FFcount == 8)
+                            {
+                            File.WriteAllBytes("temp", filebytes);
+                            Console.WriteLine("breakpoint");
+                            }
+
                         newSetting.X = BitConverter.ToInt32(filebytes, curOffset);
                         curOffset += 4;
                         newSetting.Y = BitConverter.ToInt32(filebytes, curOffset);
@@ -120,9 +153,11 @@ namespace EPFExplorer
                         curOffset += 4;
                         newSetting.Y2 = BitConverter.ToInt32(filebytes, curOffset);
                         curOffset += 4;
+                             
                         break;
                     default:
                         MessageBox.Show("Unknown sprite setting with ID \""+newSetting.type+"\"", "Unrecognised item", MessageBoxButtons.OK);
+                        File.WriteAllBytes("temp", filebytes);
                         break;
                     }
                 spriteSettings.Add(newSetting);
@@ -136,7 +171,15 @@ namespace EPFExplorer
 
             foreach (setting s in spriteSettings)
                 {
-                size += 8;
+                if(s.FFcount == 2)
+                    {
+                    size += 6;
+                    }
+                else
+                    {
+                    size += 8;
+                    }
+
                 size += s.name.Length;
                 switch(s.type)
                     {
@@ -148,6 +191,10 @@ namespace EPFExplorer
                         break;
                     case 0x05:
                         size += 16;
+                        if(s.FFcount == 2)
+                            {
+                            size += 2;
+                            }
                         break;
                     }
                 }
@@ -174,8 +221,17 @@ namespace EPFExplorer
                 parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)s.type);     //write setting type
                 curOffset += 2;
 
-                parentfile.form1.WriteU32ToArray(filebytes, curOffset, 0xFFFFFFFF);     //write padding
-                curOffset += 4;
+                if (s.FFcount == 2)
+                    {
+                    parentfile.form1.WriteU16ToArray(filebytes, curOffset, 0xFFFF);     //write FFcount 2 padding
+                    curOffset += 2;
+                    }
+                else
+                    {
+                    parentfile.form1.WriteU32ToArray(filebytes, curOffset, 0xFFFFFFFF);     //write FFcount 4 padding
+                    curOffset += 4;
+                    }
+                
 
                 switch (s.type)
                 {
@@ -199,6 +255,13 @@ namespace EPFExplorer
                         curOffset += 4;
                         break;
                     case 0x05:
+                        if (s.FFcount == 2)
+                        {
+                            filebytes[curOffset] = s.A;
+                            curOffset++;
+                            filebytes[curOffset] = s.B;
+                            curOffset++;
+                        }
                         filebytes[curOffset] = (byte)(s.X);
                         filebytes[curOffset + 1] = (byte)(s.X >> 8);
                         filebytes[curOffset + 2] = (byte)(s.X >> 16);
