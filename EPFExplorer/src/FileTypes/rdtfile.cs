@@ -37,6 +37,8 @@ namespace EPFExplorer
 
         string[] FilenamesBannedFromRando = new string[] {"spygadget", "hud", "microgames", "spypod", "suitcase", "utilityborder", "bttn", "button", "mainmenu" };
 
+        public bool is_only_sprite_container = false;
+
 
         public void ReadRdt()
         {
@@ -153,7 +155,7 @@ namespace EPFExplorer
             return true;
         }
 
-        public void RebuildRDT(bool is_only_sprite_container) {
+        public void RebuildRDT() {
 
         int longestFilenameLength = 0;
         AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();

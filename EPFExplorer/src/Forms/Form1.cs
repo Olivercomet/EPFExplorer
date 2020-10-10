@@ -20,7 +20,7 @@ namespace EPFExplorer
         public binfile activeBin;
         public rdtfile activeRdt;
 
-        public string mode = null;
+        public Mode mode = Mode.None;
 
         Dictionary<string, TreeNode> foldersProcessed = new Dictionary<string, TreeNode>();
         public Dictionary<TreeNode, archivedfile> treeNodesAndArchivedFiles = new Dictionary<TreeNode, archivedfile>();
@@ -29,6 +29,13 @@ namespace EPFExplorer
         public List<string> extensions = new List<string>();
 
         public string startFilename;
+
+        public enum Mode { 
+        None = 0x00,
+        Arc = 0x01,
+        Rdt = 0x02,
+        Bin = 0x03
+        }
 
         public Form1()
         {
@@ -124,11 +131,11 @@ namespace EPFExplorer
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.CheckPathExists = true;
 
-            if (mode == "arc" && activeArc != null)
+            if (mode == Mode.Arc && activeArc != null)
                 {
                 openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeArc.filename);
                 }
-            else if (mode == "rdt" && activeRdt != null)
+            else if (mode == Mode.Rdt && activeRdt != null)
             {
                 openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeRdt.filename);
             }
@@ -139,18 +146,17 @@ namespace EPFExplorer
                 switch (Path.GetExtension(openFileDialog1.FileName))
                 {
                     case ".arc":
-                        mode = "arc";
+                        mode = Mode.Arc;
                         ParseArc(openFileDialog1.FileName);
                         activeArc.ViewArcInFileTree();
                         break;
                     case ".bin":
-                        mode = "bin";
-
+                        mode = Mode.Bin;
                         ParseBin(openFileDialog1.FileName);
                         MakeFileTree();
                         break;
                     case ".rdt":
-                        mode = "rdt";
+                        mode = Mode.Rdt;
                         ParseRdt(openFileDialog1.FileName);
                         MakeFileTree();
                         break;
@@ -467,7 +473,7 @@ namespace EPFExplorer
             foldersProcessed = new Dictionary<string, TreeNode>();
             TreeNode NamesNotFoundFolder = null;
 
-            if (mode == "arc")
+            if (mode == Mode.Arc)
             {
                 FileTree.Nodes.Add(Path.GetFileName(activeArc.filename).Replace("/", ""));
                 NamesNotFoundFolder = FileTree.Nodes[0].Nodes.Add("Names_not_found");
@@ -480,15 +486,15 @@ namespace EPFExplorer
 
             List<archivedfile> archivedfiles = null;
 
-            if (mode == "arc")
+            if (mode == Mode.Arc)
                 {
                 archivedfiles = activeArc.archivedfiles;
                 }
-            else if (mode == "rdt")
+            else if (mode == Mode.Rdt)
                 {
                 archivedfiles = activeRdt.archivedfiles;
                 }
-            else if (mode == "bin")
+            else if (mode == Mode.Bin)
                 {
                 archivedfiles = new List<archivedfile>();
 
@@ -547,15 +553,15 @@ namespace EPFExplorer
 
                 string tempfilepath = null;
 
-                if (mode == "arc")
+                if (mode == Mode.Arc)
                 {
                     tempfilepath = Path.GetFileName(activeArc.filename).Replace("/", "");
                 }
-                else if (mode == "rdt")
+                else if (mode == Mode.Rdt)
                 {
                     tempfilepath = Path.GetFileName(activeRdt.filename).Replace("/", "");
                 }
-                else if (mode == "bin")
+                else if (mode == Mode.Bin)
                 {
                     tempfilepath = Path.GetFileName(activeBin.filename).Replace("/", "");
                 }
@@ -634,7 +640,7 @@ namespace EPFExplorer
                 treeNodesAndArchivedFiles.Add(newestNode, file);
             }
 
-            if (mode == "arc" && !keep_unnamed_files_folder)
+            if (mode == Mode.Arc && !keep_unnamed_files_folder)
             {
                 NamesNotFoundFolder.Remove();
             }
@@ -659,7 +665,7 @@ namespace EPFExplorer
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (mode == "arc")
+                if (mode == Mode.Arc)
                 {
                     if (treeNodesAndArchivedFiles.Keys.Contains(FileTree.SelectedNode))
                     {
@@ -672,7 +678,7 @@ namespace EPFExplorer
                         archivedFolderContextMenu.Show(Cursor.Position);
                     }
                 }
-                else if (mode == "rdt")
+                else if (mode == Mode.Rdt)
                 {
                     if (treeNodesAndArchivedFiles.Keys.Contains(FileTree.SelectedNode))
                     {
@@ -685,7 +691,7 @@ namespace EPFExplorer
                         archivedFolderContextMenu.Show(Cursor.Position);
                     }
                 }
-                else if (mode == "bin")
+                else if (mode == Mode.Bin)
                 {
                     if (treeNodesAndArchivedFiles.Keys.Contains(FileTree.SelectedNode))
                     {
@@ -732,7 +738,7 @@ namespace EPFExplorer
             openFileDialog1.Filter = "All files (*.*)|*.*";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                if (mode == "arc")
+                if (mode == Mode.Arc)
                 {
                     foreach (string openedFileName in openFileDialog1.FileNames)
                     {
@@ -792,7 +798,7 @@ namespace EPFExplorer
 
                     }
                 }
-                else if (mode == "rdt")
+                else if (mode == Mode.Rdt)
                 {
                     foreach (string openedFileName in openFileDialog1.FileNames)
                     {
@@ -900,11 +906,11 @@ namespace EPFExplorer
 
         private void exportToolStripMenuItem1_Click(object sender, EventArgs e) //EXPORT FOLDER
         {
-            if (mode == "arc")
+            if (mode == Mode.Arc)
             {
                 activeArc.ExportFolder(FileTree.SelectedNode);
             }
-            else if(mode == "rdt")
+            else if(mode == Mode.Rdt)
             {
                 MessageBox.Show("Folder exports are not supported for RDT files.", "Not supported", MessageBoxButtons.OK);
             }
@@ -936,11 +942,11 @@ namespace EPFExplorer
 
                 if (treeNodesAndArchivedFiles.ContainsKey(child))        //if it's a file
                 {
-                    if (mode == "arc")
+                    if (mode == Mode.Arc)
                         {
                         activeArc.archivedfiles.Remove(treeNodesAndArchivedFiles[child]);
                         }
-                    else if (mode == "rdt")
+                    else if (mode == Mode.Rdt)
                         {
                         activeRdt.archivedfiles.Remove(treeNodesAndArchivedFiles[child]);
                         }
@@ -973,7 +979,7 @@ namespace EPFExplorer
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (mode == "arc")
+            if (mode == Mode.Arc)
             {
                 activeArc.RebuildArc();
 
@@ -991,11 +997,11 @@ namespace EPFExplorer
                     File.WriteAllBytes(saveFileDialog1.FileName, activeArc.filebytes);
                 }
             }
-            else if (mode == "rdt")
+            else if (mode == Mode.Rdt)
             {
-                activeRdt.RebuildRDT(false);
+                activeRdt.RebuildRDT();
             }
-            else if (mode == "bin")
+            else if (mode == Mode.Bin)
             {
                 activeBin.SaveBin();
             }
@@ -1588,7 +1594,7 @@ namespace EPFExplorer
 
         private void massRDTExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (mode == "rdt")
+            if (mode == Mode.Rdt)
             {
                 foreach (archivedfile f in activeRdt.archivedfiles)
                 {
@@ -1656,7 +1662,8 @@ namespace EPFExplorer
             forExport.form1 = this;
             forExport.archivedfiles = new List<archivedfile>();
             forExport.archivedfiles.Add(targetfile);
-            forExport.RebuildRDT(true);
+            forExport.is_only_sprite_container = true;
+            forExport.RebuildRDT();
 
             targetfile = BackupArchivedfile;
             
@@ -1735,7 +1742,7 @@ namespace EPFExplorer
 
         private void randomizeRDTSpritesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-        if (mode == "rdt")
+        if (mode == Mode.Rdt)
             {
                 DialogResult result = MessageBox.Show("Randomize the RDT sprites on next save?", "Randomize RDT sprites?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
