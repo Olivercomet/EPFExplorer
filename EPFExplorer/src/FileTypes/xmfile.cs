@@ -39,6 +39,7 @@ namespace EPFExplorer
 
         public List<Pattern> patterns = new List<Pattern>();
         public List<Pattern> patternsInPlayingOrder = new List<Pattern>();
+        public List<sfxfile> samples = new List<sfxfile>();
 
         public class Pattern {
             public int index;
@@ -152,11 +153,11 @@ namespace EPFExplorer
                     }
                     if ((controlBytes[i] & 0x04) == 0x04)  //vol
                     {
-                        correctedControlByte |= 0x04;
+                        correctedControlByte |= 0x08;
                     }
                     if ((controlBytes[i]  & 0x02) == 0x02)  //effect
                     {
-                        correctedControlByte |= 0x08;
+                        correctedControlByte |= 0x04;
                     }
                     if ((controlBytes[i] & 0x01) == 0x01)  //effect params
                     {
@@ -275,17 +276,17 @@ namespace EPFExplorer
 
             List<Byte> output = new List<byte>();
 
-        foreach (char c in "Extended Module: ")
+            foreach (char c in "Extended Module: ")
             {
                 output.Add((byte)c);
             }
 
-        foreach (char c in moduleName)
+            foreach (char c in moduleName)
             {
                 output.Add((byte)c);
             }
 
-        while (output.Count < 0x25)
+            while (output.Count < 0x25)
             {
                 output.Add(0x00);
             }
@@ -372,32 +373,114 @@ namespace EPFExplorer
             //write instrument section
 
             string instrument_name = "instrument_";
+            string sample_name = "sample_";
 
-            for (int i = 0; i < numinstruments; i++)
-                {
-                output.Add(0x11);
-                output.Add(0x00);
-                output.Add(0x00);
-                output.Add(0x00);
+            for (int i = 0; i < samples.Count; i++) {
+                sfxfile sample = (i >= 0 && i < samples.Count && samples[i] != null) ? samples[i] : null;
+                if (sample != null) Console.WriteLine("Sample " + i.ToString() + " is at offset " + sample.offset.ToString("X"));
+                output.Add(252);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
 
                 int namelength = 0;
 
-                foreach (char c in (instrument_name + i.ToString()))
-                    {
+                foreach (char c in (instrument_name + i.ToString())) {
                     output.Add((byte)c);
                     namelength++;
-                    }
+                }
 
-                while (namelength < 0x16)
-                    {
+                while (namelength < 0x16) {
                     output.Add(0x00);
                     namelength++;
-                    }
-
-                output.Add(0x00);   //instrument type
-                output.Add(0x00);   //number of samples. I'm hoping I can get away with this being zero...
-                output.Add(0x00);
                 }
+
+                output.Add(0);
+                output.Add(1);
+                output.Add(0);
+
+                output.Add(40);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                for (int j = 0; j < 96; j++) output.Add(0);
+                if (sample != null) {
+                    for (int j = 0; j < 24; j++) {
+                        output.Add(sample != null ? (byte)(sample.volenv.nodes[j] & 0xFF) : (byte)0);
+                        output.Add(sample != null ? (byte)(sample.volenv.nodes[j] >> 8) : (byte)0);
+                    }
+                    for (int j = 0; j < 24; j++) {
+                        output.Add(sample != null ? (byte)(sample.panenv.nodes[j] & 0xFF) : (byte)0);
+                        output.Add(sample != null ? (byte)(sample.panenv.nodes[j] >> 8) : (byte)0);
+                    }
+                    output.Add((byte)sample.volenv.count);
+                    output.Add((byte)sample.panenv.count);
+                    output.Add(sample.volenv.sustainPoint != 0xFF ? sample.volenv.sustainPoint : (byte)0);
+                    output.Add(sample.volenv.loopStart != 0xFF ? sample.volenv.loopStart : (byte)0);
+                    output.Add(sample.volenv.loopEnd != 0xFF ? sample.volenv.loopEnd : (byte)0);
+                    output.Add(sample.panenv.sustainPoint != 0xFF ? sample.panenv.sustainPoint : (byte)0);
+                    output.Add(sample.panenv.loopStart != 0xFF ? sample.panenv.loopStart : (byte)0);
+                    output.Add(sample.panenv.loopEnd != 0xFF ? sample.panenv.loopEnd : (byte)0);
+                    output.Add((byte)(
+                        (sample.volenv.count > 0 ? 1 : 0) |
+                        (sample.volenv.sustainPoint < sample.volenv.count ? 2 : 0) |
+                        (sample.volenv.loopStart < sample.volenv.count && sample.volenv.loopEnd < sample.volenv.count ? 4 : 0)
+                        ));
+                    output.Add((byte)(
+                        (sample.panenv.count > 0 ? 1 : 0) |
+                        (sample.panenv.sustainPoint < sample.panenv.count ? 2 : 0) |
+                        (sample.panenv.loopStart < sample.panenv.count && sample.panenv.loopEnd < sample.panenv.count ? 4 : 0)
+                        ));
+                    output.Add(0);
+                    output.Add(0);
+                    output.Add(0);
+                    output.Add(0);
+                    output.Add(0);
+                    output.Add(0);
+                } else {
+                    for (int j = 0; j < 96 + 16; j++) output.Add(0);
+                }
+                for (int j = 0; j < 11; j++) output.Add(0);
+                short[] pcm = sample != null ? sample.ConvertToPCM() : new short[0] { };
+                output.Add((byte)((pcm.Length * 2) & 0xFF));
+                output.Add((byte)(((pcm.Length * 2) >> 8) & 0xFF));
+                output.Add((byte)(((pcm.Length * 2) >> 16) & 0xFF));
+                output.Add((byte)(((pcm.Length * 2) >> 24) & 0xFF));
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                output.Add(0);
+                output.Add(sample != null ? sample.defaultvol : (byte)0);
+                output.Add(sample != null ? (byte)sample.finetune : (byte)0);
+                output.Add(0x10);
+                output.Add(sample != null ? sample.defaultpan : (byte)0x80);
+                output.Add(sample != null ? (byte)sample.transpose : (byte)0);
+                output.Add(0);
+
+                namelength = 0;
+
+                foreach (char c in (sample_name + i.ToString())) {
+                    output.Add((byte)c);
+                    namelength++;
+                }
+
+                while (namelength < 0x16) {
+                    output.Add(0x00);
+                    namelength++;
+                }
+
+                short old = 0;
+                for (int j = 0; j < pcm.Length; j++) {
+                    short n = (short)(pcm[j] - old);
+                    output.Add((byte)(n & 0xFF));
+                    output.Add((byte)((n >> 8) & 0xFF));
+                    old = pcm[j];
+                }
+            }
 
 
 
