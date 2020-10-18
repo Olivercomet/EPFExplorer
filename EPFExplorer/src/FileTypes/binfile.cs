@@ -35,8 +35,8 @@ namespace EPFExplorer
 
         bool isHR = false;
 
-        public List<string> MusicNamesEPF = new List<string>() { "Main theme", "Unused UI theme", "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Coffee Shop", "Test Robots theme", "Cart Surfer", "Ice Fishing", "Gadget Room", "Night Club", "Dojo", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Jet Pack Adventure", "Snowboarding", "Snow Trekker", "Mission Complete", "Nothing" };
-        public List<string> MusicNamesHR = new List<string>() { "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Ice Fishing", "Gadget room", "Night Club", "Spy Snake", "Boiler room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Grapple Gadget", "Main theme", "Herbert's Base", "Herbert's Base 2", "Herbert behind Ski Lodge", "Herbert's theme", "Geyser theme", "Unused", "Aqua Rescue", "Tallest Mountain", "Tallest Mountain 2", "Puffle Training Caves", "Spy Snake", "Credits" };
+        public List<string> MusicNamesEPF = new List<string>() { "Main Theme", "Unused UI Theme", "Command Room", "Coffee Shop (1)", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Coffee Shop (2)", "Test Robots Theme", "Cart Surfer", "Ice Fishing", "Gadget Room", "Night Club", "Dojo", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Jet Pack Adventure", "Snowboarding", "Snow Trekker", "Mission Complete", "Nothing" };
+        public List<string> MusicNamesHR = new List<string>() { "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Ice Fishing", "Gadget Room", "Night Club", "Spy Snake (1)", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Grapple Gadget", "Main Theme", "Herbert's Base", "Herbert's Base (Extended)", "Herbert behind Ski Lodge", "Herbert's Theme", "Geyser Theme", "Unused", "Aqua Rescue", "Tallest Mountain", "Tallest Mountain (Shortened)", "Puffle Training Caves", "Spy Snake (2)", "Credits" };
 
         int offset_of_end_of_index_table = 0;
 
