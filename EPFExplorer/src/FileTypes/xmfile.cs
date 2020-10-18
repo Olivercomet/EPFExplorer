@@ -39,6 +39,8 @@ namespace EPFExplorer
         public List<Pattern> patternsInPlayingOrder = new List<Pattern>();
         public List<sfxfile> samples = new List<sfxfile>();
 
+        public string customExportFolder = "";
+
         public class Pattern {
             public int index;
             public int number_of_rows;
@@ -508,18 +510,27 @@ namespace EPFExplorer
 
             if (filebytes != null)
             {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                if (customExportFolder == "" || customExportFolder == null)
+                    {
+                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-                saveFileDialog1.FileName = name;
+                    saveFileDialog1.FileName = name;
 
-                saveFileDialog1.Title = "Save XM file";
-                saveFileDialog1.CheckPathExists = true;
-                saveFileDialog1.Filter = "Extended Module (*.xm)|*.xm|All files (*.*)|*.*";
+                    saveFileDialog1.Title = "Save XM file";
+                    saveFileDialog1.CheckPathExists = true;
+                    saveFileDialog1.Filter = "Extended Module (*.xm)|*.xm|All files (*.*)|*.*";
 
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    File.WriteAllBytes(saveFileDialog1.FileName, MakeXM().ToArray());
-                }
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                        File.WriteAllBytes(saveFileDialog1.FileName, MakeXM().ToArray());
+                        }
+                    }
+                else
+                    {
+                    File.WriteAllBytes(Path.Combine(customExportFolder,name), MakeXM().ToArray());
+                    customExportFolder = "";
+                    }
+                
             }
         }
 

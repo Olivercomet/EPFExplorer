@@ -147,16 +147,31 @@ namespace EPFExplorer
                 {
                     case ".arc":
                         mode = Mode.Arc;
+
+                        randomizeRDTSpritesToolStripMenuItem.Enabled = false;
+                        massRDTExportToolStripMenuItem.Enabled = false;
+                        massXMExportToolStripMenuItem.Visible = false;
+
                         ParseArc(openFileDialog1.FileName);
                         activeArc.ViewArcInFileTree();
                         break;
                     case ".bin":
                         mode = Mode.Bin;
+
+                        randomizeRDTSpritesToolStripMenuItem.Visible = false;
+                        massRDTExportToolStripMenuItem.Visible = false;
+                        massXMExportToolStripMenuItem.Visible = true;
+
                         ParseBin(openFileDialog1.FileName);
                         MakeFileTree();
                         break;
                     case ".rdt":
                         mode = Mode.Rdt;
+
+                        randomizeRDTSpritesToolStripMenuItem.Visible = true;
+                        massRDTExportToolStripMenuItem.Visible = true;
+                        massXMExportToolStripMenuItem.Visible = false;
+
                         ParseRdt(openFileDialog1.FileName);
                         MakeFileTree();
                         break;
@@ -193,14 +208,14 @@ namespace EPFExplorer
 
             if (dialogResult == DialogResult.Yes)
             {
-                activeBin.binMode = "music";
+                activeBin.binMode = binfile.binmode.music;
             }
             else if (dialogResult == DialogResult.No)
             {
-                activeBin.binMode = "sfx";
+                activeBin.binMode = binfile.binmode.sfx;
             }
 
-            if (activeBin.binMode == "sfx")
+            if (activeBin.binMode == binfile.binmode.sfx)
             {
                 newbin.ReadBin();
             }
@@ -497,7 +512,7 @@ namespace EPFExplorer
                 {
                 archivedfiles = new List<archivedfile>();
 
-                if (activeBin.binMode == "sfx")
+                if (activeBin.binMode == binfile.binmode.sfx)
                     {
                     foreach (sfxfile sfx in activeBin.sfxfiles)
                         {
@@ -1002,7 +1017,16 @@ namespace EPFExplorer
             }
             else if (mode == Mode.Bin)
             {
-                activeBin.SaveBin();
+                if (activeBin.binMode == binfile.binmode.music)
+                    {
+                    MessageBox.Show("Note: this is an experimental feature.");
+                    activeBin.SaveBin();
+                    }
+                else
+                    {
+                    MessageBox.Show("That feature is only for music XMs!");
+                    }
+               
             }
         }
 
@@ -1703,7 +1727,7 @@ namespace EPFExplorer
                 }
 
 
-            if (activeBin.binMode == "sfx")
+            if (activeBin.binMode == binfile.binmode.sfx)
                 {
                 treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedSfx.Export();
                 }
@@ -1717,7 +1741,7 @@ namespace EPFExplorer
         {
             archivedfile selectedFile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
 
-            if (activeBin.binMode == "music")
+            if (activeBin.binMode == binfile.binmode.music)
             {
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -1757,6 +1781,55 @@ namespace EPFExplorer
         else
             {
                 MessageBox.Show("That feature is only for RDT files!", "RDT file required", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void massXMExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            if (activeBin.binMode == binfile.binmode.music)
+                {
+                saveFileDialog1.FileName = "Save XM files here";
+                }
+            else
+                {
+                saveFileDialog1.FileName = "Save wav files here";
+                }
+            
+
+            saveFileDialog1.Title = "Choose folder";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "Directory |directory";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if (activeBin.binMode == binfile.binmode.music)
+                    {
+                    foreach (TreeNode node in treeNodesAndArchivedFiles.Keys)
+                        {
+                        if (treeNodesAndArchivedFiles[node].linkedXm == null)
+                            {
+                            continue;
+                            }
+
+                        treeNodesAndArchivedFiles[node].linkedXm.customExportFolder = Path.GetDirectoryName(saveFileDialog1.FileName);
+                        treeNodesAndArchivedFiles[node].linkedXm.Export();
+                        }
+                    }
+                else
+                    {
+                    foreach (TreeNode node in treeNodesAndArchivedFiles.Keys)
+                    {
+                        if (treeNodesAndArchivedFiles[node].linkedSfx == null)
+                        {
+                            continue;
+                        }
+
+                        treeNodesAndArchivedFiles[node].linkedSfx.customExportFolder = Path.GetDirectoryName(saveFileDialog1.FileName);
+                        treeNodesAndArchivedFiles[node].linkedSfx.Export();
+                    }
+                }
             }
         }
     }

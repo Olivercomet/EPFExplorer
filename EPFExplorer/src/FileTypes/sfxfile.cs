@@ -34,6 +34,7 @@ namespace EPFExplorer
         public envelope panenv = new envelope();
         public uint unk1;
 
+        public string customExportFolder = "";
         public static T Clamp<T>(T val, T min, T max) where T : IComparable<T> {
             if (val.CompareTo(min) < 0) return min;
             else if (val.CompareTo(max) > 0) return max;
@@ -102,18 +103,28 @@ namespace EPFExplorer
 
             if (filebytes != null)
             {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                string name = Path.GetFileName(parentbinfile.filename) + offset;
+                if (customExportFolder == "" || customExportFolder == null)
+                {
+                    SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-                saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + offset + ".wav";
+                    saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + offset + ".wav";
 
-                saveFileDialog1.Title = "Save .wav file";
-                saveFileDialog1.CheckPathExists = true;
-                saveFileDialog1.Filter = isPCM ? "PCM WAV (*.wav)|*.wav|All files (*.*)|*.*" : "ADPCM WAV (*.wav)|*.wav|All files (*.*)|*.*";
+                    saveFileDialog1.Title = "Save .wav file";
+                    saveFileDialog1.CheckPathExists = true;
+                    saveFileDialog1.Filter = isPCM ? "PCM WAV (*.wav)|*.wav|All files (*.*)|*.*" : "ADPCM WAV (*.wav)|*.wav|All files (*.*)|*.*";
 
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                        {
+                        ConvertToWAV();
+                        File.WriteAllBytes(saveFileDialog1.FileName, filebytes);
+                        }
+                }
+                else
                 {
                     ConvertToWAV();
-                    File.WriteAllBytes(saveFileDialog1.FileName, filebytes);
+                    File.WriteAllBytes(Path.Combine(customExportFolder, name + ".wav"), filebytes);
+                    customExportFolder = "";
                 }
             }
         }

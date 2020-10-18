@@ -39,6 +39,7 @@
             this.massRDTExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateTuxedoDLObjectEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MPBTSBEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomizeRDTSpritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.FileTree = new System.Windows.Forms.TreeView();
             this.archivedFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -68,7 +69,7 @@
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.randomizeRDTSpritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.massXMExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -100,14 +101,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -118,7 +119,8 @@
             this.massRDTExportToolStripMenuItem,
             this.generateTuxedoDLObjectEntryToolStripMenuItem,
             this.MPBTSBEditorToolStripMenuItem,
-            this.randomizeRDTSpritesToolStripMenuItem});
+            this.randomizeRDTSpritesToolStripMenuItem,
+            this.massXMExportToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -135,6 +137,7 @@
             this.massRDTExportToolStripMenuItem.Name = "massRDTExportToolStripMenuItem";
             this.massRDTExportToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
             this.massRDTExportToolStripMenuItem.Text = "Mass RDT Export";
+            this.massRDTExportToolStripMenuItem.Visible = false;
             this.massRDTExportToolStripMenuItem.Click += new System.EventHandler(this.massRDTExportToolStripMenuItem_Click);
             // 
             // generateTuxedoDLObjectEntryToolStripMenuItem
@@ -150,6 +153,14 @@
             this.MPBTSBEditorToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
             this.MPBTSBEditorToolStripMenuItem.Text = "MPB/TSB Editor";
             this.MPBTSBEditorToolStripMenuItem.Click += new System.EventHandler(this.MPBTSBEditorToolStripMenuItem_Click);
+            // 
+            // randomizeRDTSpritesToolStripMenuItem
+            // 
+            this.randomizeRDTSpritesToolStripMenuItem.Name = "randomizeRDTSpritesToolStripMenuItem";
+            this.randomizeRDTSpritesToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
+            this.randomizeRDTSpritesToolStripMenuItem.Text = "RDT Randomizer";
+            this.randomizeRDTSpritesToolStripMenuItem.Visible = false;
+            this.randomizeRDTSpritesToolStripMenuItem.Click += new System.EventHandler(this.randomizeRDTSpritesToolStripMenuItem_Click);
             // 
             // button1
             // 
@@ -379,12 +390,13 @@
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
-            // randomizeRDTSpritesToolStripMenuItem
+            // massXMExportToolStripMenuItem
             // 
-            this.randomizeRDTSpritesToolStripMenuItem.Name = "randomizeRDTSpritesToolStripMenuItem";
-            this.randomizeRDTSpritesToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
-            this.randomizeRDTSpritesToolStripMenuItem.Text = "RDT Randomizer";
-            this.randomizeRDTSpritesToolStripMenuItem.Click += new System.EventHandler(this.randomizeRDTSpritesToolStripMenuItem_Click);
+            this.massXMExportToolStripMenuItem.Name = "massXMExportToolStripMenuItem";
+            this.massXMExportToolStripMenuItem.Size = new System.Drawing.Size(311, 26);
+            this.massXMExportToolStripMenuItem.Text = "Mass sound/music Export";
+            this.massXMExportToolStripMenuItem.Visible = false;
+            this.massXMExportToolStripMenuItem.Click += new System.EventHandler(this.massXMExportToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -450,6 +462,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem replaceXM;
         private System.Windows.Forms.ToolStripMenuItem randomizeRDTSpritesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem massXMExportToolStripMenuItem;
     }
 }
 

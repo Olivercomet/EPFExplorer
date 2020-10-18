@@ -27,7 +27,7 @@ namespace EPFExplorer
 
         public uint offsetOfMusicInstructionData;
 
-        public string binMode;
+        public binmode binMode;
 
         public int samplecount;
 
@@ -39,6 +39,12 @@ namespace EPFExplorer
         public List<string> MusicNamesHR = new List<string>() { "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Ice Fishing", "Gadget Room", "Night Club", "Spy Snake (1)", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Grapple Gadget", "Main Theme", "Herbert's Base", "Herbert's Base (Extended)", "Herbert behind Ski Lodge", "Herbert's Theme", "Geyser Theme", "Unused", "Aqua Rescue", "Tallest Mountain", "Tallest Mountain (Shortened)", "Puffle Training Caves", "Spy Snake (2)", "Credits" };
 
         int offset_of_end_of_index_table = 0;
+
+
+        public enum binmode { 
+        sfx = 0x00,
+        music = 0x01
+        }
 
         public void ReadMusicBin()
         {
@@ -230,7 +236,7 @@ namespace EPFExplorer
                 filemagic = reader.ReadUInt16();
 
                
-               filecount = reader.ReadUInt16();
+                filecount = reader.ReadUInt16();
                 
                     
                 Console.WriteLine(filecount);
@@ -434,18 +440,5 @@ namespace EPFExplorer
 
             return output;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
