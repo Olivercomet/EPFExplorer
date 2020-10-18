@@ -27,6 +27,8 @@ namespace EPFExplorer
         public sbyte transpose = 0x11;
         public byte defaultvol = 0x40;
         public byte defaultpan = 0x80;
+        public uint loopstart;
+        public uint loopend;
         public bool isPCM = false;
         public envelope volenv = new envelope();
         public envelope panenv = new envelope();

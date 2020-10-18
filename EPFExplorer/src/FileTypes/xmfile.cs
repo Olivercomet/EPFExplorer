@@ -151,11 +151,11 @@ namespace EPFExplorer
                     {
                         correctedControlByte |= 0x02;
                     }
-                    if ((controlBytes[i] & 0x04) == 0x04)  //vol
+                    if ((controlBytes[i] & 0x04) == 0x04)  //effect
                     {
                         correctedControlByte |= 0x08;
                     }
-                    if ((controlBytes[i]  & 0x02) == 0x02)  //effect
+                    if ((controlBytes[i] & 0x02) == 0x02)  //vol
                     {
                         correctedControlByte |= 0x04;
                     }
@@ -170,13 +170,30 @@ namespace EPFExplorer
                     //look at its parameters and add those bytes too
 
                     byte mask = 0x80;
+                    byte effect = 0xFF;
 
                     while (mask >= 1)
                     {
                         if ((controlBytes[i] & mask) == mask)
                         {
                             //add byte
-                            output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
+                            if ((controlBytes[i] & 0x06) == 0x06) {
+                                if (mask == 0x04) {
+                                    output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1]);
+                                } else if (mask == 0x02) {
+                                    output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1]);
+                                    effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1];
+                                } else if (mask == 0x01 && effect == 0x09) {
+                                    output.Add((byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] >> 1));
+                                } else {
+                                    output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
+                                }
+                            } else if (mask == 0x01 && effect == 0x09) {
+                                output.Add((byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] >> 1));
+                            } else {
+                                output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
+                                if (mask == 0x02) effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos];
+                            }
                             pos++;
                         }
 
@@ -324,10 +341,10 @@ namespace EPFExplorer
             output.Add((byte)numpatterns);
             output.Add((byte)(numpatterns >> 8));
 
-            output.Add((byte)parentbinfile.samplecount);               //would be numinstruments, but that won't work so this is a workaround
-            output.Add((byte)(parentbinfile.samplecount >> 8));        //would be numinstruments, but that won't work so this is a workaround
+            output.Add((byte)parentbinfile.samplecount);
+            output.Add((byte)(parentbinfile.samplecount >> 8));
 
-            output.Add(0x00);     
+            output.Add(0x01);     
             output.Add(0x00);
 
             output.Add((byte)tempo);
@@ -446,17 +463,21 @@ namespace EPFExplorer
                 output.Add((byte)(((pcm.Length * 2) >> 8) & 0xFF));
                 output.Add((byte)(((pcm.Length * 2) >> 16) & 0xFF));
                 output.Add((byte)(((pcm.Length * 2) >> 24) & 0xFF));
-                output.Add(0);
-                output.Add(0);
-                output.Add(0);
-                output.Add(0);
-                output.Add(0);
-                output.Add(0);
-                output.Add(0);
-                output.Add(0);
+                if (sample != null) {
+                    output.Add((byte)((sample.loopstart * 2) & 0xFF));
+                    output.Add((byte)(((sample.loopstart * 2) >> 8) & 0xFF));
+                    output.Add((byte)(((sample.loopstart * 2) >> 16) & 0xFF));
+                    output.Add((byte)(((sample.loopstart * 2) >> 24) & 0xFF));
+                    output.Add((byte)((( sample.loopend) * 2) & 0xFF));
+                    output.Add((byte)((((sample.loopend) * 2) >> 8) & 0xFF));
+                    output.Add((byte)((((sample.loopend) * 2) >> 16) & 0xFF));
+                    output.Add((byte)((((sample.loopend) * 2) >> 24) & 0xFF));
+                } else {
+                    for (int j = 0; j < 8; j++) output.Add(0);
+                }
                 output.Add(sample != null ? sample.defaultvol : (byte)0);
                 output.Add(sample != null ? (byte)sample.finetune : (byte)0);
-                output.Add(0x10);
+                output.Add((byte)(0x10 | (sample != null && sample.loopstart != 0xFFFFFFFF && sample.loopend != 0xFFFFFFFF ? 1 : 0)));
                 output.Add(sample != null ? sample.defaultpan : (byte)0x80);
                 output.Add(sample != null ? (byte)sample.transpose : (byte)0);
                 output.Add(0);

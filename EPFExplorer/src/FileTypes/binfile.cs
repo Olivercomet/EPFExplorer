@@ -139,15 +139,15 @@ namespace EPFExplorer
                      * 
                      * Offset  | Size     | Description
                      * --------+----------+-------------------------------------------------
-                     * 0x00    | 4        | The size of the sample data divided by 4 minus 4. (Data size = this * 4 + 4)
-                     * 0x04    | 4        | The position of the start of the loop, or 0xFFFFFFFF for no loop. (?)
-                     * 0x08    | 4        | The position of the end of the loop, or size+1 for no loop. (?)
+                     * 0x00    | 4        | The size of the sample data divided by 4.
+                     * 0x04    | 4        | The position of the start of the loop divided by 4, or 0xFFFFFFFF for no loop. (?)
+                     * 0x08    | 4        | The position of the end of the loop divided by 4, or size+1 for no loop. (?)
                      * 0x0C    | 1        | The type of sample. 0 = s16 PCM, 2 = MS IMA ADPCM
                      * 0x0D    | 1        | Unknown (always 0). Could be upper byte of above.
                      * 0x0E    | 1        | Default volume for the sample.
                      * 0x0F    | 1        | Unknown (always 0). Could be upper byte of above.
                      * 0x10    | 1        | Finetune value. Stored as a signed byte.
-                     * 0x11    | 1        | Transpose value. Stored as a signed byte.
+                     * 0x11    | 1        | Transpose value. Stored as a signed byte. (For some reason, if the sample is PCM you should decrease this value by 12.)
                      * 0x12    | 1        | Default pan position. Stored as an unsigned byte, with 0x80 = center.
                      * 0x13    | 1        | Unknown (always 0).
                      * 0x14    | 1        | Number of nodes in the volume envelope.
@@ -164,10 +164,13 @@ namespace EPFExplorer
                      */
 
                     uint offset = (uint)pos;
-                    int length = (filebytes[pos] | (filebytes[pos + 1] << 8) | (filebytes[pos + 2] << 16) | (filebytes[pos + 3] << 24)) * 4 + 4;
+                    int length = (filebytes[pos] | (filebytes[pos + 1] << 8) | (filebytes[pos + 2] << 16) | (filebytes[pos + 3] << 24)) * 4;
+                    newSample.loopstart = (uint)(filebytes[pos + 4] | (filebytes[pos + 5] << 8) | (filebytes[pos + 6] << 16) | (filebytes[pos + 7] << 24)) * 4;
+                    newSample.loopend = (uint)(filebytes[pos + 8] | (filebytes[pos + 9] << 8) | (filebytes[pos + 10] << 16) | (filebytes[pos + 11] << 24)) * 4;
                     newSample.isPCM = filebytes[pos + 12] != 2;
                     newSample.finetune = (sbyte)filebytes[pos + 16];
                     newSample.transpose = (sbyte)filebytes[pos + 17];
+                    if (newSample.isPCM) newSample.transpose -= 12;
                     newSample.defaultvol = filebytes[pos + 14];
                     newSample.defaultpan = filebytes[pos + 18];
 
@@ -187,7 +190,7 @@ namespace EPFExplorer
                         newSample.panenv.nodes[j] = (short)(filebytes[pos + j * 2 + 76] | (filebytes[pos + j * 2 + 77] << 8));
                     }
 
-                    pos += 120;
+                    pos += 124;
                     if (isHR) {
                         pos += 4;
                     }
