@@ -133,9 +133,7 @@ namespace EPFExplorer
                      * specification for the data contained in this chunk. Take this with a
                      * grain of salt, but I believe it should be correct (as long as my ears
                      * are working properly). Some of the descriptions may require
-                     * understanding of the format of XM instruments. This also doesn't
-                     * account for the reported 4 byte increase in size in HR - update this
-                     * for HR!!!
+                     * understanding of the format of XM instruments.
                      * 
                      * Offset  | Size     | Description
                      * --------+----------+-------------------------------------------------
@@ -148,7 +146,7 @@ namespace EPFExplorer
                      * 0x0F    | 1        | Unknown (always 0). Could be upper byte of above.
                      * 0x10    | 1        | Finetune value. Stored as a signed byte.
                      * 0x11    | 1        | Transpose value. Stored as a signed byte. (For some reason, if the sample is PCM you should decrease this value by 12.)
-                     * 0x12    | 0/4      | This field is present in HR but not EPF. Not sure what's in it yet.
+                     * 0x12    | 0/4      | This field is present in HR but not EPF. Not sure what's in it yet. If on HR, add 4 to each subsequent offset.
                      * 0x12    | 1        | Default pan position. Stored as an unsigned byte, with 0x80 = center.
                      * 0x13    | 1        | Unknown (always 0).
                      * 0x14    | 1        | Number of nodes in the volume envelope.

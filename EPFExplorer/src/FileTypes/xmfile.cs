@@ -388,7 +388,6 @@ namespace EPFExplorer
 
             for (int i = 0; i < samples.Count; i++) {
                 sfxfile sample = (i >= 0 && i < samples.Count && samples[i] != null) ? samples[i] : null;
-                if (sample != null) Console.WriteLine("Sample " + i.ToString() + " is at offset " + sample.offset.ToString("X"));
                 output.Add(252);
                 output.Add(0);
                 output.Add(0);
