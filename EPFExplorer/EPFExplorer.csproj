@@ -55,9 +55,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dlls\DSDecmp.dll</HintPath>
     </Reference>
-    <Reference Include="Ekona">
-      <HintPath>dlls\Ekona.dll</HintPath>
-    </Reference>
     <Reference Include="RedCell.UI.Controls.PixelBox">
       <HintPath>dlls\RedCell.UI.Controls.PixelBox.dll</HintPath>
     </Reference>
@@ -188,6 +185,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="luacompiler\luac.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dlls\DSDecmp.dll" />
+    <Content Include="dlls\RedCell.UI.Controls.PixelBox.dll" />
+    <Content Include="dlls\UnluacNET.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

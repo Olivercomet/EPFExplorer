@@ -235,7 +235,7 @@ namespace EPFExplorer
         {
             uint output = 0xFFFFFFFF;
 
-            int param_1 = 0x021C4680; //start of a table that it adds an offset to to get the uint value for the big xor
+            //0x021C4680 in EU EPF is the start of a table that it adds an offset to to get the uint value for the big xor
 
             for (int i = 0; i < filename.Length; i++)
             {
@@ -374,7 +374,6 @@ namespace EPFExplorer
             bool testedWithChunks = false;
             bool testedWithLuc = false;
             bool testedWithLua = false;
-            int IndexInExtensionsArray = 0;
 
             string s = input;
 

@@ -15,5 +15,5 @@ The music replacing also currently has issues with some tracks (e.g. Dojo and Ga
 ### With thanks to
 - [Fireboyd78](https://github.com/Fireboyd78) for creating a [C# port of unluac](https://github.com/Fireboyd78/UnluacNET) (originally by [tehtmi](https://sourceforge.net/projects/unluac/))
 - [No$GBA](https://www.nogba.com/) for its invaluable debugging tools
-- [DSDecmp](https://github.com/barubary/dsdecmp) and [Ekona](https://github.com/SceneGate/Ekona) for their LZ10/11 compression features
+- [DSDecmp](https://github.com/barubary/dsdecmp) for its LZ10/11 compression features
 - [MCJack123](https://github.com/MCJack123) for their contributions regarding instruments and samples, and PCM audio.

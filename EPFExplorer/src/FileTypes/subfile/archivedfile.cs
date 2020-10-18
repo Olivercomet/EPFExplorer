@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DSDecmp;
-using Ekona;
 using System.Windows.Forms;
 using UnluacNET;
 using System.Diagnostics;
