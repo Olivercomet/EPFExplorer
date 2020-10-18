@@ -464,14 +464,14 @@ namespace EPFExplorer
                 output.Add((byte)(((pcm.Length * 2) >> 16) & 0xFF));
                 output.Add((byte)(((pcm.Length * 2) >> 24) & 0xFF));
                 if (sample != null) {
-                    output.Add((byte)((sample.loopstart * 2) & 0xFF));
-                    output.Add((byte)(((sample.loopstart * 2) >> 8) & 0xFF));
-                    output.Add((byte)(((sample.loopstart * 2) >> 16) & 0xFF));
-                    output.Add((byte)(((sample.loopstart * 2) >> 24) & 0xFF));
-                    output.Add((byte)((( sample.loopend) * 2) & 0xFF));
-                    output.Add((byte)((((sample.loopend) * 2) >> 8) & 0xFF));
-                    output.Add((byte)((((sample.loopend) * 2) >> 16) & 0xFF));
-                    output.Add((byte)((((sample.loopend) * 2) >> 24) & 0xFF));
+                    output.Add((byte)((sample.loopstart * 4) & 0xFF));
+                    output.Add((byte)(((sample.loopstart * 4) >> 8) & 0xFF));
+                    output.Add((byte)(((sample.loopstart * 4) >> 16) & 0xFF));
+                    output.Add((byte)(((sample.loopstart * 4) >> 24) & 0xFF));
+                    output.Add((byte)((( sample.loopend) * 4) & 0xFF));
+                    output.Add((byte)((((sample.loopend) * 4) >> 8) & 0xFF));
+                    output.Add((byte)((((sample.loopend) * 4) >> 16) & 0xFF));
+                    output.Add((byte)((((sample.loopend) * 4) >> 24) & 0xFF));
                 } else {
                     for (int j = 0; j < 8; j++) output.Add(0);
                 }

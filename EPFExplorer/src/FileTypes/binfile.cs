@@ -148,6 +148,7 @@ namespace EPFExplorer
                      * 0x0F    | 1        | Unknown (always 0). Could be upper byte of above.
                      * 0x10    | 1        | Finetune value. Stored as a signed byte.
                      * 0x11    | 1        | Transpose value. Stored as a signed byte. (For some reason, if the sample is PCM you should decrease this value by 12.)
+                     * 0x12    | 0/4      | This field is present in HR but not EPF. Not sure what's in it yet.
                      * 0x12    | 1        | Default pan position. Stored as an unsigned byte, with 0x80 = center.
                      * 0x13    | 1        | Unknown (always 0).
                      * 0x14    | 1        | Number of nodes in the volume envelope.
@@ -172,28 +173,27 @@ namespace EPFExplorer
                     newSample.transpose = (sbyte)filebytes[pos + 17];
                     if (newSample.isPCM) newSample.transpose -= 12;
                     newSample.defaultvol = filebytes[pos + 14];
-                    newSample.defaultpan = filebytes[pos + 18];
+                    if (isHR) pos += 22;
+                    else pos += 18;
+                    newSample.defaultpan = filebytes[pos];
 
-                    newSample.volenv.count = filebytes[pos + 20];
-                    newSample.volenv.sustainPoint = filebytes[pos + 21];
-                    newSample.volenv.loopStart = filebytes[pos + 22];
-                    newSample.volenv.loopEnd = filebytes[pos + 23];
+                    newSample.volenv.count = filebytes[pos + 2];
+                    newSample.volenv.sustainPoint = filebytes[pos + 3];
+                    newSample.volenv.loopStart = filebytes[pos + 4];
+                    newSample.volenv.loopEnd = filebytes[pos + 5];
                     for (int j = 0; j < 24; j++) {
-                        newSample.volenv.nodes[j] = (short)(filebytes[pos + j*2 + 24] | (filebytes[pos + j * 2 + 25] << 8));
+                        newSample.volenv.nodes[j] = (short)(filebytes[pos + j*2 + 6] | (filebytes[pos + j * 2 + 7] << 8));
                     }
 
-                    newSample.panenv.count = filebytes[pos + 72];
-                    newSample.panenv.sustainPoint = filebytes[pos + 73];
-                    newSample.panenv.loopStart = filebytes[pos + 74];
-                    newSample.panenv.loopEnd = filebytes[pos + 75];
+                    newSample.panenv.count = filebytes[pos + 54];
+                    newSample.panenv.sustainPoint = filebytes[pos + 55];
+                    newSample.panenv.loopStart = filebytes[pos + 56];
+                    newSample.panenv.loopEnd = filebytes[pos + 57];
                     for (int j = 0; j < 24; j++) {
-                        newSample.panenv.nodes[j] = (short)(filebytes[pos + j * 2 + 76] | (filebytes[pos + j * 2 + 77] << 8));
+                        newSample.panenv.nodes[j] = (short)(filebytes[pos + j * 2 + 58] | (filebytes[pos + j * 2 + 59] << 8));
                     }
 
-                    pos += 124;
-                    if (isHR) {
-                        pos += 4;
-                    }
+                    pos += 106;
 
                     newSample.parentbinfile = this;
 
