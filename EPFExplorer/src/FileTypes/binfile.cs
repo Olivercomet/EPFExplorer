@@ -177,6 +177,16 @@ namespace EPFExplorer
                     else pos += 18;
                     newSample.defaultpan = filebytes[pos];
 
+                    // Hot-patch for Snake Game samples, which have the wrong transpose
+                    // (also changing finetune since that seems to make it sound better)
+                    if (isHR) {
+                        if (i == 54 || i == 58 || i == 59) newSample.transpose--;
+                        if (i == 54 || i == 57 || i == 58 || i == 59) newSample.defaultpan = 0x80;
+                        if (i == 54) newSample.finetune = -16;
+                        else if (i == 57) newSample.finetune = -30;
+                        else if (i == 59) newSample.finetune = -26;
+                    }
+
                     newSample.volenv.count = filebytes[pos + 2];
                     newSample.volenv.sustainPoint = filebytes[pos + 3];
                     newSample.volenv.loopStart = filebytes[pos + 4];

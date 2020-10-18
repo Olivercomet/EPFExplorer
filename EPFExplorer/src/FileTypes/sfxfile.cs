@@ -42,12 +42,12 @@ namespace EPFExplorer
 
         public binfile parentbinfile;
 
-        private int[] ima_index_table = new int[]{
+        private static int[] ima_index_table = new int[]{
               -1, -1, -1, -1, 2, 4, 6, 8,
               -1, -1, -1, -1, 2, 4, 6, 8
             };
 
-        private short[] ima_step_table = new short[]{
+        private static short[] ima_step_table = new short[]{
           7, 8, 9, 10, 11, 12, 13, 14, 16, 17,
           19, 21, 23, 25, 28, 31, 34, 37, 41, 45,
           50, 55, 60, 66, 73, 80, 88, 97, 107, 118,
@@ -68,7 +68,7 @@ namespace EPFExplorer
                 return output;
             } else {
                 List<short> output = new List<short>();
-                int predictor = (filebytes[0] | (filebytes[1] << 8));
+                int predictor = (short)(filebytes[0] | (filebytes[1] << 8));
                 int step_index = filebytes[2], step;
                 for (int i = 4; i < filebytes.Length; i++) {
                     int diff;

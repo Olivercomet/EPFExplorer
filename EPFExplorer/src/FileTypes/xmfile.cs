@@ -177,22 +177,18 @@ namespace EPFExplorer
                         if ((controlBytes[i] & mask) == mask)
                         {
                             //add byte
-                            if ((controlBytes[i] & 0x06) == 0x06) {
+                            if ((controlBytes[i] & 0x06) == 0x06 && (mask == 0x04 || mask == 0x02)) {
                                 if (mask == 0x04) {
                                     output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1]);
-                                } else if (mask == 0x02) {
+                                } else {
                                     output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1]);
                                     effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1];
-                                } else if (mask == 0x01 && effect == 0x09) {
-                                    output.Add((byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] >> 1));
-                                } else {
-                                    output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
                                 }
-                            } else if (mask == 0x01 && effect == 0x09) {
+                            } else if (mask == 0x01 && (effect == 0x09 || effect == 0x04)) {
                                 output.Add((byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] >> 1));
                             } else {
                                 output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
-                                if (mask == 0x02) effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos];
+                                if (mask == 0x04) effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos];
                             }
                             pos++;
                         }
