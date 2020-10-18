@@ -18,8 +18,6 @@ namespace EPFExplorer
 
         public binfile parentbinfile;
 
-        string moduleName = "default";
-
         public int number_of_patterns_in_one_loop;
         public int restartPosition;
 
@@ -294,14 +292,14 @@ namespace EPFExplorer
                 output.Add((byte)c);
             }
 
-            foreach (char c in moduleName)
+            for (int i = 0; i < Math.Min(name.Length-3, 20); i++)
             {
-                output.Add((byte)c);
+                output.Add((byte)name[i]);
             }
 
             while (output.Count < 0x25)
             {
-                output.Add(0x00);
+                output.Add(0x20);
             }
 
             output.Add(0x1A);
