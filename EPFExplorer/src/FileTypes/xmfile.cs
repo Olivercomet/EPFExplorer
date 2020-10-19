@@ -85,11 +85,13 @@ namespace EPFExplorer
             Byte[] controlBytes = new byte[numchannels];
 
             int b = 0;
+            bool loopStart = true;
 
             while (b < numchannels)
             {
                 controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0xF8) >> 3);
                 b++;
+                loopStart = false;
                 if (b == numchannels) { break; }
 
                 controlBytes[b] = (byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x07) << 2);
@@ -127,10 +129,11 @@ namespace EPFExplorer
                 controlBytes[b] = (byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x1F);
                 b++;
                 pos++;
+                loopStart = true;
                 if (b == numchannels) { break; }
             }
 
-            pos++;
+            if (!loopStart) pos++;
 
             for (int i = 0; i < controlBytes.Length; i++)
                 {
@@ -184,8 +187,10 @@ namespace EPFExplorer
                                     output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1]);
                                     effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1];
                                 }
-                            } else if (mask == 0x01 && (effect == 0x09 || effect == 0x04)) {
+                            } else if (mask == 0x01 && effect == 0x09) {
                                 output.Add((byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] >> 1));
+                            } else if (mask == 0x01 && effect == 0x04) {
+                                output.Add((byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0xF0) | ((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x0F) >> 1)));
                             } else {
                                 output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
                                 if (mask == 0x04) effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos];
