@@ -66,7 +66,6 @@ namespace EPFExplorer
 
                 reader.BaseStream.Position = 0x10;
 
-                Console.WriteLine(filecount);
                 for (int i = 0; i < filecount; i++)
                 {
                     xmfile newxmfile = new xmfile();
@@ -76,8 +75,6 @@ namespace EPFExplorer
                 }
 
                 offset_of_end_of_index_table = (int)reader.BaseStream.Position;
-
-                Console.WriteLine(xmfiles.Count);
 
                 for (int i = 0; i < xmfiles.Count; i++)
                 {
@@ -240,7 +237,6 @@ namespace EPFExplorer
                 filecount = reader.ReadUInt16();
                 
                     
-                Console.WriteLine(filecount);
                 for (int i = 0; i < filecount; i++)
                 {
                     sfxfile newsfxfile = new sfxfile();
@@ -251,7 +247,6 @@ namespace EPFExplorer
                     if (filemagic == 0x0103)    //hr only
                         {
                         isHR = true;
-                        Console.WriteLine("hr");
                         reader.BaseStream.Position += 0x04;
                         }
                     newsfxfile.samplerate = reader.ReadUInt16();
@@ -259,8 +254,6 @@ namespace EPFExplorer
                     newsfxfile.unk1 = reader.ReadUInt16();
                   
                 }
-
-                Console.WriteLine(sfxfiles.Count);
 
                 for (int i = 0; i < sfxfiles.Count; i++)
                 {

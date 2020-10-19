@@ -282,14 +282,6 @@ namespace EPFExplorer
                 }
         }
 
-
-
-
-
-
-
-
-
         public List<Byte> MakeXM() {
 
             List<Byte> output = new List<byte>();
@@ -712,11 +704,6 @@ namespace EPFExplorer
             int current_bit_in_byte = 0;
 
             int pos = 0;
-
-            if(name.Contains("Command") && input.Length == 31 && input[0] == 136)
-                {
-                Console.WriteLine("breakpoint");
-                }    
 
             for (int channel = 0; channel < numchannels; channel++)
                 {
