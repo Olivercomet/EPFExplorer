@@ -179,7 +179,8 @@ namespace EPFExplorer
                     newSample.defaultvol = filebytes[pos + 14];
                     if (isHR) pos += 22;
                     else pos += 18;
-                    newSample.defaultpan = filebytes[pos];
+                    if (!isHR && i >= 68 && i <= 73) newSample.defaultpan = 0x80; // override for odd right-panned samples
+                    else newSample.defaultpan = filebytes[pos];
 
                     // Hot-patch for Snake Game samples, which have the wrong transpose
                     // (also changing finetune since that seems to make it sound better)
