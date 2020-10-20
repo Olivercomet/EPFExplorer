@@ -734,24 +734,27 @@ namespace EPFExplorer
 
                 filebytes[0xF7FC] = (byte)(unlocks & 0xFF);
 
-                //DOWNLOAD.ARC CHECKSUM CALCULATION
-                //redoing the checksum here just in case
 
-                endOfDownloadArc = (0x100 + embeddedArc.filebytes.Length) - 4; //minus 4, because the length includes the checksum, but that's what we want to write to
+                if (embeddedArc != null)
+                    {
+                    //DOWNLOAD.ARC CHECKSUM CALCULATION
+                    //redoing the checksum here just in case
 
-                while (endOfDownloadArc % 4 != 0) //pad to multiple of 4
-                {
-                    filebytes[endOfDownloadArc] = 0;
-                    endOfDownloadArc++;
-                }
+                    endOfDownloadArc = (0x100 + embeddedArc.filebytes.Length) - 4; //minus 4, because the length includes the checksum, but that's what we want to write to
 
-                checksumArea = new Byte[endOfDownloadArc - 0x100];
+                    while (endOfDownloadArc % 4 != 0) //pad to multiple of 4
+                    {
+                        filebytes[endOfDownloadArc] = 0;
+                        endOfDownloadArc++;
+                    }
 
-                Array.Copy(filebytes, 0x100, checksumArea, 0x0, endOfDownloadArc - 0x100);
+                    checksumArea = new Byte[endOfDownloadArc - 0x100];
 
-                checksum = Crc32.Compute(checksumArea);
-                WriteU32ToArray(filebytes, endOfDownloadArc, checksum);
+                    Array.Copy(filebytes, 0x100, checksumArea, 0x0, endOfDownloadArc - 0x100);
 
+                    checksum = Crc32.Compute(checksumArea);
+                    WriteU32ToArray(filebytes, endOfDownloadArc, checksum);
+                    }
 
                 //CHECKSUM CALCULATION EPF
 
