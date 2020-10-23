@@ -532,9 +532,9 @@ namespace EPFExplorer
                         archivedfiles.Add(newArchivedFile);
                         }
 
-                    archivedfile sampleCollection = new archivedfile();
-                    sampleCollection.filename = "SAMPLES.sampleCollection";
-                    archivedfiles.Add(sampleCollection);
+                    // archivedfile sampleCollection = new archivedfile();
+                    //sampleCollection.filename = "SAMPLES.sampleCollection";
+                    //archivedfiles.Add(sampleCollection);
                     }
                 }
 
