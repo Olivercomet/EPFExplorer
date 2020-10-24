@@ -59,7 +59,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.objectsTab = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.doorSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.destposY = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
@@ -92,8 +92,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.chooseCustomRoomBackground = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
@@ -106,7 +104,7 @@
             this.label25 = new System.Windows.Forms.Label();
             this.moveObjectUp = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -119,7 +117,7 @@
             this.missionSettingsTab.SuspendLayout();
             this.objectsTab.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            this.groupBox8.SuspendLayout();
+            this.doorSettingsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.destposX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk3UpDown)).BeginInit();
@@ -129,6 +127,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).BeginInit();
             this.luaScriptsTabPage.SuspendLayout();
+            this.groupBox8.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -418,16 +417,7 @@
             // 
             // objectsTab
             // 
-            this.objectsTab.Controls.Add(this.button6);
-            this.objectsTab.Controls.Add(this.button5);
-            this.objectsTab.Controls.Add(this.moveObjectUp);
-            this.objectsTab.Controls.Add(this.groupBox7);
-            this.objectsTab.Controls.Add(this.button2);
-            this.objectsTab.Controls.Add(this.button1);
-            this.objectsTab.Controls.Add(this.comboBox1);
-            this.objectsTab.Controls.Add(this.chooseCustomRoomBackground);
-            this.objectsTab.Controls.Add(this.label10);
-            this.objectsTab.Controls.Add(this.label9);
+            this.objectsTab.Controls.Add(this.groupBox8);
             this.objectsTab.Controls.Add(this.label8);
             this.objectsTab.Controls.Add(this.selectedRoomBox);
             this.objectsTab.Location = new System.Drawing.Point(4, 25);
@@ -436,12 +426,13 @@
             this.objectsTab.TabIndex = 2;
             this.objectsTab.Text = "Objects";
             this.objectsTab.UseVisualStyleBackColor = true;
+            this.objectsTab.Click += new System.EventHandler(this.objectsTab_Click);
             // 
             // groupBox7
             // 
             this.groupBox7.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.groupBox7.Controls.Add(this.label25);
-            this.groupBox7.Controls.Add(this.groupBox8);
+            this.groupBox7.Controls.Add(this.doorSettingsGroupBox);
             this.groupBox7.Controls.Add(this.label23);
             this.groupBox7.Controls.Add(this.FlipYCheckBox);
             this.groupBox7.Controls.Add(this.label16);
@@ -464,31 +455,31 @@
             this.groupBox7.Controls.Add(this.label20);
             this.groupBox7.Controls.Add(this.ObjectIDUpDown);
             this.groupBox7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox7.Location = new System.Drawing.Point(13, 123);
+            this.groupBox7.Location = new System.Drawing.Point(12, 61);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(476, 390);
+            this.groupBox7.Size = new System.Drawing.Size(459, 405);
             this.groupBox7.TabIndex = 13;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Object settings";
             // 
-            // groupBox8
+            // doorSettingsGroupBox
             // 
-            this.groupBox8.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.groupBox8.Controls.Add(this.destposY);
-            this.groupBox8.Controls.Add(this.label15);
-            this.groupBox8.Controls.Add(this.label14);
-            this.groupBox8.Controls.Add(this.LockedCheckBox);
-            this.groupBox8.Controls.Add(this.destposX);
-            this.groupBox8.Controls.Add(this.label13);
-            this.groupBox8.Controls.Add(this.DestinationRoomComboBox);
-            this.groupBox8.Controls.Add(this.label12);
-            this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox8.Location = new System.Drawing.Point(10, 261);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(449, 123);
-            this.groupBox8.TabIndex = 62;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "If it\'s a door";
+            this.doorSettingsGroupBox.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.doorSettingsGroupBox.Controls.Add(this.destposY);
+            this.doorSettingsGroupBox.Controls.Add(this.label15);
+            this.doorSettingsGroupBox.Controls.Add(this.label14);
+            this.doorSettingsGroupBox.Controls.Add(this.LockedCheckBox);
+            this.doorSettingsGroupBox.Controls.Add(this.destposX);
+            this.doorSettingsGroupBox.Controls.Add(this.label13);
+            this.doorSettingsGroupBox.Controls.Add(this.DestinationRoomComboBox);
+            this.doorSettingsGroupBox.Controls.Add(this.label12);
+            this.doorSettingsGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.doorSettingsGroupBox.Location = new System.Drawing.Point(10, 262);
+            this.doorSettingsGroupBox.Name = "doorSettingsGroupBox";
+            this.doorSettingsGroupBox.Size = new System.Drawing.Size(449, 129);
+            this.doorSettingsGroupBox.TabIndex = 62;
+            this.doorSettingsGroupBox.TabStop = false;
+            this.doorSettingsGroupBox.Text = "Door settings (optional)";
             // 
             // destposY
             // 
@@ -630,7 +621,7 @@
             "Inventory Item",
             "Uninteractable",
             "Interactable"});
-            this.interactionTypeComboBox.Location = new System.Drawing.Point(121, 227);
+            this.interactionTypeComboBox.Location = new System.Drawing.Point(121, 228);
             this.interactionTypeComboBox.Name = "interactionTypeComboBox";
             this.interactionTypeComboBox.Size = new System.Drawing.Size(247, 24);
             this.interactionTypeComboBox.TabIndex = 60;
@@ -737,7 +728,7 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(123, 58);
+            this.comboBox2.Location = new System.Drawing.Point(131, 58);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(245, 24);
             this.comboBox2.TabIndex = 1;
@@ -766,7 +757,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(5, 230);
+            this.label19.Location = new System.Drawing.Point(5, 231);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(110, 17);
             this.label19.TabIndex = 42;
@@ -783,7 +774,7 @@
             // 
             // ObjectIDUpDown
             // 
-            this.ObjectIDUpDown.Location = new System.Drawing.Point(123, 28);
+            this.ObjectIDUpDown.Location = new System.Drawing.Point(132, 28);
             this.ObjectIDUpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -795,7 +786,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(322, 86);
+            this.button2.Location = new System.Drawing.Point(318, 29);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(65, 23);
             this.button2.TabIndex = 12;
@@ -804,7 +795,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(264, 86);
+            this.button1.Location = new System.Drawing.Point(260, 29);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(52, 23);
             this.button1.TabIndex = 11;
@@ -815,34 +806,15 @@
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(82, 86);
+            this.comboBox1.Location = new System.Drawing.Point(78, 29);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(176, 24);
             this.comboBox1.TabIndex = 10;
             // 
-            // chooseCustomRoomBackground
-            // 
-            this.chooseCustomRoomBackground.Location = new System.Drawing.Point(203, 54);
-            this.chooseCustomRoomBackground.Name = "chooseCustomRoomBackground";
-            this.chooseCustomRoomBackground.Size = new System.Drawing.Size(113, 23);
-            this.chooseCustomRoomBackground.TabIndex = 9;
-            this.chooseCustomRoomBackground.Text = "Choose...";
-            this.chooseCustomRoomBackground.UseVisualStyleBackColor = true;
-            this.chooseCustomRoomBackground.Click += new System.EventHandler(this.chooseCustomRoomBackground_Click);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(20, 56);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(176, 17);
-            this.label10.TabIndex = 8;
-            this.label10.Text = "Custom Room Background";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(20, 86);
+            this.label9.Location = new System.Drawing.Point(16, 29);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 17);
             this.label9.TabIndex = 7;
@@ -851,7 +823,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(20, 23);
+            this.label8.Location = new System.Drawing.Point(20, 18);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(45, 17);
             this.label8.TabIndex = 6;
@@ -892,7 +864,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(313, 24);
+            this.button3.Location = new System.Drawing.Point(396, 24);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(65, 23);
             this.button3.TabIndex = 16;
@@ -901,9 +873,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(264, 24);
+            this.button4.Location = new System.Drawing.Point(332, 24);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(43, 23);
+            this.button4.Size = new System.Drawing.Size(58, 23);
             this.button4.TabIndex = 15;
             this.button4.Text = "Add";
             this.button4.UseVisualStyleBackColor = true;
@@ -914,7 +886,7 @@
             this.comboBox4.FormattingEnabled = true;
             this.comboBox4.Location = new System.Drawing.Point(75, 24);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(183, 24);
+            this.comboBox4.Size = new System.Drawing.Size(235, 24);
             this.comboBox4.TabIndex = 14;
             // 
             // label24
@@ -937,7 +909,7 @@
             // 
             // moveObjectUp
             // 
-            this.moveObjectUp.Location = new System.Drawing.Point(393, 84);
+            this.moveObjectUp.Location = new System.Drawing.Point(389, 27);
             this.moveObjectUp.Name = "moveObjectUp";
             this.moveObjectUp.Size = new System.Drawing.Size(35, 28);
             this.moveObjectUp.TabIndex = 14;
@@ -946,21 +918,30 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(433, 84);
+            this.button5.Location = new System.Drawing.Point(429, 27);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(35, 28);
             this.button5.TabIndex = 15;
             this.button5.Text = "\\/";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // groupBox8
             // 
-            this.button6.Location = new System.Drawing.Point(322, 54);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(146, 23);
-            this.button6.TabIndex = 16;
-            this.button6.Text = "Reset BG to vanilla";
-            this.button6.UseVisualStyleBackColor = true;
+            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox8.Controls.Add(this.label9);
+            this.groupBox8.Controls.Add(this.button5);
+            this.groupBox8.Controls.Add(this.groupBox7);
+            this.groupBox8.Controls.Add(this.comboBox1);
+            this.groupBox8.Controls.Add(this.moveObjectUp);
+            this.groupBox8.Controls.Add(this.button1);
+            this.groupBox8.Controls.Add(this.button2);
+            this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBox8.Location = new System.Drawing.Point(14, 51);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(481, 472);
+            this.groupBox8.TabIndex = 66;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Room settings";
             // 
             // MissionEditor
             // 
@@ -972,6 +953,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Name = "MissionEditor";
             this.Text = "EPF Explorer Mission Editor";
+            this.Load += new System.EventHandler(this.MissionEditor_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
@@ -991,8 +973,8 @@
             this.objectsTab.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
+            this.doorSettingsGroupBox.ResumeLayout(false);
+            this.doorSettingsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.destposX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk3UpDown)).EndInit();
@@ -1003,6 +985,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).EndInit();
             this.luaScriptsTabPage.ResumeLayout(false);
             this.luaScriptsTabPage.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1025,8 +1009,6 @@
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage loadMissionTab;
-        private System.Windows.Forms.TabPage missionSettingsTab;
         private System.Windows.Forms.Label downloadArcLabel;
         private System.Windows.Forms.Label fsArcLabel;
         private System.Windows.Forms.Label gameRdtLabel;
@@ -1038,12 +1020,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TabPage objectsTab;
         private System.Windows.Forms.ComboBox selectedRoomBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Button chooseCustomRoomBackground;
         private System.Windows.Forms.Button recalculateCapacityButton;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button2;
@@ -1073,8 +1052,7 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
-        private System.Windows.Forms.TabPage luaScriptsTabPage;
-        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.GroupBox doorSettingsGroupBox;
         private System.Windows.Forms.NumericUpDown destposY;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
@@ -1088,6 +1066,10 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button moveObjectUp;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
+        public System.Windows.Forms.TabPage loadMissionTab;
+        public System.Windows.Forms.TabPage missionSettingsTab;
+        public System.Windows.Forms.TabPage objectsTab;
+        public System.Windows.Forms.TabPage luaScriptsTabPage;
+        private System.Windows.Forms.GroupBox groupBox8;
     }
 }

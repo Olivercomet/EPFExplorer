@@ -75,6 +75,10 @@ namespace EPFExplorer
             {
                 selectedRoomBox.Items.Add(r.DisplayName);
             }
+
+            missionSettingsTab.Enabled = false;
+            objectsTab.Enabled = false;
+            luaScriptsTabPage.Enabled = false;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -207,7 +211,9 @@ namespace EPFExplorer
 
             UpdateCurrentCapacity();
 
-
+            missionSettingsTab.Enabled = true;
+            objectsTab.Enabled = true;
+            luaScriptsTabPage.Enabled = true;
 
 
 
@@ -233,7 +239,7 @@ namespace EPFExplorer
                 size++;
             }
 
-            if (size >= capacityProgressBar.Value)
+            if (size >= capacityProgressBar.Maximum)
                 {
                 MessageBox.Show("Your mission will be too big to fit in a save file!\nIt is " + ((((float)size/(float)capacityProgressBar.Maximum)*(float)100.00) - (float)100.00) + "% over the maximum size.","Size limit exceeded",MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 capacityProgressBar.Value = capacityProgressBar.Maximum - 1;
@@ -272,7 +278,20 @@ namespace EPFExplorer
 
         private void recalculateCapacityButton_Click(object sender, EventArgs e)
         {
-            UpdateCurrentCapacity();
+            if (downloadArc != null)
+                {
+                UpdateCurrentCapacity();
+                }
+        }
+
+        private void objectsTab_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void MissionEditor_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
