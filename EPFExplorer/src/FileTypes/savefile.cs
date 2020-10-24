@@ -388,9 +388,11 @@ namespace EPFExplorer
                 {
                     reader.BaseStream.Position = 0x100;
 
-                    if (reader.ReadInt32() == 0x00000000)
+                    if (reader.ReadInt32() == 0x00000000)   
                     {
-                        //then there's no embedded arc file, skip to later in the file
+                        //there's no embedded arc file
+                        embeddedArc = null;
+                        saveFileEditor.downloadableMissionNameDisplay.Text = "Downloadable Mission: None";
                     }
                     else
                     {   //load embedded arc file (e.g. puffle pranksters)
