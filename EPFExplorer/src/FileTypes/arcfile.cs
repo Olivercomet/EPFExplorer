@@ -137,39 +137,22 @@ namespace EPFExplorer
             }
         }
 
-
-
-
-
-
-
-       
-
-
         public archivedfile GetFileByName(string filename) {
 
-        List<string> potentialFilenames = form1.GetFilenamePermutations(filename);
-
-            ReadArc();
+            if(archivedfiles == null || archivedfiles.Count == 0)
+                {
+                ReadArc();
+                }
 
         foreach (archivedfile file in archivedfiles)
                 {
-                foreach (string s in potentialFilenames)
-                    {
-                    if (form1.CalculateHash(s) == file.hash)
+                    if (form1.CalculateHash(filename.ToLower()) == file.hash)
                         {
                         return file;
                         }
-                    }
                 }
-
             return null;
         }
-
-
-
-
-
 
 
         public void ExportAll() {
@@ -282,7 +265,7 @@ namespace EPFExplorer
 
 
                 targetFileIndex = form1.Find_Closest_File_To(form1.CalculateHash(s.Replace(".luc",".lua")), this); //normal case luc
-                if (targetFileIndex < filecount) {  /*Console.WriteLine("method C worked"); */ SetArchivedFileName(targetFileIndex, s); } //if we succeeded, go to later on.
+                if (targetFileIndex < filecount) {  /*Console.WriteLine("method C worked"); */ SetArchivedFileName(targetFileIndex, s.Replace(".luc", ".lua")); } //if we succeeded, go to later on.
 
                 targetFileIndex = form1.Find_Closest_File_To(form1.CalculateHash(s.Replace(".luc", ".lua").Replace("chunks/", "scripts/")), this); //normal case luc
                 if (targetFileIndex < filecount) {  /*Console.WriteLine("method C2 worked"); */ SetArchivedFileName(targetFileIndex, s.Replace(".luc", ".lua").Replace("chunks/", "scripts/")); } //if we succeeded, go to later on.

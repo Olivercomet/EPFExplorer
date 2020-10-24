@@ -15,19 +15,18 @@ namespace EPFExplorer
         public TuxedoDLObjectEntryForm()
         {
             InitializeComponent();
-
-            
-
-            DestinationRoomComboBox.Items.Add("none");
-            foreach (Form1.Room r in form1.rooms)
-                {
-                RoomComboBox.Items.Add(r.DisplayName);
-                DestinationRoomComboBox.Items.Add(r.DisplayName);
-                }
         }
 
         public Form1 form1;
 
+        public void LoadFormControls() {
+            DestinationRoomComboBox.Items.Add("none");
+            foreach (Form1.Room r in form1.rooms)
+            {
+                RoomComboBox.Items.Add(r.DisplayName);
+                DestinationRoomComboBox.Items.Add(r.DisplayName);
+            }
+        }
         
         
 

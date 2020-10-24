@@ -1110,7 +1110,6 @@ namespace EPFExplorer
             Decompiler d = new Decompiler(lmain);
             d.Decompile();
 
-
             using (var writer = new StreamWriter(destfile, false, new UTF8Encoding(false)))
                 {
                 d.Print(new Output(writer));
@@ -1119,9 +1118,6 @@ namespace EPFExplorer
                 }
 
             return (null);   
-
         }
-
-        
     }
 }

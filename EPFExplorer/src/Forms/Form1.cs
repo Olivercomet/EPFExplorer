@@ -1768,6 +1768,7 @@ namespace EPFExplorer
         {
             TuxedoDLObjectEntryForm TuxedoDLForm = new TuxedoDLObjectEntryForm();
             TuxedoDLForm.form1 = this;
+            TuxedoDLForm.LoadFormControls();
             TuxedoDLForm.Show();
         }
 
@@ -1897,6 +1898,7 @@ namespace EPFExplorer
         {
             MissionEditor missionEditor = new MissionEditor();
             missionEditor.form1 = this;
+            missionEditor.LoadFormControls();
             missionEditor.Show();
         }
     }
