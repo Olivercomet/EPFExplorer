@@ -80,6 +80,12 @@
     <Compile Include="src\FileTypes\binfile.cs" />
     <Compile Include="src\FileTypes\subfile\rdtSubfileData.cs" />
     <Compile Include="src\FileTypes\tsbfile.cs" />
+    <Compile Include="src\Forms\MissionEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\MissionEditor.Designer.cs">
+      <DependentUpon>MissionEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Forms\MPB_TSB_EditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="src\Forms\MissionEditor.resx">
+      <DependentUpon>MissionEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\MPB_TSB_EditorForm.resx">
       <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>
     </EmbeddedResource>

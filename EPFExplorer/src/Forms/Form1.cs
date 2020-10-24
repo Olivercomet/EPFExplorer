@@ -30,6 +30,8 @@ namespace EPFExplorer
 
         public string startFilename;
 
+        public List<Room> rooms = new List<Room>();
+
         public enum Mode { 
         None = 0x00,
         Arc = 0x01,
@@ -108,6 +110,63 @@ namespace EPFExplorer
             extensions.Add(".nsc");
             extensions.Add(".ncl.l");
             extensions.Add(".nsc.l");
+
+            rooms.Add(new Room("Beach", "BEACH0", 60));
+            rooms.Add(new Room("Beacon", "BEACON0", 83));
+            rooms.Add(new Room("Boiler Room", "BOILERROOM0", 93));
+            rooms.Add(new Room("Book Room", "BOOKROOM0", 107));
+            rooms.Add(new Room("Coffee Shop", "COFFEESHOP0", 61));
+            rooms.Add(new Room("Command Room", "COMMANDROOM0", 62));
+            rooms.Add(new Room("Dock", "DOCK0", 63));
+            rooms.Add(new Room("Dojo", "DOJO0", 64));
+            rooms.Add(new Room("Fishing Pond", "FISHING0", 108));
+            rooms.Add(new Room("Forest", "FOREST0", 102));
+            rooms.Add(new Room("Gadget Room", "GADGETROOM0", 65));
+            rooms.Add(new Room("Gary's Room", "GARYSROOM0", 66));
+            rooms.Add(new Room("Gift Shop", "GIFTSHOP0", 98));
+            rooms.Add(new Room("Gift Shop Office", "GIFTOFFICE0", 99));
+            rooms.Add(new Room("Gift Shop Roof", "GIFTROOF0", 100));
+            rooms.Add(new Room("HQ", "HEADQUARTERS0", 67));
+            rooms.Add(new Room("Ice Rink", "ICERINK0", 91));
+            rooms.Add(new Room("Iceberg", "ICEBERG0", 103));
+            rooms.Add(new Room("Lighthouse", "LIGHTHOUSE0", 82));
+            rooms.Add(new Room("Lodge Attic", "ATTIC0", 109));
+            rooms.Add(new Room("Lounge", "LOUNGE0", 106));
+            rooms.Add(new Room("Mine", "MINEINTERIOR0", 69));
+            rooms.Add(new Room("Mine Shack", "MINESHACK0", 68));
+            rooms.Add(new Room("Mine Shed", "MINESHED0", 72));
+            rooms.Add(new Room("Mine Crash Site", "MINECRASH0", 70));
+            rooms.Add(new Room("Mine Lair", "MINELAIR0", 71));
+            rooms.Add(new Room("Night Club", "NIGHTCLUB0", 94));
+            rooms.Add(new Room("Pet Shop", "PETSHOP0", 74));
+            rooms.Add(new Room("Pizza Parlor", "PIZZAPARLOR0", 75));
+            rooms.Add(new Room("Plaza", "PLAZA0", 76));
+            rooms.Add(new Room("Puffle Training Room", "PUFFLETRAINING0", 77));
+            rooms.Add(new Room("Ski Hill", "SKIHILL0", 73));
+            rooms.Add(new Room("Ski Lodge", "LODGE0", 90));
+            rooms.Add(new Room("Ski Village", "SKIVILLAGE0", 78));
+            rooms.Add(new Room("Snow Forts", "SNOWFORTS0", 79));
+            rooms.Add(new Room("Sport Shop", "SPORTSHOP0", 80));
+            rooms.Add(new Room("Stage", "STAGE0", 95));
+            rooms.Add(new Room("Tallest Mountain", "TALLESTMOUNTAINTOP0", 96));
+            rooms.Add(new Room("Town", "TOWN0", 81));
+            rooms.Add(new Room("Underground Pool", "POOL0", 92));
+        }
+
+        public class Room
+        {
+
+
+            public string DisplayName;
+            public string InternalName;
+            public int ID_for_objects;
+
+            public Room(string _DisplayName, string _InternalName, int _ID_for_objects)
+            {
+                DisplayName = _DisplayName;
+                InternalName = _InternalName;
+                ID_for_objects = _ID_for_objects;
+            }
         }
 
         private void Toolstrip_Open_Click(object sender, EventArgs e)
@@ -1708,6 +1767,7 @@ namespace EPFExplorer
         private void generateTuxedoDLObjectEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TuxedoDLObjectEntryForm TuxedoDLForm = new TuxedoDLObjectEntryForm();
+            TuxedoDLForm.form1 = this;
             TuxedoDLForm.Show();
         }
 
@@ -1831,6 +1891,13 @@ namespace EPFExplorer
                     }
                 }
             }
+        }
+
+        private void missionEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MissionEditor missionEditor = new MissionEditor();
+            missionEditor.form1 = this;
+            missionEditor.Show();
         }
     }
 }
