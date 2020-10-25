@@ -144,9 +144,11 @@ namespace EPFExplorer
                 ReadArc();
                 }
 
+            filename = filename.ToLower();
+
         foreach (archivedfile file in archivedfiles)
                 {
-                    if (form1.CalculateHash(filename.ToLower()) == file.hash)
+                    if (form1.CalculateHash(filename) == file.hash)
                         {
                         return file;
                         }
@@ -465,6 +467,48 @@ namespace EPFExplorer
                             TryToFindFilename(s);
                         }
                     }
+
+                //if tuxedoDL exists in this arc, read some lua filenames out of it
+                archivedfile tuxedoDL = GetFileByName("/chunks/tuxedoDL.luc");
+
+                if (tuxedoDL != null)
+                    {
+                    tuxedoDL.ReadFile();
+                    tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
+
+                    string[] tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
+                    File.Delete("tuxedoDL_TEMP");
+
+                    for (int line = 0; line < tuxedoDLdecompiled.Length; line++)
+                        {
+                        if (tuxedoDLdecompiled[line].Contains("AddDownloadItem("))
+                            {
+                            tuxedoDLdecompiled[line] = tuxedoDLdecompiled[line].Substring(1, tuxedoDLdecompiled[line].Length - 2).Replace("AddDownloadItem(","").Replace(", ",",");
+
+                            string[] splitString = tuxedoDLdecompiled[line].Split(',');
+
+                            string potentialLuaName = splitString[7];
+
+                            if (potentialLuaName == "\"\"")
+                            {
+                                continue;
+                            }
+
+                        potentialLuaName = splitString[7].Substring(1, splitString[7].Length - 2).Replace(".lua", ".luc");
+
+                        potentialLuaName = "/chunks/" + potentialLuaName.Substring(7, potentialLuaName.Length - 7);
+
+                            foreach (archivedfile f in archivedfiles)
+                                {
+                                if ((f.filename == "" || f.filename == "FILENAME_NOT_SET" || f.filename == null) && f.hash == form1.CalculateHash(potentialLuaName.ToLower()))
+                                    {
+                                    f.filename = potentialLuaName;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                
 
 
                 for (int i = 0; i < archivedfiles.Count; i++)
