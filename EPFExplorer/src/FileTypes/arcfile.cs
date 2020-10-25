@@ -474,7 +474,17 @@ namespace EPFExplorer
                 if (tuxedoDL != null)
                     {
                     tuxedoDL.ReadFile();
+                    tuxedoDL.DecompressFile();
                     tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
+                    if (tuxedoDL.was_LZ10_compressed)
+                        {
+                        tuxedoDL.CompressFileLZ10();
+                        }
+                    else if (tuxedoDL.was_LZ11_compressed)
+                        {
+                        tuxedoDL.CompressFileLZ11();
+                        }
+                tuxedoDL.filebytes = new byte[0];
 
                     string[] tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
                     File.Delete("tuxedoDL_TEMP");

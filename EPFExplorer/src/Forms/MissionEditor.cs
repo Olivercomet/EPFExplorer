@@ -185,6 +185,7 @@ namespace EPFExplorer
 
             tuxedoDL = downloadArc.GetFileByName("/chunks/tuxedoDL.luc");
             tuxedoDL.ReadFile();
+            tuxedoDL.DecompressFile();
             tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
 
             string[] tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");

@@ -142,9 +142,13 @@ namespace EPFExplorer
 
                 foreach (archivedfile file in activeSaveFile.embeddedArc.archivedfiles)
                 {
-                    file.ReadFile();    //looks redundant as rebuildarc does this anyway, but we need to read it out before changing the compression information, otherwise rebuildarc's readarc call will try to decompress even if it's not actually compressed yet
-                    file.has_LZ11_filesize = true;
-                    file.was_LZ11_compressed = true;
+                    file.ReadFile();    //this may look redundant, as rebuildarc does this anyway, but we need to read it out before changing the compression information, otherwise rebuildarc's readarc call will try to decompress even if it's not actually compressed yet
+                    
+                    if (!file.was_LZ10_compressed && !file.was_LZ11_compressed)
+                        {
+                        file.has_LZ11_filesize = true;
+                        file.was_LZ11_compressed = true;
+                        }
                 }
 
                 activeSaveFile.embeddedArc.use_custom_filename_table = false;
