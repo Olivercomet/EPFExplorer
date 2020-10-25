@@ -27,6 +27,8 @@ namespace EPFExplorer
         public int ReserveDownloadExits;
         public int ReserveDownloadItems;
 
+        public Form1.Room selectedRoom;
+
         public List<DownloadItem> downloadItems = new List<DownloadItem>();
 
         public MissionEditor()
@@ -79,6 +81,7 @@ namespace EPFExplorer
             missionSettingsTab.Enabled = false;
             objectsTab.Enabled = false;
             luaScriptsTabPage.Enabled = false;
+            textEditorTab.Enabled = false;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -88,19 +91,21 @@ namespace EPFExplorer
 
         private void selectedRoomBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            selectedRoom = form1.rooms[selectedRoomBox.SelectedIndex];
 
+            AddCurrentRoomObjectsToComboBox();
+
+            if (roomObjectsComboBox.Items.Count > 0)
+                {
+                objectSettingsGroupBox.Enabled = true;
+                roomObjectsComboBox.SelectedIndex = 0;
+                }
+            else
+                {
+                objectSettingsGroupBox.Enabled = false;
+                }
         }
 
-        private void chooseCustomRoomBackground_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("Custom backgrounds take up lots of space! \nAre you sure you want to use one?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-            if (result == DialogResult.Yes)
-            {
-
-
-            }
-        }
 
         private void chooseMainArc_Click(object sender, EventArgs e)
         {
@@ -189,6 +194,11 @@ namespace EPFExplorer
 
             downloadItems = new List<DownloadItem>();
 
+            foreach (Form1.Room r in form1.rooms)
+            {
+                r.Objects.Clear();
+            }
+
             for (int i = 0; i < tuxedoDLdecompiled.Length; i++)
             {
                 if (tuxedoDLdecompiled[i].Contains("_util.ReserveDownloadNpcs"))
@@ -214,8 +224,14 @@ namespace EPFExplorer
             missionSettingsTab.Enabled = true;
             objectsTab.Enabled = true;
             luaScriptsTabPage.Enabled = true;
+            textEditorTab.Enabled = true;
 
+            selectedRoomBox.SelectedIndex = 0;
 
+            AddCurrentRoomObjectsToComboBox(); //force this in case the selected index was already zero (thus not triggering the selectedindexchanged function)
+
+            selectedRoomBox.SelectedIndex = 0;
+            roomObjectsComboBox.SelectedIndex = 0;
 
         }
 
@@ -273,7 +289,16 @@ namespace EPFExplorer
             if (splitString[15] == "true" ? newDownloadItem.flipX = true : newDownloadItem.flipX = false)
             if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
 
-             downloadItems.Add(newDownloadItem);
+            downloadItems.Add(newDownloadItem);
+
+            foreach (Form1.Room r in form1.rooms)
+                {
+                if (newDownloadItem.room == r.ID_for_objects)
+                    {
+                    r.Objects.Add(newDownloadItem);
+                    break;
+                    }
+                }
         }
 
         private void recalculateCapacityButton_Click(object sender, EventArgs e)
@@ -292,6 +317,145 @@ namespace EPFExplorer
         private void MissionEditor_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void roomObjectsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ObjectIDUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].ID;
+            PosXUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos;
+            PosYUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos;
+            spawnedByDefault.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].SpawnedByDefault;
+            interactionTypeComboBox.SelectedIndex = ((int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionType)-1;
+
+
+        }
+
+        public void AddCurrentRoomObjectsToComboBox() {
+
+            roomObjectsComboBox.Items.Clear();
+
+            if (selectedRoom.Objects.Count == 0)
+                {
+                return;
+                }
+
+            foreach (DownloadItem item in selectedRoom.Objects)
+            {
+                string nameToAdd = "";
+
+                if (item.spritePath != null && item.spritePath != "")
+                {
+                    nameToAdd = item.spritePath;
+                }
+                else 
+                {
+                    nameToAdd = item.luaScriptPath;
+                }
+
+                roomObjectsComboBox.Items.Add(nameToAdd);
+            }
+        }
+
+        private void ObjectIDUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].ID = (int)ObjectIDUpDown.Value;
+        }
+
+        private void PosXUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos = (int)PosXUpDown.Value;
+        }
+
+        private void PosYUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos = (int)PosYUpDown.Value;
+        }
+
+        private void FlipXCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX = FlipXCheckBox.Checked;
+        }
+
+        private void FlipYCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY = FlipYCheckBox.Checked;
+        }
+
+        private void spawnedByDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].SpawnedByDefault = spawnedByDefault.Checked;
+        }
+
+        private void Unk1UpDown_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk1 = (int)Unk1UpDown.Value;
+        }
+
+        private void Unk2UpDown_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk2 = (int)Unk2UpDown.Value;
+        }
+
+        private void Unk3UpDown_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk3 = (int)Unk3UpDown.Value;
+        }
+
+        private void interactionTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionType = (InteractionType)(interactionTypeComboBox.SelectedIndex + 1);
+        }
+
+        private void destposX_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosX = (int)destposX.Value;
+        }
+
+        private void destposY_ValueChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosY = (int)destposY.Value;
+        }
+
+        private void LockedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].locked = LockedCheckBox.Checked;
+        }
+
+        private void moveObjectUp_Click(object sender, EventArgs e)
+        {
+            if (roomObjectsComboBox.SelectedIndex > 0)
+                {
+                //swap with the one before
+                DownloadItem temp = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex - 1];
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex - 1] = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex];
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex] = temp;
+
+                int i = roomObjectsComboBox.SelectedIndex;
+
+                //refresh object list
+
+                AddCurrentRoomObjectsToComboBox();
+                roomObjectsComboBox.SelectedIndex = i - 1;
+            }
+        }
+
+        private void moveObjectDown_Click(object sender, EventArgs e)
+        {
+            if (roomObjectsComboBox.SelectedIndex < roomObjectsComboBox.Items.Count - 1)
+            {
+                //swap with the one afterwards
+                DownloadItem temp = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex + 1];
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex + 1] = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex];
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex] = temp;
+
+                int i = roomObjectsComboBox.SelectedIndex;
+
+                //refresh object list
+
+                AddCurrentRoomObjectsToComboBox();
+                roomObjectsComboBox.SelectedIndex = i + 1;
+                
+            }
         }
     }
 }

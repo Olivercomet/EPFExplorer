@@ -58,7 +58,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.objectsTab = new System.Windows.Forms.TabPage();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.moveObjectDown = new System.Windows.Forms.Button();
+            this.objectSettingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.label25 = new System.Windows.Forms.Label();
             this.doorSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.destposY = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
@@ -75,7 +79,7 @@
             this.label18 = new System.Windows.Forms.Label();
             this.interactionTypeComboBox = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
-            this.unkBool1CheckBox = new System.Windows.Forms.CheckBox();
+            this.spawnedByDefault = new System.Windows.Forms.CheckBox();
             this.Unk2UpDown = new System.Windows.Forms.NumericUpDown();
             this.Unk1UpDown = new System.Windows.Forms.NumericUpDown();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
@@ -83,16 +87,16 @@
             this.label11 = new System.Windows.Forms.Label();
             this.PosXUpDown = new System.Windows.Forms.NumericUpDown();
             this.label22 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.RDTSpritePath = new System.Windows.Forms.ComboBox();
             this.PosYUpDown = new System.Windows.Forms.NumericUpDown();
             this.label21 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.ObjectIDUpDown = new System.Windows.Forms.NumericUpDown();
-            this.button2 = new System.Windows.Forms.Button();
+            this.roomObjectsComboBox = new System.Windows.Forms.ComboBox();
+            this.moveObjectUp = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
             this.luaScriptsTabPage = new System.Windows.Forms.TabPage();
@@ -101,10 +105,17 @@
             this.button4 = new System.Windows.Forms.Button();
             this.comboBox4 = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
-            this.label25 = new System.Windows.Forms.Label();
-            this.moveObjectUp = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pixelBox1 = new RedCell.UI.Controls.PixelBox();
+            this.textEditorTab = new System.Windows.Forms.TabPage();
+            this.textIDUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -116,7 +127,8 @@
             this.loadMissionTab.SuspendLayout();
             this.missionSettingsTab.SuspendLayout();
             this.objectsTab.SuspendLayout();
-            this.groupBox7.SuspendLayout();
+            this.groupBox8.SuspendLayout();
+            this.objectSettingsGroupBox.SuspendLayout();
             this.doorSettingsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.destposX)).BeginInit();
@@ -127,7 +139,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).BeginInit();
             this.luaScriptsTabPage.SuspendLayout();
-            this.groupBox8.SuspendLayout();
+            this.groupBox9.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).BeginInit();
+            this.textEditorTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).BeginInit();
+            this.groupBox7.SuspendLayout();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -250,7 +268,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1420, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1420, 30);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -259,7 +277,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveMissionToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // saveMissionToolStripMenuItem
@@ -271,10 +289,12 @@
             // capacityProgressBar
             // 
             this.capacityProgressBar.Location = new System.Drawing.Point(26, 32);
+            this.capacityProgressBar.MarqueeAnimationSpeed = 0;
             this.capacityProgressBar.Maximum = 62792;
             this.capacityProgressBar.Name = "capacityProgressBar";
             this.capacityProgressBar.Size = new System.Drawing.Size(810, 21);
             this.capacityProgressBar.Step = 1;
+            this.capacityProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.capacityProgressBar.TabIndex = 2;
             // 
             // groupBox5
@@ -314,6 +334,7 @@
             this.tabControl1.Controls.Add(this.missionSettingsTab);
             this.tabControl1.Controls.Add(this.objectsTab);
             this.tabControl1.Controls.Add(this.luaScriptsTabPage);
+            this.tabControl1.Controls.Add(this.textEditorTab);
             this.tabControl1.Location = new System.Drawing.Point(14, 35);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -428,39 +449,85 @@
             this.objectsTab.UseVisualStyleBackColor = true;
             this.objectsTab.Click += new System.EventHandler(this.objectsTab_Click);
             // 
-            // groupBox7
+            // groupBox8
             // 
-            this.groupBox7.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.groupBox7.Controls.Add(this.label25);
-            this.groupBox7.Controls.Add(this.doorSettingsGroupBox);
-            this.groupBox7.Controls.Add(this.label23);
-            this.groupBox7.Controls.Add(this.FlipYCheckBox);
-            this.groupBox7.Controls.Add(this.label16);
-            this.groupBox7.Controls.Add(this.Unk3UpDown);
-            this.groupBox7.Controls.Add(this.label18);
-            this.groupBox7.Controls.Add(this.interactionTypeComboBox);
-            this.groupBox7.Controls.Add(this.label17);
-            this.groupBox7.Controls.Add(this.unkBool1CheckBox);
-            this.groupBox7.Controls.Add(this.Unk2UpDown);
-            this.groupBox7.Controls.Add(this.Unk1UpDown);
-            this.groupBox7.Controls.Add(this.comboBox3);
-            this.groupBox7.Controls.Add(this.FlipXCheckBox);
-            this.groupBox7.Controls.Add(this.label11);
-            this.groupBox7.Controls.Add(this.PosXUpDown);
-            this.groupBox7.Controls.Add(this.label22);
-            this.groupBox7.Controls.Add(this.comboBox2);
-            this.groupBox7.Controls.Add(this.PosYUpDown);
-            this.groupBox7.Controls.Add(this.label21);
-            this.groupBox7.Controls.Add(this.label19);
-            this.groupBox7.Controls.Add(this.label20);
-            this.groupBox7.Controls.Add(this.ObjectIDUpDown);
-            this.groupBox7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox7.Location = new System.Drawing.Point(12, 61);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(459, 405);
-            this.groupBox7.TabIndex = 13;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Object settings";
+            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox8.Controls.Add(this.label9);
+            this.groupBox8.Controls.Add(this.moveObjectDown);
+            this.groupBox8.Controls.Add(this.objectSettingsGroupBox);
+            this.groupBox8.Controls.Add(this.roomObjectsComboBox);
+            this.groupBox8.Controls.Add(this.moveObjectUp);
+            this.groupBox8.Controls.Add(this.button1);
+            this.groupBox8.Controls.Add(this.button2);
+            this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.groupBox8.Location = new System.Drawing.Point(14, 51);
+            this.groupBox8.Name = "groupBox8";
+            this.groupBox8.Size = new System.Drawing.Size(481, 472);
+            this.groupBox8.TabIndex = 66;
+            this.groupBox8.TabStop = false;
+            this.groupBox8.Text = "Room settings";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(16, 29);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(56, 17);
+            this.label9.TabIndex = 7;
+            this.label9.Text = "Objects";
+            // 
+            // moveObjectDown
+            // 
+            this.moveObjectDown.Location = new System.Drawing.Point(429, 27);
+            this.moveObjectDown.Name = "moveObjectDown";
+            this.moveObjectDown.Size = new System.Drawing.Size(35, 28);
+            this.moveObjectDown.TabIndex = 15;
+            this.moveObjectDown.Text = "\\/";
+            this.moveObjectDown.UseVisualStyleBackColor = true;
+            this.moveObjectDown.Click += new System.EventHandler(this.moveObjectDown_Click);
+            // 
+            // objectSettingsGroupBox
+            // 
+            this.objectSettingsGroupBox.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.objectSettingsGroupBox.Controls.Add(this.label25);
+            this.objectSettingsGroupBox.Controls.Add(this.doorSettingsGroupBox);
+            this.objectSettingsGroupBox.Controls.Add(this.label23);
+            this.objectSettingsGroupBox.Controls.Add(this.FlipYCheckBox);
+            this.objectSettingsGroupBox.Controls.Add(this.label16);
+            this.objectSettingsGroupBox.Controls.Add(this.Unk3UpDown);
+            this.objectSettingsGroupBox.Controls.Add(this.label18);
+            this.objectSettingsGroupBox.Controls.Add(this.interactionTypeComboBox);
+            this.objectSettingsGroupBox.Controls.Add(this.label17);
+            this.objectSettingsGroupBox.Controls.Add(this.spawnedByDefault);
+            this.objectSettingsGroupBox.Controls.Add(this.Unk2UpDown);
+            this.objectSettingsGroupBox.Controls.Add(this.Unk1UpDown);
+            this.objectSettingsGroupBox.Controls.Add(this.comboBox3);
+            this.objectSettingsGroupBox.Controls.Add(this.FlipXCheckBox);
+            this.objectSettingsGroupBox.Controls.Add(this.label11);
+            this.objectSettingsGroupBox.Controls.Add(this.PosXUpDown);
+            this.objectSettingsGroupBox.Controls.Add(this.label22);
+            this.objectSettingsGroupBox.Controls.Add(this.RDTSpritePath);
+            this.objectSettingsGroupBox.Controls.Add(this.PosYUpDown);
+            this.objectSettingsGroupBox.Controls.Add(this.label21);
+            this.objectSettingsGroupBox.Controls.Add(this.label19);
+            this.objectSettingsGroupBox.Controls.Add(this.label20);
+            this.objectSettingsGroupBox.Controls.Add(this.ObjectIDUpDown);
+            this.objectSettingsGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.objectSettingsGroupBox.Location = new System.Drawing.Point(12, 61);
+            this.objectSettingsGroupBox.Name = "objectSettingsGroupBox";
+            this.objectSettingsGroupBox.Size = new System.Drawing.Size(459, 405);
+            this.objectSettingsGroupBox.TabIndex = 13;
+            this.objectSettingsGroupBox.TabStop = false;
+            this.objectSettingsGroupBox.Text = "Object settings";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(7, 93);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(58, 17);
+            this.label25.TabIndex = 63;
+            this.label25.Text = "Position";
             // 
             // doorSettingsGroupBox
             // 
@@ -492,6 +559,7 @@
             this.destposY.Name = "destposY";
             this.destposY.Size = new System.Drawing.Size(68, 22);
             this.destposY.TabIndex = 65;
+            this.destposY.ValueChanged += new System.EventHandler(this.destposY_ValueChanged);
             // 
             // label15
             // 
@@ -521,6 +589,7 @@
             this.LockedCheckBox.TabIndex = 52;
             this.LockedCheckBox.Text = "Locked";
             this.LockedCheckBox.UseVisualStyleBackColor = true;
+            this.LockedCheckBox.CheckedChanged += new System.EventHandler(this.LockedCheckBox_CheckedChanged);
             // 
             // destposX
             // 
@@ -533,6 +602,7 @@
             this.destposX.Name = "destposX";
             this.destposX.Size = new System.Drawing.Size(68, 22);
             this.destposX.TabIndex = 61;
+            this.destposX.ValueChanged += new System.EventHandler(this.destposX_ValueChanged);
             // 
             // label13
             // 
@@ -580,6 +650,7 @@
             this.FlipYCheckBox.TabIndex = 58;
             this.FlipYCheckBox.Text = "Flip Y";
             this.FlipYCheckBox.UseVisualStyleBackColor = true;
+            this.FlipYCheckBox.CheckedChanged += new System.EventHandler(this.FlipYCheckBox_CheckedChanged);
             // 
             // label16
             // 
@@ -601,6 +672,7 @@
             this.Unk3UpDown.Name = "Unk3UpDown";
             this.Unk3UpDown.Size = new System.Drawing.Size(73, 22);
             this.Unk3UpDown.TabIndex = 49;
+            this.Unk3UpDown.ValueChanged += new System.EventHandler(this.Unk3UpDown_ValueChanged);
             // 
             // label18
             // 
@@ -625,6 +697,7 @@
             this.interactionTypeComboBox.Name = "interactionTypeComboBox";
             this.interactionTypeComboBox.Size = new System.Drawing.Size(247, 24);
             this.interactionTypeComboBox.TabIndex = 60;
+            this.interactionTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.interactionTypeComboBox_SelectedIndexChanged);
             // 
             // label17
             // 
@@ -635,16 +708,17 @@
             this.label17.TabIndex = 46;
             this.label17.Text = "Unk 2";
             // 
-            // unkBool1CheckBox
+            // spawnedByDefault
             // 
-            this.unkBool1CheckBox.AutoSize = true;
-            this.unkBool1CheckBox.Location = new System.Drawing.Point(6, 127);
-            this.unkBool1CheckBox.Name = "unkBool1CheckBox";
-            this.unkBool1CheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.unkBool1CheckBox.Size = new System.Drawing.Size(159, 21);
-            this.unkBool1CheckBox.TabIndex = 43;
-            this.unkBool1CheckBox.Text = "Spawn straight away";
-            this.unkBool1CheckBox.UseVisualStyleBackColor = true;
+            this.spawnedByDefault.AutoSize = true;
+            this.spawnedByDefault.Location = new System.Drawing.Point(6, 127);
+            this.spawnedByDefault.Name = "spawnedByDefault";
+            this.spawnedByDefault.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.spawnedByDefault.Size = new System.Drawing.Size(154, 21);
+            this.spawnedByDefault.TabIndex = 43;
+            this.spawnedByDefault.Text = "Spawned by default";
+            this.spawnedByDefault.UseVisualStyleBackColor = true;
+            this.spawnedByDefault.CheckedChanged += new System.EventHandler(this.spawnedByDefault_CheckedChanged);
             // 
             // Unk2UpDown
             // 
@@ -662,6 +736,7 @@
             0,
             0,
             0});
+            this.Unk2UpDown.ValueChanged += new System.EventHandler(this.Unk2UpDown_ValueChanged);
             // 
             // Unk1UpDown
             // 
@@ -674,6 +749,7 @@
             this.Unk1UpDown.Name = "Unk1UpDown";
             this.Unk1UpDown.Size = new System.Drawing.Size(68, 22);
             this.Unk1UpDown.TabIndex = 45;
+            this.Unk1UpDown.ValueChanged += new System.EventHandler(this.Unk1UpDown_ValueChanged);
             // 
             // comboBox3
             // 
@@ -694,6 +770,7 @@
             this.FlipXCheckBox.TabIndex = 57;
             this.FlipXCheckBox.Text = "Flip X";
             this.FlipXCheckBox.UseVisualStyleBackColor = true;
+            this.FlipXCheckBox.CheckedChanged += new System.EventHandler(this.FlipXCheckBox_CheckedChanged);
             // 
             // label11
             // 
@@ -715,6 +792,7 @@
             this.PosXUpDown.Name = "PosXUpDown";
             this.PosXUpDown.Size = new System.Drawing.Size(71, 22);
             this.PosXUpDown.TabIndex = 38;
+            this.PosXUpDown.ValueChanged += new System.EventHandler(this.PosXUpDown_ValueChanged);
             // 
             // label22
             // 
@@ -725,13 +803,13 @@
             this.label22.TabIndex = 14;
             this.label22.Text = "Lua Script";
             // 
-            // comboBox2
+            // RDTSpritePath
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(131, 58);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(245, 24);
-            this.comboBox2.TabIndex = 1;
+            this.RDTSpritePath.FormattingEnabled = true;
+            this.RDTSpritePath.Location = new System.Drawing.Point(131, 58);
+            this.RDTSpritePath.Name = "RDTSpritePath";
+            this.RDTSpritePath.Size = new System.Drawing.Size(245, 24);
+            this.RDTSpritePath.TabIndex = 1;
             // 
             // PosYUpDown
             // 
@@ -744,6 +822,7 @@
             this.PosYUpDown.Name = "PosYUpDown";
             this.PosYUpDown.Size = new System.Drawing.Size(71, 22);
             this.PosYUpDown.TabIndex = 39;
+            this.PosYUpDown.ValueChanged += new System.EventHandler(this.PosYUpDown_ValueChanged);
             // 
             // label21
             // 
@@ -783,15 +862,28 @@
             this.ObjectIDUpDown.Name = "ObjectIDUpDown";
             this.ObjectIDUpDown.Size = new System.Drawing.Size(101, 22);
             this.ObjectIDUpDown.TabIndex = 37;
+            this.ObjectIDUpDown.ValueChanged += new System.EventHandler(this.ObjectIDUpDown_ValueChanged);
             // 
-            // button2
+            // roomObjectsComboBox
             // 
-            this.button2.Location = new System.Drawing.Point(318, 29);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(65, 23);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "Delete";
-            this.button2.UseVisualStyleBackColor = true;
+            this.roomObjectsComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.roomObjectsComboBox.DropDownWidth = 276;
+            this.roomObjectsComboBox.FormattingEnabled = true;
+            this.roomObjectsComboBox.Location = new System.Drawing.Point(78, 29);
+            this.roomObjectsComboBox.Name = "roomObjectsComboBox";
+            this.roomObjectsComboBox.Size = new System.Drawing.Size(176, 24);
+            this.roomObjectsComboBox.TabIndex = 10;
+            this.roomObjectsComboBox.SelectedIndexChanged += new System.EventHandler(this.roomObjectsComboBox_SelectedIndexChanged);
+            // 
+            // moveObjectUp
+            // 
+            this.moveObjectUp.Location = new System.Drawing.Point(389, 27);
+            this.moveObjectUp.Name = "moveObjectUp";
+            this.moveObjectUp.Size = new System.Drawing.Size(35, 28);
+            this.moveObjectUp.TabIndex = 14;
+            this.moveObjectUp.Text = "/\\";
+            this.moveObjectUp.UseVisualStyleBackColor = true;
+            this.moveObjectUp.Click += new System.EventHandler(this.moveObjectUp_Click);
             // 
             // button1
             // 
@@ -802,23 +894,14 @@
             this.button1.Text = "Add";
             this.button1.UseVisualStyleBackColor = true;
             // 
-            // comboBox1
+            // button2
             // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(78, 29);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(176, 24);
-            this.comboBox1.TabIndex = 10;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(16, 29);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(56, 17);
-            this.label9.TabIndex = 7;
-            this.label9.Text = "Objects";
+            this.button2.Location = new System.Drawing.Point(318, 29);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(65, 23);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "Delete";
+            this.button2.UseVisualStyleBackColor = true;
             // 
             // label8
             // 
@@ -892,62 +975,128 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(18, 27);
+            this.label24.Location = new System.Drawing.Point(20, 27);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(51, 17);
+            this.label24.Size = new System.Drawing.Size(44, 17);
             this.label24.TabIndex = 13;
-            this.label24.Text = "Scripts";
+            this.label24.Text = "Script";
             // 
-            // label25
+            // groupBox9
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(7, 93);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(58, 17);
-            this.label25.TabIndex = 63;
-            this.label25.Text = "Position";
+            this.groupBox9.Controls.Add(this.panel1);
+            this.groupBox9.Location = new System.Drawing.Point(12, 31);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(842, 484);
+            this.groupBox9.TabIndex = 5;
+            this.groupBox9.TabStop = false;
             // 
-            // moveObjectUp
+            // panel1
             // 
-            this.moveObjectUp.Location = new System.Drawing.Point(389, 27);
-            this.moveObjectUp.Name = "moveObjectUp";
-            this.moveObjectUp.Size = new System.Drawing.Size(35, 28);
-            this.moveObjectUp.TabIndex = 14;
-            this.moveObjectUp.Text = "/\\";
-            this.moveObjectUp.UseVisualStyleBackColor = true;
+            this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pixelBox1);
+            this.panel1.Location = new System.Drawing.Point(6, 21);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(830, 457);
+            this.panel1.TabIndex = 1;
             // 
-            // button5
+            // pixelBox1
             // 
-            this.button5.Location = new System.Drawing.Point(429, 27);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(35, 28);
-            this.button5.TabIndex = 15;
-            this.button5.Text = "\\/";
-            this.button5.UseVisualStyleBackColor = true;
+            this.pixelBox1.Location = new System.Drawing.Point(8, 12);
+            this.pixelBox1.Name = "pixelBox1";
+            this.pixelBox1.Size = new System.Drawing.Size(792, 399);
+            this.pixelBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pixelBox1.TabIndex = 0;
+            this.pixelBox1.TabStop = false;
             // 
-            // groupBox8
+            // textEditorTab
             // 
-            this.groupBox8.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox8.Controls.Add(this.label9);
-            this.groupBox8.Controls.Add(this.button5);
-            this.groupBox8.Controls.Add(this.groupBox7);
-            this.groupBox8.Controls.Add(this.comboBox1);
-            this.groupBox8.Controls.Add(this.moveObjectUp);
-            this.groupBox8.Controls.Add(this.button1);
-            this.groupBox8.Controls.Add(this.button2);
-            this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox8.Location = new System.Drawing.Point(14, 51);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(481, 472);
-            this.groupBox8.TabIndex = 66;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Room settings";
+            this.textEditorTab.Controls.Add(this.groupBox10);
+            this.textEditorTab.Controls.Add(this.groupBox7);
+            this.textEditorTab.Location = new System.Drawing.Point(4, 25);
+            this.textEditorTab.Name = "textEditorTab";
+            this.textEditorTab.Padding = new System.Windows.Forms.Padding(3);
+            this.textEditorTab.Size = new System.Drawing.Size(509, 526);
+            this.textEditorTab.TabIndex = 4;
+            this.textEditorTab.Text = "Text Editor";
+            this.textEditorTab.UseVisualStyleBackColor = true;
+            // 
+            // textIDUpDown
+            // 
+            this.textIDUpDown.Location = new System.Drawing.Point(127, 42);
+            this.textIDUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.textIDUpDown.Name = "textIDUpDown";
+            this.textIDUpDown.Size = new System.Drawing.Size(120, 22);
+            this.textIDUpDown.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(24, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(95, 17);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Text ID to edit";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(29, 31);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(203, 24);
+            this.comboBox1.TabIndex = 2;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.comboBox1);
+            this.groupBox7.Location = new System.Drawing.Point(29, 26);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(450, 75);
+            this.groupBox7.TabIndex = 4;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Text file";
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.label2);
+            this.groupBox10.Controls.Add(this.richTextBox4);
+            this.groupBox10.Controls.Add(this.textIDUpDown);
+            this.groupBox10.Controls.Add(this.label1);
+            this.groupBox10.Location = new System.Drawing.Point(29, 116);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(450, 302);
+            this.groupBox10.TabIndex = 5;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Edit text";
+            // 
+            // richTextBox4
+            // 
+            this.richTextBox4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.richTextBox4.Location = new System.Drawing.Point(19, 111);
+            this.richTextBox4.Name = "richTextBox4";
+            this.richTextBox4.Size = new System.Drawing.Size(411, 142);
+            this.richTextBox4.TabIndex = 2;
+            this.richTextBox4.Text = "";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(26, 87);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 17);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Text";
             // 
             // MissionEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1420, 639);
+            this.Controls.Add(this.groupBox9);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.menuStrip1);
@@ -971,8 +1120,10 @@
             this.missionSettingsTab.PerformLayout();
             this.objectsTab.ResumeLayout(false);
             this.objectsTab.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox7.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.objectSettingsGroupBox.ResumeLayout(false);
+            this.objectSettingsGroupBox.PerformLayout();
             this.doorSettingsGroupBox.ResumeLayout(false);
             this.doorSettingsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).EndInit();
@@ -985,8 +1136,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).EndInit();
             this.luaScriptsTabPage.ResumeLayout(false);
             this.luaScriptsTabPage.PerformLayout();
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).EndInit();
+            this.textEditorTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).EndInit();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1024,12 +1182,12 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button recalculateCapacityButton;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox roomObjectsComboBox;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox objectSettingsGroupBox;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox RDTSpritePath;
         private System.Windows.Forms.ComboBox interactionTypeComboBox;
         private System.Windows.Forms.CheckBox FlipYCheckBox;
         private System.Windows.Forms.CheckBox FlipXCheckBox;
@@ -1042,7 +1200,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.NumericUpDown Unk1UpDown;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.CheckBox unkBool1CheckBox;
+        private System.Windows.Forms.CheckBox spawnedByDefault;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
@@ -1065,11 +1223,22 @@
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button moveObjectUp;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button moveObjectDown;
         public System.Windows.Forms.TabPage loadMissionTab;
         public System.Windows.Forms.TabPage missionSettingsTab;
         public System.Windows.Forms.TabPage objectsTab;
         public System.Windows.Forms.TabPage luaScriptsTabPage;
         private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.Panel panel1;
+        private RedCell.UI.Controls.PixelBox pixelBox1;
+        private System.Windows.Forms.TabPage textEditorTab;
+        private System.Windows.Forms.NumericUpDown textIDUpDown;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.RichTextBox richTextBox4;
+        private System.Windows.Forms.Label label2;
     }
 }
