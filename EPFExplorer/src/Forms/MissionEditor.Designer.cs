@@ -100,10 +100,12 @@
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
             this.luaScriptsTabPage = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
             this.saveLua = new System.Windows.Forms.Button();
             this.luaRichText = new System.Windows.Forms.RichTextBox();
             this.deleteLuaScriptButton = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.addLuaScript = new System.Windows.Forms.Button();
             this.luaScriptComboBox = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
             this.textEditorTab = new System.Windows.Forms.TabPage();
@@ -117,8 +119,6 @@
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pixelBox1 = new RedCell.UI.Controls.PixelBox();
-            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -957,7 +957,7 @@
             this.luaScriptsTabPage.Controls.Add(this.saveLua);
             this.luaScriptsTabPage.Controls.Add(this.luaRichText);
             this.luaScriptsTabPage.Controls.Add(this.deleteLuaScriptButton);
-            this.luaScriptsTabPage.Controls.Add(this.button4);
+            this.luaScriptsTabPage.Controls.Add(this.addLuaScript);
             this.luaScriptsTabPage.Controls.Add(this.luaScriptComboBox);
             this.luaScriptsTabPage.Controls.Add(this.label24);
             this.luaScriptsTabPage.Location = new System.Drawing.Point(4, 25);
@@ -966,6 +966,22 @@
             this.luaScriptsTabPage.TabIndex = 3;
             this.luaScriptsTabPage.Text = "Lua Scripts";
             this.luaScriptsTabPage.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(83, 17);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Script name";
+            // 
+            // luaScriptNameBox
+            // 
+            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 64);
+            this.luaScriptNameBox.Name = "luaScriptNameBox";
+            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
+            this.luaScriptNameBox.TabIndex = 19;
             // 
             // saveLua
             // 
@@ -997,14 +1013,15 @@
             this.deleteLuaScriptButton.UseVisualStyleBackColor = true;
             this.deleteLuaScriptButton.Click += new System.EventHandler(this.deleteLuaScriptButton_Click);
             // 
-            // button4
+            // addLuaScript
             // 
-            this.button4.Location = new System.Drawing.Point(283, 24);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(58, 23);
-            this.button4.TabIndex = 15;
-            this.button4.Text = "Add";
-            this.button4.UseVisualStyleBackColor = true;
+            this.addLuaScript.Location = new System.Drawing.Point(283, 24);
+            this.addLuaScript.Name = "addLuaScript";
+            this.addLuaScript.Size = new System.Drawing.Size(58, 23);
+            this.addLuaScript.TabIndex = 15;
+            this.addLuaScript.Text = "Add";
+            this.addLuaScript.UseVisualStyleBackColor = true;
+            this.addLuaScript.Click += new System.EventHandler(this.addLuaScript_Click);
             // 
             // luaScriptComboBox
             // 
@@ -1135,22 +1152,6 @@
             this.pixelBox1.TabIndex = 0;
             this.pixelBox1.TabStop = false;
             // 
-            // luaScriptNameBox
-            // 
-            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 64);
-            this.luaScriptNameBox.Name = "luaScriptNameBox";
-            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
-            this.luaScriptNameBox.TabIndex = 19;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 65);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 17);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "Script name";
-            // 
             // MissionEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1278,7 +1279,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.RichTextBox luaRichText;
         private System.Windows.Forms.Button deleteLuaScriptButton;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button addLuaScript;
         private System.Windows.Forms.ComboBox luaScriptComboBox;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
