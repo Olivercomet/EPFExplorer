@@ -82,7 +82,7 @@
             this.spawnedByDefault = new System.Windows.Forms.CheckBox();
             this.Unk2UpDown = new System.Windows.Forms.NumericUpDown();
             this.Unk1UpDown = new System.Windows.Forms.NumericUpDown();
-            this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.objectLuaScriptComboBox = new System.Windows.Forms.ComboBox();
             this.FlipXCheckBox = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
             this.PosXUpDown = new System.Windows.Forms.NumericUpDown();
@@ -95,27 +95,30 @@
             this.ObjectIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.roomObjectsComboBox = new System.Windows.Forms.ComboBox();
             this.moveObjectUp = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.AddObject = new System.Windows.Forms.Button();
+            this.deleteObject = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
             this.luaScriptsTabPage = new System.Windows.Forms.TabPage();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            this.button3 = new System.Windows.Forms.Button();
+            this.saveLua = new System.Windows.Forms.Button();
+            this.luaRichText = new System.Windows.Forms.RichTextBox();
+            this.deleteLuaScriptButton = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.luaScriptComboBox = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
+            this.textEditorTab = new System.Windows.Forms.TabPage();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
+            this.textIDUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pixelBox1 = new RedCell.UI.Controls.PixelBox();
-            this.textEditorTab = new System.Windows.Forms.TabPage();
-            this.textIDUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.groupBox10 = new System.Windows.Forms.GroupBox();
-            this.richTextBox4 = new System.Windows.Forms.RichTextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -139,13 +142,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).BeginInit();
             this.luaScriptsTabPage.SuspendLayout();
+            this.textEditorTab.SuspendLayout();
+            this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).BeginInit();
+            this.groupBox7.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).BeginInit();
-            this.textEditorTab.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).BeginInit();
-            this.groupBox7.SuspendLayout();
-            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -268,7 +271,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1420, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(1420, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -277,7 +280,7 @@
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveMissionToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // saveMissionToolStripMenuItem
@@ -457,8 +460,8 @@
             this.groupBox8.Controls.Add(this.objectSettingsGroupBox);
             this.groupBox8.Controls.Add(this.roomObjectsComboBox);
             this.groupBox8.Controls.Add(this.moveObjectUp);
-            this.groupBox8.Controls.Add(this.button1);
-            this.groupBox8.Controls.Add(this.button2);
+            this.groupBox8.Controls.Add(this.AddObject);
+            this.groupBox8.Controls.Add(this.deleteObject);
             this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox8.Location = new System.Drawing.Point(14, 51);
             this.groupBox8.Name = "groupBox8";
@@ -501,7 +504,7 @@
             this.objectSettingsGroupBox.Controls.Add(this.spawnedByDefault);
             this.objectSettingsGroupBox.Controls.Add(this.Unk2UpDown);
             this.objectSettingsGroupBox.Controls.Add(this.Unk1UpDown);
-            this.objectSettingsGroupBox.Controls.Add(this.comboBox3);
+            this.objectSettingsGroupBox.Controls.Add(this.objectLuaScriptComboBox);
             this.objectSettingsGroupBox.Controls.Add(this.FlipXCheckBox);
             this.objectSettingsGroupBox.Controls.Add(this.label11);
             this.objectSettingsGroupBox.Controls.Add(this.PosXUpDown);
@@ -552,10 +555,15 @@
             // 
             this.destposY.Location = new System.Drawing.Point(308, 63);
             this.destposY.Maximum = new decimal(new int[] {
-            65535,
+            32767,
             0,
             0,
             0});
+            this.destposY.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
             this.destposY.Name = "destposY";
             this.destposY.Size = new System.Drawing.Size(68, 22);
             this.destposY.TabIndex = 65;
@@ -595,10 +603,15 @@
             // 
             this.destposX.Location = new System.Drawing.Point(209, 63);
             this.destposX.Maximum = new decimal(new int[] {
-            65535,
+            32767,
             0,
             0,
             0});
+            this.destposX.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
             this.destposX.Name = "destposX";
             this.destposX.Size = new System.Drawing.Size(68, 22);
             this.destposX.TabIndex = 61;
@@ -621,6 +634,7 @@
             this.DestinationRoomComboBox.Name = "DestinationRoomComboBox";
             this.DestinationRoomComboBox.Size = new System.Drawing.Size(192, 24);
             this.DestinationRoomComboBox.TabIndex = 51;
+            this.DestinationRoomComboBox.SelectedIndexChanged += new System.EventHandler(this.DestinationRoomComboBox_SelectedIndexChanged);
             // 
             // label12
             // 
@@ -692,7 +706,10 @@
             "Door",
             "Inventory Item",
             "Uninteractable",
-            "Interactable"});
+            "Interactable",
+            "Puffle",
+            "Type 7",
+            "SpecialObject"});
             this.interactionTypeComboBox.Location = new System.Drawing.Point(121, 228);
             this.interactionTypeComboBox.Name = "interactionTypeComboBox";
             this.interactionTypeComboBox.Size = new System.Drawing.Size(247, 24);
@@ -751,14 +768,14 @@
             this.Unk1UpDown.TabIndex = 45;
             this.Unk1UpDown.ValueChanged += new System.EventHandler(this.Unk1UpDown_ValueChanged);
             // 
-            // comboBox3
+            // objectLuaScriptComboBox
             // 
-            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(85, 197);
-            this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(283, 24);
-            this.comboBox3.TabIndex = 15;
+            this.objectLuaScriptComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.objectLuaScriptComboBox.FormattingEnabled = true;
+            this.objectLuaScriptComboBox.Location = new System.Drawing.Point(85, 197);
+            this.objectLuaScriptComboBox.Name = "objectLuaScriptComboBox";
+            this.objectLuaScriptComboBox.Size = new System.Drawing.Size(283, 24);
+            this.objectLuaScriptComboBox.TabIndex = 15;
             // 
             // FlipXCheckBox
             // 
@@ -785,10 +802,15 @@
             // 
             this.PosXUpDown.Location = new System.Drawing.Point(94, 93);
             this.PosXUpDown.Maximum = new decimal(new int[] {
-            65535,
+            32767,
             0,
             0,
             0});
+            this.PosXUpDown.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
             this.PosXUpDown.Name = "PosXUpDown";
             this.PosXUpDown.Size = new System.Drawing.Size(71, 22);
             this.PosXUpDown.TabIndex = 38;
@@ -815,10 +837,15 @@
             // 
             this.PosYUpDown.Location = new System.Drawing.Point(193, 93);
             this.PosYUpDown.Maximum = new decimal(new int[] {
-            65535,
+            32767,
             0,
             0,
             0});
+            this.PosYUpDown.Minimum = new decimal(new int[] {
+            32768,
+            0,
+            0,
+            -2147483648});
             this.PosYUpDown.Name = "PosYUpDown";
             this.PosYUpDown.Size = new System.Drawing.Size(71, 22);
             this.PosYUpDown.TabIndex = 39;
@@ -885,23 +912,24 @@
             this.moveObjectUp.UseVisualStyleBackColor = true;
             this.moveObjectUp.Click += new System.EventHandler(this.moveObjectUp_Click);
             // 
-            // button1
+            // AddObject
             // 
-            this.button1.Location = new System.Drawing.Point(260, 29);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(52, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = true;
+            this.AddObject.Location = new System.Drawing.Point(260, 29);
+            this.AddObject.Name = "AddObject";
+            this.AddObject.Size = new System.Drawing.Size(52, 23);
+            this.AddObject.TabIndex = 11;
+            this.AddObject.Text = "Add";
+            this.AddObject.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // deleteObject
             // 
-            this.button2.Location = new System.Drawing.Point(318, 29);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(65, 23);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "Delete";
-            this.button2.UseVisualStyleBackColor = true;
+            this.deleteObject.Location = new System.Drawing.Point(318, 29);
+            this.deleteObject.Name = "deleteObject";
+            this.deleteObject.Size = new System.Drawing.Size(65, 23);
+            this.deleteObject.TabIndex = 12;
+            this.deleteObject.Text = "Delete";
+            this.deleteObject.UseVisualStyleBackColor = true;
+            this.deleteObject.Click += new System.EventHandler(this.deleteObject_Click);
             // 
             // label8
             // 
@@ -924,10 +952,13 @@
             // 
             // luaScriptsTabPage
             // 
-            this.luaScriptsTabPage.Controls.Add(this.richTextBox3);
-            this.luaScriptsTabPage.Controls.Add(this.button3);
+            this.luaScriptsTabPage.Controls.Add(this.label3);
+            this.luaScriptsTabPage.Controls.Add(this.luaScriptNameBox);
+            this.luaScriptsTabPage.Controls.Add(this.saveLua);
+            this.luaScriptsTabPage.Controls.Add(this.luaRichText);
+            this.luaScriptsTabPage.Controls.Add(this.deleteLuaScriptButton);
             this.luaScriptsTabPage.Controls.Add(this.button4);
-            this.luaScriptsTabPage.Controls.Add(this.comboBox4);
+            this.luaScriptsTabPage.Controls.Add(this.luaScriptComboBox);
             this.luaScriptsTabPage.Controls.Add(this.label24);
             this.luaScriptsTabPage.Location = new System.Drawing.Point(4, 25);
             this.luaScriptsTabPage.Name = "luaScriptsTabPage";
@@ -936,41 +967,54 @@
             this.luaScriptsTabPage.Text = "Lua Scripts";
             this.luaScriptsTabPage.UseVisualStyleBackColor = true;
             // 
-            // richTextBox3
+            // saveLua
             // 
-            this.richTextBox3.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox3.Location = new System.Drawing.Point(21, 64);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(469, 442);
-            this.richTextBox3.TabIndex = 17;
-            this.richTextBox3.Text = "";
+            this.saveLua.Location = new System.Drawing.Point(417, 24);
+            this.saveLua.Name = "saveLua";
+            this.saveLua.Size = new System.Drawing.Size(73, 23);
+            this.saveLua.TabIndex = 18;
+            this.saveLua.Text = "Save";
+            this.saveLua.UseVisualStyleBackColor = true;
+            this.saveLua.Click += new System.EventHandler(this.saveLua_Click);
             // 
-            // button3
+            // luaRichText
             // 
-            this.button3.Location = new System.Drawing.Point(396, 24);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(65, 23);
-            this.button3.TabIndex = 16;
-            this.button3.Text = "Delete";
-            this.button3.UseVisualStyleBackColor = true;
+            this.luaRichText.BackColor = System.Drawing.SystemColors.Control;
+            this.luaRichText.Location = new System.Drawing.Point(21, 90);
+            this.luaRichText.Name = "luaRichText";
+            this.luaRichText.Size = new System.Drawing.Size(469, 426);
+            this.luaRichText.TabIndex = 17;
+            this.luaRichText.Text = "";
+            this.luaRichText.WordWrap = false;
+            // 
+            // deleteLuaScriptButton
+            // 
+            this.deleteLuaScriptButton.Location = new System.Drawing.Point(346, 24);
+            this.deleteLuaScriptButton.Name = "deleteLuaScriptButton";
+            this.deleteLuaScriptButton.Size = new System.Drawing.Size(65, 23);
+            this.deleteLuaScriptButton.TabIndex = 16;
+            this.deleteLuaScriptButton.Text = "Delete";
+            this.deleteLuaScriptButton.UseVisualStyleBackColor = true;
+            this.deleteLuaScriptButton.Click += new System.EventHandler(this.deleteLuaScriptButton_Click);
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(332, 24);
+            this.button4.Location = new System.Drawing.Point(283, 24);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(58, 23);
             this.button4.TabIndex = 15;
             this.button4.Text = "Add";
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // comboBox4
+            // luaScriptComboBox
             // 
-            this.comboBox4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Location = new System.Drawing.Point(75, 24);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(235, 24);
-            this.comboBox4.TabIndex = 14;
+            this.luaScriptComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.luaScriptComboBox.FormattingEnabled = true;
+            this.luaScriptComboBox.Location = new System.Drawing.Point(75, 24);
+            this.luaScriptComboBox.Name = "luaScriptComboBox";
+            this.luaScriptComboBox.Size = new System.Drawing.Size(202, 24);
+            this.luaScriptComboBox.TabIndex = 14;
+            this.luaScriptComboBox.SelectedIndexChanged += new System.EventHandler(this.luaScriptComboBox_SelectedIndexChanged);
             // 
             // label24
             // 
@@ -980,6 +1024,89 @@
             this.label24.Size = new System.Drawing.Size(44, 17);
             this.label24.TabIndex = 13;
             this.label24.Text = "Script";
+            // 
+            // textEditorTab
+            // 
+            this.textEditorTab.Controls.Add(this.groupBox10);
+            this.textEditorTab.Controls.Add(this.groupBox7);
+            this.textEditorTab.Location = new System.Drawing.Point(4, 25);
+            this.textEditorTab.Name = "textEditorTab";
+            this.textEditorTab.Padding = new System.Windows.Forms.Padding(3);
+            this.textEditorTab.Size = new System.Drawing.Size(509, 526);
+            this.textEditorTab.TabIndex = 4;
+            this.textEditorTab.Text = "Text Editor";
+            this.textEditorTab.UseVisualStyleBackColor = true;
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.label2);
+            this.groupBox10.Controls.Add(this.richTextBox4);
+            this.groupBox10.Controls.Add(this.textIDUpDown);
+            this.groupBox10.Controls.Add(this.label1);
+            this.groupBox10.Location = new System.Drawing.Point(29, 116);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(450, 302);
+            this.groupBox10.TabIndex = 5;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Edit text";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(26, 87);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 17);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Text";
+            // 
+            // richTextBox4
+            // 
+            this.richTextBox4.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.richTextBox4.Location = new System.Drawing.Point(19, 111);
+            this.richTextBox4.Name = "richTextBox4";
+            this.richTextBox4.Size = new System.Drawing.Size(411, 142);
+            this.richTextBox4.TabIndex = 2;
+            this.richTextBox4.Text = "";
+            // 
+            // textIDUpDown
+            // 
+            this.textIDUpDown.Location = new System.Drawing.Point(127, 42);
+            this.textIDUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.textIDUpDown.Name = "textIDUpDown";
+            this.textIDUpDown.Size = new System.Drawing.Size(120, 22);
+            this.textIDUpDown.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(24, 42);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(95, 17);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Text ID to edit";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.comboBox1);
+            this.groupBox7.Location = new System.Drawing.Point(29, 26);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(450, 75);
+            this.groupBox7.TabIndex = 4;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Text file";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(29, 31);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(203, 24);
+            this.comboBox1.TabIndex = 2;
             // 
             // groupBox9
             // 
@@ -1008,88 +1135,21 @@
             this.pixelBox1.TabIndex = 0;
             this.pixelBox1.TabStop = false;
             // 
-            // textEditorTab
+            // luaScriptNameBox
             // 
-            this.textEditorTab.Controls.Add(this.groupBox10);
-            this.textEditorTab.Controls.Add(this.groupBox7);
-            this.textEditorTab.Location = new System.Drawing.Point(4, 25);
-            this.textEditorTab.Name = "textEditorTab";
-            this.textEditorTab.Padding = new System.Windows.Forms.Padding(3);
-            this.textEditorTab.Size = new System.Drawing.Size(509, 526);
-            this.textEditorTab.TabIndex = 4;
-            this.textEditorTab.Text = "Text Editor";
-            this.textEditorTab.UseVisualStyleBackColor = true;
+            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 64);
+            this.luaScriptNameBox.Name = "luaScriptNameBox";
+            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
+            this.luaScriptNameBox.TabIndex = 19;
             // 
-            // textIDUpDown
+            // label3
             // 
-            this.textIDUpDown.Location = new System.Drawing.Point(127, 42);
-            this.textIDUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.textIDUpDown.Name = "textIDUpDown";
-            this.textIDUpDown.Size = new System.Drawing.Size(120, 22);
-            this.textIDUpDown.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 42);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 17);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Text ID to edit";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(29, 31);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(203, 24);
-            this.comboBox1.TabIndex = 2;
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.comboBox1);
-            this.groupBox7.Location = new System.Drawing.Point(29, 26);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(450, 75);
-            this.groupBox7.TabIndex = 4;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Text file";
-            // 
-            // groupBox10
-            // 
-            this.groupBox10.Controls.Add(this.label2);
-            this.groupBox10.Controls.Add(this.richTextBox4);
-            this.groupBox10.Controls.Add(this.textIDUpDown);
-            this.groupBox10.Controls.Add(this.label1);
-            this.groupBox10.Location = new System.Drawing.Point(29, 116);
-            this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(450, 302);
-            this.groupBox10.TabIndex = 5;
-            this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "Edit text";
-            // 
-            // richTextBox4
-            // 
-            this.richTextBox4.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.richTextBox4.Location = new System.Drawing.Point(19, 111);
-            this.richTextBox4.Name = "richTextBox4";
-            this.richTextBox4.Size = new System.Drawing.Size(411, 142);
-            this.richTextBox4.TabIndex = 2;
-            this.richTextBox4.Text = "";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(26, 87);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 17);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Text";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 65);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(83, 17);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Script name";
             // 
             // MissionEditor
             // 
@@ -1136,15 +1196,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).EndInit();
             this.luaScriptsTabPage.ResumeLayout(false);
             this.luaScriptsTabPage.PerformLayout();
+            this.textEditorTab.ResumeLayout(false);
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).EndInit();
+            this.groupBox7.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).EndInit();
-            this.textEditorTab.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).EndInit();
-            this.groupBox7.ResumeLayout(false);
-            this.groupBox10.ResumeLayout(false);
-            this.groupBox10.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1183,8 +1243,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button recalculateCapacityButton;
         private System.Windows.Forms.ComboBox roomObjectsComboBox;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button deleteObject;
+        private System.Windows.Forms.Button AddObject;
         private System.Windows.Forms.GroupBox objectSettingsGroupBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox RDTSpritePath;
@@ -1207,7 +1267,7 @@
         private System.Windows.Forms.NumericUpDown PosYUpDown;
         private System.Windows.Forms.NumericUpDown PosXUpDown;
         private System.Windows.Forms.NumericUpDown ObjectIDUpDown;
-        private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.ComboBox objectLuaScriptComboBox;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.GroupBox doorSettingsGroupBox;
@@ -1216,10 +1276,10 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.NumericUpDown destposX;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.RichTextBox richTextBox3;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.RichTextBox luaRichText;
+        private System.Windows.Forms.Button deleteLuaScriptButton;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.ComboBox comboBox4;
+        private System.Windows.Forms.ComboBox luaScriptComboBox;
         private System.Windows.Forms.Label label24;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button moveObjectUp;
@@ -1240,5 +1300,8 @@
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.RichTextBox richTextBox4;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button saveLua;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox luaScriptNameBox;
     }
 }

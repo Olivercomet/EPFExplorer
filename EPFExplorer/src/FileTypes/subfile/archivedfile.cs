@@ -230,45 +230,7 @@ namespace EPFExplorer
 
                             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                             {
-                                Byte[] backupbytes = new byte[filebytes.Length];
-
-                                Array.Copy(filebytes, 0, backupbytes, 0, filebytes.Length);
-
-                                filebytes = File.ReadAllBytes(openFileDialog1.FileName);
-
-                                if (filebytes[0] == 0x1B && filebytes[1] == 0x4C && filebytes[2] == 0x75 && filebytes[4] == 0x51)
-                                    {
-                                    //then we imported an already-compiled script, so don't need to change anything
-                                    }
-                                else
-                                    {
-                                    string luaDir = Path.Combine(Application.StartupPath, "LuaCompiler");
-                                    File.WriteAllBytes(Path.Combine(luaDir,"input.lua"),filebytes);
-                                    
-                                    ProcessStartInfo processInfo = new ProcessStartInfo();
-                                    processInfo.FileName = Path.Combine(luaDir, "luac.exe");
-                                    processInfo.ErrorDialog = true;
-                                    processInfo.UseShellExecute = false;
-                                    processInfo.RedirectStandardOutput = true;
-                                    processInfo.RedirectStandardError = true;
-                                    processInfo.Arguments = " -s input.lua";
-                                    processInfo.WorkingDirectory = luaDir;
-
-                                    Process compiler = Process.Start(processInfo);
-                                    compiler.WaitForExit();
-
-                                    if (File.Exists(Path.Combine(luaDir, "luac.out")))
-                                        {
-                                        filebytes = File.ReadAllBytes(Path.Combine(luaDir, "luac.out"));
-                                        File.Delete(Path.Combine(luaDir, "input.lua"));
-                                        File.Delete(Path.Combine(luaDir, "luac.out"));
-                                        }
-                                    else
-                                        {
-                                        filebytes = backupbytes;    //revert to old bytes if we failed to read the lua script
-                                        MessageBox.Show("Bad lua file or file read error. Check your syntax.");
-                                        }
-                                    }
+                                filebytes = LuaFromFileToLuc(filebytes, openFileDialog1.FileName);
                             }
                         }
                         else
@@ -1119,5 +1081,56 @@ namespace EPFExplorer
 
             return (null);   
         }
+
+
+
+
+        public byte[] LuaFromFileToLuc(byte[] array, string filename) {
+
+            byte[] backupbytes = new byte[array.Length];
+
+            Array.Copy(array, 0, backupbytes, 0, array.Length);
+
+            array = File.ReadAllBytes(filename);
+
+            if (array[0] == 0x1B && array[1] == 0x4C && array[2] == 0x75 && array[4] == 0x51)
+            {
+                //then we imported an already-compiled script, so don't need to change anything
+            }
+            else
+            {
+                string luaDir = Path.Combine(Application.StartupPath, "LuaCompiler");
+                File.WriteAllBytes(Path.Combine(luaDir, "input.lua"), array);
+
+                ProcessStartInfo processInfo = new ProcessStartInfo();
+                processInfo.FileName = Path.Combine(luaDir, "luac.exe");
+                processInfo.ErrorDialog = true;
+                processInfo.UseShellExecute = false;
+                processInfo.RedirectStandardOutput = true;
+                processInfo.RedirectStandardError = true;
+                processInfo.Arguments = " -s input.lua";
+                processInfo.WorkingDirectory = luaDir;
+
+                Process compiler = Process.Start(processInfo);
+                compiler.WaitForExit();
+
+                if (File.Exists(Path.Combine(luaDir, "luac.out")))
+                {
+                    array = File.ReadAllBytes(Path.Combine(luaDir, "luac.out"));
+                    File.Delete(Path.Combine(luaDir, "input.lua"));
+                    File.Delete(Path.Combine(luaDir, "luac.out"));
+                    return array;
+                }
+                else
+                {
+                    MessageBox.Show("Bad lua file or file read error. Check your syntax.");
+                    return backupbytes;    //revert to old bytes if we failed to read the lua script
+                }
+            }
+            return backupbytes;
+        }
+
+
+
     }
 }

@@ -15,6 +15,8 @@ namespace EPFExplorer
     {
         public Form1 form1;
 
+        bool ready;
+
         public arcfile mainArc;
         public arcfile downloadArc;
 
@@ -31,6 +33,9 @@ namespace EPFExplorer
 
         public List<DownloadItem> downloadItems = new List<DownloadItem>();
 
+        public List<archivedfile> luaScripts = new List<archivedfile>();
+        public List<archivedfile> rdtSprites = new List<archivedfile>();
+
         public MissionEditor()
         {
             InitializeComponent();
@@ -41,7 +46,10 @@ namespace EPFExplorer
             Door = 0x02,
             InventoryItem = 0x03,
             Uninteractable = 0x04,
-            Interactable = 0x05
+            Interactable = 0x05,
+            Puffle = 0x06,
+            InteractionType7 = 0x07,
+            SpecialObject = 0x08
         }
         public class DownloadItem {
 
@@ -73,15 +81,21 @@ namespace EPFExplorer
         }
 
         public void LoadFormControls() {
+
             foreach (Form1.Room r in form1.rooms)
             {
                 selectedRoomBox.Items.Add(r.DisplayName);
+                DestinationRoomComboBox.Items.Add(r.DisplayName);
             }
+
+            DestinationRoomComboBox.SelectedIndex = 0;
 
             missionSettingsTab.Enabled = false;
             objectsTab.Enabled = false;
             luaScriptsTabPage.Enabled = false;
             textEditorTab.Enabled = false;
+
+            ready = true;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -99,11 +113,17 @@ namespace EPFExplorer
                 {
                 objectSettingsGroupBox.Enabled = true;
                 roomObjectsComboBox.SelectedIndex = 0;
-                }
+                deleteObject.Enabled = true;
+                moveObjectUp.Enabled = true;
+                moveObjectDown.Enabled = true;
+            }
             else
                 {
                 objectSettingsGroupBox.Enabled = false;
-                }
+                deleteObject.Enabled = false;
+                moveObjectUp.Enabled = false;
+                moveObjectDown.Enabled = false;
+            }
         }
 
 
@@ -222,6 +242,41 @@ namespace EPFExplorer
 
             UpdateCurrentCapacity();
 
+            objectLuaScriptComboBox.Items.Clear();
+            luaScriptComboBox.Items.Clear();
+
+
+            foreach (archivedfile f in downloadArc.archivedfiles)
+                {
+                    string ext = Path.GetExtension(f.filename).ToLower();
+
+                    if (ext != ".luc")
+                    {
+                        continue;
+                    }
+
+                    if (f.filebytes == null || f.filebytes.Length == 0)
+                    {
+                        f.ReadFile();
+                    }
+
+                    if (f.filename.ToLower().Contains("tuxedodl.luc"))
+                        {
+                        continue;
+                        }
+
+                    luaScripts.Add(f);
+                    objectLuaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+                    luaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+                }
+
+            luaScriptComboBox.Sorted = true;
+            objectLuaScriptComboBox.Sorted = true;
+            objectLuaScriptComboBox.Sorted = false;
+            objectLuaScriptComboBox.Items.Insert(0,"None");
+
+            luaRichText.Text = "";
+
             missionSettingsTab.Enabled = true;
             objectsTab.Enabled = true;
             luaScriptsTabPage.Enabled = true;
@@ -233,7 +288,6 @@ namespace EPFExplorer
 
             selectedRoomBox.SelectedIndex = 0;
             roomObjectsComboBox.SelectedIndex = 0;
-
         }
 
         public void UpdateCurrentCapacity() {
@@ -300,6 +354,8 @@ namespace EPFExplorer
                     break;
                     }
                 }
+
+           
         }
 
         private void recalculateCapacityButton_Click(object sender, EventArgs e)
@@ -327,11 +383,72 @@ namespace EPFExplorer
             PosYUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos;
             spawnedByDefault.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].SpawnedByDefault;
             interactionTypeComboBox.SelectedIndex = ((int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionType)-1;
+            FlipXCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX;
+            FlipYCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY;
+            Unk1UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk1;
+            Unk2UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk2;
+            Unk3UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk3;
+            LockedCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].locked;
+            destposX.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosX;
+            destposY.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosY;
 
+            bool validDestRoom = false;
 
+            foreach (Form1.Room r in form1.rooms)
+                {
+                if (r.InternalName == selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destinationRoom)
+                    {
+                    DestinationRoomComboBox.SelectedIndex = form1.rooms.IndexOf(r) + 1;
+                    validDestRoom = true;
+                    break;
+                    }
+                }
+
+            if (!validDestRoom)
+                {
+                DestinationRoomComboBox.SelectedIndex = 0;
+                }
+
+            bool validLuaScriptPath = false;
+
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath.Length > 2)
+                {
+                for (int i = 0; i < objectLuaScriptComboBox.Items.Count; i++)
+                    {
+                    if (((string)objectLuaScriptComboBox.Items[i]).Replace(".luc", ".lua") == selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath.Substring(7, selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath.Length - 7))
+                        {
+                        objectLuaScriptComboBox.SelectedIndex = i;
+                        validLuaScriptPath = true;
+                        break;
+                        }
+                    }
+                }
+
+            if (!validLuaScriptPath)
+                {
+                objectLuaScriptComboBox.SelectedIndex = 0;
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "\"\"";
+                }
         }
 
+        public void AddLuaScriptsToObjectLuaComboBox() {
+
+            objectLuaScriptComboBox.Items.Clear();
+
+            foreach (archivedfile f in luaScripts)
+                {
+                objectLuaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+                }
+            
+            objectLuaScriptComboBox.Sorted = true;
+            objectLuaScriptComboBox.Sorted = false;
+            objectLuaScriptComboBox.Items.Insert(0,"None");
+        }
+
+
         public void AddCurrentRoomObjectsToComboBox() {
+
+            AddLuaScriptsToObjectLuaComboBox();
 
             roomObjectsComboBox.Items.Clear();
 
@@ -456,6 +573,145 @@ namespace EPFExplorer
                 AddCurrentRoomObjectsToComboBox();
                 roomObjectsComboBox.SelectedIndex = i + 1;
                 
+            }
+        }
+
+        private void DestinationRoomComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!ready)
+                {
+                return;
+                }
+
+            if (DestinationRoomComboBox.SelectedIndex == 0)
+                {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destinationRoom = null;
+                return;
+                }
+
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destinationRoom = form1.rooms[DestinationRoomComboBox.SelectedIndex - 1].InternalName;
+        }
+
+        private void deleteObject_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete the object "+ roomObjectsComboBox.Items[roomObjectsComboBox.SelectedIndex] + "?","Are you sure?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+                {
+                downloadItems.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex]);
+
+                if (roomObjectsComboBox.SelectedIndex > 0)
+                    {
+                    roomObjectsComboBox.SelectedIndex--;
+                    roomObjectsComboBox.Items.RemoveAt(roomObjectsComboBox.SelectedIndex + 1);
+                    selectedRoom.Objects.RemoveAt(roomObjectsComboBox.SelectedIndex + 1);
+                    }
+                else if (roomObjectsComboBox.Items.Count > 1)
+                    {
+                    roomObjectsComboBox.SelectedIndex = 1;
+                    roomObjectsComboBox.Items.RemoveAt(0);
+                    selectedRoom.Objects.RemoveAt(0);
+                    roomObjectsComboBox.SelectedIndex = 0;
+                    }
+                else
+                    {
+                    roomObjectsComboBox.Items.Clear();
+                    selectedRoom.Objects.Clear();
+                    selectedRoomBox_SelectedIndexChanged(null,null);
+                    }
+                }
+        }
+
+        private void luaScriptComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            archivedfile scriptToLoad = null;
+
+            foreach (archivedfile f in luaScripts)
+                {
+                if (f.filename.ToLower() == Path.Combine("/chunks/",(string)luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex]).ToLower())
+                    {
+                    scriptToLoad = f;
+                    break;
+                    }
+                }
+
+            luaScriptNameBox.Text = Path.GetFileName(scriptToLoad.filename);
+
+            scriptToLoad.DecompileLuc(scriptToLoad.filebytes, "lua_TEMP_DECOMPILED");
+            luaRichText.Text = File.ReadAllText("lua_TEMP_DECOMPILED");
+            File.Delete("lua_TEMP_DECOMPILED");
+        }
+
+        private void saveLua_Click(object sender, EventArgs e)
+        {
+            archivedfile scriptToSave = null;
+
+            foreach (archivedfile f in luaScripts)
+                {
+                if (f.filename.ToLower() == Path.Combine("/chunks/", (string)luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex]).ToLower())
+                    {
+                    scriptToSave = f;
+                    break;
+                    }
+                }
+
+            if (scriptToSave.filename != Path.Combine("/chunks/", luaScriptNameBox.Text.Replace(".lua", ".luc")))
+                {
+                if (!luaScriptNameBox.Text.Contains(".lua") && !luaScriptNameBox.Text.Contains(".luc"))
+                    {
+                    luaScriptNameBox.Text += ".luc";
+                    }
+
+                scriptToSave.filename = Path.Combine("/chunks/", luaScriptNameBox.Text.Replace(".lua", ".luc"));
+                luaScriptComboBox.Items.Clear();
+                foreach (archivedfile f in luaScripts)
+                    {
+                    luaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+                    }
+                luaScriptComboBox.Sorted = true;
+                }
+
+            File.WriteAllText("lua_TEMP_FOR_COMPILING", luaRichText.Text);
+            scriptToSave.filebytes = scriptToSave.LuaFromFileToLuc(scriptToSave.filebytes, "lua_TEMP_FOR_COMPILING");
+            File.Delete("lua_TEMP_FOR_COMPILING");
+            AddCurrentRoomObjectsToComboBox();
+        }
+
+        private void deleteLuaScriptButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete the lua script " + luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex] + "?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            
+            if (result == DialogResult.Yes)
+            {
+                archivedfile scriptToDelete = null;
+
+                foreach (archivedfile f in luaScripts)
+                {
+                    if (f.filename.ToLower() == Path.Combine("/chunks/", (string)luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex]).ToLower())
+                    {
+                        scriptToDelete = f;
+                        break;
+                    }
+                }
+
+                luaScripts.Remove(scriptToDelete);
+
+                if (luaScriptComboBox.SelectedIndex > 0)
+                {
+                    luaScriptComboBox.SelectedIndex--;
+                    luaScriptComboBox.Items.RemoveAt(luaScriptComboBox.SelectedIndex + 1);
+                }
+                else if (luaScriptComboBox.Items.Count > 1)
+                {
+                    luaScriptComboBox.SelectedIndex = 1;
+                    luaScriptComboBox.Items.RemoveAt(0);
+                    luaScriptComboBox.SelectedIndex = 0;
+                }
+                else
+                {
+                    luaScriptComboBox.Items.Clear();
+                }
+
+                AddCurrentRoomObjectsToComboBox();
             }
         }
     }
