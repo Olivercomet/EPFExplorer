@@ -25,6 +25,8 @@ namespace EPFExplorer
 
         public Color TSBAlphaColour;
 
+        public Image image;
+
 
         public class Tile
         {
@@ -51,12 +53,8 @@ namespace EPFExplorer
                 activeTsb = new tsbfile();
                 activeTsb.form1 = form1;
                 activeTsb.filepath = openFileDialog1.FileName;
+                activeTsb.filebytes = File.ReadAllBytes(activeTsb.filepath);
                 activeTsb.Load();
-
-                if (activeMpb != null)
-                {
-      
-                }
             }
         }
 
@@ -75,13 +73,19 @@ namespace EPFExplorer
                 activeMpb = new mpbfile();
                 activeMpb.form1 = form1;
                 activeMpb.filepath = openFileDialog1.FileName;
+                activeMpb.filebytes = File.ReadAllBytes(activeMpb.filepath);
                 activeMpb.Load();
             }
         }
 
-        public void LoadBoth() { 
-        
-        if (activeMpb == null)
+        public void LoadBoth() {
+
+            if (activeMpb.known_tile_width != 0 && ImageWidthInTiles.Value != activeMpb.known_tile_width)
+            {
+                ImageWidthInTiles.Value = activeMpb.known_tile_width;
+            }
+
+            if (activeMpb == null)
             {
                 MessageBox.Show("No MPB loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -92,6 +96,7 @@ namespace EPFExplorer
                 MessageBox.Show("No TSB loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
+        
 
             if ((activeMpb.highest_tile_offset - 0x200) / 64 > activeTsb.number_of_tiles)
             {
@@ -177,9 +182,8 @@ namespace EPFExplorer
                 pos_in_output_image += ((int)ImageWidthInTiles.Value * 8) * 7;
              }
 
-            pixelBox1.Image = form1.NBFCtoImage(imageForDisplay, 0, (int)ImageWidthInTiles.Value * 8, heightInTiles * 8, activeTsb.palette, 8);
-        
-        
+            image = form1.NBFCtoImage(imageForDisplay, 0, (int)ImageWidthInTiles.Value * 8, heightInTiles * 8, activeTsb.palette, 8);
+            pixelBox1.Image = image;
         }
 
         private void ImageWidthInTiles_ValueChanged(object sender, EventArgs e)

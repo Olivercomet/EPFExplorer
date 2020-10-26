@@ -230,8 +230,6 @@
         }
 
         #endregion
-
-        private RedCell.UI.Controls.PixelBox pixelBox1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button chooseTileset;
@@ -246,5 +244,6 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ColorDialog colorDialog1;
+        public RedCell.UI.Controls.PixelBox pixelBox1;
     }
 }

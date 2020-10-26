@@ -36,6 +36,9 @@ namespace EPFExplorer
         public List<archivedfile> luaScripts = new List<archivedfile>();
         public List<archivedfile> rdtSprites = new List<archivedfile>();
 
+        public MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
+       
+
         public MissionEditor()
         {
             InitializeComponent();
@@ -53,34 +56,36 @@ namespace EPFExplorer
         }
         public class DownloadItem {
 
-            public int ID;
-            public string spritePath;
+            public int ID = 0;
+            public string spritePath = "";
 
-            public int Xpos;
-            public int Ypos;
+            public int Xpos = 0;
+            public int Ypos = 0;
 
             public InteractionType interactionType = InteractionType.Interactable;
-            public bool SpawnedByDefault;
+            public bool SpawnedByDefault = true;
             public int unk1;
-            public string luaScriptPath;
+            public string luaScriptPath = "";
             public int unk2;
 
             public int room;
 
             public int unk3;
 
-            public string destinationRoom;
+            public string destinationRoom = "";
 
-            public bool locked;
+            public bool locked = false;
 
             public int destPosX;
             public int destPosY;
 
-            public bool flipX;
-            public bool flipY;
+            public bool flipX = false;
+            public bool flipY = false;
         }
 
         public void LoadFormControls() {
+
+            DestinationRoomComboBox.Items.Add("None");
 
             foreach (Form1.Room r in form1.rooms)
             {
@@ -94,6 +99,8 @@ namespace EPFExplorer
             objectsTab.Enabled = false;
             luaScriptsTabPage.Enabled = false;
             textEditorTab.Enabled = false;
+
+            mpb_tsb_editor.form1 = form1;
 
             ready = true;
         }
@@ -123,7 +130,88 @@ namespace EPFExplorer
                 deleteObject.Enabled = false;
                 moveObjectUp.Enabled = false;
                 moveObjectDown.Enabled = false;
+                }
+
+            mpbfile tilemap = new mpbfile();
+            tsbfile tileset = new tsbfile();
+
+            mpb_tsb_editor.activeMpb = tilemap;
+            mpb_tsb_editor.activeTsb = tileset;
+
+            tilemap.form1 = form1;
+            tileset.form1 = form1;
+
+            string tilemapPathInArc = "";
+            string tilesetPathInArc = "";
+
+            switch (selectedRoom.InternalName)
+                {
+                case "BEACH0":
+                    tilemapPathInArc = "/levels/Beach0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Beach.tsb";
+                    break;
+                case "BEACON0":
+                    tilemapPathInArc = "/levels/Beacon0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Beacon.tsb";
+                    break;
+                case "BOILERROOM0":
+                    tilemapPathInArc = "/levels/BoilerRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/BoilerRoom.tsb";
+                    break;
+                case "BOOKROOM0":
+                    tilemapPathInArc = "/levels/BookRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/BookRoom.tsb";
+                    break;
+                case "COFFEESHOP0":
+                    tilemapPathInArc = "/levels/CoffeeShop0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/CoffeeShop.tsb";
+                    break;
+                case "COMMANDROOM0":
+                    tilemapPathInArc = "/levels/CommandRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/CommandRoom.tsb";
+                    break;
+                case "DOCK0":
+                    tilemapPathInArc = "/levels/Dock0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Dock.tsb";
+                    break;
+                default:
+                    MessageBox.Show("EPFExplorer doesn't have tsb or mpb names listed for that room... even though it probably should!");
+                    break;
+                }
+
+            //Try to get tilemap from download.arc if it's there. If not, fall back to vanilla.
+            archivedfile tilemapArchivedFile = downloadArc.GetFileByName(tilemapPathInArc.ToLower());
+
+            if (tilemapArchivedFile == null)
+                {
+                tilemapArchivedFile = mainArc.GetFileByName(tilemapPathInArc.ToLower());
+                }
+
+            tilemapArchivedFile.ReadFile();
+            tilemap.filebytes = tilemapArchivedFile.filebytes;
+
+            if(selectedRoom.tilemapWidth != 0)
+                {
+                tilemap.known_tile_width = selectedRoom.tilemapWidth;
+                }
+
+            //Try to get tileset from download.arc if it's there. If not, fall back to vanilla.
+            archivedfile tilesetArchivedFile = downloadArc.GetFileByName(tilesetPathInArc.ToLower());
+
+            if (tilesetArchivedFile == null)
+            {
+                tilesetArchivedFile = mainArc.GetFileByName(tilesetPathInArc.ToLower());
             }
+
+            tilesetArchivedFile.ReadFile();
+            tileset.filebytes = tilesetArchivedFile.filebytes;
+
+            tilemap.Load();
+            tileset.Load();
+            
+            mpb_tsb_editor.LoadBoth();
+
+            backgroundImageBox.Image = mpb_tsb_editor.image;
         }
 
 
@@ -241,6 +329,40 @@ namespace EPFExplorer
             }
 
             UpdateCurrentCapacity();
+
+
+            //read game.rdt filenames into the combobox
+
+            RDTSpritePath.Items.Clear();
+
+            foreach (archivedfile f in gameRdt.archivedfiles)
+            {
+                RDTSpritePath.Items.Add(f.filename);
+            }
+
+            //and do the same for downloads.rdt if it exists
+
+            archivedfile temp = downloadArc.GetFileByName("/downloads.rdt");
+
+            downloadRdt = new rdtfile();
+
+            if (temp != null)
+                {
+                temp.ReadFile();
+                downloadRdt.filebytes = temp.filebytes;
+                downloadRdt.ReadRdt();
+
+                foreach (archivedfile f in downloadRdt.archivedfiles)
+                    {
+                    RDTSpritePath.Items.Add(f.filename);
+                    }
+                }
+
+            RDTSpritePath.Sorted = true;
+
+
+
+            //put the lua filenames into the relevant combo boxes
 
             objectLuaScriptComboBox.Items.Clear();
             luaScriptComboBox.Items.Clear();
@@ -391,6 +513,8 @@ namespace EPFExplorer
             LockedCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].locked;
             destposX.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosX;
             destposY.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosY;
+
+            RDTSpritePath.Text = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].spritePath;
 
             bool validDestRoom = false;
 
@@ -758,6 +882,43 @@ namespace EPFExplorer
             AddCurrentRoomObjectsToComboBox();
 
             luaScriptComboBox.SelectedIndex = 0;
+        }
+
+        private void addObjectButton_Click(object sender, EventArgs e)
+        {
+            DownloadItem newDownloadItem = new DownloadItem();
+
+            newDownloadItem.interactionType = InteractionType.Interactable;
+            newDownloadItem.spritePath = "Objects/Crate";
+            newDownloadItem.room = selectedRoom.ID_for_objects;
+
+            downloadItems.Add(newDownloadItem);
+            selectedRoom.Objects.Insert(roomObjectsComboBox.SelectedIndex, newDownloadItem);
+
+            int i = roomObjectsComboBox.SelectedIndex;
+
+            AddCurrentRoomObjectsToComboBox();
+
+            roomObjectsComboBox.SelectedIndex = i;
+        }
+
+        private void objectLuaScriptComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (archivedfile f in luaScripts)
+                {
+                if ((string)objectLuaScriptComboBox.Items[objectLuaScriptComboBox.SelectedIndex] == Path.GetFileName(f.filename))
+                    {
+                    selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "scripts" + Path.GetFileName(f.filename).Replace(".luc", ".lua");
+                    return;
+                    }
+                }
+
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "";
+        }
+
+        private void RDTSpritePath_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

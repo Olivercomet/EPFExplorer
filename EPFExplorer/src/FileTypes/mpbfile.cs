@@ -17,9 +17,10 @@ namespace EPFExplorer
 
         public int highest_tile_offset;
 
+        public int known_tile_width = 0;
+
         public void Load() {
 
-            filebytes = File.ReadAllBytes(filepath);
             highest_tile_offset = 0;
 
             for (int i = 0; i < filebytes.Length; i+=2)

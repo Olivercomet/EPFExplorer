@@ -95,7 +95,7 @@
             this.ObjectIDUpDown = new System.Windows.Forms.NumericUpDown();
             this.roomObjectsComboBox = new System.Windows.Forms.ComboBox();
             this.moveObjectUp = new System.Windows.Forms.Button();
-            this.AddObject = new System.Windows.Forms.Button();
+            this.addObjectButton = new System.Windows.Forms.Button();
             this.deleteObject = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
@@ -118,7 +118,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pixelBox1 = new RedCell.UI.Controls.PixelBox();
+            this.backgroundImageBox = new RedCell.UI.Controls.PixelBox();
             this.groupBox1.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -148,7 +148,7 @@
             this.groupBox7.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundImageBox)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -460,7 +460,7 @@
             this.groupBox8.Controls.Add(this.objectSettingsGroupBox);
             this.groupBox8.Controls.Add(this.roomObjectsComboBox);
             this.groupBox8.Controls.Add(this.moveObjectUp);
-            this.groupBox8.Controls.Add(this.AddObject);
+            this.groupBox8.Controls.Add(this.addObjectButton);
             this.groupBox8.Controls.Add(this.deleteObject);
             this.groupBox8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox8.Location = new System.Drawing.Point(14, 51);
@@ -776,6 +776,7 @@
             this.objectLuaScriptComboBox.Name = "objectLuaScriptComboBox";
             this.objectLuaScriptComboBox.Size = new System.Drawing.Size(283, 24);
             this.objectLuaScriptComboBox.TabIndex = 15;
+            this.objectLuaScriptComboBox.SelectedIndexChanged += new System.EventHandler(this.objectLuaScriptComboBox_SelectedIndexChanged);
             // 
             // FlipXCheckBox
             // 
@@ -832,6 +833,7 @@
             this.RDTSpritePath.Name = "RDTSpritePath";
             this.RDTSpritePath.Size = new System.Drawing.Size(245, 24);
             this.RDTSpritePath.TabIndex = 1;
+            this.RDTSpritePath.SelectedIndexChanged += new System.EventHandler(this.RDTSpritePath_SelectedIndexChanged);
             // 
             // PosYUpDown
             // 
@@ -912,14 +914,15 @@
             this.moveObjectUp.UseVisualStyleBackColor = true;
             this.moveObjectUp.Click += new System.EventHandler(this.moveObjectUp_Click);
             // 
-            // AddObject
+            // addObjectButton
             // 
-            this.AddObject.Location = new System.Drawing.Point(260, 29);
-            this.AddObject.Name = "AddObject";
-            this.AddObject.Size = new System.Drawing.Size(52, 23);
-            this.AddObject.TabIndex = 11;
-            this.AddObject.Text = "Add";
-            this.AddObject.UseVisualStyleBackColor = true;
+            this.addObjectButton.Location = new System.Drawing.Point(260, 29);
+            this.addObjectButton.Name = "addObjectButton";
+            this.addObjectButton.Size = new System.Drawing.Size(52, 23);
+            this.addObjectButton.TabIndex = 11;
+            this.addObjectButton.Text = "Add";
+            this.addObjectButton.UseVisualStyleBackColor = true;
+            this.addObjectButton.Click += new System.EventHandler(this.addObjectButton_Click);
             // 
             // deleteObject
             // 
@@ -1137,20 +1140,20 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.pixelBox1);
+            this.panel1.Controls.Add(this.backgroundImageBox);
             this.panel1.Location = new System.Drawing.Point(6, 21);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(830, 457);
             this.panel1.TabIndex = 1;
             // 
-            // pixelBox1
+            // backgroundImageBox
             // 
-            this.pixelBox1.Location = new System.Drawing.Point(8, 12);
-            this.pixelBox1.Name = "pixelBox1";
-            this.pixelBox1.Size = new System.Drawing.Size(792, 399);
-            this.pixelBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pixelBox1.TabIndex = 0;
-            this.pixelBox1.TabStop = false;
+            this.backgroundImageBox.Location = new System.Drawing.Point(8, 12);
+            this.backgroundImageBox.Name = "backgroundImageBox";
+            this.backgroundImageBox.Size = new System.Drawing.Size(792, 399);
+            this.backgroundImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.backgroundImageBox.TabIndex = 0;
+            this.backgroundImageBox.TabStop = false;
             // 
             // MissionEditor
             // 
@@ -1205,7 +1208,7 @@
             this.groupBox9.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.backgroundImageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1245,7 +1248,7 @@
         private System.Windows.Forms.Button recalculateCapacityButton;
         private System.Windows.Forms.ComboBox roomObjectsComboBox;
         private System.Windows.Forms.Button deleteObject;
-        private System.Windows.Forms.Button AddObject;
+        private System.Windows.Forms.Button addObjectButton;
         private System.Windows.Forms.GroupBox objectSettingsGroupBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox RDTSpritePath;
@@ -1292,7 +1295,7 @@
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Panel panel1;
-        private RedCell.UI.Controls.PixelBox pixelBox1;
+        private RedCell.UI.Controls.PixelBox backgroundImageBox;
         private System.Windows.Forms.TabPage textEditorTab;
         private System.Windows.Forms.NumericUpDown textIDUpDown;
         private System.Windows.Forms.Label label1;

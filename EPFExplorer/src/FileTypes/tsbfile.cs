@@ -22,8 +22,6 @@ namespace EPFExplorer
 
         public void Load() {
 
-            filebytes = File.ReadAllBytes(filepath);
-
             palette = new Color[256];   //create palette and fill it with the colours from the tsb
 
             for (int i = 0; i < 256; i++)
