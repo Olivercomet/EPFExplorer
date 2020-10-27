@@ -129,7 +129,7 @@ namespace EPFExplorer
               rooms.Add(new Room("HQ", "HEADQUARTERS0", 67, 199));
               rooms.Add(new Room("Ice Rink", "ICERINK0", 91, 150));
               rooms.Add(new Room("Iceberg", "ICEBERG0", 103, 166));
-              rooms.Add(new Room("Lighthouse", "LIGHTHOUSE0", 82, 150));
+              rooms.Add(new Room("Lighthouse", "LIGHTHOUSE0", 82, 151));
               rooms.Add(new Room("Lodge Attic", "ATTIC0", 109, 144));
               rooms.Add(new Room("Lounge", "LOUNGE0", 106, 150));
               rooms.Add(new Room("Mine", "MINEINTERIOR0", 69, 101));

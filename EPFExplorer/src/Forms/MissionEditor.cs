@@ -37,7 +37,8 @@ namespace EPFExplorer
         public List<archivedfile> rdtSprites = new List<archivedfile>();
 
         public MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
-       
+
+        public List<int> already_used_IDs = new List<int>();
 
         public MissionEditor()
         {
@@ -132,86 +133,7 @@ namespace EPFExplorer
                 moveObjectDown.Enabled = false;
                 }
 
-            mpbfile tilemap = new mpbfile();
-            tsbfile tileset = new tsbfile();
-
-            mpb_tsb_editor.activeMpb = tilemap;
-            mpb_tsb_editor.activeTsb = tileset;
-
-            tilemap.form1 = form1;
-            tileset.form1 = form1;
-
-            string tilemapPathInArc = "";
-            string tilesetPathInArc = "";
-
-            switch (selectedRoom.InternalName)
-                {
-                case "BEACH0":
-                    tilemapPathInArc = "/levels/Beach0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/Beach.tsb";
-                    break;
-                case "BEACON0":
-                    tilemapPathInArc = "/levels/Beacon0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/Beacon.tsb";
-                    break;
-                case "BOILERROOM0":
-                    tilemapPathInArc = "/levels/BoilerRoom0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/BoilerRoom.tsb";
-                    break;
-                case "BOOKROOM0":
-                    tilemapPathInArc = "/levels/BookRoom0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/BookRoom.tsb";
-                    break;
-                case "COFFEESHOP0":
-                    tilemapPathInArc = "/levels/CoffeeShop0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/CoffeeShop.tsb";
-                    break;
-                case "COMMANDROOM0":
-                    tilemapPathInArc = "/levels/CommandRoom0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/CommandRoom.tsb";
-                    break;
-                case "DOCK0":
-                    tilemapPathInArc = "/levels/Dock0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/Dock.tsb";
-                    break;
-                default:
-                    MessageBox.Show("EPFExplorer doesn't have tsb or mpb names listed for that room... even though it probably should!");
-                    break;
-                }
-
-            //Try to get tilemap from download.arc if it's there. If not, fall back to vanilla.
-            archivedfile tilemapArchivedFile = downloadArc.GetFileByName(tilemapPathInArc.ToLower());
-
-            if (tilemapArchivedFile == null)
-                {
-                tilemapArchivedFile = mainArc.GetFileByName(tilemapPathInArc.ToLower());
-                }
-
-            tilemapArchivedFile.ReadFile();
-            tilemap.filebytes = tilemapArchivedFile.filebytes;
-
-            if(selectedRoom.tilemapWidth != 0)
-                {
-                tilemap.known_tile_width = selectedRoom.tilemapWidth;
-                }
-
-            //Try to get tileset from download.arc if it's there. If not, fall back to vanilla.
-            archivedfile tilesetArchivedFile = downloadArc.GetFileByName(tilesetPathInArc.ToLower());
-
-            if (tilesetArchivedFile == null)
-            {
-                tilesetArchivedFile = mainArc.GetFileByName(tilesetPathInArc.ToLower());
-            }
-
-            tilesetArchivedFile.ReadFile();
-            tileset.filebytes = tilesetArchivedFile.filebytes;
-
-            tilemap.Load();
-            tileset.Load();
-            
-            mpb_tsb_editor.LoadBoth();
-
-            backgroundImageBox.Image = mpb_tsb_editor.image;
+            ChangeBackgroundImage();
         }
 
 
@@ -467,6 +389,7 @@ namespace EPFExplorer
             if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
 
             downloadItems.Add(newDownloadItem);
+            already_used_IDs.Add(newDownloadItem.ID);
 
             foreach (Form1.Room r in form1.rooms)
                 {
@@ -731,6 +654,7 @@ namespace EPFExplorer
             DialogResult result = MessageBox.Show("Are you sure you want to delete the object "+ roomObjectsComboBox.Items[roomObjectsComboBox.SelectedIndex] + "?","Are you sure?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
                 {
+                already_used_IDs.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].ID);
                 downloadItems.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex]);
 
                 if (roomObjectsComboBox.SelectedIndex > 0)
@@ -892,6 +816,12 @@ namespace EPFExplorer
             newDownloadItem.spritePath = "Objects/Crate";
             newDownloadItem.room = selectedRoom.ID_for_objects;
 
+            Random rnd = new Random();
+            do
+            {
+                newDownloadItem.ID = rnd.Next(30000, 60000);
+            } while (already_used_IDs.Contains(newDownloadItem.ID));
+
             downloadItems.Add(newDownloadItem);
             selectedRoom.Objects.Insert(roomObjectsComboBox.SelectedIndex, newDownloadItem);
 
@@ -919,6 +849,223 @@ namespace EPFExplorer
         private void RDTSpritePath_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void ChangeBackgroundImage() {
+
+            mpbfile tilemap = new mpbfile();
+            tsbfile tileset = new tsbfile();
+
+            mpb_tsb_editor.activeMpb = tilemap;
+            mpb_tsb_editor.activeTsb = tileset;
+
+            tilemap.form1 = form1;
+            tileset.form1 = form1;
+
+            string tilemapPathInArc = "";
+            string tilesetPathInArc = "";
+
+            switch (selectedRoom.InternalName)
+            {
+                case "ATTIC0":
+                    tilemapPathInArc = "/levels/Attic0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Attic.tsb";
+                    break;
+                case "BEACH0":
+                    tilemapPathInArc = "/levels/Beach0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Beach.tsb";
+                    break;
+                case "BEACON0":
+                    tilemapPathInArc = "/levels/Beacon0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Beacon.tsb";
+                    break;
+                case "BOILERROOM0":
+                    tilemapPathInArc = "/levels/BoilerRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/BoilerRoom.tsb";
+                    break;
+                case "BOOKROOM0":
+                    tilemapPathInArc = "/levels/BookRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/BookRoom.tsb";
+                    break;
+                case "COFFEESHOP0":
+                    tilemapPathInArc = "/levels/CoffeeShop0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/CoffeeShop.tsb";
+                    break;
+                case "COMMANDROOM0":
+                    tilemapPathInArc = "/levels/CommandRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/CommandRoom.tsb";
+                    break;
+                case "DOCK0":
+                    tilemapPathInArc = "/levels/Dock0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Dock.tsb";
+                    break;
+                case "DOJO0":
+                    tilemapPathInArc = "/levels/Dojo0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Dojo.tsb";
+                    break;
+                case "FISHING0":
+                    tilemapPathInArc = "/levels/Fishing0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Fishing.tsb";
+                    break;
+                case "FOREST0":
+                    tilemapPathInArc = "/levels/Forest0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Forest.tsb";
+                    break;
+                case "GADGETROOM0":
+                    tilemapPathInArc = "/levels/GadgetRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/GadgetRoom.tsb";
+                    break;
+                case "GARYSROOM0":
+                    tilemapPathInArc = "/levels/GarysRoom0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/GarysRooms.tsb";
+                    break;
+                case "GIFTOFFICE0":
+                    tilemapPathInArc = "/levels/GiftOffice0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/GiftOffice.tsb";
+                    break;
+                case "GIFTROOF0":
+                    tilemapPathInArc = "/levels/GiftRoof0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/GiftRoof.tsb";
+                    break;
+                case "GIFTSHOP0":
+                    tilemapPathInArc = "/levels/GiftShop0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/GiftShop.tsb";
+                    break;
+                case "HEADQUARTERS0":
+                    tilemapPathInArc = "/levels/HeadQuarters0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/HQ.tsb";
+                    break;
+                case "ICEBERG0":
+                    tilemapPathInArc = "/levels/Iceberg0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Iceberg.tsb";
+                    break;
+                case "ICERINK0":
+                    tilemapPathInArc = "/levels/IceRink0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/IceRink.tsb";
+                    break;
+                case "LIGHTHOUSE0":
+                    tilemapPathInArc = "/levels/Lighthouse0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Lighthouse.tsb";
+                    break;
+                case "LODGE0":
+                    tilemapPathInArc = "/levels/Lodge0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Lodge.tsb";
+                    break;
+                case "LOUNGE0":
+                    tilemapPathInArc = "/levels/Lounge0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Lounge.tsb";
+                    break;
+                case "MINECRASH0":
+                    tilemapPathInArc = "/levels/MineCrash0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/MineCrashSite.tsb";
+                    break;
+                case "MINELAIR0":
+                    tilemapPathInArc = "/levels/MineLair0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/MineTunnelExit.tsb";
+                    break;
+                case "MINESHACK0":
+                    tilemapPathInArc = "/levels/MineShack0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/MineExterior.tsb";
+                    break;
+                case "MINEINTERIOR0":
+                    tilemapPathInArc = "/levels/MineInterior0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/MineInterior.tsb";
+                    break;
+                case "MINESHED0":
+                    tilemapPathInArc = "/levels/MineShed0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/MineShedInterior.tsb";
+                    break;
+                case "NIGHTCLUB0":
+                    tilemapPathInArc = "/levels/NightClub0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/NightClub.tsb";
+                    break;
+                case "PETSHOP0":
+                    tilemapPathInArc = "/levels/PetShop0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/PetShop.tsb";
+                    break;
+                case "PIZZAPARLOR0":
+                    tilemapPathInArc = "/levels/PizzaParlor0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/PizzaParlor.tsb";
+                    break;
+                case "PLAZA0":
+                    tilemapPathInArc = "/levels/Plaza0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Plaza.tsb";
+                    break;
+                case "POOL0":
+                    tilemapPathInArc = "/levels/Pool0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Pool.tsb";
+                    break;
+                case "PUFFLETRAINING0":
+                    tilemapPathInArc = "/levels/PuffleTraining0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/PuffleTraining.tsb";
+                    break;
+                case "SKIHILL0":
+                    tilemapPathInArc = "/levels/SkiHill0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Mountain.tsb";
+                    break;
+                case "SKIVILLAGE0":
+                    tilemapPathInArc = "/levels/SkiVillage0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/SkiVillage.tsb";
+                    break;
+                case "SNOWFORTS0":
+                    tilemapPathInArc = "/levels/SnowForts0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/SnowForts.tsb";
+                    break;
+                case "SPORTSHOP0":
+                    tilemapPathInArc = "/levels/SportShop0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/SportShop.tsb";
+                    break;
+                case "STAGE0":
+                    tilemapPathInArc = "/levels/Stage0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Stage.tsb";
+                    break;
+                case "TALLESTMOUNTAINTOP0":
+                    tilemapPathInArc = "/levels/TallestMountain0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/TallestMountain.tsb";
+                    MessageBox.Show("The tallest mountain is not implemented in the mission editor. Sorry!");
+                    return;
+                case "TOWN0":
+                    tilemapPathInArc = "/levels/Town0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/Town.tsb";
+                    break;
+                default:
+                    MessageBox.Show("EPFExplorer doesn't have tsb or mpb names listed for that room... even though it probably should!");
+                    break;
+            }
+
+            //Try to get tilemap from download.arc if it's there. If not, fall back to vanilla.
+            archivedfile tilemapArchivedFile = downloadArc.GetFileByName(tilemapPathInArc.ToLower());
+
+            if (tilemapArchivedFile == null)
+            {
+                tilemapArchivedFile = mainArc.GetFileByName(tilemapPathInArc.ToLower());
+            }
+
+            tilemapArchivedFile.ReadFile();
+            tilemap.filebytes = tilemapArchivedFile.filebytes;
+
+            if (selectedRoom.tilemapWidth != 0)
+            {
+                tilemap.known_tile_width = selectedRoom.tilemapWidth;
+            }
+
+            //Try to get tileset from download.arc if it's there. If not, fall back to vanilla.
+            archivedfile tilesetArchivedFile = downloadArc.GetFileByName(tilesetPathInArc.ToLower());
+
+            if (tilesetArchivedFile == null)
+            {
+                tilesetArchivedFile = mainArc.GetFileByName(tilesetPathInArc.ToLower());
+            }
+
+            tilesetArchivedFile.ReadFile();
+            tileset.filebytes = tilesetArchivedFile.filebytes;
+
+            tilemap.Load();
+            tileset.Load();
+
+            mpb_tsb_editor.LoadBoth();
+
+            backgroundImageBox.Image = mpb_tsb_editor.image;
         }
     }
 }
