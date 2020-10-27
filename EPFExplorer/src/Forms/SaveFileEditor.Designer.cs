@@ -165,14 +165,14 @@
             // quickLaunchButton
             // 
             this.quickLaunchButton.Name = "quickLaunchButton";
-            this.quickLaunchButton.Size = new System.Drawing.Size(224, 26);
+            this.quickLaunchButton.Size = new System.Drawing.Size(172, 26);
             this.quickLaunchButton.Text = "Gooooooo!";
             this.quickLaunchButton.Click += new System.EventHandler(this.quickLaunchButton_Click);
             // 
             // ChooseQuickLaunchRom
             // 
             this.ChooseQuickLaunchRom.Name = "ChooseQuickLaunchRom";
-            this.ChooseQuickLaunchRom.Size = new System.Drawing.Size(224, 26);
+            this.ChooseQuickLaunchRom.Size = new System.Drawing.Size(172, 26);
             this.ChooseQuickLaunchRom.Text = "Choose rom";
             this.ChooseQuickLaunchRom.Click += new System.EventHandler(this.ChooseQuickLaunchRom_Click);
             // 
@@ -404,6 +404,7 @@
             // 
             // importDownloadArc
             // 
+            this.importDownloadArc.Enabled = false;
             this.importDownloadArc.Location = new System.Drawing.Point(12, 118);
             this.importDownloadArc.Name = "importDownloadArc";
             this.importDownloadArc.Size = new System.Drawing.Size(181, 29);

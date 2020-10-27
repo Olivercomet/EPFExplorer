@@ -221,6 +221,11 @@ namespace EPFExplorer
                 }
             }
 
+            if (!mainArc.archivedfiles[0].LuaUtiliesExist())
+            {
+                MessageBox.Show("Couldn't write lua utilities. Make sure you're NOT running EPFExplorer in the Program Files directory!");
+            }
+
             downloadStrings = null;
             dialogStrings = null;
             gameStrings = null;
@@ -1464,6 +1469,7 @@ namespace EPFExplorer
             downloadArc.form1 = form1;
             downloadArc.filebytes = filebytes;
 
+            
             loadMission_Click(null, null);
         }
 
@@ -1574,22 +1580,6 @@ namespace EPFExplorer
                 textIDUpDown.Value++;
                 textIDUpDown.Value--;
             }
-        }
-
-        private void luaScriptNameBox_TextChanged(object sender, EventArgs e)
-        {
-            foreach (Form1.Room r in form1.rooms)
-            {
-                foreach (DownloadItem f in r.Objects)
-                {
-                    if (f.luaScriptPath == "scripts" + Path.GetFileName(luaScripts[luaScriptComboBox.SelectedIndex].filename).Replace(".luc", ".luc"))
-                    {
-                        f.luaScriptPath = "scripts" + Path.GetFileName(luaScriptNameBox.Text.Replace(".luc", ".lua"));
-                    }
-                }
-            }
-            luaScripts[luaScriptComboBox.SelectedIndex].filename = Path.Combine("/chunks/",luaScriptNameBox.Text);
-            AddLuaScriptsToObjectLuaComboBox();
         }
     }
 }

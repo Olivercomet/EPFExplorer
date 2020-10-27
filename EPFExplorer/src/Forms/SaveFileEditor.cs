@@ -40,6 +40,7 @@ namespace EPFExplorer
                 activeSaveFile.LoadFromFile(openFileDialog1.FileName);
                 Properties.Settings.Default.DSSaveFileDir = Path.GetDirectoryName(openFileDialog1.FileName);
                 Properties.Settings.Default.Save();
+                importDownloadArc.Enabled = true;
             }
         }
 

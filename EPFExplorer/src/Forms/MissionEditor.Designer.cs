@@ -111,6 +111,8 @@
             this.addTextLine = new System.Windows.Forms.Button();
             this.deleteTextLine = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -847,6 +849,8 @@
             // 
             // luaScriptsTabPage
             // 
+            this.luaScriptsTabPage.Controls.Add(this.label3);
+            this.luaScriptsTabPage.Controls.Add(this.luaScriptNameBox);
             this.luaScriptsTabPage.Controls.Add(this.luaRichText);
             this.luaScriptsTabPage.Controls.Add(this.saveLua);
             this.luaScriptsTabPage.Controls.Add(this.deleteLuaScriptButton);
@@ -863,9 +867,9 @@
             // luaRichText
             // 
             this.luaRichText.BackColor = System.Drawing.SystemColors.Control;
-            this.luaRichText.Location = new System.Drawing.Point(14, 68);
+            this.luaRichText.Location = new System.Drawing.Point(14, 92);
             this.luaRichText.Name = "luaRichText";
-            this.luaRichText.Size = new System.Drawing.Size(479, 441);
+            this.luaRichText.Size = new System.Drawing.Size(479, 426);
             this.luaRichText.TabIndex = 17;
             this.luaRichText.Text = "";
             this.luaRichText.WordWrap = false;
@@ -1070,6 +1074,22 @@
             this.label4.Text = "Be careful here - if gamestrings or dialogstrings have fewer strings\r\nthan their " +
     "vanilla versions, the game may crash!";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 64);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(83, 17);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Script name";
+            // 
+            // luaScriptNameBox
+            // 
+            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 63);
+            this.luaScriptNameBox.Name = "luaScriptNameBox";
+            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
+            this.luaScriptNameBox.TabIndex = 19;
+            // 
             // MissionEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1209,5 +1229,7 @@
         private System.Windows.Forms.Button addTextLine;
         private System.Windows.Forms.Button deleteTextLine;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox luaScriptNameBox;
     }
 }
