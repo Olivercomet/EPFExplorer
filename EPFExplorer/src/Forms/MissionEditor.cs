@@ -799,6 +799,7 @@ namespace EPFExplorer
                     selectedRoom.Objects.Clear();
                     selectedRoomBox_SelectedIndexChanged(null,null);
                     }
+                AddCurrentRoomPixelBoxes();
                 }
         }
 
@@ -813,6 +814,11 @@ namespace EPFExplorer
                     scriptToLoad = f;
                     break;
                     }
+                }
+
+            if(scriptToLoad == null)
+                {
+                return;
                 }
 
             luaScriptNameBox.Text = Path.GetFileName(scriptToLoad.filename);
@@ -854,6 +860,11 @@ namespace EPFExplorer
 
         private void deleteLuaScriptButton_Click(object sender, EventArgs e)
         {
+            if (luaScriptComboBox.SelectedIndex >= luaScriptComboBox.Items.Count)
+                {
+                return;
+                }
+
             DialogResult result = MessageBox.Show("Are you sure you want to delete the lua script " + luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex] + "?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             
             if (result == DialogResult.Yes)
@@ -1563,6 +1574,22 @@ namespace EPFExplorer
                 textIDUpDown.Value++;
                 textIDUpDown.Value--;
             }
+        }
+
+        private void luaScriptNameBox_TextChanged(object sender, EventArgs e)
+        {
+            foreach (Form1.Room r in form1.rooms)
+            {
+                foreach (DownloadItem f in r.Objects)
+                {
+                    if (f.luaScriptPath == "scripts" + Path.GetFileName(luaScripts[luaScriptComboBox.SelectedIndex].filename).Replace(".luc", ".luc"))
+                    {
+                        f.luaScriptPath = "scripts" + Path.GetFileName(luaScriptNameBox.Text.Replace(".luc", ".lua"));
+                    }
+                }
+            }
+            luaScripts[luaScriptComboBox.SelectedIndex].filename = Path.Combine("/chunks/",luaScriptNameBox.Text);
+            AddLuaScriptsToObjectLuaComboBox();
         }
     }
 }

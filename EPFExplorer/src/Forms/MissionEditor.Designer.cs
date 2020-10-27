@@ -90,8 +90,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
             this.luaScriptsTabPage = new System.Windows.Forms.TabPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
             this.luaRichText = new System.Windows.Forms.RichTextBox();
             this.saveLua = new System.Windows.Forms.Button();
             this.deleteLuaScriptButton = new System.Windows.Forms.Button();
@@ -849,8 +847,6 @@
             // 
             // luaScriptsTabPage
             // 
-            this.luaScriptsTabPage.Controls.Add(this.label3);
-            this.luaScriptsTabPage.Controls.Add(this.luaScriptNameBox);
             this.luaScriptsTabPage.Controls.Add(this.luaRichText);
             this.luaScriptsTabPage.Controls.Add(this.saveLua);
             this.luaScriptsTabPage.Controls.Add(this.deleteLuaScriptButton);
@@ -864,28 +860,12 @@
             this.luaScriptsTabPage.Text = "Lua Scripts";
             this.luaScriptsTabPage.UseVisualStyleBackColor = true;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 64);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 17);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "Script name";
-            // 
-            // luaScriptNameBox
-            // 
-            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 63);
-            this.luaScriptNameBox.Name = "luaScriptNameBox";
-            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
-            this.luaScriptNameBox.TabIndex = 19;
-            // 
             // luaRichText
             // 
             this.luaRichText.BackColor = System.Drawing.SystemColors.Control;
-            this.luaRichText.Location = new System.Drawing.Point(14, 92);
+            this.luaRichText.Location = new System.Drawing.Point(14, 68);
             this.luaRichText.Name = "luaRichText";
-            this.luaRichText.Size = new System.Drawing.Size(479, 426);
+            this.luaRichText.Size = new System.Drawing.Size(479, 441);
             this.luaRichText.TabIndex = 17;
             this.luaRichText.Text = "";
             this.luaRichText.WordWrap = false;
@@ -1211,8 +1191,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ComboBox selectedRoomBox;
         public System.Windows.Forms.TabPage luaScriptsTabPage;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox luaScriptNameBox;
         private System.Windows.Forms.RichTextBox luaRichText;
         private System.Windows.Forms.Button saveLua;
         private System.Windows.Forms.Button deleteLuaScriptButton;
