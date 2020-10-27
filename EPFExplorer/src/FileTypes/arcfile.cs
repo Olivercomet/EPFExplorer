@@ -699,8 +699,6 @@ namespace EPFExplorer
             form1.MakeFileTree();
             }
 
-
-
         public archivedfile GetFileWithHash(uint hash)
             {   
             foreach (archivedfile f in archivedfiles)
@@ -712,7 +710,5 @@ namespace EPFExplorer
                 }
             return null;
             }
-
-
     }
 }

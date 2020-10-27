@@ -29,7 +29,6 @@ namespace EPFExplorer
         public List<DownloadItem> downloadItems = new List<DownloadItem>();
 
         public List<archivedfile> luaScripts = new List<archivedfile>();
-        public List<archivedfile> rdtSprites = new List<archivedfile>();
 
         public MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
         public SpriteEditor spriteEditor = new SpriteEditor();
@@ -38,7 +37,14 @@ namespace EPFExplorer
 
         public List<PixelBox> pixelBoxes = new List<PixelBox>();
 
-        public int tuxedoDL_compression = 0;
+        public archivedfile downloadStrings;
+        public archivedfile dialogStrings;
+        public archivedfile gameStrings;
+
+        bool includeDownloadStrings;
+        bool includeDialogStrings;
+        bool includeGameStrings;
+
 
         public MissionEditor()
         {
@@ -215,7 +221,16 @@ namespace EPFExplorer
                 }
             }
 
+            downloadStrings = null;
+            dialogStrings = null;
+            gameStrings = null;
+
+            includeDownloadStrings = false;
+            includeDialogStrings = false;
+            includeGameStrings = false;
+
             already_used_IDs = new List<int>();
+            luaScripts = new List<archivedfile>();
 
             //read tuxedoDL
 
@@ -223,17 +238,6 @@ namespace EPFExplorer
             tuxedoDL.ReadFile();
             tuxedoDL.DecompressFile();
             tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
-
-            tuxedoDL_compression = 0;
-
-            if (tuxedoDL.was_LZ10_compressed)
-                {
-                tuxedoDL_compression = 10;
-                }
-            else if (tuxedoDL.was_LZ11_compressed)
-                {
-                tuxedoDL_compression = 11;
-                }
 
             string[] tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
             File.Delete("tuxedoDL_TEMP");
@@ -356,6 +360,75 @@ namespace EPFExplorer
                 }
             
             roomObjectsComboBox.SelectedIndex = 0;
+
+            //read STs
+
+            downloadStrings = downloadArc.GetFileByName("/strings/downloadstrings.st");
+            dialogStrings = downloadArc.GetFileByName("/strings/dialogstrings.st");
+            gameStrings = downloadArc.GetFileByName("/strings/gamestrings.st");
+
+            //look for them in the download arc first, but if they're not found, use the one from the main arc
+
+            if (dialogStrings == null)
+                {
+                //don't read it, the vanilla one is too big.
+                }
+            else
+                {
+                includeDialogStrings = true;  //we always include this if it was in download.arc before, but NOT if it was only in fs.arc
+                }
+
+            if (gameStrings == null)
+                {
+                //don't read it, the vanilla one is too big.
+                }
+            else
+                {
+                includeGameStrings = true;  //we always include this if it was in download.arc before, but NOT if it was only in fs.arc
+                }
+
+            if (downloadStrings != null){
+                includeDownloadStrings = true;  //we always include this if it was in download.arc before
+                downloadStrings.ReadFile();
+                }
+            else
+                {
+                downloadStrings = new archivedfile();
+                downloadStrings.form1 = form1;
+                downloadStrings.parentarcfile = downloadArc;
+                downloadStrings.filebytes = new byte[1] { 0x00 };
+                downloadStrings.filename = "/strings/downloadstrings.st";
+                downloadStrings.STstrings = new List<string>();
+                downloadStrings.STstrings.Add(" ");
+                }
+
+            if (gameStrings != null){
+                gameStrings.ReadFile();
+                }
+            else
+                {
+                gameStrings = new archivedfile();
+                gameStrings.form1 = form1;
+                gameStrings.parentarcfile = downloadArc;
+                gameStrings.filebytes = new byte[1] { 0x00 };
+                gameStrings.filename = "/strings/gamestrings.st";
+                gameStrings.STstrings = new List<string>();
+                gameStrings.STstrings.Add(" ");
+                }
+
+            if (dialogStrings != null){
+                dialogStrings.ReadFile();
+                }
+            else
+                {
+                dialogStrings = new archivedfile();
+                dialogStrings.form1 = form1;
+                dialogStrings.parentarcfile = downloadArc;
+                dialogStrings.filename = "/strings/dialogstrings.st";
+                dialogStrings.filebytes = new byte[1] { 0x00 };
+                dialogStrings.STstrings = new List<string>();
+                dialogStrings.STstrings.Add(" ");
+            }
         }
 
         public void UpdateCurrentCapacity() {
@@ -380,7 +453,7 @@ namespace EPFExplorer
 
             if (size >= capacityProgressBar.Maximum)
                 {
-                MessageBox.Show("Your mission will be too big to fit in a save file!\nIt is " + ((((float)size/(float)capacityProgressBar.Maximum)*(float)100.00) - (float)100.00) + "% over the maximum size.","Size limit exceeded",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Your mission will be too big to fit in a save file!\nIt is " + ((((float)size/(float)capacityProgressBar.Maximum)*(float)100.00) - (float)100.00) + "% over the maximum size.\nIf this is unexpected, try making gamestrings.st or dialogstrings.st smaller - the vanilla ones are too big!","Size limit exceeded",MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 capacityProgressBar.Value = capacityProgressBar.Maximum - 1;
                 return;
                 }
@@ -570,20 +643,28 @@ namespace EPFExplorer
 
         private void FlipXCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX = FlipXCheckBox.Checked;
-            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX != FlipXCheckBox.Checked)
+            {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX = FlipXCheckBox.Checked;
+                if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
                 {
-                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX);
+                    selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX);
+                    selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Refresh();
                 }
+            }
         }
 
         private void FlipYCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY = FlipYCheckBox.Checked;
-            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY != FlipYCheckBox.Checked)
+            {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY = FlipYCheckBox.Checked;
+                if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
                 {
-                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+                    selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+                    selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Refresh();
                 }
+            }
         }
 
         private void spawnedByDefault_CheckedChanged(object sender, EventArgs e)
@@ -1231,6 +1312,8 @@ namespace EPFExplorer
                         newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipNone);
                         }
 
+                    newPixelBox.Refresh();
+
                     //and finally, position the sprite in the viewport
                     newPixelBox.Location = new System.Drawing.Point(item.Xpos - item.displayOffsetX, item.Ypos - item.displayOffsetY);                  
                     newPixelBox.Show();
@@ -1253,39 +1336,53 @@ namespace EPFExplorer
             newTuxedoDL += "_util.ReserveDownloadExits(" + ReserveDownloadExits + ")\n";
             newTuxedoDL += "_util.ReserveDownloadItems(" + ReserveDownloadItems+ ")\n";
 
-            foreach (Form1.Room r in form1.rooms)
+            for (int i = 60; i < 110; i++)  //to make it go through in ID_for_objects order
+            {
+                foreach (Form1.Room r in form1.rooms)
                 {
-                foreach (DownloadItem item in r.Objects)
+                    if (r.ID_for_objects != i)
+                        {
+                        continue;
+                        }
+
+                    foreach (DownloadItem item in r.Objects)
                     {
-                    if (item.spritePath == "\"\"" || item.spritePath == "None"){
-                        item.spritePath = "";}
+                        if (item.spritePath == "\"\"" || item.spritePath == "None")
+                        {
+                            item.spritePath = "";
+                        }
 
-                    if (item.luaScriptPath == "\"\"" || item.luaScriptPath == "None"){
-                        item.luaScriptPath = "";}
+                        if (item.luaScriptPath == "\"\"" || item.luaScriptPath == "None")
+                        {
+                            item.luaScriptPath = "";
+                        }
 
-                    if (item.destinationRoom == "\"\"" || item.destinationRoom == "None"){
-                        item.destinationRoom = "";}
+                        if (item.destinationRoom == "\"\"" || item.destinationRoom == "None")
+                        {
+                            item.destinationRoom = "";
+                        }
 
-                    newTuxedoDL += "_util.AddDownloadItem(";
-                    newTuxedoDL += item.ID + ", ";
-                    newTuxedoDL += "\""+item.spritePath+ "\", ";
-                    newTuxedoDL += item.Xpos + ", ";
-                    newTuxedoDL += item.Ypos + ", ";
-                    newTuxedoDL += (int)item.interactionType + ", ";
-                    if (item.SpawnedByDefault){ newTuxedoDL += "true, "; }else{ newTuxedoDL += "false, ";}
-                    newTuxedoDL += item.unk1 + ", ";
-                    newTuxedoDL += "\"" + item.luaScriptPath + "\", ";
-                    newTuxedoDL += item.unk2 + ", ";
-                    newTuxedoDL += item.room + ", ";
-                    newTuxedoDL += item.unk3 + ", ";
-                    newTuxedoDL += "\""+item.destinationRoom + "\", ";
-                    if (item.locked) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
-                    newTuxedoDL += item.destPosX + ", ";
-                    newTuxedoDL += item.destPosY + ", ";
-                    if (item.flipX) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
-                    if (item.flipY) { newTuxedoDL += "true)\n"; } else { newTuxedoDL += "false)\n"; }
+                        newTuxedoDL += "_util.AddDownloadItem(";
+                        newTuxedoDL += item.ID + ", ";
+                        newTuxedoDL += "\"" + item.spritePath + "\", ";
+                        newTuxedoDL += item.Xpos + ", ";
+                        newTuxedoDL += item.Ypos + ", ";
+                        newTuxedoDL += (int)item.interactionType + ", ";
+                        if (item.SpawnedByDefault) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
+                        newTuxedoDL += item.unk1 + ", ";
+                        newTuxedoDL += "\"" + item.luaScriptPath + "\", ";
+                        newTuxedoDL += item.unk2 + ", ";
+                        newTuxedoDL += item.room + ", ";
+                        newTuxedoDL += item.unk3 + ", ";
+                        newTuxedoDL += "\"" + item.destinationRoom + "\", ";
+                        if (item.locked) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
+                        newTuxedoDL += item.destPosX + ", ";
+                        newTuxedoDL += item.destPosY + ", ";
+                        if (item.flipX) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
+                        if (item.flipY) { newTuxedoDL += "true)\n"; } else { newTuxedoDL += "false)\n"; }
                     }
                 }
+            }
 
             List<archivedfile> extraFiles = new List<archivedfile>(); //any extra files like rdts, mpbs or tsbs that were hanging out in the old download.arc
             foreach (archivedfile f in downloadArc.archivedfiles)
@@ -1308,7 +1405,23 @@ namespace EPFExplorer
                 downloadArc.archivedfiles.Add(f);
                 }
 
-            MessageBox.Show("You also need to add .ST files here, once that's ready.");
+            if (includeDownloadStrings)
+                {
+                downloadArc.archivedfiles.Add(downloadStrings);
+                }
+
+            if (includeDialogStrings)
+                {
+                dialogStrings.filename = "/strings/dialogstrings.st";
+                downloadArc.archivedfiles.Add(dialogStrings);
+                }
+
+            if (includeGameStrings)
+                {
+                gameStrings.filename = "/strings/gamestrings.st";
+                downloadArc.archivedfiles.Add(gameStrings);
+                }
+
 
             File.WriteAllText("lua_TEMP_FOR_COMPILING", newTuxedoDL);
             tuxedoDL.filebytes = tuxedoDL.LuaFromFileToLuc(tuxedoDL.filebytes, "lua_TEMP_FOR_COMPILING");
@@ -1334,7 +1447,122 @@ namespace EPFExplorer
             }
 
             tuxedoDL = null;
+
+            byte[] filebytes = downloadArc.filebytes;
+            downloadArc = new arcfile();
+            downloadArc.form1 = form1;
+            downloadArc.filebytes = filebytes;
+
             loadMission_Click(null, null);
+        }
+
+        private void textFileComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (textIDUpDown.Value == 0)
+                {
+                textIDUpDown_ValueChanged(null, null);
+                }
+            else
+                {
+                textIDUpDown.Value = 0;
+                }
+        }
+
+        private void textIDUpDown_ValueChanged(object sender, EventArgs e)
+        {
+
+            switch (textFileComboBox.SelectedItem)
+            {
+                case "downloadStrings.st":
+                    if (textIDUpDown.Value < downloadStrings.STstrings.Count){
+                        richTextST.Text = downloadStrings.STstrings[(int)textIDUpDown.Value].Replace("[newline]", "\n");
+                        }
+                    else{
+                        textIDUpDown.Value = downloadStrings.STstrings.Count - 1;
+                    }
+                    break;
+                case "dialogStrings.st":
+                    if (textIDUpDown.Value < dialogStrings.STstrings.Count){
+                        richTextST.Text = dialogStrings.STstrings[(int)textIDUpDown.Value].Replace("[newline]", "\n");
+                    }
+                    else{
+                        textIDUpDown.Value = dialogStrings.STstrings.Count - 1;
+                    }
+                    break;
+                case "gameStrings.st":
+                    if (textIDUpDown.Value < gameStrings.STstrings.Count){
+                        richTextST.Text = gameStrings.STstrings[(int)textIDUpDown.Value].Replace("[newline]", "\n");
+                        }
+                    else{
+                        textIDUpDown.Value = gameStrings.STstrings.Count - 1;
+                    }
+                    break;
+            }
+        }
+
+        private void richTextST_TextChanged(object sender, EventArgs e)
+        {
+            switch (textFileComboBox.SelectedItem)
+            {
+                case "downloadStrings.st":
+                    downloadStrings.STstrings[(int)textIDUpDown.Value] = richTextST.Text.Replace("\r", "").Replace("\n", "[newline]");
+                    break;
+                case "dialogStrings.st":
+                    dialogStrings.STstrings[(int)textIDUpDown.Value] = richTextST.Text.Replace("\r","").Replace("\n","[newline]");
+                    includeDialogStrings = true;
+                    break;
+                case "gameStrings.st":
+                    gameStrings.STstrings[(int)textIDUpDown.Value] = richTextST.Text.Replace("\r", "").Replace("\n", "[newline]");
+                    includeGameStrings = true;
+                    break;
+            }
+        }
+
+        private void addTextLine_Click(object sender, EventArgs e)
+        {
+            switch (textFileComboBox.SelectedItem)
+            {
+                case "downloadStrings.st":
+                    downloadStrings.STstrings.Insert((int)textIDUpDown.Value, "");
+                    break;
+                case "dialogStrings.st":
+                    dialogStrings.STstrings.Insert((int)textIDUpDown.Value, "");
+                    includeDialogStrings = true;
+                    break;
+                case "gameStrings.st":
+                    gameStrings.STstrings.Insert((int)textIDUpDown.Value, "");
+                    includeGameStrings = true;
+                    break;
+            }
+            textIDUpDown.Value++;
+            textIDUpDown.Value--;
+        }
+
+        private void deleteTextLine_Click(object sender, EventArgs e)
+        {
+            switch (textFileComboBox.SelectedItem)
+                {
+                case "downloadStrings.st":
+                    downloadStrings.STstrings.RemoveAt((int)textIDUpDown.Value);
+                    break;
+                case "dialogStrings.st":
+                    dialogStrings.STstrings.RemoveAt((int)textIDUpDown.Value);
+                    includeDialogStrings = true;
+                    break;
+                case "gameStrings.st":
+                    gameStrings.STstrings.RemoveAt((int)textIDUpDown.Value);
+                    includeGameStrings = true;
+                    break;
+                }
+
+            if (textIDUpDown.Value > 0){
+                textIDUpDown.Value--;
+            }
+            else 
+            {
+                textIDUpDown.Value++;
+                textIDUpDown.Value--;
+            }
         }
     }
 }
