@@ -98,12 +98,6 @@
     <Compile Include="src\Forms\SpriteEditor.Designer.cs">
       <DependentUpon>SpriteEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Forms\TuxedoDLObjectEntryForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="src\Forms\TuxedoDLObjectEntryForm.Designer.cs">
-      <DependentUpon>TuxedoDLObjectEntryForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="src\Utility\Crc32.cs" />
     <Compile Include="src\Forms\Form1.cs">
       <SubType>Form</SubType>
@@ -148,9 +142,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\SpriteEditor.resx">
       <DependentUpon>SpriteEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\Forms\TuxedoDLObjectEntryForm.resx">
-      <DependentUpon>TuxedoDLObjectEntryForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

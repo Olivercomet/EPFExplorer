@@ -112,9 +112,7 @@ namespace EPFExplorer
 
             int pos_in_output_image = 0;
 
-            Console.WriteLine("Image dimensions will be: "+ ((int)ImageWidthInTiles.Value * 8) + " by " + (heightInTiles * 8));
-
-      
+            //Console.WriteLine("Image dimensions will be: "+ ((int)ImageWidthInTiles.Value * 8) + " by " + (heightInTiles * 8));
 
             for (int y = 0; y < heightInTiles; y++)
                 {
@@ -159,7 +157,6 @@ namespace EPFExplorer
                         }
                     else if (flipX)
                         {
-                        Console.WriteLine("flipped tile on X only");
                         for (int i = 0; i < 8; i++)
                             {
                             for (int j = 0; j < 8; j++)
@@ -170,7 +167,6 @@ namespace EPFExplorer
                         }
                     else if (flipY)
                         {
-                        Console.WriteLine("flipped tile on Y only");
                         for (int i = 0; i < 8; i++)
                             {
                             Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + ((7 - i) * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
@@ -382,8 +378,6 @@ namespace EPFExplorer
                             
                             if (tileSimilarlity > 0) //if they are similar (i.e. identical but one of them is a mirror of the other)
                                 {
-                                Console.WriteLine("tile similarity found");
-
                                 newTile.hasSimilarTile = true;
                                 newTile.SimilarTile = tiles[t];
 
@@ -418,7 +412,6 @@ namespace EPFExplorer
 
                     if (pos % image.Width == 0)
                         {
-                        Console.WriteLine("skipping to next row");
                         pos += image.Width * 7;
                         }
                     }

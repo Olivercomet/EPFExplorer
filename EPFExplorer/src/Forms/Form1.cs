@@ -1099,7 +1099,7 @@ namespace EPFExplorer
 
         private void openRDTarchivedfile_Click(object sender, EventArgs e)          //OPEN RDT ARCHIVED FILE
         {
-            treeNodesAndArchivedFiles[FileTree.SelectedNode].OpenRDTSubfileInEditor();
+            treeNodesAndArchivedFiles[FileTree.SelectedNode].OpenRDTSubfileInEditor(true);
         }
 
         private void renameRDTarchfile_Click(object sender, EventArgs e)         //RENAME RDT ARCHIVED FILE
@@ -1147,7 +1147,7 @@ namespace EPFExplorer
 
             if (selectedFile.spriteEditor == null)
             {
-                selectedFile.OpenRDTSubfileInEditor();
+                selectedFile.OpenRDTSubfileInEditor(false);
                 OpenedSpriteEditorJustForThis = true;
             }
 
@@ -1763,14 +1763,6 @@ namespace EPFExplorer
                 treeNodesAndArchivedFiles.Remove(node);
                 node.Remove();
             }
-        }
-
-        private void generateTuxedoDLObjectEntryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            TuxedoDLObjectEntryForm TuxedoDLForm = new TuxedoDLObjectEntryForm();
-            TuxedoDLForm.form1 = this;
-            TuxedoDLForm.LoadFormControls();
-            TuxedoDLForm.Show();
         }
 
         private void MPBTSBEditorToolStripMenuItem_Click(object sender, EventArgs e)

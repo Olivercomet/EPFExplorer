@@ -427,7 +427,7 @@ namespace EPFExplorer
 
 
 
-        public void OpenRDTSubfileInEditor() { 
+        public void OpenRDTSubfileInEditor(bool showEditor) { 
         
         if (spriteEditor == null)   //if this hasn't been opened in the spriteeditor before, read the file
             {
@@ -438,7 +438,10 @@ namespace EPFExplorer
 
                 spriteEditor = new SpriteEditor();
                 spriteEditor.sprite = this;
-                spriteEditor.Show();
+                if (showEditor)
+                    {
+                    spriteEditor.Show();
+                    }
 
                 spriteEditor.images = new List<rdtSubfileData>();
                 spriteEditor.palettes = new List<rdtSubfileData>();
@@ -467,7 +470,10 @@ namespace EPFExplorer
 
                 if (spriteEditor.images.Count == 0)
                     {
-                    spriteEditor.Close();
+                    if (showEditor)
+                        {
+                        spriteEditor.Close();
+                        }
                     MessageBox.Show("Image data not found...", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                     }
@@ -508,7 +514,10 @@ namespace EPFExplorer
             }
         else
             {
-                spriteEditor.BringToFront();
+                if (showEditor)
+                {
+                    spriteEditor.BringToFront();
+                }
             }
         }
 
@@ -1129,8 +1138,5 @@ namespace EPFExplorer
             }
             return backupbytes;
         }
-
-
-
     }
 }

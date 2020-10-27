@@ -139,12 +139,6 @@ namespace EPFExplorer
                             curOffset++;
                             }
 
-                        if (newSetting.FFcount == 8)
-                            {
-                            File.WriteAllBytes("temp", filebytes);
-                            Console.WriteLine("breakpoint");
-                            }
-
                         newSetting.X = BitConverter.ToInt32(filebytes, curOffset);
                         curOffset += 4;
                         newSetting.Y = BitConverter.ToInt32(filebytes, curOffset);

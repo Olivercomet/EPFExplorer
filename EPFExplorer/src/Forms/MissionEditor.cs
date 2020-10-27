@@ -1,12 +1,7 @@
-﻿using System;
+﻿using RedCell.UI.Controls;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -37,8 +32,13 @@ namespace EPFExplorer
         public List<archivedfile> rdtSprites = new List<archivedfile>();
 
         public MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
+        public SpriteEditor spriteEditor = new SpriteEditor();
 
         public List<int> already_used_IDs = new List<int>();
+
+        public List<PixelBox> pixelBoxes = new List<PixelBox>();
+
+        public int tuxedoDL_compression = 0;
 
         public MissionEditor()
         {
@@ -82,6 +82,10 @@ namespace EPFExplorer
 
             public bool flipX = false;
             public bool flipY = false;
+
+            public PixelBox image;
+            public int displayOffsetX;
+            public int displayOffsetY;
         }
 
         public void LoadFormControls() {
@@ -96,7 +100,6 @@ namespace EPFExplorer
 
             DestinationRoomComboBox.SelectedIndex = 0;
 
-            missionSettingsTab.Enabled = false;
             objectsTab.Enabled = false;
             luaScriptsTabPage.Enabled = false;
             textEditorTab.Enabled = false;
@@ -134,6 +137,7 @@ namespace EPFExplorer
                 }
 
             ChangeBackgroundImage();
+            AddCurrentRoomPixelBoxes();
         }
 
 
@@ -211,12 +215,25 @@ namespace EPFExplorer
                 }
             }
 
+            already_used_IDs = new List<int>();
+
             //read tuxedoDL
 
             tuxedoDL = downloadArc.GetFileByName("/chunks/tuxedoDL.luc");
             tuxedoDL.ReadFile();
             tuxedoDL.DecompressFile();
             tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
+
+            tuxedoDL_compression = 0;
+
+            if (tuxedoDL.was_LZ10_compressed)
+                {
+                tuxedoDL_compression = 10;
+                }
+            else if (tuxedoDL.was_LZ11_compressed)
+                {
+                tuxedoDL_compression = 11;
+                }
 
             string[] tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
             File.Delete("tuxedoDL_TEMP");
@@ -321,7 +338,6 @@ namespace EPFExplorer
 
             luaRichText.Text = "";
 
-            missionSettingsTab.Enabled = true;
             objectsTab.Enabled = true;
             luaScriptsTabPage.Enabled = true;
             textEditorTab.Enabled = true;
@@ -330,7 +346,15 @@ namespace EPFExplorer
 
             AddCurrentRoomObjectsToComboBox(); //force this in case the selected index was already zero (thus not triggering the selectedindexchanged function)
 
-            selectedRoomBox.SelectedIndex = 0;
+            if (selectedRoomBox.SelectedIndex == 0)
+                {
+                selectedRoomBox.SelectedIndex = 0;
+                }
+            else
+                {
+                selectedRoomBox_SelectedIndexChanged(null, null);
+                }
+            
             roomObjectsComboBox.SelectedIndex = 0;
         }
 
@@ -529,21 +553,37 @@ namespace EPFExplorer
         private void PosXUpDown_ValueChanged(object sender, EventArgs e)
         {
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos = (int)PosXUpDown.Value;
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
+                {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Location = new System.Drawing.Point(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos - selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].displayOffsetX, selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Location.Y);
+                }
         }
 
         private void PosYUpDown_ValueChanged(object sender, EventArgs e)
         {
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos = (int)PosYUpDown.Value;
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
+            {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Location = new System.Drawing.Point(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Location.X, selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos - selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].displayOffsetY);
+            }
         }
 
         private void FlipXCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX = FlipXCheckBox.Checked;
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
+                {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX);
+                }
         }
 
         private void FlipYCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY = FlipYCheckBox.Checked;
+            if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
+                {
+                selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+                }
         }
 
         private void spawnedByDefault_CheckedChanged(object sender, EventArgs e)
@@ -601,7 +641,9 @@ namespace EPFExplorer
 
                 AddCurrentRoomObjectsToComboBox();
                 roomObjectsComboBox.SelectedIndex = i - 1;
-            }
+
+                AddCurrentRoomPixelBoxes();
+                }
         }
 
         private void moveObjectDown_Click(object sender, EventArgs e)
@@ -619,7 +661,7 @@ namespace EPFExplorer
 
                 AddCurrentRoomObjectsToComboBox();
                 roomObjectsComboBox.SelectedIndex = i + 1;
-                
+                AddCurrentRoomPixelBoxes();
             }
         }
 
@@ -806,6 +848,16 @@ namespace EPFExplorer
             AddCurrentRoomObjectsToComboBox();
 
             luaScriptComboBox.SelectedIndex = 0;
+
+            for (int j = 0; j < luaScriptComboBox.Items.Count; j++)
+                {
+                if ((string)luaScriptComboBox.Items[j] == Path.GetFileName(newScript.filename))
+                    {
+                    luaScriptComboBox.SelectedIndex = j;
+                    break;
+                    }
+                }
+
         }
 
         private void addObjectButton_Click(object sender, EventArgs e)
@@ -815,6 +867,9 @@ namespace EPFExplorer
             newDownloadItem.interactionType = InteractionType.Interactable;
             newDownloadItem.spritePath = "Objects/Crate";
             newDownloadItem.room = selectedRoom.ID_for_objects;
+            newDownloadItem.SpawnedByDefault = true;
+            newDownloadItem.Xpos = 100;
+            newDownloadItem.Ypos = 100;
 
             Random rnd = new Random();
             do
@@ -830,6 +885,7 @@ namespace EPFExplorer
             AddCurrentRoomObjectsToComboBox();
 
             roomObjectsComboBox.SelectedIndex = i;
+            AddCurrentRoomPixelBoxes();
         }
 
         private void objectLuaScriptComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -846,9 +902,35 @@ namespace EPFExplorer
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "";
         }
 
-        private void RDTSpritePath_SelectedIndexChanged(object sender, EventArgs e)
+        private void RDTSpritePath_TextChanged(object sender, EventArgs e)
         {
+            archivedfile newLinkedSprite = null;
 
+            foreach (archivedfile f in gameRdt.archivedfiles)
+                {
+                if (f.filename == RDTSpritePath.Text)
+                    {
+                    newLinkedSprite = f;
+                    break;
+                    }
+                }
+
+            foreach (archivedfile f in downloadRdt.archivedfiles)
+            {
+                if (f.filename == RDTSpritePath.Text)
+                {
+                    newLinkedSprite = f;
+                    break;
+                }
+            }
+
+            if (newLinkedSprite == null && RDTSpritePath.Text != "" && RDTSpritePath.Text != "None")
+                {
+                return;
+                }
+
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].spritePath = RDTSpritePath.Text;
+            AddCurrentRoomPixelBoxes();
         }
 
         private void ChangeBackgroundImage() {
@@ -1066,6 +1148,193 @@ namespace EPFExplorer
             mpb_tsb_editor.LoadBoth();
 
             backgroundImageBox.Image = mpb_tsb_editor.image;
+        }
+
+
+        public void AddCurrentRoomPixelBoxes() {
+
+            for (int i = backgroundImageBox.Controls.Count - 1; i >= 0; i--)
+            {
+                backgroundImageBox.Controls[i].Dispose();
+            }
+
+            backgroundImageBox.Controls.Clear();
+            pixelBoxes.Clear();
+
+            foreach (DownloadItem item in selectedRoom.Objects)
+                {
+                PixelBox newPixelBox = new PixelBox();
+                backgroundImageBox.Controls.Add(newPixelBox);
+
+                archivedfile sprite = null;
+
+                foreach (archivedfile f in gameRdt.archivedfiles)
+                    {
+                    if (f.filename == item.spritePath)
+                        {
+                        sprite = f;
+                        break;
+                        }
+                    }
+                foreach (archivedfile f in downloadRdt.archivedfiles)
+                {
+                    if (f.filename == item.spritePath)
+                    {
+                        sprite = f;
+                        break;
+                    }
+                }
+
+                if (sprite == null)
+                    {
+                    foreach (archivedfile f in gameRdt.archivedfiles)
+                        {
+                        if (f.filename == "Tools/broken")
+                            {
+                            sprite = f;
+                            break;
+                            }
+                        }
+                    }
+
+                    sprite.form1 = form1;
+                    if(sprite.filebytes == null || sprite.filebytes.Length == 0)
+                        {
+                        sprite.ReadFile();
+                        }
+
+                    sprite.OpenRDTSubfileInEditor(false);
+                    newPixelBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    newPixelBox.Anchor = AnchorStyles.None;
+                    newPixelBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                    newPixelBox.Parent = backgroundImageBox;
+                    newPixelBox.Image = sprite.spriteEditor.images[0].image;
+                    newPixelBox.BringToFront();
+
+                    item.displayOffsetX = (int)Math.Round((float)sprite.spriteEditor.centreX.Value - (float)sprite.spriteEditor.images[0].offsetX);
+                    item.displayOffsetY = (int)Math.Round((float)sprite.spriteEditor.centreY.Value - (float)sprite.spriteEditor.images[0].offsetY);
+                    
+                    if (item.flipX && item.flipY)
+                        {
+                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipXY);
+                        }
+                    else if (item.flipX)
+                        {
+                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX);
+                        }
+                    else if (item.flipY)
+                        {
+                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+                        }
+                    else
+                        {
+                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipNone);
+                        }
+
+                    //and finally, position the sprite in the viewport
+                    newPixelBox.Location = new System.Drawing.Point(item.Xpos - item.displayOffsetX, item.Ypos - item.displayOffsetY);                  
+                    newPixelBox.Show();
+
+                    item.image = newPixelBox;
+                    sprite.spriteEditor.Close();  
+            }
+        }
+
+        private void saveMissionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mainArc == null || downloadArc == null || gameRdt == null)
+                {
+                return;
+                }
+  
+            string newTuxedoDL = "";
+
+            newTuxedoDL += "_util.ReserveDownloadNpcs(" + ReserveDownloadNpcs + ")\n";
+            newTuxedoDL += "_util.ReserveDownloadExits(" + ReserveDownloadExits + ")\n";
+            newTuxedoDL += "_util.ReserveDownloadItems(" + ReserveDownloadItems+ ")\n";
+
+            foreach (Form1.Room r in form1.rooms)
+                {
+                foreach (DownloadItem item in r.Objects)
+                    {
+                    if (item.spritePath == "\"\"" || item.spritePath == "None"){
+                        item.spritePath = "";}
+
+                    if (item.luaScriptPath == "\"\"" || item.luaScriptPath == "None"){
+                        item.luaScriptPath = "";}
+
+                    if (item.destinationRoom == "\"\"" || item.destinationRoom == "None"){
+                        item.destinationRoom = "";}
+
+                    newTuxedoDL += "_util.AddDownloadItem(";
+                    newTuxedoDL += item.ID + ", ";
+                    newTuxedoDL += "\""+item.spritePath+ "\", ";
+                    newTuxedoDL += item.Xpos + ", ";
+                    newTuxedoDL += item.Ypos + ", ";
+                    newTuxedoDL += (int)item.interactionType + ", ";
+                    if (item.SpawnedByDefault){ newTuxedoDL += "true, "; }else{ newTuxedoDL += "false, ";}
+                    newTuxedoDL += item.unk1 + ", ";
+                    newTuxedoDL += "\"" + item.luaScriptPath + "\", ";
+                    newTuxedoDL += item.unk2 + ", ";
+                    newTuxedoDL += item.room + ", ";
+                    newTuxedoDL += item.unk3 + ", ";
+                    newTuxedoDL += "\""+item.destinationRoom + "\", ";
+                    if (item.locked) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
+                    newTuxedoDL += item.destPosX + ", ";
+                    newTuxedoDL += item.destPosY + ", ";
+                    if (item.flipX) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
+                    if (item.flipY) { newTuxedoDL += "true)\n"; } else { newTuxedoDL += "false)\n"; }
+                    }
+                }
+
+            List<archivedfile> extraFiles = new List<archivedfile>(); //any extra files like rdts, mpbs or tsbs that were hanging out in the old download.arc
+            foreach (archivedfile f in downloadArc.archivedfiles)
+                {
+                if (!f.filename.Contains(".luc") && !f.filename.Contains(".lua") && !f.filename.Contains(".st"))
+                    {
+                    extraFiles.Add(f);
+                    }
+                }
+
+            downloadArc.archivedfiles = new List<archivedfile>();
+
+            foreach (archivedfile f in luaScripts)
+                {
+                downloadArc.archivedfiles.Add(f);
+                }
+
+            foreach (archivedfile f in extraFiles)
+                {
+                downloadArc.archivedfiles.Add(f);
+                }
+
+            MessageBox.Show("You also need to add .ST files here, once that's ready.");
+
+            File.WriteAllText("lua_TEMP_FOR_COMPILING", newTuxedoDL);
+            tuxedoDL.filebytes = tuxedoDL.LuaFromFileToLuc(tuxedoDL.filebytes, "lua_TEMP_FOR_COMPILING");
+            File.Delete("lua_TEMP_FOR_COMPILING");
+
+            downloadArc.archivedfiles.Add(tuxedoDL);
+
+            downloadArc.RebuildArc();
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            
+            saveFileDialog1.InitialDirectory = Path.GetDirectoryName(downloadArc.filename);
+            saveFileDialog1.FileName = Path.GetFileName(downloadArc.filename);
+
+            saveFileDialog1.Title = "Save arc file";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "1PP archive (*.arc)|*.arc|All files (*.*)|*.*";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                downloadArc.filename = saveFileDialog1.FileName;
+                File.WriteAllBytes(saveFileDialog1.FileName, downloadArc.filebytes);
+            }
+
+            tuxedoDL = null;
+            loadMission_Click(null, null);
         }
     }
 }
