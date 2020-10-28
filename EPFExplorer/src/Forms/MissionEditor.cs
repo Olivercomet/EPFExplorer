@@ -609,6 +609,8 @@ namespace EPFExplorer
 
         public void AddLuaScriptsToObjectLuaComboBox() {
 
+            int i = roomObjectsComboBox.SelectedIndex;
+
             objectLuaScriptComboBox.Items.Clear();
 
             foreach (archivedfile f in luaScripts)
@@ -619,6 +621,8 @@ namespace EPFExplorer
             objectLuaScriptComboBox.Sorted = true;
             objectLuaScriptComboBox.Sorted = false;
             objectLuaScriptComboBox.Items.Insert(0, "None");
+
+            roomObjectsComboBox.SelectedIndex = i;
         }
 
 
@@ -774,12 +778,20 @@ namespace EPFExplorer
         }
 
         public void UpdateLuaScriptComboBox() {
+
+            int i = luaScriptComboBox.SelectedIndex;
+
             luaScriptComboBox.Items.Clear();
             foreach (archivedfile f in luaScripts)
             {
                 luaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
             }
             luaScriptComboBox.Sorted = true;
+
+            if (i < luaScriptComboBox.Items.Count)
+                {
+                luaScriptComboBox.SelectedIndex = i;
+                }
         }
 
 
@@ -857,6 +869,18 @@ namespace EPFExplorer
         private void saveLua_Click(object sender, EventArgs e)
         {
             archivedfile scriptToSave = null;
+
+            if (luaRichText.Text.Length == 0)
+                {
+                MessageBox.Show("Don't save a blank lua file - delete it instead.");
+                return;
+                }
+
+            if (luaScriptComboBox.SelectedIndex == -1)
+                {
+                MessageBox.Show("Sorry, could you copy your code to the clipboard, reselect the lua script from the dropdown, and try again? This is to avoid an error.");
+                return;
+                }    
 
             foreach (archivedfile f in luaScripts)
             {
@@ -1617,22 +1641,31 @@ namespace EPFExplorer
 
         private void addTextLine_Click(object sender, EventArgs e)
         {
+            archivedfile strings = null;
+
             switch (textFileComboBox.SelectedItem)
             {
                 case "downloadStrings.st":
-                    downloadStrings.STstrings.Insert((int)textIDUpDown.Value, "");
+                    strings = downloadStrings;
                     break;
                 case "dialogStrings.st":
-                    dialogStrings.STstrings.Insert((int)textIDUpDown.Value, "");
-                    includeDialogStrings = true;
+                    strings = dialogStrings;
                     break;
                 case "gameStrings.st":
-                    gameStrings.STstrings.Insert((int)textIDUpDown.Value, "");
-                    includeGameStrings = true;
+                    strings = gameStrings;
                     break;
             }
+
+            if (textIDUpDown.Value == strings.STstrings.Count - 1)
+                {
+                downloadStrings.STstrings.Add("");
+                }
+            else
+                {
+                downloadStrings.STstrings.Insert((int)textIDUpDown.Value + 1, "");
+                }
+            
             textIDUpDown.Value++;
-            textIDUpDown.Value--;
         }
 
         private void deleteTextLine_Click(object sender, EventArgs e)
