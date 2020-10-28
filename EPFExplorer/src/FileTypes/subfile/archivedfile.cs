@@ -1119,6 +1119,7 @@ namespace EPFExplorer
                 processInfo.RedirectStandardError = true;
                 processInfo.Arguments = " -s input.lua";
                 processInfo.WorkingDirectory = luaDir;
+                processInfo.CreateNoWindow = true;
 
                 Process compiler = Process.Start(processInfo);
                 compiler.WaitForExit();

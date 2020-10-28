@@ -1007,6 +1007,7 @@ namespace EPFExplorer
             }
 
             roomObjectsComboBox.SelectedIndex = savedRoomObjectIndex;
+            saveLua_Click(null,null);
         }
 
         private void addObjectButton_Click(object sender, EventArgs e)
