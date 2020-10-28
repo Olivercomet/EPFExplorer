@@ -101,7 +101,6 @@
             this.luaScriptComboBox = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
             this.textEditorTab = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.deleteTextLine = new System.Windows.Forms.Button();
             this.addTextLine = new System.Windows.Forms.Button();
@@ -884,12 +883,13 @@
             // luaRichText
             // 
             this.luaRichText.BackColor = System.Drawing.SystemColors.Control;
-            this.luaRichText.Location = new System.Drawing.Point(14, 92);
+            this.luaRichText.Location = new System.Drawing.Point(12, 92);
             this.luaRichText.Name = "luaRichText";
             this.luaRichText.Size = new System.Drawing.Size(479, 426);
             this.luaRichText.TabIndex = 17;
             this.luaRichText.Text = "";
             this.luaRichText.WordWrap = false;
+            this.luaRichText.ZoomFactor = 1.1F;
             // 
             // saveLua
             // 
@@ -944,7 +944,6 @@
             // 
             // textEditorTab
             // 
-            this.textEditorTab.Controls.Add(this.label4);
             this.textEditorTab.Controls.Add(this.groupBox10);
             this.textEditorTab.Controls.Add(this.groupBox7);
             this.textEditorTab.Location = new System.Drawing.Point(4, 25);
@@ -954,17 +953,6 @@
             this.textEditorTab.TabIndex = 4;
             this.textEditorTab.Text = "Text Editor";
             this.textEditorTab.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(46, 439);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(422, 51);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Be careful here - if you edit gamestrings or dialogstrings,\r\nand leave them with " +
-    "fewer strings than their vanilla versions,\r\nthe game may crash! It\'s safer to no" +
-    "t edit them unless you\'re sure.";
             // 
             // groupBox10
             // 
@@ -1013,11 +1001,12 @@
             // richTextST
             // 
             this.richTextST.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.richTextST.Location = new System.Drawing.Point(12, 111);
+            this.richTextST.Location = new System.Drawing.Point(9, 111);
             this.richTextST.Name = "richTextST";
-            this.richTextST.Size = new System.Drawing.Size(427, 142);
+            this.richTextST.Size = new System.Drawing.Size(432, 142);
             this.richTextST.TabIndex = 2;
             this.richTextST.Text = "";
+            this.richTextST.ZoomFactor = 1.3F;
             this.richTextST.TextChanged += new System.EventHandler(this.richTextST_TextChanged);
             // 
             // textIDUpDown
@@ -1058,8 +1047,7 @@
             this.textFileComboBox.FormattingEnabled = true;
             this.textFileComboBox.Items.AddRange(new object[] {
             "downloadStrings.st",
-            "dialogStrings.st",
-            "gameStrings.st"});
+            "dialogStrings.st"});
             this.textFileComboBox.Location = new System.Drawing.Point(29, 31);
             this.textFileComboBox.Name = "textFileComboBox";
             this.textFileComboBox.Size = new System.Drawing.Size(203, 24);
@@ -1137,7 +1125,6 @@
             this.luaScriptsTabPage.ResumeLayout(false);
             this.luaScriptsTabPage.PerformLayout();
             this.textEditorTab.ResumeLayout(false);
-            this.textEditorTab.PerformLayout();
             this.groupBox10.ResumeLayout(false);
             this.groupBox10.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.textIDUpDown)).EndInit();
@@ -1230,7 +1217,6 @@
         private System.Windows.Forms.Button saveMissionToolStripMenuItem;
         private System.Windows.Forms.Button addTextLine;
         private System.Windows.Forms.Button deleteTextLine;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox luaScriptNameBox;
         private System.Windows.Forms.ComboBox InteractionAnimTypeComboBox;
