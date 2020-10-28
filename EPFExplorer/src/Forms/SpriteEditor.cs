@@ -21,8 +21,6 @@ namespace EPFExplorer
             InitializeComponent();
         }
 
-
-
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
         {
             sprite.spriteEditor = null;

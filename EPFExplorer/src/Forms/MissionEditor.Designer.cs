@@ -20,6 +20,8 @@
             base.Dispose(disposing);
         }
 
+        
+
         #region Windows Form Designer generated code
 
         /// <summary>
@@ -28,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MissionEditor));
             this.capacityProgressBar = new System.Windows.Forms.ProgressBar();

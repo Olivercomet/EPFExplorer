@@ -92,6 +92,13 @@ namespace EPFExplorer
             public int displayOffsetY;
         }
 
+        public void OnClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            if (System.Windows.Forms.MessageBox.Show("Are you sure you want to exit the mission editor? Any unsaved changes will be lost!", "Are you sure you want to exit?", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Warning) != System.Windows.Forms.DialogResult.Yes)
+            {
+                e.Cancel = true;
+            }
+        }
         public void LoadFormControls() {
 
             DestinationRoomComboBox.Items.Add("None");
@@ -113,10 +120,6 @@ namespace EPFExplorer
             ready = true;
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void selectedRoomBox_SelectedIndexChanged(object sender, EventArgs e)
         {
