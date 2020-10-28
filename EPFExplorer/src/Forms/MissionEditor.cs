@@ -26,8 +26,6 @@ namespace EPFExplorer
 
         public Form1.Room selectedRoom;
 
-        public List<DownloadItem> downloadItems = new List<DownloadItem>();
-
         public List<archivedfile> luaScripts = new List<archivedfile>();
 
         public MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
@@ -206,9 +204,9 @@ namespace EPFExplorer
 
         private void loadMission_Click(object sender, EventArgs e)
         {
-            if (mainArc == null || gameRdt == null || downloadArc == null)
+            if (mainArc == null || gameRdt == null)
             {
-                MessageBox.Show("You need to add the above three files first!");
+                MessageBox.Show("You need to add the above three files first! \nAlternatively, leave the last one blank to open a mission template instead.");
                 return;
             }
 
@@ -237,19 +235,32 @@ namespace EPFExplorer
             already_used_IDs = new List<int>();
             luaScripts = new List<archivedfile>();
 
-            //read tuxedoDL
+            string[] tuxedoDLdecompiled = new string[0];
 
-            tuxedoDL = downloadArc.GetFileByName("/chunks/tuxedoDL.luc");
-            tuxedoDL.ReadFile();
-            tuxedoDL.DecompressFile();
-            tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
 
-            string[] tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
-            File.Delete("tuxedoDL_TEMP");
+            if (downloadArc == null)
+                {
+                    downloadArc = new arcfile();
+                    downloadArc.form1 = form1;
+                    downloadArc.filebytes = EPFExplorer.Properties.Resources.templateMission;
+                    downloadArc.filename = "TemplateMission.arc";
+                    downloadArcLabel.Text = "Template Mission loaded";
+                    downloadArc.ReadArc();
+                }
+            
+                //read tuxedoDL
+
+                tuxedoDL = downloadArc.GetFileByName("/chunks/tuxedoDL.luc");
+                tuxedoDL.ReadFile();
+                tuxedoDL.DecompressFile();
+                tuxedoDL.DecompileLuc(tuxedoDL.filebytes, "tuxedoDL_TEMP");
+
+                tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
+                File.Delete("tuxedoDL_TEMP");
+            
+            
 
             //parse downloadItems (aka, the mission objects) from tuxedoDL
-
-            downloadItems = new List<DownloadItem>();
 
             foreach (Form1.Room r in form1.rooms)
             {
@@ -364,7 +375,11 @@ namespace EPFExplorer
                 selectedRoomBox_SelectedIndexChanged(null, null);
             }
 
-            roomObjectsComboBox.SelectedIndex = 0;
+            if (roomObjectsComboBox.Items.Count > 0)
+                {
+                roomObjectsComboBox.SelectedIndex = 0;
+                }
+            
 
             //read STs
 
@@ -490,7 +505,6 @@ namespace EPFExplorer
             if (splitString[15] == "true" ? newDownloadItem.flipX = true : newDownloadItem.flipX = false)
                 if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
 
-                    downloadItems.Add(newDownloadItem);
             already_used_IDs.Add(newDownloadItem.ID);
 
             foreach (Form1.Room r in form1.rooms)
@@ -525,6 +539,11 @@ namespace EPFExplorer
 
         private void roomObjectsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (roomObjectsComboBox.SelectedIndex == -1 && selectedRoom.Objects.Count > 0)
+                {
+                roomObjectsComboBox.SelectedIndex = 0;
+                return;
+                }
             ObjectIDUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].ID;
             PosXUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos;
             PosYUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos;
@@ -783,7 +802,6 @@ namespace EPFExplorer
             if (result == DialogResult.Yes)
             {
                 already_used_IDs.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].ID);
-                downloadItems.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex]);
 
                 if (roomObjectsComboBox.SelectedIndex > 0)
                 {
@@ -861,6 +879,10 @@ namespace EPFExplorer
             scriptToSave.filebytes = scriptToSave.LuaFromFileToLuc(scriptToSave.filebytes, "lua_TEMP_FOR_COMPILING");
             File.Delete("lua_TEMP_FOR_COMPILING");
             AddCurrentRoomObjectsToComboBox();
+            if (roomObjectsComboBox.Items.Count > 0)
+                {
+                roomObjectsComboBox.SelectedIndex = 0;
+                }
         }
 
         private void deleteLuaScriptButton_Click(object sender, EventArgs e)
@@ -974,7 +996,6 @@ namespace EPFExplorer
                 newDownloadItem.ID = rnd.Next(30000, 60000);
             } while (already_used_IDs.Contains(newDownloadItem.ID));
 
-            downloadItems.Add(newDownloadItem);
 
             if (roomObjectsComboBox.Items.Count != 0)
                 {
@@ -1005,6 +1026,12 @@ namespace EPFExplorer
 
         private void objectLuaScriptComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (roomObjectsComboBox.SelectedIndex == -1)
+                {
+                MessageBox.Show("Sorry, could you please reselect your object from the list? Thanks.");
+                return;
+                }
+
             foreach (archivedfile f in luaScripts)
             {
                 if ((string)objectLuaScriptComboBox.Items[objectLuaScriptComboBox.SelectedIndex] == Path.GetFileName(f.filename))
@@ -1365,6 +1392,29 @@ namespace EPFExplorer
             }
 
             string newTuxedoDL = "";
+
+            ReserveDownloadNpcs = 0;
+            ReserveDownloadExits = 0;
+            ReserveDownloadItems = 0;
+
+            foreach (Form1.Room r in form1.rooms)
+                {
+                foreach (DownloadItem item in r.Objects)
+                    {
+                    if (item.interactionType == InteractionType.NPC)
+                        {
+                        ReserveDownloadNpcs++;
+                        }
+                    else if (item.interactionType == InteractionType.Door)
+                        {
+                        ReserveDownloadExits++;
+                        }
+                    else
+                        {
+                        ReserveDownloadItems++;
+                        }
+                    }
+                }
 
             newTuxedoDL += "_util.ReserveDownloadNpcs(" + ReserveDownloadNpcs + ")\n";
             newTuxedoDL += "_util.ReserveDownloadExits(" + ReserveDownloadExits + ")\n";

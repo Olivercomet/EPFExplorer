@@ -139,6 +139,11 @@ namespace EPFExplorer
 
         public archivedfile GetFileByName(string filename) {
 
+            if (filebytes == null || filebytes.Length == 0)
+                {
+                return null;
+                }
+
             if(archivedfiles == null || archivedfiles.Count == 0)
                 {
                 ReadArc();
