@@ -388,8 +388,8 @@ namespace EPFExplorer
 
                     bool is_modified = false;
 
-                    List<ushort> offsetsX = new List<ushort>();
-                    List<ushort> offsetsY = new List<ushort>();
+                    List<short> offsetsX = new List<short>();
+                    List<short> offsetsY = new List<short>();
 
                     foreach (rdtSubfileData subfiledata in file.rdtSubfileDataList) //get images
                         {
@@ -548,8 +548,8 @@ namespace EPFExplorer
 
                                 form1.WriteU16ToArray(newImage.filebytes, 0, (ushort)images[j].Width);
                                 form1.WriteU16ToArray(newImage.filebytes, 2, (ushort)images[j].Height);
-                                form1.WriteU16ToArray(newImage.filebytes, 4, offsetsX[j]);   
-                                form1.WriteU16ToArray(newImage.filebytes, 6, offsetsY[j]);    
+                                form1.WriteS16ToArray(newImage.filebytes, 4, offsetsX[j]);   
+                                form1.WriteS16ToArray(newImage.filebytes, 6, offsetsY[j]);    
 
                                 int curOffset = 8;
 

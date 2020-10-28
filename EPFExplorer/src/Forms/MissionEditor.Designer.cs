@@ -30,7 +30,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MissionEditor));
             this.capacityProgressBar = new System.Windows.Forms.ProgressBar();
@@ -55,6 +54,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.moveObjectDown = new System.Windows.Forms.Button();
             this.objectSettingsGroupBox = new System.Windows.Forms.GroupBox();
+            this.InteractionAnimTypeComboBox = new System.Windows.Forms.ComboBox();
             this.label25 = new System.Windows.Forms.Label();
             this.doorSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.destposY = new System.Windows.Forms.NumericUpDown();
@@ -68,13 +68,12 @@
             this.label23 = new System.Windows.Forms.Label();
             this.FlipYCheckBox = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.Unk3UpDown = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
             this.interactionTypeComboBox = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
             this.spawnedByDefault = new System.Windows.Forms.CheckBox();
             this.Unk2UpDown = new System.Windows.Forms.NumericUpDown();
-            this.Unk1UpDown = new System.Windows.Forms.NumericUpDown();
+            this.soundUpDown = new System.Windows.Forms.NumericUpDown();
             this.objectLuaScriptComboBox = new System.Windows.Forms.ComboBox();
             this.FlipXCheckBox = new System.Windows.Forms.CheckBox();
             this.label11 = new System.Windows.Forms.Label();
@@ -130,9 +129,8 @@
             this.doorSettingsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.destposX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Unk3UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk2UpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Unk1UpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosXUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).BeginInit();
@@ -203,6 +201,7 @@
             // 
             // saveMissionToolStripMenuItem
             // 
+            this.saveMissionToolStripMenuItem.Enabled = false;
             this.saveMissionToolStripMenuItem.Location = new System.Drawing.Point(12, 430);
             this.saveMissionToolStripMenuItem.Name = "saveMissionToolStripMenuItem";
             this.saveMissionToolStripMenuItem.Size = new System.Drawing.Size(473, 79);
@@ -379,18 +378,18 @@
             // objectSettingsGroupBox
             // 
             this.objectSettingsGroupBox.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.objectSettingsGroupBox.Controls.Add(this.InteractionAnimTypeComboBox);
             this.objectSettingsGroupBox.Controls.Add(this.label25);
             this.objectSettingsGroupBox.Controls.Add(this.doorSettingsGroupBox);
             this.objectSettingsGroupBox.Controls.Add(this.label23);
             this.objectSettingsGroupBox.Controls.Add(this.FlipYCheckBox);
             this.objectSettingsGroupBox.Controls.Add(this.label16);
-            this.objectSettingsGroupBox.Controls.Add(this.Unk3UpDown);
             this.objectSettingsGroupBox.Controls.Add(this.label18);
             this.objectSettingsGroupBox.Controls.Add(this.interactionTypeComboBox);
             this.objectSettingsGroupBox.Controls.Add(this.label17);
             this.objectSettingsGroupBox.Controls.Add(this.spawnedByDefault);
             this.objectSettingsGroupBox.Controls.Add(this.Unk2UpDown);
-            this.objectSettingsGroupBox.Controls.Add(this.Unk1UpDown);
+            this.objectSettingsGroupBox.Controls.Add(this.soundUpDown);
             this.objectSettingsGroupBox.Controls.Add(this.objectLuaScriptComboBox);
             this.objectSettingsGroupBox.Controls.Add(this.FlipXCheckBox);
             this.objectSettingsGroupBox.Controls.Add(this.label11);
@@ -409,6 +408,19 @@
             this.objectSettingsGroupBox.TabIndex = 13;
             this.objectSettingsGroupBox.TabStop = false;
             this.objectSettingsGroupBox.Text = "Object settings";
+            // 
+            // InteractionAnimTypeComboBox
+            // 
+            this.InteractionAnimTypeComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.InteractionAnimTypeComboBox.FormattingEnabled = true;
+            this.InteractionAnimTypeComboBox.Items.AddRange(new object[] {
+            "Play animation (one-shot)",
+            "Go to next sprite in loop"});
+            this.InteractionAnimTypeComboBox.Location = new System.Drawing.Point(183, 225);
+            this.InteractionAnimTypeComboBox.Name = "InteractionAnimTypeComboBox";
+            this.InteractionAnimTypeComboBox.Size = new System.Drawing.Size(229, 24);
+            this.InteractionAnimTypeComboBox.TabIndex = 64;
+            this.InteractionAnimTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.InteractionSubtypeComboBox_SelectedIndexChanged);
             // 
             // label25
             // 
@@ -557,34 +569,20 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(274, 163);
+            this.label16.Location = new System.Drawing.Point(7, 228);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(45, 17);
+            this.label16.Size = new System.Drawing.Size(170, 17);
             this.label16.TabIndex = 48;
-            this.label16.Text = "Unk 3";
-            // 
-            // Unk3UpDown
-            // 
-            this.Unk3UpDown.Location = new System.Drawing.Point(324, 162);
-            this.Unk3UpDown.Maximum = new decimal(new int[] {
-            65535,
-            0,
-            0,
-            0});
-            this.Unk3UpDown.Name = "Unk3UpDown";
-            this.Unk3UpDown.Size = new System.Drawing.Size(73, 22);
-            this.Unk3UpDown.TabIndex = 49;
-            this.toolTip1.SetToolTip(this.Unk3UpDown, "Unknown");
-            this.Unk3UpDown.ValueChanged += new System.EventHandler(this.Unk3UpDown_ValueChanged);
+            this.label16.Text = "Interaction animation type";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(7, 162);
+            this.label18.Location = new System.Drawing.Point(172, 128);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(45, 17);
+            this.label18.Size = new System.Drawing.Size(49, 17);
             this.label18.TabIndex = 44;
-            this.label18.Text = "Unk 1";
+            this.label18.Text = "Sound";
             // 
             // interactionTypeComboBox
             // 
@@ -598,8 +596,8 @@
             "Interactable",
             "Puffle",
             "Type 7",
-            "SpecialObject"});
-            this.interactionTypeComboBox.Location = new System.Drawing.Point(121, 228);
+            "Interact once, then despawn"});
+            this.interactionTypeComboBox.Location = new System.Drawing.Point(122, 193);
             this.interactionTypeComboBox.Name = "interactionTypeComboBox";
             this.interactionTypeComboBox.Size = new System.Drawing.Size(247, 24);
             this.interactionTypeComboBox.TabIndex = 60;
@@ -608,11 +606,11 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(138, 164);
+            this.label17.Location = new System.Drawing.Point(302, 129);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(45, 17);
+            this.label17.Size = new System.Drawing.Size(66, 17);
             this.label17.TabIndex = 46;
-            this.label17.Text = "Unk 2";
+            this.label17.Text = "Unknown";
             // 
             // spawnedByDefault
             // 
@@ -630,14 +628,14 @@
             // 
             // Unk2UpDown
             // 
-            this.Unk2UpDown.Location = new System.Drawing.Point(189, 163);
+            this.Unk2UpDown.Location = new System.Drawing.Point(374, 128);
             this.Unk2UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
             this.Unk2UpDown.Name = "Unk2UpDown";
-            this.Unk2UpDown.Size = new System.Drawing.Size(73, 22);
+            this.Unk2UpDown.Size = new System.Drawing.Size(64, 22);
             this.Unk2UpDown.TabIndex = 47;
             this.toolTip1.SetToolTip(this.Unk2UpDown, "Unknown");
             this.Unk2UpDown.Value = new decimal(new int[] {
@@ -647,25 +645,25 @@
             0});
             this.Unk2UpDown.ValueChanged += new System.EventHandler(this.Unk2UpDown_ValueChanged);
             // 
-            // Unk1UpDown
+            // soundUpDown
             // 
-            this.Unk1UpDown.Location = new System.Drawing.Point(58, 162);
-            this.Unk1UpDown.Maximum = new decimal(new int[] {
+            this.soundUpDown.Location = new System.Drawing.Point(224, 127);
+            this.soundUpDown.Maximum = new decimal(new int[] {
             65535,
             0,
             0,
             0});
-            this.Unk1UpDown.Name = "Unk1UpDown";
-            this.Unk1UpDown.Size = new System.Drawing.Size(68, 22);
-            this.Unk1UpDown.TabIndex = 45;
-            this.toolTip1.SetToolTip(this.Unk1UpDown, "Unknown");
-            this.Unk1UpDown.ValueChanged += new System.EventHandler(this.Unk1UpDown_ValueChanged);
+            this.soundUpDown.Name = "soundUpDown";
+            this.soundUpDown.Size = new System.Drawing.Size(68, 22);
+            this.soundUpDown.TabIndex = 45;
+            this.toolTip1.SetToolTip(this.soundUpDown, "Unknown");
+            this.soundUpDown.ValueChanged += new System.EventHandler(this.soundUpDown_ValueChanged);
             // 
             // objectLuaScriptComboBox
             // 
             this.objectLuaScriptComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.objectLuaScriptComboBox.FormattingEnabled = true;
-            this.objectLuaScriptComboBox.Location = new System.Drawing.Point(85, 197);
+            this.objectLuaScriptComboBox.Location = new System.Drawing.Point(85, 162);
             this.objectLuaScriptComboBox.Name = "objectLuaScriptComboBox";
             this.objectLuaScriptComboBox.Size = new System.Drawing.Size(283, 24);
             this.objectLuaScriptComboBox.TabIndex = 15;
@@ -714,7 +712,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(7, 200);
+            this.label22.Location = new System.Drawing.Point(7, 165);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(72, 17);
             this.label22.TabIndex = 14;
@@ -760,7 +758,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(5, 231);
+            this.label19.Location = new System.Drawing.Point(8, 196);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(110, 17);
             this.label19.TabIndex = 42;
@@ -1108,6 +1106,7 @@
             this.MaximizeBox = false;
             this.Name = "MissionEditor";
             this.Text = "EPFExplorer Mission Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.Load += new System.EventHandler(this.MissionEditor_Load);
             this.groupBox5.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
@@ -1130,9 +1129,8 @@
             this.doorSettingsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.destposY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.destposX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Unk3UpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Unk2UpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Unk1UpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.soundUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosXUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PosYUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ObjectIDUpDown)).EndInit();
@@ -1191,13 +1189,12 @@
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.CheckBox FlipYCheckBox;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.NumericUpDown Unk3UpDown;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.ComboBox interactionTypeComboBox;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.CheckBox spawnedByDefault;
         private System.Windows.Forms.NumericUpDown Unk2UpDown;
-        private System.Windows.Forms.NumericUpDown Unk1UpDown;
+        private System.Windows.Forms.NumericUpDown soundUpDown;
         private System.Windows.Forms.ComboBox objectLuaScriptComboBox;
         private System.Windows.Forms.CheckBox FlipXCheckBox;
         private System.Windows.Forms.Label label11;
@@ -1236,5 +1233,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox luaScriptNameBox;
+        private System.Windows.Forms.ComboBox InteractionAnimTypeComboBox;
     }
 }

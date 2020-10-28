@@ -84,6 +84,7 @@ namespace EPFExplorer
                 }
 
             offsetXUpDown.Value = images[frame].offsetX;
+
             offsetYUpDown.Value = images[frame].offsetY;
 
             ImageBox.Image = images[frame].image;
@@ -377,14 +378,14 @@ namespace EPFExplorer
         private void offsetXUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            images[curFrame].offsetX = (ushort)offsetXUpDown.Value;
+            images[curFrame].offsetX = (short)(offsetXUpDown.Value);
             SendUpdateToRDT();
         }
 
         private void offsetYUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            images[curFrame].offsetY = (ushort)offsetYUpDown.Value;
+           images[curFrame].offsetY = (short)offsetYUpDown.Value;
             SendUpdateToRDT();
         }
 

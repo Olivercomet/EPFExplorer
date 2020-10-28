@@ -57,7 +57,12 @@ namespace EPFExplorer
             Interactable = 0x05,
             Puffle = 0x06,
             InteractionType7 = 0x07,
-            SpecialObject = 0x08
+            InteractThenDespawn = 0x08
+        }
+
+        public enum InteractAnim { 
+            OneShotAnimation = 0x00,
+            CycleThroughSprites = 0x01
         }
         public class DownloadItem {
 
@@ -69,13 +74,13 @@ namespace EPFExplorer
 
             public InteractionType interactionType = InteractionType.Interactable;
             public bool SpawnedByDefault = true;
-            public int unk1;
+            public int sound;
             public string luaScriptPath = "";
             public int unk2;
 
             public int room;
 
-            public int unk3;
+            public InteractAnim interactionSubtype;
 
             public string destinationRoom = "";
 
@@ -260,8 +265,8 @@ namespace EPFExplorer
 
                 tuxedoDLdecompiled = File.ReadAllLines("tuxedoDL_TEMP");
                 File.Delete("tuxedoDL_TEMP");
-            
-            
+
+            saveMissionToolStripMenuItem.Enabled = true;
 
             //parse downloadItems (aka, the mission objects) from tuxedoDL
 
@@ -496,17 +501,18 @@ namespace EPFExplorer
             newDownloadItem.Ypos = int.Parse(splitString[3]);
             newDownloadItem.interactionType = (InteractionType)int.Parse(splitString[4]);
             if (splitString[5] == "true" ? newDownloadItem.SpawnedByDefault = true : newDownloadItem.SpawnedByDefault = false)
-                newDownloadItem.unk1 = int.Parse(splitString[6]);
+                newDownloadItem.sound = int.Parse(splitString[6]);
             newDownloadItem.luaScriptPath = splitString[7].Substring(1, splitString[7].Length - 2);
             newDownloadItem.unk2 = int.Parse(splitString[8]);
             newDownloadItem.room = int.Parse(splitString[9]);
-            newDownloadItem.unk3 = int.Parse(splitString[10]);
+            newDownloadItem.interactionSubtype = (InteractAnim)int.Parse(splitString[10]);
             newDownloadItem.destinationRoom = splitString[11].Substring(1, splitString[11].Length - 2);
             if (splitString[12] == "true" ? newDownloadItem.locked = true : newDownloadItem.locked = false)
                 newDownloadItem.destPosX = int.Parse(splitString[13]);
             newDownloadItem.destPosY = int.Parse(splitString[14]);
             if (splitString[15] == "true" ? newDownloadItem.flipX = true : newDownloadItem.flipX = false)
                 if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
+
 
             already_used_IDs.Add(newDownloadItem.ID);
 
@@ -518,8 +524,6 @@ namespace EPFExplorer
                     break;
                 }
             }
-
-
         }
 
         private void recalculateCapacityButton_Click(object sender, EventArgs e)
@@ -554,9 +558,9 @@ namespace EPFExplorer
             interactionTypeComboBox.SelectedIndex = ((int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionType) - 1;
             FlipXCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX;
             FlipYCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY;
-            Unk1UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk1;
+            soundUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].sound;
             Unk2UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk2;
-            Unk3UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk3;
+            InteractionAnimTypeComboBox.SelectedIndex = (int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionSubtype;
             LockedCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].locked;
             destposX.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosX;
             destposY.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosY;
@@ -699,19 +703,14 @@ namespace EPFExplorer
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].SpawnedByDefault = spawnedByDefault.Checked;
         }
 
-        private void Unk1UpDown_ValueChanged(object sender, EventArgs e)
+        private void soundUpDown_ValueChanged(object sender, EventArgs e)
         {
-            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk1 = (int)Unk1UpDown.Value;
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].sound = (int)soundUpDown.Value;
         }
 
         private void Unk2UpDown_ValueChanged(object sender, EventArgs e)
         {
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk2 = (int)Unk2UpDown.Value;
-        }
-
-        private void Unk3UpDown_ValueChanged(object sender, EventArgs e)
-        {
-            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk3 = (int)Unk3UpDown.Value;
         }
 
         private void interactionTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1284,6 +1283,12 @@ namespace EPFExplorer
                 tilesetArchivedFile = mainArc.GetFileByName(tilesetPathInArc.ToLower());
             }
 
+            if(tilesetArchivedFile == null)
+                {
+                MessageBox.Show(tilesetPathInArc + " not found! Are youi sure you're using fs.arc, from the first game?");
+                return;
+                }
+
             tilesetArchivedFile.ReadFile();
             tileset.filebytes = tilesetArchivedFile.filebytes;
 
@@ -1449,6 +1454,11 @@ namespace EPFExplorer
                             item.destinationRoom = "";
                         }
 
+                        if (item.interactionType == InteractionType.Door)
+                            {
+                            item.sound = 64;
+                            }
+
                         newTuxedoDL += "_util.AddDownloadItem(";
                         newTuxedoDL += item.ID + ", ";
                         newTuxedoDL += "\"" + item.spritePath + "\", ";
@@ -1456,11 +1466,11 @@ namespace EPFExplorer
                         newTuxedoDL += item.Ypos + ", ";
                         newTuxedoDL += (int)item.interactionType + ", ";
                         if (item.SpawnedByDefault) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
-                        newTuxedoDL += item.unk1 + ", ";
+                        newTuxedoDL += item.sound + ", ";
                         newTuxedoDL += "\"" + item.luaScriptPath + "\", ";
                         newTuxedoDL += item.unk2 + ", ";
                         newTuxedoDL += item.room + ", ";
-                        newTuxedoDL += item.unk3 + ", ";
+                        newTuxedoDL += (int)item.interactionSubtype + ", ";
                         newTuxedoDL += "\"" + item.destinationRoom + "\", ";
                         if (item.locked) { newTuxedoDL += "true, "; } else { newTuxedoDL += "false, "; }
                         newTuxedoDL += item.destPosX + ", ";
@@ -1651,6 +1661,11 @@ namespace EPFExplorer
                 textIDUpDown.Value++;
                 textIDUpDown.Value--;
             }
+        }
+
+        private void InteractionSubtypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionSubtype = (InteractAnim)InteractionAnimTypeComboBox.SelectedIndex;
         }
     }
 }

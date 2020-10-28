@@ -69,8 +69,6 @@ namespace EPFExplorer
             public int FFcount = 0;
         }
 
-       
-
         public void LoadSpriteSettings() {    //load sprite settings file (centre, bounds, etc)
 
             int curOffset = 6;
@@ -110,8 +108,6 @@ namespace EPFExplorer
                         curOffset++;
                         }
                  }
-
-                
 
                 switch (newSetting.type)
                     {
@@ -200,7 +196,6 @@ namespace EPFExplorer
             parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)spriteSettings.Count);   //write setting count
             curOffset += 2;
           
-
             foreach (setting s in spriteSettings)
                 {
                 parentfile.form1.WriteU16ToArray(filebytes,curOffset,(ushort)s.name.Length);    //write name length
@@ -226,7 +221,6 @@ namespace EPFExplorer
                     curOffset += 4;
                     }
                 
-
                 switch (s.type)
                 {
                     case 0x03:
@@ -281,21 +275,18 @@ namespace EPFExplorer
             }
         }
 
-
-
         //stuff for graphics
 
         public string graphicsType = "";
 
         ushort width = 0;
         ushort height = 0;
-        public ushort offsetX = 0;
-        public ushort offsetY = 0;
+        public short offsetX = 0;
+        public short offsetY = 0;
 
         public Image image = null;
 
         public int writeAddress = 0; //for writing
-
 
         //generic functions follow
 
@@ -326,8 +317,6 @@ namespace EPFExplorer
                 LoadSpriteSettings();
                 }
             }
-
-
         public void DecompressLZ10IfCompressed() {
             if (filebytes[0] == 0x10 && BitConverter.ToInt32(filebytes, 1) > 0)
             {
@@ -379,7 +368,6 @@ namespace EPFExplorer
             parentfile.RDTSpriteBPP = filebytes[6];
         }
 
-
         public void LoadFrameDurations() {
 
             parentfile.RDTSpriteFrameDurations = new List<ushort>();
@@ -390,16 +378,14 @@ namespace EPFExplorer
                 }
         }
 
-
         public void LoadImage(Color[] palette) {
 
             width = BitConverter.ToUInt16(filebytes, 0);
             height = BitConverter.ToUInt16(filebytes, 2);
-            offsetX = BitConverter.ToUInt16(filebytes, 4);
-            offsetY = BitConverter.ToUInt16(filebytes, 6);
+            offsetX = BitConverter.ToInt16(filebytes, 4);
+            offsetY = BitConverter.ToInt16(filebytes, 6);
 
             image = parentfile.form1.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
-        
         }
     }
 }

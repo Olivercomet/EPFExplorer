@@ -12,7 +12,6 @@ using System.Windows.Forms;
 
 namespace EPFExplorer
 {
-
     public partial class Form1 : Form
     {
 
@@ -283,7 +282,6 @@ namespace EPFExplorer
             {
                 newbin.ReadMusicBin();
             }
-
         }
 
         public void ParseRdt(string filename)
@@ -297,7 +295,6 @@ namespace EPFExplorer
             newrdt.form1 = this;
             newrdt.ReadRdt();
         }
-
 
         private void saveFileExtractorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -322,7 +319,6 @@ namespace EPFExplorer
             return output;
         }
 
-
         public Color ABGR1555_to_RGBA32(ushort input)
         {
 
@@ -344,8 +340,6 @@ namespace EPFExplorer
 
             return output;
         }
-
-
 
         public ushort ColorToABGR1555(Color input)
         {
@@ -373,6 +367,12 @@ namespace EPFExplorer
             array[offset + 1] = (byte)((input & 0xFF00) >> 8);
         }
 
+        public void WriteS16ToArray(Byte[] array, int offset, short input)
+        {
+            array[offset] = (byte)(input & 0x00FF);
+            array[offset + 1] = (byte)((input & 0xFF00) >> 8);
+        }
+
 
         public string GetOrMakeDirectoryForFileName(string path)  //recursively make directories so that a given path exists
         {
@@ -394,8 +394,6 @@ namespace EPFExplorer
 
             return path;
         }
-
-
 
         public int Find_Closest_File_To(uint requested_hash, arcfile arc)   //this is how the game looks up files by hash, and if it can't find the exact one, it uses the closest one instead
         {
@@ -434,10 +432,6 @@ namespace EPFExplorer
 
             return startPosition;   //returns index of the best match file
         }
-
-
-
-
 
         public List<string> GetFilenamePermutations(string input)   //get a bunch of variations on a filename
         {
@@ -512,13 +506,6 @@ namespace EPFExplorer
             return output;
         }
 
-
-
-
-
-
-
-
         public uint readU32FromArray(Byte[] input, int offset)
         {
             uint output = (uint)input[offset] + ((uint)input[offset + 1] * 0x100) + ((uint)input[offset + 2] * 0x10000) + ((uint)input[offset + 3] * 0x1000000);
@@ -532,8 +519,6 @@ namespace EPFExplorer
 
             return output;
         }
-
-
 
         public void MakeFileTree()
         {
@@ -734,7 +719,6 @@ namespace EPFExplorer
             Console.Write("number of unnamed files: " + unnamed_files_count);
         }
 
-
         private void FileTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -867,9 +851,6 @@ namespace EPFExplorer
                         treeNodesAndArchivedFiles.Add(newNode, newfile);
 
                         activeArc.archivedfiles.Add(newfile);
-
-                        
-
                     }
                 }
                 else if (mode == Mode.Rdt)
@@ -1004,7 +985,6 @@ namespace EPFExplorer
             }
         }
 
-
         public void DeleteSubfiles(TreeNode node)
         {
             foreach (TreeNode child in node.Nodes)
@@ -1035,13 +1015,10 @@ namespace EPFExplorer
             }
         }
 
-
-
         private void replaceToolStripMenuItem_Click(object sender, EventArgs e) //REPLACE FILE
         {
             treeNodesAndArchivedFiles[FileTree.SelectedNode].ReplaceFile();
         }
-
 
         public void WriteIntToArray(Byte[] array, int offset, int input)
         {
@@ -1090,8 +1067,6 @@ namespace EPFExplorer
             }
         }
 
-
-
         private void exportRdtFileItem_Click(object sender, EventArgs e)
         {
             //strange remnant
@@ -1138,7 +1113,6 @@ namespace EPFExplorer
                 node.Remove();
             }
         }
-
 
         public void ExportRdtSpriteAsPNG(archivedfile selectedFile, bool askDir)
         {
@@ -1189,7 +1163,6 @@ namespace EPFExplorer
                 selectedFile.spriteEditor.Close();
             }
         }
-
 
         private void FileTree_AfterLabelEdit(object sender, System.Windows.Forms.NodeLabelEditEventArgs e)
         {
@@ -1260,8 +1233,6 @@ namespace EPFExplorer
                 }
             }
         }
-
-
 
         public Bitmap NBFCtoImage(Byte[] input, int offset, int width, int height, Color[] palette, byte bpp)  //palettes aren't always the same length, this function is designed for the image in the downloadable newsletter
         {
@@ -1679,10 +1650,9 @@ namespace EPFExplorer
         {
             if (mode == Mode.Rdt)
             {
+                MessageBox.Show("Files will be exported to the same directory as EPFExplorer's exe.");
                 foreach (archivedfile f in activeRdt.archivedfiles)
                 {
-                    
-                    Console.WriteLine(f.filename);
                     ExportRdtSpriteAsPNG(f, false);
                 }
             }
@@ -1710,26 +1680,34 @@ namespace EPFExplorer
             openFileDialog1.Title = "Select sprite file";
             openFileDialog1.CheckFileExists = true;
             openFileDialog1.CheckPathExists = true;
-            openFileDialog1.Filter = "1PP sprite data (*.sprite)|*.sprite";
+            openFileDialog1.Filter = "1PP sprite data, GIF image (*.sprite, .gif)|*.sprite;*.gif";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                rdtfile newSprite = new rdtfile();
+                switch (Path.GetExtension(openFileDialog1.FileName))
+                {
+                    case ".sprite":
+                        rdtfile newSprite = new rdtfile();
 
-                if (fileToBeReplaced.spriteEditor != null)
-                    {
-                    fileToBeReplaced.spriteEditor.Close();
+                        if (fileToBeReplaced.spriteEditor != null)
+                            {
+                            fileToBeReplaced.spriteEditor.Close();
+                            }
+
+                        newSprite.arcname = Path.GetFileName(openFileDialog1.FileName);
+                        newSprite.filename = openFileDialog1.FileName;
+                        newSprite.filebytes = File.ReadAllBytes(openFileDialog1.FileName);
+                        newSprite.form1 = this;
+                        newSprite.ReadRdt();
+                        newSprite.archivedfiles[0].filename = oldName;
+                        treeNodesAndArchivedFiles.Remove(node);
+                        activeRdt.archivedfiles[activeRdt.archivedfiles.IndexOf(fileToBeReplaced)] = newSprite.archivedfiles[0];
+                        treeNodesAndArchivedFiles.Add(node, activeRdt.archivedfiles[activeRdt.archivedfiles.IndexOf(newSprite.archivedfiles[0])]);
+                        break;
+                    case ".gif":
+                        MessageBox.Show("GIF importing not yet implemented");
+                        break;
                     }
-                
-                newSprite.arcname = Path.GetFileName(openFileDialog1.FileName);
-                newSprite.filename = openFileDialog1.FileName;
-                newSprite.filebytes = File.ReadAllBytes(openFileDialog1.FileName);
-                newSprite.form1 = this;
-                newSprite.ReadRdt();
-                newSprite.archivedfiles[0].filename = oldName;
-                treeNodesAndArchivedFiles.Remove(node);
-                activeRdt.archivedfiles[activeRdt.archivedfiles.IndexOf(fileToBeReplaced)] = newSprite.archivedfiles[0];
-                treeNodesAndArchivedFiles.Add(node,activeRdt.archivedfiles[activeRdt.archivedfiles.IndexOf(newSprite.archivedfiles[0])]);
                 }
         }
 
@@ -1815,7 +1793,6 @@ namespace EPFExplorer
             }
 
         }
-
 
         private void randomizeRDTSpritesToolStripMenuItem_Click(object sender, EventArgs e)
         {
