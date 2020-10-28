@@ -958,6 +958,8 @@ namespace EPFExplorer
 
         private void addLuaScript_Click(object sender, EventArgs e)
         {
+            int savedRoomObjectIndex = roomObjectsComboBox.SelectedIndex;
+
             archivedfile newScript = new archivedfile();
             newScript.form1 = form1;
             newScript.parentarcfile = downloadArc;
@@ -1004,6 +1006,7 @@ namespace EPFExplorer
                 }
             }
 
+            roomObjectsComboBox.SelectedIndex = savedRoomObjectIndex;
         }
 
         private void addObjectButton_Click(object sender, EventArgs e)
