@@ -554,7 +554,7 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(267, 162);
+            this.label16.Location = new System.Drawing.Point(274, 163);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(45, 17);
             this.label16.TabIndex = 48;
@@ -562,7 +562,7 @@
             // 
             // Unk3UpDown
             // 
-            this.Unk3UpDown.Location = new System.Drawing.Point(318, 160);
+            this.Unk3UpDown.Location = new System.Drawing.Point(324, 162);
             this.Unk3UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -605,7 +605,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(132, 162);
+            this.label17.Location = new System.Drawing.Point(138, 164);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(45, 17);
             this.label17.TabIndex = 46;
@@ -627,7 +627,7 @@
             // 
             // Unk2UpDown
             // 
-            this.Unk2UpDown.Location = new System.Drawing.Point(183, 162);
+            this.Unk2UpDown.Location = new System.Drawing.Point(189, 163);
             this.Unk2UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -646,7 +646,7 @@
             // 
             // Unk1UpDown
             // 
-            this.Unk1UpDown.Location = new System.Drawing.Point(54, 162);
+            this.Unk1UpDown.Location = new System.Drawing.Point(58, 162);
             this.Unk1UpDown.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -892,12 +892,13 @@
             // 
             // saveLua
             // 
-            this.saveLua.Location = new System.Drawing.Point(417, 24);
+            this.saveLua.BackColor = System.Drawing.Color.Yellow;
+            this.saveLua.Location = new System.Drawing.Point(417, 13);
             this.saveLua.Name = "saveLua";
-            this.saveLua.Size = new System.Drawing.Size(73, 23);
+            this.saveLua.Size = new System.Drawing.Size(73, 44);
             this.saveLua.TabIndex = 18;
             this.saveLua.Text = "Save";
-            this.saveLua.UseVisualStyleBackColor = true;
+            this.saveLua.UseVisualStyleBackColor = false;
             this.saveLua.Click += new System.EventHandler(this.saveLua_Click);
             // 
             // deleteLuaScriptButton

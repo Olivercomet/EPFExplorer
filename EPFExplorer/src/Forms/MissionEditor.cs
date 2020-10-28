@@ -975,9 +975,27 @@ namespace EPFExplorer
             } while (already_used_IDs.Contains(newDownloadItem.ID));
 
             downloadItems.Add(newDownloadItem);
-            selectedRoom.Objects.Insert(roomObjectsComboBox.SelectedIndex, newDownloadItem);
+
+            if (roomObjectsComboBox.Items.Count != 0)
+                {
+                selectedRoom.Objects.Insert(roomObjectsComboBox.SelectedIndex, newDownloadItem);
+                }
+            else
+                {
+                selectedRoom.Objects.Add(newDownloadItem);
+                objectSettingsGroupBox.Enabled = true;
+                deleteObject.Enabled = true;
+                moveObjectUp.Enabled = true;
+                moveObjectDown.Enabled = true;
+                }
+            
 
             int i = roomObjectsComboBox.SelectedIndex;
+
+            if (i == -1)
+                {
+                i = 0;
+                }
 
             AddCurrentRoomObjectsToComboBox();
 
