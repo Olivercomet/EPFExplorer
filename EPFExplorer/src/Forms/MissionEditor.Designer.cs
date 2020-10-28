@@ -90,6 +90,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.selectedRoomBox = new System.Windows.Forms.ComboBox();
             this.luaScriptsTabPage = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
             this.luaRichText = new System.Windows.Forms.RichTextBox();
             this.saveLua = new System.Windows.Forms.Button();
             this.deleteLuaScriptButton = new System.Windows.Forms.Button();
@@ -97,7 +99,10 @@
             this.luaScriptComboBox = new System.Windows.Forms.ComboBox();
             this.label24 = new System.Windows.Forms.Label();
             this.textEditorTab = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.deleteTextLine = new System.Windows.Forms.Button();
+            this.addTextLine = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.richTextST = new System.Windows.Forms.RichTextBox();
             this.textIDUpDown = new System.Windows.Forms.NumericUpDown();
@@ -108,11 +113,6 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.backgroundImageBox = new RedCell.UI.Controls.PixelBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.addTextLine = new System.Windows.Forms.Button();
-            this.deleteTextLine = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.luaScriptNameBox = new System.Windows.Forms.TextBox();
             this.groupBox5.SuspendLayout();
             this.groupBox6.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -864,6 +864,22 @@
             this.luaScriptsTabPage.Text = "Lua Scripts";
             this.luaScriptsTabPage.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 64);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(83, 17);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Script name";
+            // 
+            // luaScriptNameBox
+            // 
+            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 63);
+            this.luaScriptNameBox.Name = "luaScriptNameBox";
+            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
+            this.luaScriptNameBox.TabIndex = 19;
+            // 
             // luaRichText
             // 
             this.luaRichText.BackColor = System.Drawing.SystemColors.Control;
@@ -937,6 +953,17 @@
             this.textEditorTab.Text = "Text Editor";
             this.textEditorTab.UseVisualStyleBackColor = true;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(46, 439);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(422, 51);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Be careful here - if you edit gamestrings or dialogstrings,\r\nand leave them with " +
+    "fewer strings than their vanilla versions,\r\nthe game may crash! It\'s safer to no" +
+    "t edit them unless you\'re sure.";
+            // 
             // groupBox10
             // 
             this.groupBox10.Controls.Add(this.deleteTextLine);
@@ -951,6 +978,26 @@
             this.groupBox10.TabIndex = 5;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Edit text";
+            // 
+            // deleteTextLine
+            // 
+            this.deleteTextLine.Location = new System.Drawing.Point(324, 40);
+            this.deleteTextLine.Name = "deleteTextLine";
+            this.deleteTextLine.Size = new System.Drawing.Size(63, 23);
+            this.deleteTextLine.TabIndex = 5;
+            this.deleteTextLine.Text = "Delete";
+            this.deleteTextLine.UseVisualStyleBackColor = true;
+            this.deleteTextLine.Click += new System.EventHandler(this.deleteTextLine_Click);
+            // 
+            // addTextLine
+            // 
+            this.addTextLine.Location = new System.Drawing.Point(266, 40);
+            this.addTextLine.Name = "addTextLine";
+            this.addTextLine.Size = new System.Drawing.Size(52, 23);
+            this.addTextLine.TabIndex = 4;
+            this.addTextLine.Text = "Add";
+            this.addTextLine.UseVisualStyleBackColor = true;
+            this.addTextLine.Click += new System.EventHandler(this.addTextLine_Click);
             // 
             // label2
             // 
@@ -1043,52 +1090,6 @@
             this.backgroundImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.backgroundImageBox.TabIndex = 0;
             this.backgroundImageBox.TabStop = false;
-            // 
-            // addTextLine
-            // 
-            this.addTextLine.Location = new System.Drawing.Point(266, 40);
-            this.addTextLine.Name = "addTextLine";
-            this.addTextLine.Size = new System.Drawing.Size(52, 23);
-            this.addTextLine.TabIndex = 4;
-            this.addTextLine.Text = "Add";
-            this.addTextLine.UseVisualStyleBackColor = true;
-            this.addTextLine.Click += new System.EventHandler(this.addTextLine_Click);
-            // 
-            // deleteTextLine
-            // 
-            this.deleteTextLine.Location = new System.Drawing.Point(324, 40);
-            this.deleteTextLine.Name = "deleteTextLine";
-            this.deleteTextLine.Size = new System.Drawing.Size(63, 23);
-            this.deleteTextLine.TabIndex = 5;
-            this.deleteTextLine.Text = "Delete";
-            this.deleteTextLine.UseVisualStyleBackColor = true;
-            this.deleteTextLine.Click += new System.EventHandler(this.deleteTextLine_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(40, 454);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(426, 34);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Be careful here - if gamestrings or dialogstrings have fewer strings\r\nthan their " +
-    "vanilla versions, the game may crash!";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 64);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(83, 17);
-            this.label3.TabIndex = 20;
-            this.label3.Text = "Script name";
-            // 
-            // luaScriptNameBox
-            // 
-            this.luaScriptNameBox.Location = new System.Drawing.Point(107, 63);
-            this.luaScriptNameBox.Name = "luaScriptNameBox";
-            this.luaScriptNameBox.Size = new System.Drawing.Size(383, 22);
-            this.luaScriptNameBox.TabIndex = 19;
             // 
             // MissionEditor
             // 

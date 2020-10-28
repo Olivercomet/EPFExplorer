@@ -127,7 +127,7 @@ namespace EPFExplorer
             AddCurrentRoomObjectsToComboBox();
 
             if (roomObjectsComboBox.Items.Count > 0)
-                {
+            {
                 objectSettingsGroupBox.Enabled = true;
                 roomObjectsComboBox.SelectedIndex = 0;
                 deleteObject.Enabled = true;
@@ -135,12 +135,12 @@ namespace EPFExplorer
                 moveObjectDown.Enabled = true;
             }
             else
-                {
+            {
                 objectSettingsGroupBox.Enabled = false;
                 deleteObject.Enabled = false;
                 moveObjectUp.Enabled = false;
                 moveObjectDown.Enabled = false;
-                }
+            }
 
             ChangeBackgroundImage();
             AddCurrentRoomPixelBoxes();
@@ -295,16 +295,16 @@ namespace EPFExplorer
             downloadRdt = new rdtfile();
 
             if (temp != null)
-                {
+            {
                 temp.ReadFile();
                 downloadRdt.filebytes = temp.filebytes;
                 downloadRdt.ReadRdt();
 
                 foreach (archivedfile f in downloadRdt.archivedfiles)
-                    {
+                {
                     RDTSpritePath.Items.Add(f.filename);
-                    }
                 }
+            }
 
             RDTSpritePath.Sorted = true;
 
@@ -317,33 +317,33 @@ namespace EPFExplorer
 
 
             foreach (archivedfile f in downloadArc.archivedfiles)
+            {
+                string ext = Path.GetExtension(f.filename).ToLower();
+
+                if (ext != ".luc")
                 {
-                    string ext = Path.GetExtension(f.filename).ToLower();
-
-                    if (ext != ".luc")
-                    {
-                        continue;
-                    }
-
-                    if (f.filebytes == null || f.filebytes.Length == 0)
-                    {
-                        f.ReadFile();
-                    }
-
-                    if (f.filename.ToLower().Contains("tuxedodl.luc"))
-                        {
-                        continue;
-                        }
-
-                    luaScripts.Add(f);
-                    objectLuaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
-                    luaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+                    continue;
                 }
+
+                if (f.filebytes == null || f.filebytes.Length == 0)
+                {
+                    f.ReadFile();
+                }
+
+                if (f.filename.ToLower().Contains("tuxedodl.luc"))
+                {
+                    continue;
+                }
+
+                luaScripts.Add(f);
+                objectLuaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+                luaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
+            }
 
             luaScriptComboBox.Sorted = true;
             objectLuaScriptComboBox.Sorted = true;
             objectLuaScriptComboBox.Sorted = false;
-            objectLuaScriptComboBox.Items.Insert(0,"None");
+            objectLuaScriptComboBox.Items.Insert(0, "None");
 
             luaRichText.Text = "";
 
@@ -356,14 +356,14 @@ namespace EPFExplorer
             AddCurrentRoomObjectsToComboBox(); //force this in case the selected index was already zero (thus not triggering the selectedindexchanged function)
 
             if (selectedRoomBox.SelectedIndex == 0)
-                {
+            {
                 selectedRoomBox.SelectedIndex = 0;
-                }
+            }
             else
-                {
+            {
                 selectedRoomBox_SelectedIndexChanged(null, null);
-                }
-            
+            }
+
             roomObjectsComboBox.SelectedIndex = 0;
 
             //read STs
@@ -375,29 +375,29 @@ namespace EPFExplorer
             //look for them in the download arc first, but if they're not found, use the one from the main arc
 
             if (dialogStrings == null)
-                {
+            {
                 //don't read it, the vanilla one is too big.
-                }
+            }
             else
-                {
+            {
                 includeDialogStrings = true;  //we always include this if it was in download.arc before, but NOT if it was only in fs.arc
-                }
+            }
 
             if (gameStrings == null)
-                {
+            {
                 //don't read it, the vanilla one is too big.
-                }
+            }
             else
-                {
+            {
                 includeGameStrings = true;  //we always include this if it was in download.arc before, but NOT if it was only in fs.arc
-                }
+            }
 
-            if (downloadStrings != null){
+            if (downloadStrings != null) {
                 includeDownloadStrings = true;  //we always include this if it was in download.arc before
                 downloadStrings.ReadFile();
-                }
+            }
             else
-                {
+            {
                 downloadStrings = new archivedfile();
                 downloadStrings.form1 = form1;
                 downloadStrings.parentarcfile = downloadArc;
@@ -405,13 +405,13 @@ namespace EPFExplorer
                 downloadStrings.filename = "/strings/downloadstrings.st";
                 downloadStrings.STstrings = new List<string>();
                 downloadStrings.STstrings.Add(" ");
-                }
+            }
 
-            if (gameStrings != null){
+            if (gameStrings != null) {
                 gameStrings.ReadFile();
-                }
+            }
             else
-                {
+            {
                 gameStrings = new archivedfile();
                 gameStrings.form1 = form1;
                 gameStrings.parentarcfile = downloadArc;
@@ -419,13 +419,13 @@ namespace EPFExplorer
                 gameStrings.filename = "/strings/gamestrings.st";
                 gameStrings.STstrings = new List<string>();
                 gameStrings.STstrings.Add(" ");
-                }
+            }
 
-            if (dialogStrings != null){
+            if (dialogStrings != null) {
                 dialogStrings.ReadFile();
-                }
+            }
             else
-                {
+            {
                 dialogStrings = new archivedfile();
                 dialogStrings.form1 = form1;
                 dialogStrings.parentarcfile = downloadArc;
@@ -457,60 +457,60 @@ namespace EPFExplorer
             }
 
             if (size >= capacityProgressBar.Maximum)
-                {
-                MessageBox.Show("Your mission will be too big to fit in a save file!\nIt is " + ((((float)size/(float)capacityProgressBar.Maximum)*(float)100.00) - (float)100.00) + "% over the maximum size.\nIf this is unexpected, try making gamestrings.st or dialogstrings.st smaller - the vanilla ones are too big!","Size limit exceeded",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            {
+                MessageBox.Show("Your mission will be too big to fit in a save file!\nIt is " + ((((float)size / (float)capacityProgressBar.Maximum) * (float)100.00) - (float)100.00) + "% over the maximum size.\nIf this is unexpected, try making gamestrings.st or dialogstrings.st smaller - the vanilla ones are too big!", "Size limit exceeded", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 capacityProgressBar.Value = capacityProgressBar.Maximum - 1;
                 return;
-                }
+            }
             capacityProgressBar.Value = size;
         }
 
 
         public void LoadDownloadItemFromString(string args)
-            {
-            string[] splitString = args.Replace(", ",",").Split(',');
+        {
+            string[] splitString = args.Replace(", ", ",").Split(',');
 
             DownloadItem newDownloadItem = new DownloadItem();
 
             newDownloadItem.ID = int.Parse(splitString[0]);
-            newDownloadItem.spritePath = splitString[1].Substring(1,splitString[1].Length-2);
+            newDownloadItem.spritePath = splitString[1].Substring(1, splitString[1].Length - 2);
             newDownloadItem.Xpos = int.Parse(splitString[2]);
             newDownloadItem.Ypos = int.Parse(splitString[3]);
             newDownloadItem.interactionType = (InteractionType)int.Parse(splitString[4]);
             if (splitString[5] == "true" ? newDownloadItem.SpawnedByDefault = true : newDownloadItem.SpawnedByDefault = false)
-            newDownloadItem.unk1 = int.Parse(splitString[6]);
+                newDownloadItem.unk1 = int.Parse(splitString[6]);
             newDownloadItem.luaScriptPath = splitString[7].Substring(1, splitString[7].Length - 2);
             newDownloadItem.unk2 = int.Parse(splitString[8]);
             newDownloadItem.room = int.Parse(splitString[9]);
             newDownloadItem.unk3 = int.Parse(splitString[10]);
             newDownloadItem.destinationRoom = splitString[11].Substring(1, splitString[11].Length - 2);
             if (splitString[12] == "true" ? newDownloadItem.locked = true : newDownloadItem.locked = false)
-            newDownloadItem.destPosX = int.Parse(splitString[13]);
+                newDownloadItem.destPosX = int.Parse(splitString[13]);
             newDownloadItem.destPosY = int.Parse(splitString[14]);
             if (splitString[15] == "true" ? newDownloadItem.flipX = true : newDownloadItem.flipX = false)
-            if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
+                if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
 
-            downloadItems.Add(newDownloadItem);
+                    downloadItems.Add(newDownloadItem);
             already_used_IDs.Add(newDownloadItem.ID);
 
             foreach (Form1.Room r in form1.rooms)
-                {
+            {
                 if (newDownloadItem.room == r.ID_for_objects)
-                    {
+                {
                     r.Objects.Add(newDownloadItem);
                     break;
-                    }
                 }
+            }
 
-           
+
         }
 
         private void recalculateCapacityButton_Click(object sender, EventArgs e)
         {
             if (downloadArc != null)
-                {
+            {
                 UpdateCurrentCapacity();
-                }
+            }
         }
 
         private void objectsTab_Click(object sender, EventArgs e)
@@ -529,7 +529,7 @@ namespace EPFExplorer
             PosXUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos;
             PosYUpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Ypos;
             spawnedByDefault.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].SpawnedByDefault;
-            interactionTypeComboBox.SelectedIndex = ((int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionType)-1;
+            interactionTypeComboBox.SelectedIndex = ((int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionType) - 1;
             FlipXCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipX;
             FlipYCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].flipY;
             Unk1UpDown.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].unk1;
@@ -544,40 +544,40 @@ namespace EPFExplorer
             bool validDestRoom = false;
 
             foreach (Form1.Room r in form1.rooms)
-                {
+            {
                 if (r.InternalName == selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destinationRoom)
-                    {
+                {
                     DestinationRoomComboBox.SelectedIndex = form1.rooms.IndexOf(r) + 1;
                     validDestRoom = true;
                     break;
-                    }
                 }
+            }
 
             if (!validDestRoom)
-                {
+            {
                 DestinationRoomComboBox.SelectedIndex = 0;
-                }
+            }
 
             bool validLuaScriptPath = false;
 
             if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath.Length > 2)
-                {
+            {
                 for (int i = 0; i < objectLuaScriptComboBox.Items.Count; i++)
-                    {
+                {
                     if (((string)objectLuaScriptComboBox.Items[i]).Replace(".luc", ".lua") == selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath.Substring(7, selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath.Length - 7))
-                        {
+                    {
                         objectLuaScriptComboBox.SelectedIndex = i;
                         validLuaScriptPath = true;
                         break;
-                        }
                     }
                 }
+            }
 
             if (!validLuaScriptPath)
-                {
+            {
                 objectLuaScriptComboBox.SelectedIndex = 0;
                 selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "\"\"";
-                }
+            }
         }
 
         public void AddLuaScriptsToObjectLuaComboBox() {
@@ -585,13 +585,13 @@ namespace EPFExplorer
             objectLuaScriptComboBox.Items.Clear();
 
             foreach (archivedfile f in luaScripts)
-                {
+            {
                 objectLuaScriptComboBox.Items.Add(Path.GetFileName(f.filename));
-                }
-            
+            }
+
             objectLuaScriptComboBox.Sorted = true;
             objectLuaScriptComboBox.Sorted = false;
-            objectLuaScriptComboBox.Items.Insert(0,"None");
+            objectLuaScriptComboBox.Items.Insert(0, "None");
         }
 
 
@@ -602,9 +602,9 @@ namespace EPFExplorer
             roomObjectsComboBox.Items.Clear();
 
             if (selectedRoom.Objects.Count == 0)
-                {
+            {
                 return;
-                }
+            }
 
             foreach (DownloadItem item in selectedRoom.Objects)
             {
@@ -614,7 +614,7 @@ namespace EPFExplorer
                 {
                     nameToAdd = item.spritePath;
                 }
-                else 
+                else
                 {
                     nameToAdd = item.luaScriptPath;
                 }
@@ -632,9 +632,9 @@ namespace EPFExplorer
         {
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos = (int)PosXUpDown.Value;
             if (selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image != null)
-                {
+            {
                 selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Location = new System.Drawing.Point(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].Xpos - selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].displayOffsetX, selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].image.Location.Y);
-                }
+            }
         }
 
         private void PosYUpDown_ValueChanged(object sender, EventArgs e)
@@ -715,7 +715,7 @@ namespace EPFExplorer
         private void moveObjectUp_Click(object sender, EventArgs e)
         {
             if (roomObjectsComboBox.SelectedIndex > 0)
-                {
+            {
                 //swap with the one before
                 DownloadItem temp = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex - 1];
                 selectedRoom.Objects[roomObjectsComboBox.SelectedIndex - 1] = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex];
@@ -729,7 +729,7 @@ namespace EPFExplorer
                 roomObjectsComboBox.SelectedIndex = i - 1;
 
                 AddCurrentRoomPixelBoxes();
-                }
+            }
         }
 
         private void moveObjectDown_Click(object sender, EventArgs e)
@@ -764,48 +764,48 @@ namespace EPFExplorer
         private void DestinationRoomComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!ready)
-                {
+            {
                 return;
-                }
+            }
 
             if (DestinationRoomComboBox.SelectedIndex == 0)
-                {
+            {
                 selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destinationRoom = null;
                 return;
-                }
+            }
 
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destinationRoom = form1.rooms[DestinationRoomComboBox.SelectedIndex - 1].InternalName;
         }
 
         private void deleteObject_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete the object "+ roomObjectsComboBox.Items[roomObjectsComboBox.SelectedIndex] + "?","Are you sure?",MessageBoxButtons.YesNo,MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you want to delete the object " + roomObjectsComboBox.Items[roomObjectsComboBox.SelectedIndex] + "?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
-                {
+            {
                 already_used_IDs.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].ID);
                 downloadItems.Remove(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex]);
 
                 if (roomObjectsComboBox.SelectedIndex > 0)
-                    {
+                {
                     roomObjectsComboBox.SelectedIndex--;
                     roomObjectsComboBox.Items.RemoveAt(roomObjectsComboBox.SelectedIndex + 1);
                     selectedRoom.Objects.RemoveAt(roomObjectsComboBox.SelectedIndex + 1);
-                    }
+                }
                 else if (roomObjectsComboBox.Items.Count > 1)
-                    {
+                {
                     roomObjectsComboBox.SelectedIndex = 1;
                     roomObjectsComboBox.Items.RemoveAt(0);
                     selectedRoom.Objects.RemoveAt(0);
                     roomObjectsComboBox.SelectedIndex = 0;
-                    }
+                }
                 else
-                    {
+                {
                     roomObjectsComboBox.Items.Clear();
                     selectedRoom.Objects.Clear();
-                    selectedRoomBox_SelectedIndexChanged(null,null);
-                    }
-                AddCurrentRoomPixelBoxes();
+                    selectedRoomBox_SelectedIndexChanged(null, null);
                 }
+                AddCurrentRoomPixelBoxes();
+            }
         }
 
         private void luaScriptComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -813,18 +813,18 @@ namespace EPFExplorer
             archivedfile scriptToLoad = null;
 
             foreach (archivedfile f in luaScripts)
+            {
+                if (f.filename.ToLower() == Path.Combine("/chunks/", (string)luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex]).ToLower())
                 {
-                if (f.filename.ToLower() == Path.Combine("/chunks/",(string)luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex]).ToLower())
-                    {
                     scriptToLoad = f;
                     break;
-                    }
                 }
+            }
 
-            if(scriptToLoad == null)
-                {
+            if (scriptToLoad == null)
+            {
                 return;
-                }
+            }
 
             luaScriptNameBox.Text = Path.GetFileName(scriptToLoad.filename);
 
@@ -838,24 +838,24 @@ namespace EPFExplorer
             archivedfile scriptToSave = null;
 
             foreach (archivedfile f in luaScripts)
-                {
+            {
                 if (f.filename.ToLower() == Path.Combine("/chunks/", (string)luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex]).ToLower())
-                    {
+                {
                     scriptToSave = f;
                     break;
-                    }
                 }
+            }
 
             if (scriptToSave.filename != Path.Combine("/chunks/", luaScriptNameBox.Text.Replace(".lua", ".luc")))
-                {
+            {
                 if (!luaScriptNameBox.Text.Contains(".lua") && !luaScriptNameBox.Text.Contains(".luc"))
-                    {
+                {
                     luaScriptNameBox.Text += ".luc";
-                    }
+                }
 
                 scriptToSave.filename = Path.Combine("/chunks/", luaScriptNameBox.Text.Replace(".lua", ".luc"));
                 UpdateLuaScriptComboBox();
-                }
+            }
 
             File.WriteAllText("lua_TEMP_FOR_COMPILING", luaRichText.Text);
             scriptToSave.filebytes = scriptToSave.LuaFromFileToLuc(scriptToSave.filebytes, "lua_TEMP_FOR_COMPILING");
@@ -866,12 +866,12 @@ namespace EPFExplorer
         private void deleteLuaScriptButton_Click(object sender, EventArgs e)
         {
             if (luaScriptComboBox.SelectedIndex >= luaScriptComboBox.Items.Count)
-                {
+            {
                 return;
-                }
+            }
 
             DialogResult result = MessageBox.Show("Are you sure you want to delete the lua script " + luaScriptComboBox.Items[luaScriptComboBox.SelectedIndex] + "?", "Are you sure?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            
+
             if (result == DialogResult.Yes)
             {
                 archivedfile scriptToDelete = null;
@@ -923,7 +923,7 @@ namespace EPFExplorer
 
                 foreach (archivedfile f in luaScripts)
                 {
-                if (f.filename == "/chunks/newScript"+i+".luc")
+                    if (f.filename == "/chunks/newScript" + i + ".luc")
                     {
                         freeName = false;
                         break;
@@ -931,10 +931,10 @@ namespace EPFExplorer
                 }
 
                 if (freeName)
-                    {
+                {
                     newScript.filename = "/chunks/newScript" + i + ".luc";
                     break;
-                    }
+                }
 
                 i++;
             }
@@ -947,13 +947,13 @@ namespace EPFExplorer
             luaScriptComboBox.SelectedIndex = 0;
 
             for (int j = 0; j < luaScriptComboBox.Items.Count; j++)
-                {
+            {
                 if ((string)luaScriptComboBox.Items[j] == Path.GetFileName(newScript.filename))
-                    {
+                {
                     luaScriptComboBox.SelectedIndex = j;
                     break;
-                    }
                 }
+            }
 
         }
 
@@ -988,13 +988,13 @@ namespace EPFExplorer
         private void objectLuaScriptComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (archivedfile f in luaScripts)
-                {
+            {
                 if ((string)objectLuaScriptComboBox.Items[objectLuaScriptComboBox.SelectedIndex] == Path.GetFileName(f.filename))
-                    {
+                {
                     selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "scripts" + Path.GetFileName(f.filename).Replace(".luc", ".lua");
                     return;
-                    }
                 }
+            }
 
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].luaScriptPath = "";
         }
@@ -1004,13 +1004,13 @@ namespace EPFExplorer
             archivedfile newLinkedSprite = null;
 
             foreach (archivedfile f in gameRdt.archivedfiles)
-                {
+            {
                 if (f.filename == RDTSpritePath.Text)
-                    {
+                {
                     newLinkedSprite = f;
                     break;
-                    }
                 }
+            }
 
             foreach (archivedfile f in downloadRdt.archivedfiles)
             {
@@ -1022,9 +1022,9 @@ namespace EPFExplorer
             }
 
             if (newLinkedSprite == null && RDTSpritePath.Text != "" && RDTSpritePath.Text != "None")
-                {
+            {
                 return;
-                }
+            }
 
             selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].spritePath = RDTSpritePath.Text;
             AddCurrentRoomPixelBoxes();
@@ -1259,20 +1259,20 @@ namespace EPFExplorer
             pixelBoxes.Clear();
 
             foreach (DownloadItem item in selectedRoom.Objects)
-                {
+            {
                 PixelBox newPixelBox = new PixelBox();
                 backgroundImageBox.Controls.Add(newPixelBox);
 
                 archivedfile sprite = null;
 
                 foreach (archivedfile f in gameRdt.archivedfiles)
-                    {
+                {
                     if (f.filename == item.spritePath)
-                        {
+                    {
                         sprite = f;
                         break;
-                        }
                     }
+                }
                 foreach (archivedfile f in downloadRdt.archivedfiles)
                 {
                     if (f.filename == item.spritePath)
@@ -1283,83 +1283,83 @@ namespace EPFExplorer
                 }
 
                 if (sprite == null)
-                    {
+                {
                     foreach (archivedfile f in gameRdt.archivedfiles)
-                        {
+                    {
                         if (f.filename == "Tools/broken")
-                            {
+                        {
                             sprite = f;
                             break;
-                            }
                         }
                     }
+                }
 
-                    sprite.form1 = form1;
-                    if(sprite.filebytes == null || sprite.filebytes.Length == 0)
-                        {
-                        sprite.ReadFile();
-                        }
+                sprite.form1 = form1;
+                if (sprite.filebytes == null || sprite.filebytes.Length == 0)
+                {
+                    sprite.ReadFile();
+                }
 
-                    sprite.OpenRDTSubfileInEditor(false);
-                    newPixelBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-                    newPixelBox.Anchor = AnchorStyles.None;
-                    newPixelBox.SizeMode = PictureBoxSizeMode.AutoSize;
-                    newPixelBox.Parent = backgroundImageBox;
-                    newPixelBox.Image = sprite.spriteEditor.images[0].image;
-                    newPixelBox.BringToFront();
+                sprite.OpenRDTSubfileInEditor(false);
+                newPixelBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                newPixelBox.Anchor = AnchorStyles.None;
+                newPixelBox.SizeMode = PictureBoxSizeMode.AutoSize;
+                newPixelBox.Parent = backgroundImageBox;
+                newPixelBox.Image = sprite.spriteEditor.images[0].image;
+                newPixelBox.BringToFront();
 
-                    item.displayOffsetX = (int)Math.Round((float)sprite.spriteEditor.centreX.Value - (float)sprite.spriteEditor.images[0].offsetX);
-                    item.displayOffsetY = (int)Math.Round((float)sprite.spriteEditor.centreY.Value - (float)sprite.spriteEditor.images[0].offsetY);
-                    
-                    if (item.flipX && item.flipY)
-                        {
-                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipXY);
-                        }
-                    else if (item.flipX)
-                        {
-                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX);
-                        }
-                    else if (item.flipY)
-                        {
-                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
-                        }
-                    else
-                        {
-                        newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipNone);
-                        }
+                item.displayOffsetX = (int)Math.Round((float)sprite.spriteEditor.centreX.Value - (float)sprite.spriteEditor.images[0].offsetX);
+                item.displayOffsetY = (int)Math.Round((float)sprite.spriteEditor.centreY.Value - (float)sprite.spriteEditor.images[0].offsetY);
 
-                    newPixelBox.Refresh();
+                if (item.flipX && item.flipY)
+                {
+                    newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipXY);
+                }
+                else if (item.flipX)
+                {
+                    newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX);
+                }
+                else if (item.flipY)
+                {
+                    newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipY);
+                }
+                else
+                {
+                    newPixelBox.Image.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipNone);
+                }
 
-                    //and finally, position the sprite in the viewport
-                    newPixelBox.Location = new System.Drawing.Point(item.Xpos - item.displayOffsetX, item.Ypos - item.displayOffsetY);                  
-                    newPixelBox.Show();
+                newPixelBox.Refresh();
 
-                    item.image = newPixelBox;
-                    sprite.spriteEditor.Close();  
+                //and finally, position the sprite in the viewport
+                newPixelBox.Location = new System.Drawing.Point(item.Xpos - item.displayOffsetX, item.Ypos - item.displayOffsetY);
+                newPixelBox.Show();
+
+                item.image = newPixelBox;
+                sprite.spriteEditor.Close();
             }
         }
 
         private void saveMissionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (mainArc == null || downloadArc == null || gameRdt == null)
-                {
+            {
                 return;
-                }
-  
+            }
+
             string newTuxedoDL = "";
 
             newTuxedoDL += "_util.ReserveDownloadNpcs(" + ReserveDownloadNpcs + ")\n";
             newTuxedoDL += "_util.ReserveDownloadExits(" + ReserveDownloadExits + ")\n";
-            newTuxedoDL += "_util.ReserveDownloadItems(" + ReserveDownloadItems+ ")\n";
+            newTuxedoDL += "_util.ReserveDownloadItems(" + ReserveDownloadItems + ")\n";
 
             for (int i = 60; i < 110; i++)  //to make it go through in ID_for_objects order
             {
                 foreach (Form1.Room r in form1.rooms)
                 {
                     if (r.ID_for_objects != i)
-                        {
+                    {
                         continue;
-                        }
+                    }
 
                     foreach (DownloadItem item in r.Objects)
                     {
@@ -1402,41 +1402,41 @@ namespace EPFExplorer
 
             List<archivedfile> extraFiles = new List<archivedfile>(); //any extra files like rdts, mpbs or tsbs that were hanging out in the old download.arc
             foreach (archivedfile f in downloadArc.archivedfiles)
-                {
+            {
                 if (!f.filename.Contains(".luc") && !f.filename.Contains(".lua") && !f.filename.Contains(".st"))
-                    {
+                {
                     extraFiles.Add(f);
-                    }
                 }
+            }
 
             downloadArc.archivedfiles = new List<archivedfile>();
 
             foreach (archivedfile f in luaScripts)
-                {
+            {
                 downloadArc.archivedfiles.Add(f);
-                }
+            }
 
             foreach (archivedfile f in extraFiles)
-                {
+            {
                 downloadArc.archivedfiles.Add(f);
-                }
+            }
 
             if (includeDownloadStrings)
-                {
+            {
                 downloadArc.archivedfiles.Add(downloadStrings);
-                }
+            }
 
             if (includeDialogStrings)
-                {
+            {
                 dialogStrings.filename = "/strings/dialogstrings.st";
                 downloadArc.archivedfiles.Add(dialogStrings);
-                }
+            }
 
             if (includeGameStrings)
-                {
+            {
                 gameStrings.filename = "/strings/gamestrings.st";
                 downloadArc.archivedfiles.Add(gameStrings);
-                }
+            }
 
 
             File.WriteAllText("lua_TEMP_FOR_COMPILING", newTuxedoDL);
@@ -1448,7 +1448,7 @@ namespace EPFExplorer
             downloadArc.RebuildArc();
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            
+
             saveFileDialog1.InitialDirectory = Path.GetDirectoryName(downloadArc.filename);
             saveFileDialog1.FileName = Path.GetFileName(downloadArc.filename);
 
@@ -1469,20 +1469,20 @@ namespace EPFExplorer
             downloadArc.form1 = form1;
             downloadArc.filebytes = filebytes;
 
-            
+
             loadMission_Click(null, null);
         }
 
         private void textFileComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (textIDUpDown.Value == 0)
-                {
+            {
                 textIDUpDown_ValueChanged(null, null);
-                }
+            }
             else
-                {
+            {
                 textIDUpDown.Value = 0;
-                }
+            }
         }
 
         private void textIDUpDown_ValueChanged(object sender, EventArgs e)
@@ -1491,26 +1491,26 @@ namespace EPFExplorer
             switch (textFileComboBox.SelectedItem)
             {
                 case "downloadStrings.st":
-                    if (textIDUpDown.Value < downloadStrings.STstrings.Count){
+                    if (textIDUpDown.Value < downloadStrings.STstrings.Count) {
                         richTextST.Text = downloadStrings.STstrings[(int)textIDUpDown.Value].Replace("[newline]", "\n");
-                        }
-                    else{
+                    }
+                    else {
                         textIDUpDown.Value = downloadStrings.STstrings.Count - 1;
                     }
                     break;
                 case "dialogStrings.st":
-                    if (textIDUpDown.Value < dialogStrings.STstrings.Count){
+                    if (textIDUpDown.Value < dialogStrings.STstrings.Count) {
                         richTextST.Text = dialogStrings.STstrings[(int)textIDUpDown.Value].Replace("[newline]", "\n");
                     }
-                    else{
+                    else {
                         textIDUpDown.Value = dialogStrings.STstrings.Count - 1;
                     }
                     break;
                 case "gameStrings.st":
-                    if (textIDUpDown.Value < gameStrings.STstrings.Count){
+                    if (textIDUpDown.Value < gameStrings.STstrings.Count) {
                         richTextST.Text = gameStrings.STstrings[(int)textIDUpDown.Value].Replace("[newline]", "\n");
-                        }
-                    else{
+                    }
+                    else {
                         textIDUpDown.Value = gameStrings.STstrings.Count - 1;
                     }
                     break;
@@ -1525,7 +1525,7 @@ namespace EPFExplorer
                     downloadStrings.STstrings[(int)textIDUpDown.Value] = richTextST.Text.Replace("\r", "").Replace("\n", "[newline]");
                     break;
                 case "dialogStrings.st":
-                    dialogStrings.STstrings[(int)textIDUpDown.Value] = richTextST.Text.Replace("\r","").Replace("\n","[newline]");
+                    dialogStrings.STstrings[(int)textIDUpDown.Value] = richTextST.Text.Replace("\r", "").Replace("\n", "[newline]");
                     includeDialogStrings = true;
                     break;
                 case "gameStrings.st":
@@ -1558,7 +1558,7 @@ namespace EPFExplorer
         private void deleteTextLine_Click(object sender, EventArgs e)
         {
             switch (textFileComboBox.SelectedItem)
-                {
+            {
                 case "downloadStrings.st":
                     downloadStrings.STstrings.RemoveAt((int)textIDUpDown.Value);
                     break;
@@ -1570,12 +1570,12 @@ namespace EPFExplorer
                     gameStrings.STstrings.RemoveAt((int)textIDUpDown.Value);
                     includeGameStrings = true;
                     break;
-                }
+            }
 
-            if (textIDUpDown.Value > 0){
+            if (textIDUpDown.Value > 0) {
                 textIDUpDown.Value--;
             }
-            else 
+            else
             {
                 textIDUpDown.Value++;
                 textIDUpDown.Value--;
