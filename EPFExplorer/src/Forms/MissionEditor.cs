@@ -500,18 +500,18 @@ namespace EPFExplorer
             newDownloadItem.Xpos = int.Parse(splitString[2]);
             newDownloadItem.Ypos = int.Parse(splitString[3]);
             newDownloadItem.interactionType = (InteractionType)int.Parse(splitString[4]);
-            if (splitString[5] == "true" ? newDownloadItem.SpawnedByDefault = true : newDownloadItem.SpawnedByDefault = false)
-                newDownloadItem.sound = int.Parse(splitString[6]);
+            if (splitString[5] == "true") { newDownloadItem.SpawnedByDefault = true; } else { newDownloadItem.SpawnedByDefault = false; }
+            newDownloadItem.sound = int.Parse(splitString[6]);
             newDownloadItem.luaScriptPath = splitString[7].Substring(1, splitString[7].Length - 2);
             newDownloadItem.unk2 = int.Parse(splitString[8]);
             newDownloadItem.room = int.Parse(splitString[9]);
             newDownloadItem.interactionSubtype = (InteractAnim)int.Parse(splitString[10]);
             newDownloadItem.destinationRoom = splitString[11].Substring(1, splitString[11].Length - 2);
-            if (splitString[12] == "true" ? newDownloadItem.locked = true : newDownloadItem.locked = false)
-                newDownloadItem.destPosX = int.Parse(splitString[13]);
+            if (splitString[12] == "true") { newDownloadItem.locked = true; } else { newDownloadItem.locked = false; }
+            newDownloadItem.destPosX = int.Parse(splitString[13]);
             newDownloadItem.destPosY = int.Parse(splitString[14]);
-            if (splitString[15] == "true" ? newDownloadItem.flipX = true : newDownloadItem.flipX = false)
-                if (splitString[16] == "true" ? newDownloadItem.flipY = true : newDownloadItem.flipY = false)
+            if (splitString[15] == "true") { newDownloadItem.flipX = true; } else { newDownloadItem.flipX = false; }
+            if (splitString[16] == "true") { newDownloadItem.flipY = true; } else { newDownloadItem.flipY = false; }
 
 
             already_used_IDs.Add(newDownloadItem.ID);
@@ -563,6 +563,7 @@ namespace EPFExplorer
             InteractionAnimTypeComboBox.SelectedIndex = (int)selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].interactionSubtype;
             LockedCheckBox.Checked = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].locked;
             destposX.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosX;
+            Console.WriteLine(selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosX);
             destposY.Value = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].destPosY;
 
             RDTSpritePath.Text = selectedRoom.Objects[roomObjectsComboBox.SelectedIndex].spritePath;
@@ -1428,15 +1429,9 @@ namespace EPFExplorer
             newTuxedoDL += "_util.ReserveDownloadExits(" + ReserveDownloadExits + ")\n";
             newTuxedoDL += "_util.ReserveDownloadItems(" + ReserveDownloadItems + ")\n";
 
-            for (int i = 60; i < 110; i++)  //to make it go through in ID_for_objects order
-            {
+
                 foreach (Form1.Room r in form1.rooms)
                 {
-                    if (r.ID_for_objects != i)
-                    {
-                        continue;
-                    }
-
                     foreach (DownloadItem item in r.Objects)
                     {
                         if (item.spritePath == "\"\"" || item.spritePath == "None")
@@ -1479,7 +1474,7 @@ namespace EPFExplorer
                         if (item.flipY) { newTuxedoDL += "true)\n"; } else { newTuxedoDL += "false)\n"; }
                     }
                 }
-            }
+            
 
             List<archivedfile> extraFiles = new List<archivedfile>(); //any extra files like rdts, mpbs or tsbs that were hanging out in the old download.arc
             foreach (archivedfile f in downloadArc.archivedfiles)
@@ -1512,6 +1507,10 @@ namespace EPFExplorer
                 dialogStrings.filename = "/strings/dialogstrings.st";
                 downloadArc.archivedfiles.Add(dialogStrings);
             }
+
+            if (gameStrings.STstrings.Count < 2){
+                includeGameStrings = false;
+                }
 
             if (includeGameStrings)
             {
