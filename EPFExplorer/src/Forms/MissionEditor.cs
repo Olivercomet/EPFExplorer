@@ -1275,10 +1275,9 @@ namespace EPFExplorer
                     tilesetPathInArc = "/tilesets/Stage.tsb";
                     break;
                 case "TALLESTMOUNTAINTOP0":
-                    tilemapPathInArc = "/levels/TallestMountain0_map_0.mpb";
-                    tilesetPathInArc = "/tilesets/TallestMountain.tsb";
-                    MessageBox.Show("The tallest mountain is not implemented in the mission editor. Sorry!");
-                    return;
+                    tilemapPathInArc = "/levels/TallestMountainTop0_map_0.mpb";
+                    tilesetPathInArc = "/tilesets/TallestMountainTop.tsb";
+                    break;
                 case "TOWN0":
                     tilemapPathInArc = "/levels/Town0_map_0.mpb";
                     tilesetPathInArc = "/tilesets/Town.tsb";

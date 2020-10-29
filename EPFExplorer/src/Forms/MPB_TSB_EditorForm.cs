@@ -100,7 +100,7 @@ namespace EPFExplorer
 
             if ((activeMpb.highest_tile_offset - 0x200) / 64 > activeTsb.number_of_tiles)
             {
-            MessageBox.Show("That tilemap references tiles that are beyond the end of the tileset!", "Tilemap is too big for tileset", MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("That tilemap references tiles that are beyond the end of the tileset!\nTileset number of tiles: "+activeTsb.number_of_tiles+".\nThe tilemap's highest tile is: "+ ((activeMpb.highest_tile_offset - 0x200) / 64), "Tilemap is too big for tileset", MessageBoxButtons.OK,MessageBoxIcon.Information);
             return;
             }
 
@@ -133,8 +133,13 @@ namespace EPFExplorer
                         flipX = true;
                         }
 
+                    if ((IndexFromMPB & 0x2000) == 0x2000)
+                        {
+                        Console.WriteLine("The third bit was set in the MPB tile info! Not sure what it does...");
+                        }
 
-                    int offset_of_tile_in_tsb = 0x200 + (64 * (0x3FFF & IndexFromMPB)); //cut the highest two bits off the index, as they were tile-flipping booleans
+
+                    int offset_of_tile_in_tsb = 0x200 + (64 * (0x1FFF & IndexFromMPB)); //cut the highest two bits off the index, as they were tile-flipping booleans
 
 
                  

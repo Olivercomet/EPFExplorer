@@ -25,7 +25,7 @@ namespace EPFExplorer
 
             for (int i = 0; i < filebytes.Length; i+=2)
                 {
-                int potentialHighestOffset = BitConverter.ToUInt16(filebytes, i);
+                int potentialHighestOffset = BitConverter.ToUInt16(filebytes, i) & 0x1FFF;
 
                 if (potentialHighestOffset > highest_tile_offset)
                     {

@@ -147,7 +147,7 @@ namespace EPFExplorer
               rooms.Add(new Room("Snow Forts", "SNOWFORTS0", 79, 91));
               rooms.Add(new Room("Sport Shop", "SPORTSHOP0", 80, 197));
               rooms.Add(new Room("Stage", "STAGE0", 95, 162));
-              rooms.Add(new Room("Tallest Mountain", "TALLESTMOUNTAINTOP0", 96, 1));
+              rooms.Add(new Room("Tallest Mountain", "TALLESTMOUNTAINTOP0", 96, 95));
               rooms.Add(new Room("Town", "TOWN0", 81, 99));
               rooms.Add(new Room("Underground Pool", "POOL0", 92, 84));
         }
