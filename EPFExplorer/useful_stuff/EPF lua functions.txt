@@ -99,8 +99,10 @@ _util.IsCoach
 _util.PlaySFX
 _util.MarkFreePlayMission
 _util.SetItemPopUpText
+_util.SetupDownloadCutscene(int titleTextID, int descriptionTextID)
+
+These ones are handled automatically by EPFExplorer, don't use them unless you're doing it manually:
 _util.AddDownloadItem
 _util.ReserveDownloadItems(int itemCount)
 _util.ReserveDownloadExits(int exitCount)
 _util.ReserveDownloadNpcs(int npcCount)
-_util.SetupDownloadCutscene(int titleTextID, int descriptionTextID)
