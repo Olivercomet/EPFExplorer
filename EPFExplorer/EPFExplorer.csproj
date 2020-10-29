@@ -117,6 +117,25 @@
     </Compile>
     <Compile Include="src\FileTypes\sfxfile.cs" />
     <Compile Include="src\FileTypes\xmfile.cs" />
+    <Compile Include="src\Utility\hifss\Color.cs" />
+    <Compile Include="src\Utility\hifss\ColorTable.cs" />
+    <Compile Include="src\Utility\hifss\DisposalMethod.cs" />
+    <Compile Include="src\Utility\hifss\Extensions\ApplicationExtension.cs" />
+    <Compile Include="src\Utility\hifss\Extensions\CommentExtension.cs" />
+    <Compile Include="src\Utility\hifss\Extensions\Extension.cs" />
+    <Compile Include="src\Utility\hifss\Extensions\ExtensionResolver.cs" />
+    <Compile Include="src\Utility\hifss\Extensions\GraphicsControlExtension.cs" />
+    <Compile Include="src\Utility\hifss\Extensions\PlainTextExtension.cs" />
+    <Compile Include="src\Utility\hifss\Gif.cs" />
+    <Compile Include="src\Utility\hifss\GifHeader.cs" />
+    <Compile Include="src\Utility\hifss\GifImage.cs" />
+    <Compile Include="src\Utility\hifss\GifLoader.cs" />
+    <Compile Include="src\Utility\hifss\GifReader.cs" />
+    <Compile Include="src\Utility\hifss\ImageDescriptor.cs" />
+    <Compile Include="src\Utility\hifss\LZW\CodeTable.cs" />
+    <Compile Include="src\Utility\hifss\LZW\Decoder.cs" />
+    <Compile Include="src\Utility\hifss\LZW\LZWDecompressor.cs" />
+    <Compile Include="src\Utility\hifss\ScreenDescriptor.cs" />
     <EmbeddedResource Include="src\Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -153,6 +172,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\templateMission.arc" />
+    <None Include="src\Utility\hifss\LICENSE" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

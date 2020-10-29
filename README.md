@@ -18,3 +18,4 @@ The music replacing also currently has issues with some tracks (e.g. Dojo and Ga
 - [No$GBA](http://problemkaputt.de/gba.htm) for its invaluable debugging tools
 - [DSDecmp](https://github.com/barubary/dsdecmp) for its LZ10/11 compression features
 - [MCJack123](https://github.com/MCJack123) for their contributions regarding instruments and samples, and PCM audio.
+- [Hifss](https://github.com/Ciorro/Hifss)

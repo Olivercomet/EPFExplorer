@@ -1,0 +1,14 @@
+== Action Replay code to allow music changing via lua (EU version only) ==
+
+If you activate this code, then the lua function _util.SetGlobal(“anything”, ID) will play the music track with that ID.
+Make sure the code is not turned on when you boot the game, or it will hang.
+
+1211DD22 00004804
+1211DD24 00006800
+1211DD26 00001C21
+1211DD28 00002220
+1211DD2A 00002301
+1211DD2C 0000F030
+1211DD2E 0000F8D1
+1211DD30 0000BD7F
+0211DD34 027E00E0
