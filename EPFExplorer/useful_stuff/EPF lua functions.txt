@@ -1,0 +1,106 @@
+_util.GetVar(string name)
+_util.SetVar(string name, int value)
+_util.IncVar(string name)
+_util.DecVar(string name)
+_util.GetGlobal(string name)
+_util.SetGlobal(string name int value)
+_util.IncGlobal(string name)
+_util.DecGlobal(string name)
+_util.GetSource
+_util.GetReason
+_util.GetSelf
+_util.SetSource
+_util.AddInterest
+_util.DelInterest
+_util.HasInterest
+_util.GetActiveChapter
+_util.GetActiveMission
+_util.Pushcamera
+_util.PopCamera
+_util.SwitchState
+_util.AddInventoryItem
+_util.RemoveInventoryItem
+_util.HasInventoryItem
+_util.ClearInventory
+_util.AddSMileys
+_util.SubtractCoins
+_util.AddCoins
+_util.IsAnimPlaying
+_util.AddItem
+_util.DelItem
+_util.SetSpawn
+_util.SetupParticleEffects
+_util.AddMonologue
+_util.SetCombinationSuccess
+_util.AddDialog
+_util.HideDialog
+_util.AddDialogButton
+_util.AddConversation
+_util.GetConversationCount
+_util.SetConversationCount
+_util.ActivateNpc
+_util.HideMap
+_util.ShowMap
+_util.AddMapAlert
+_util.RemoveMapAlert
+_util.StartMiniGame
+_util.StartCutscene
+_util.StartSequenceCutscene
+_util.StartMissionSelect
+_util.AddLoopingConv
+_util.AddLoopingOption
+_util.StartMission
+_util.EndMission
+_util.SetExitLocked
+_util.GetExitLocked
+_util.DisableInput
+_util.EnableInput
+_util.SetSuitcaseItemEnabled
+_util.IsSuitcaseItemEnabled
+_util.OpenCatalog
+_util.IsInState
+_util.IsInRoom
+_util.SetSuccess
+_util.MoveObject
+_util.ClearEffects
+_util.SetPuffle
+_util.GetX
+_util.GetY
+_util.GetTouchValid
+_util.GetMinigameOutput1
+_util.GetMinigameOutput2
+_util.GetGameState
+_util.ClearCom
+_util.SetupComNpc
+_util.GetComCount
+_util.SetComCount
+_util.AddComText
+_util.AddComOption
+_util.EnableSpyPodFunc
+_util.DisableSpyPodFunc
+_util.EnablePuffle
+_util.DisablePuffle
+_util.ChangeRoom
+_util.SetNextRoom
+_util.DisplayPopUp
+_util.IsPopUpVisible
+_util.SetVisible
+_util.SetObjective
+_util.ClearObjective
+_util.SetCursorPos
+_util.EnableDpadScrolling
+_util.DisableDpadScrolling
+_util.ScreenShake
+_util.EnableSpyPod
+_util.DisableSpyPod
+_util.ShowHUDHighlight
+_util.IsCommandCoachActve
+_util.IsCoach
+_util.PlaySFX
+_util.MarkFreePlayMission
+_util.SetItemPopUpText
+_util.AddDownloadItem
+_util.ReserveDownloadItems(int itemCount)
+_util.ReserveDownloadExits(int exitCount)
+_util.ReserveDownloadNpcs(int npcCount)
+_util.SetupDownloadCutscene(int titleTextID, int descriptionTextID)
