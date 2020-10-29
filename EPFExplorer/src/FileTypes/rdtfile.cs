@@ -43,7 +43,8 @@ namespace EPFExplorer
         public void ReadRdt()
         {
             filecount = BitConverter.ToUInt16(filebytes,0x0F);
-            
+
+
             if (BitConverter.ToUInt32(filebytes,0x13) > filebytes.Length)
                 {
                 isHR = true;
@@ -51,56 +52,154 @@ namespace EPFExplorer
 
             if (isHR)
                 {
-                MessageBox.Show("HR RDT files are annoying. There won't be any filenames.","Filenames will not be shown");
-                RDTBlagger3000();
-                return;
+                ReadHRRdt();
                 }
+            else
+                {
+                int currentOffset = 0x11;
+
+                int number_of_top_level_trees = filebytes[currentOffset];
+
+
+                for (int i = 0; i < number_of_top_level_trees; i++)
+                {
+                    currentOffset = BitConverter.ToInt32(filebytes, 0x12 + (5 * i) + 1);
+                    ParseRDTNode(currentOffset, (char)filebytes[0x12 + (5 * i)] + "");    //only parse the first node if the string actually begins with that letter, and it will recursively go down the tree
+                }
+
+                //now all the filenames should be parsed, let's check though
+
+                if (archivedfiles.Count == filecount)
+                {
+                    Console.WriteLine("All RDT files accounted for!");
+                }
+                else
+                {
+                    Console.WriteLine("ERROR! Either some files were missed, or we overcounted!");
+                }
+            }
+        }
+
+
+        public void ReadHRRdt() {
 
             int currentOffset = 0x11;
 
-            int number_of_top_level_trees = filebytes[currentOffset];
+            int number_of_top_level_folders = filebytes[currentOffset];
+            currentOffset++;
 
+            for (int i = 0; i < number_of_top_level_folders; i++)
+            {
+                string currentPath = "";
+                while ((filebytes[currentOffset] & 0x80) == 0x80) 
+                    {
+                    currentPath += (char)(filebytes[currentOffset] ^ 0x80);
+                    currentOffset++;
+                    }
+                
+                if (filebytes[currentOffset] != 0x00)
+                    {
+                    currentPath += (char)filebytes[currentOffset];
+                    }
+                currentOffset++;
 
-            for (int i = 0; i < number_of_top_level_trees; i++)
-                {
-                currentOffset = BitConverter.ToInt32(filebytes, 0x12 + (5 * i) + 1);
-                ParseRDTNode(currentOffset, (char)filebytes[0x12 + (5 * i)]+"");    //only parse the first node if the string actually begins with that letter, and it will recursively go down the tree
-                }
+                if (filebytes[currentOffset - 1] == 0x00)
+                    {
+                    EndHerbertsRevengeChain(currentOffset, currentPath);
+                    }
+                else
+                    {
+                    ParseHerbertsRevengeRDTNode(BitConverter.ToInt32(filebytes, currentOffset), currentPath);
+                    }
+                   
+                currentOffset += 4;
+            }
 
             //now all the filenames should be parsed, let's check though
 
             if (archivedfiles.Count == filecount)
-                {
+            {
                 Console.WriteLine("All RDT files accounted for!");
-                }
+            }
             else
-                {
+            {
                 Console.WriteLine("ERROR! Either some files were missed, or we overcounted!");
-                }
-
-         
-        }
-
-        public void RDTBlagger3000() { //attempts to scrape likely file offsets from the index table. Intended for HR RDTs, where the file tree is in an annoying format
-
-            int endOfIndexTable = BitConverter.ToInt32(filebytes, 0x0B);
-
-            for (int i = 0x12; i < endOfIndexTable; i++)
-                {
-                int possibleOffset = BitConverter.ToInt32(filebytes,i);
-
-                if (possibleOffset >= endOfIndexTable && possibleOffset < filebytes.Length && filebytes[possibleOffset] == 0x03 && BitConverter.ToInt32(filebytes, possibleOffset+1) > 0 && BitConverter.ToUInt16(filebytes, possibleOffset+1) < 65535)
-                    {
-                    archivedfile newFile = new archivedfile();
-                    newFile.offset = possibleOffset;
-                    newFile.filename = "PotentialFile"+newFile.offset.ToString();
-                    newFile.form1 = form1;
-                    newFile.parentrdtfile = this;
-                    archivedfiles.Add(newFile);
-                    }
             }
         }
 
+        public void ParseHerbertsRevengeRDTNode(int offsetOfThisNode, string baseString)
+        {
+            int subnodeCount = filebytes[offsetOfThisNode];
+            offsetOfThisNode++;
+
+            string currentStateOfString = baseString;
+
+            for (int i = 0; i < subnodeCount; i++)
+            {
+                char letter = (char)filebytes[offsetOfThisNode];
+
+                if ((letter & 0x80) == 0x80)    //it's one of those XORed strings
+                {
+                    while ((filebytes[offsetOfThisNode] & 0x80) == 0x80)
+                        {
+                        currentStateOfString += (char)(filebytes[offsetOfThisNode] ^ 0x80);
+                        offsetOfThisNode++;
+                    }      
+
+                    if ((char)filebytes[offsetOfThisNode] != 0x00)
+                        { 
+                        currentStateOfString += (char)filebytes[offsetOfThisNode];
+                        }
+                    offsetOfThisNode++;
+
+                    if (filebytes[offsetOfThisNode - 1] == 0x00)
+                        {
+                        EndHerbertsRevengeChain(offsetOfThisNode, currentStateOfString);
+                        }
+                    else
+                        {
+                        ParseHerbertsRevengeRDTNode(BitConverter.ToInt32(filebytes, offsetOfThisNode), currentStateOfString);
+                        }
+                    offsetOfThisNode += 4;
+                    }
+                else
+                    {
+                    if ((byte)letter == 0x00)   //it's the end of the string
+                        {
+                        offsetOfThisNode++;
+                        EndHerbertsRevengeChain(offsetOfThisNode, currentStateOfString);
+                        offsetOfThisNode += 4;
+                        }
+                    else          //keep following the string
+                        {
+                        currentStateOfString += letter;
+                        offsetOfThisNode++;
+                        ParseHerbertsRevengeRDTNode(BitConverter.ToInt32(filebytes, offsetOfThisNode), currentStateOfString);
+                        offsetOfThisNode += 4;
+                        }
+                    }
+
+                currentStateOfString = baseString;
+            }
+        }
+
+        public void EndHerbertsRevengeChain(int offsetOfThisNode, string currentStateOfString) {
+
+            if (!filenamesAndOffsets.ContainsKey(currentStateOfString))
+            {
+                filenamesAndOffsets.Add(currentStateOfString, BitConverter.ToInt32(filebytes, offsetOfThisNode));
+                offsetOfThisNode += 4;
+                archivedfile newFile = new archivedfile();
+
+                newFile.filename = currentStateOfString;
+                newFile.offset = filenamesAndOffsets[currentStateOfString];
+                newFile.form1 = form1;
+                newFile.parentrdtfile = this;
+
+                archivedfiles.Add(newFile);
+            }
+            Console.WriteLine(currentStateOfString + " file offset is " + filenamesAndOffsets[currentStateOfString]);
+        }
 
         public void ParseRDTNode(int offsetOfThisNode, string baseString) {
 
@@ -159,6 +258,12 @@ namespace EPFExplorer
 
         int longestFilenameLength = 0;
         AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
+
+            if (isHR)
+                {
+                MessageBox.Show("Saving Herbert's Revenge RDT files is not supported.", "Not supported", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;   
+                }
 
             if (archivedfiles.Count > 1000)
                 {

@@ -3,7 +3,7 @@ A tool for extracting/modifying the files of the Elite Penguin Force DS games.
 ### Current features:
 
 - Opening and editing .ARC archives (Both EPF and HR)
-- Opening and editing .RDT resource data files (EPF. HR is viewing/exporting only, and lacks filenames)
+- Opening and editing .RDT resource data files (EPF. HR is viewing/exporting only.)
 - Opening and editing TSB/MPB tiled images. (Both EPF and HR)
 - Exporting and reimporting Lua scripts.
 - Editing save files. (Both EPF and HR)
