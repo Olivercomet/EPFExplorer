@@ -1833,9 +1833,27 @@ namespace EPFExplorer
 
                         fileToBeReplaced.RDTSpriteAlphaColour = AlphaColor;
                         fileToBeReplaced.RDTSpriteNumFrames = (ushort)framesAsBitmaps.Count;
-                        MessageBox.Show("also need to update centre and bounds here");
+                        fileToBeReplaced.RDTSpriteWidth = (ushort)(maxX - minX);
+                        fileToBeReplaced.RDTSpriteHeight = (ushort)(maxY - minY);
 
-                        fileToBeReplaced.rdtSubfileDataList.Clear();
+
+                        foreach (rdtSubfileData.setting s in fileToBeReplaced.rdtSubfileDataList[1].spriteSettings)
+                            {
+                            switch (s.name)
+                                {
+                                case "center":
+                                    s.X = (maxX - minX) / 2;
+                                    s.Y = (maxY - minY) / 2;
+                                    break;
+                                case "bounds":
+                                    s.X = 0;
+                                    s.Y = 0;
+                                    s.X2 = maxX - minX;
+                                    s.Y2 = maxY - minY;
+                                    break;
+                                }
+                            }
+
 
                         for (int i = fileToBeReplaced.rdtSubfileDataList.Count - 1; i >= 0; i--)
                             {
