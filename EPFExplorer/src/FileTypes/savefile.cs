@@ -32,6 +32,9 @@ namespace EPFExplorer
             HR = 0x474F4C44         //GOLD
         }
 
+        public byte[] newsletterImage = new byte[0x2940];
+        public Color[] newsletterPalette = new Color[16];
+
 
         public int currentMission = 0;
         public int penguinColour = 0;
@@ -432,23 +435,11 @@ namespace EPFExplorer
 
                         //the arc is then padded with 0x00 until the end of the line, and then the CRC-32 of the arc file follows.
 
-                        Byte[] newsletterImage = new byte[0x2960];
-
-                        Array.Copy(filebytes,0xCCF0,newsletterImage,0,0x2960);
-
-                        Console.WriteLine("test");
+                        
                         GetDownloadableMissionName();
-                        Console.WriteLine("test2");
+
                         saveFileEditor.exportDownloadArc.Enabled = true;
 
-                        //Bitmap bm = embeddedArc.archivedfiles[0].NBFCtoImage(newsletterImage);
-
-                        //bm.Save(filepath + "image.png");
-
-
-                        //File.WriteAllBytes(filepath+"image.raw",newsletterImage);
-
-                        Console.WriteLine("Last offset was " + reader.BaseStream.Position);
 
                         if (embeddedArc.filebytes.Length > 0xF540)
                             {
@@ -459,6 +450,48 @@ namespace EPFExplorer
                             extendedSaveMode = false;
                             }
                     }
+
+                    //LOAD NEWSLETTER
+
+
+                    int readPos = 0xC960;
+
+                    saveFileEditor.topStoryBox.Text = "";
+
+                    while (filebytes[readPos] != 0x00 && readPos < (0xC960 + 0x12C))
+                    {
+                        saveFileEditor.topStoryBox.Text += (char)filebytes[readPos];
+                        readPos += 2;
+                    }
+
+                    readPos = 0xCA8C;
+
+                    saveFileEditor.tipsAndSecretsTextBox.Text = "";
+
+                    while (filebytes[readPos] != 0x00 && readPos < (0xCA8C + 0x12C))
+                    {
+                        saveFileEditor.tipsAndSecretsTextBox.Text += (char)filebytes[readPos];
+                        readPos += 2;
+                    }
+
+                    readPos = 0xCBB8;
+
+                    saveFileEditor.jokeTextBox.Text = "";
+
+                    while (filebytes[readPos] != 0x00 && readPos < (0xCBB8 + 0x12C))
+                    {
+                        saveFileEditor.jokeTextBox.Text += (char)filebytes[readPos];
+                        readPos += 2;
+                    }
+
+                    //read newsletter palette and image
+
+                    newsletterPalette = saveFileEditor.form1.GetPalette(filebytes, 0xCCF0, 4);
+
+                    Array.Copy(filebytes, 0xCD10, newsletterImage, 0, 0x2940);
+
+                    saveFileEditor.pictureBox1.Image = saveFileEditor.form1.NBFCtoImage(newsletterImage, 0, 220, 96, newsletterPalette, 4);
+
 
                     //LOAD INVENTORY
                     reader.BaseStream.Position = 0xF650;
@@ -737,6 +770,40 @@ namespace EPFExplorer
                 { unlocks = unlocks | 0x08; }
 
                 filebytes[0xF7FC] = (byte)(unlocks & 0xFF);
+
+
+                if (embeddedArc == null || (embeddedArc != null && embeddedArc.filebytes.Length < 0xC860))
+                    {
+                    //if it's safe to write the newsletter, do so
+
+                    //write the text
+
+                    for (int i = 0; i < saveFileEditor.topStoryBox.Text.Length; i++)
+                        {
+                        filebytes[0xC960 + (i * 2)] = (byte)saveFileEditor.topStoryBox.Text[i];
+                        }
+
+                    for (int i = 0; i < saveFileEditor.tipsAndSecretsTextBox.Text.Length; i++)
+                        {
+                        filebytes[0xCA8C + (i * 2)] = (byte)saveFileEditor.tipsAndSecretsTextBox.Text[i];
+                        }
+
+                    for (int i = 0; i < saveFileEditor.jokeTextBox.Text.Length; i++)
+                        {
+                        filebytes[0xCBB8 + (i * 2)] = (byte)saveFileEditor.jokeTextBox.Text[i];
+                        }
+
+                    Array.Copy(newsletterImage, 0, filebytes, 0xCD10, 0x2940);  //copy newsletter image into save file
+
+                    int colorindex = 0;
+                    foreach (Color c in newsletterPalette)      //copy newsletter palette into save file
+                    {
+                        ushort ABGR1555Color = saveFileEditor.form1.ColorToABGR1555(c);
+                        filebytes[0xCCF0 + (colorindex * 2)] = (byte)(ABGR1555Color & 0x00FF);
+                        filebytes[0xCCF0 + (colorindex * 2) + 1] = (byte)((ABGR1555Color & 0xFF00) >> 8);
+                        colorindex++;
+                    }
+                }
 
                 int endOfDownloadArc = 0;
 

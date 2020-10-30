@@ -44,6 +44,8 @@ namespace EPFExplorer
                 Properties.Settings.Default.DSSaveFileDir = Path.GetDirectoryName(openFileDialog1.FileName);
                 Properties.Settings.Default.Save();
                 importDownloadArc.Enabled = true;
+                importNewspaperImage.Enabled = true;
+                exportNewspaperImage.Enabled = true;
             }
         }
 
@@ -118,7 +120,6 @@ namespace EPFExplorer
                 Properties.Settings.Default.DLCArcsDir = Path.GetDirectoryName(saveFileDialog1.FileName);
                 Properties.Settings.Default.Save();
             }
-
         }
 
         private void importDownloadArc_Click(object sender, EventArgs e)
@@ -239,6 +240,74 @@ namespace EPFExplorer
                 {
                     QuickLaunch();
                 }
+            }
+        }
+
+        private void exportNewspaperImage_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image == null)
+                {
+                return;
+                }
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Title = "Export image";
+            saveFileDialog1.Filter = "PNG image (*.png)|*.png";
+            saveFileDialog1.CheckPathExists = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                pictureBox1.Image.Save(saveFileDialog1.FileName);
+                }
+        }
+
+        private void importNewspaperImage_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.Title = "Import image";
+            openFileDialog1.Filter = "PNG images (*.png)|*.png";
+            openFileDialog1.CheckPathExists = true;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Bitmap potentialImage = (Bitmap)Image.FromFile(openFileDialog1.FileName);
+
+                if (potentialImage.Width != 220 || potentialImage.Height != 96)
+                    {
+                    MessageBox.Show("Wrong image dimensions. The accepted dimensions are 220px wide by 96px high.");
+                    return;
+                    }
+
+                List<Color> uniqueColors = new List<Color>();
+
+                for(int y = 0; y < potentialImage.Height; y++)
+                    {
+                    for (int x = 0; x < potentialImage.Width; x++)
+                        {
+                        Color c = potentialImage.GetPixel(x, y);
+                        c = Color.FromArgb(0xFF, c.R & 0xF8, c.G & 0xF8, c.B & 0xF8);
+                        
+                        if (!uniqueColors.Contains(c))
+                            {
+                            uniqueColors.Add(c);
+                            }
+                        }
+                    }
+
+                if (uniqueColors.Count > 15)
+                    {
+                    MessageBox.Show("Too many colours! Your image had: "+uniqueColors.Count+"colours. The limit is 15.");
+                    return;
+                    }
+
+                uniqueColors.Insert(0, Color.FromArgb(0xFF, 0xFF, 0x00, 0xFF));    //insert alpha colour at the beginning
+
+                pictureBox1.Image = potentialImage;
+
+                activeSaveFile.newsletterPalette = uniqueColors.ToArray();
+                activeSaveFile.newsletterImage = form1.ImageToNBFC(potentialImage, 4, activeSaveFile.newsletterPalette);
             }
         }
     }

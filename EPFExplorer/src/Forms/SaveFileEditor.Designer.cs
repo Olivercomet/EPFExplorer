@@ -61,6 +61,16 @@
             this.downloadableMissionNameDisplay = new System.Windows.Forms.Label();
             this.importDownloadArc = new System.Windows.Forms.Button();
             this.exportDownloadArc = new System.Windows.Forms.Button();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.jokeTextBox = new System.Windows.Forms.TextBox();
+            this.tipsAndSecretsTextBox = new System.Windows.Forms.TextBox();
+            this.topStoryBox = new System.Windows.Forms.TextBox();
+            this.exportNewspaperImage = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.importNewspaperImage = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.inventoryUnlockable = new System.Windows.Forms.CheckBox();
             this.whistleUnlockable = new System.Windows.Forms.CheckBox();
@@ -103,6 +113,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.coinsChooser)).BeginInit();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -212,6 +224,7 @@
             this.singleplayerOrOnline.Controls.Add(this.tabPage3);
             this.singleplayerOrOnline.Controls.Add(this.tabPage4);
             this.singleplayerOrOnline.Controls.Add(this.tabPage5);
+            this.singleplayerOrOnline.Controls.Add(this.tabPage6);
             this.singleplayerOrOnline.Location = new System.Drawing.Point(6, 21);
             this.singleplayerOrOnline.Name = "singleplayerOrOnline";
             this.singleplayerOrOnline.SelectedIndex = 0;
@@ -390,13 +403,13 @@
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Size = new System.Drawing.Size(392, 159);
             this.tabPage5.TabIndex = 2;
-            this.tabPage5.Text = "Downloadable Content";
+            this.tabPage5.Text = "Download.arc";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
             // downloadableMissionNameDisplay
             // 
             this.downloadableMissionNameDisplay.AutoSize = true;
-            this.downloadableMissionNameDisplay.Location = new System.Drawing.Point(28, 85);
+            this.downloadableMissionNameDisplay.Location = new System.Drawing.Point(16, 54);
             this.downloadableMissionNameDisplay.Name = "downloadableMissionNameDisplay";
             this.downloadableMissionNameDisplay.Size = new System.Drawing.Size(190, 17);
             this.downloadableMissionNameDisplay.TabIndex = 9;
@@ -405,7 +418,7 @@
             // importDownloadArc
             // 
             this.importDownloadArc.Enabled = false;
-            this.importDownloadArc.Location = new System.Drawing.Point(12, 118);
+            this.importDownloadArc.Location = new System.Drawing.Point(12, 78);
             this.importDownloadArc.Name = "importDownloadArc";
             this.importDownloadArc.Size = new System.Drawing.Size(181, 29);
             this.importDownloadArc.TabIndex = 8;
@@ -416,13 +429,113 @@
             // exportDownloadArc
             // 
             this.exportDownloadArc.Enabled = false;
-            this.exportDownloadArc.Location = new System.Drawing.Point(199, 118);
+            this.exportDownloadArc.Location = new System.Drawing.Point(199, 78);
             this.exportDownloadArc.Name = "exportDownloadArc";
             this.exportDownloadArc.Size = new System.Drawing.Size(181, 29);
             this.exportDownloadArc.TabIndex = 7;
             this.exportDownloadArc.Text = "Export download.arc";
             this.exportDownloadArc.UseVisualStyleBackColor = true;
             this.exportDownloadArc.Click += new System.EventHandler(this.exportDownloadArc_Click);
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.jokeTextBox);
+            this.tabPage6.Controls.Add(this.tipsAndSecretsTextBox);
+            this.tabPage6.Controls.Add(this.topStoryBox);
+            this.tabPage6.Controls.Add(this.exportNewspaperImage);
+            this.tabPage6.Controls.Add(this.label17);
+            this.tabPage6.Controls.Add(this.label15);
+            this.tabPage6.Controls.Add(this.label11);
+            this.tabPage6.Controls.Add(this.importNewspaperImage);
+            this.tabPage6.Controls.Add(this.pictureBox1);
+            this.tabPage6.Location = new System.Drawing.Point(4, 25);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(392, 159);
+            this.tabPage6.TabIndex = 3;
+            this.tabPage6.Text = "Newsletter";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // jokeTextBox
+            // 
+            this.jokeTextBox.Location = new System.Drawing.Point(174, 126);
+            this.jokeTextBox.MaxLength = 150;
+            this.jokeTextBox.Name = "jokeTextBox";
+            this.jokeTextBox.Size = new System.Drawing.Size(209, 22);
+            this.jokeTextBox.TabIndex = 8;
+            // 
+            // tipsAndSecretsTextBox
+            // 
+            this.tipsAndSecretsTextBox.Location = new System.Drawing.Point(176, 81);
+            this.tipsAndSecretsTextBox.MaxLength = 150;
+            this.tipsAndSecretsTextBox.Name = "tipsAndSecretsTextBox";
+            this.tipsAndSecretsTextBox.Size = new System.Drawing.Size(209, 22);
+            this.tipsAndSecretsTextBox.TabIndex = 7;
+            // 
+            // topStoryBox
+            // 
+            this.topStoryBox.Location = new System.Drawing.Point(176, 33);
+            this.topStoryBox.MaxLength = 150;
+            this.topStoryBox.Name = "topStoryBox";
+            this.topStoryBox.Size = new System.Drawing.Size(209, 22);
+            this.topStoryBox.TabIndex = 6;
+            // 
+            // exportNewspaperImage
+            // 
+            this.exportNewspaperImage.Enabled = false;
+            this.exportNewspaperImage.Location = new System.Drawing.Point(15, 125);
+            this.exportNewspaperImage.Name = "exportNewspaperImage";
+            this.exportNewspaperImage.Size = new System.Drawing.Size(153, 28);
+            this.exportNewspaperImage.TabIndex = 2;
+            this.exportNewspaperImage.Text = "Export image";
+            this.exportNewspaperImage.UseVisualStyleBackColor = true;
+            this.exportNewspaperImage.Click += new System.EventHandler(this.exportNewspaperImage_Click);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(174, 108);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(42, 17);
+            this.label17.TabIndex = 5;
+            this.label17.Text = "Joke:";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(174, 61);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(117, 17);
+            this.label15.TabIndex = 4;
+            this.label15.Text = "Tips and secrets:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(174, 10);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(72, 17);
+            this.label11.TabIndex = 3;
+            this.label11.Text = "Top story:";
+            // 
+            // importNewspaperImage
+            // 
+            this.importNewspaperImage.Enabled = false;
+            this.importNewspaperImage.Location = new System.Drawing.Point(15, 93);
+            this.importNewspaperImage.Name = "importNewspaperImage";
+            this.importNewspaperImage.Size = new System.Drawing.Size(153, 29);
+            this.importNewspaperImage.TabIndex = 1;
+            this.importNewspaperImage.Text = "Import image";
+            this.importNewspaperImage.UseVisualStyleBackColor = true;
+            this.importNewspaperImage.Click += new System.EventHandler(this.importNewspaperImage_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(15, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(153, 75);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // groupBox1
             // 
@@ -815,6 +928,9 @@
             this.tabPage4.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -903,5 +1019,15 @@
         private System.Windows.Forms.ToolStripMenuItem quickLaunchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem quickLaunchButton;
         private System.Windows.Forms.ToolStripMenuItem ChooseQuickLaunchRom;
+        private System.Windows.Forms.TabPage tabPage6;
+        public System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label11;
+        public System.Windows.Forms.TextBox jokeTextBox;
+        public System.Windows.Forms.TextBox tipsAndSecretsTextBox;
+        public System.Windows.Forms.TextBox topStoryBox;
+        public System.Windows.Forms.Button exportNewspaperImage;
+        public System.Windows.Forms.Button importNewspaperImage;
     }
 }

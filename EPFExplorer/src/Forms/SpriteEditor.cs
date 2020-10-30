@@ -46,7 +46,7 @@ namespace EPFExplorer
                 palettes[i].DecompressLZ10IfCompressed();
                 if (images[i].image == null && i != frame)
                 {
-                    tempPalette = sprite.GetPalette(palettes[i].filebytes, 1, sprite.RDTSpriteBPP).ToList();
+                    tempPalette = sprite.form1.GetPalette(palettes[i].filebytes, 1, sprite.RDTSpriteBPP).ToList();
 
                     //for (int c = 0; c < tempPalette.Count; c++)
                       //  {
@@ -62,7 +62,7 @@ namespace EPFExplorer
             if (images[frame].image == null)        //load selected image if not already loaded
             {
                 palettes[frame].DecompressLZ10IfCompressed();
-                tempPalette = sprite.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
+                tempPalette = sprite.form1.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
                 
                 //for (int c = 0; c < tempPalette.Count; c++)
                 //{

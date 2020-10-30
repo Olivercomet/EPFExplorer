@@ -782,62 +782,6 @@ namespace EPFExplorer
         }
 
 
-        public Color[] GetPalette(Byte[] input, int offset, byte bpp) {
-
-            Color[] palette = new Color[0];
-            
-            if (bpp == 4)
-            {
-                palette = new Color[16];
-
-                for (int i = 0; i < 16; i++)
-                {
-                    palette[i] = form1.ABGR1555_to_RGBA32(BitConverter.ToUInt16(input, offset));
-                    offset += 2;
-                }
-            }
-            else if (bpp == 8)
-            {
-                palette = new Color[256];
-
-                for (int i = 0; i < 256; i++)
-                {
-                    palette[i] = form1.ABGR1555_to_RGBA32(BitConverter.ToUInt16(input, offset));
-                    offset += 2;
-                }
-            }
-            else if (bpp == 3)
-            {
-                palette = new Color[8];
-
-                Console.WriteLine("3BPP");
-
-                for (int i = 0; i < 8; i++)
-                {
-                    palette[i] = form1.ABGR1555_to_RGBA32(BitConverter.ToUInt16(input, offset));
-                    offset += 2;
-                }
-            }
-            else if (bpp == 5)
-            {
-                palette = new Color[32];
-
-                Console.WriteLine("5BPP");
-
-                for (int i = 0; i < 32; i++)
-                {
-                    palette[i] = form1.ABGR1555_to_RGBA32(BitConverter.ToUInt16(input, offset));
-                    offset += 2;
-                }
-            }
-            return palette;
-        }
-
-
-        
-
-
-
         public void ReadTextFileEPF() {
 
             STstrings = new List<string>();

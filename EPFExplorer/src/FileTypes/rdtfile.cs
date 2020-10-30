@@ -497,7 +497,7 @@ namespace EPFExplorer
                                 }
                             else          //otherwise, just read the existing image for the first time and apply the existing palette
                                 {
-                                subfiledata.LoadImage(file.GetPalette(palettes[imageIndex], 1, file.RDTSpriteBPP));
+                                subfiledata.LoadImage(form1.GetPalette(palettes[imageIndex], 1, file.RDTSpriteBPP));
                                 images.Add(subfiledata.image);
                                 skipIndices.Add(images.Count - 1); //so that we know not to bother rereading it and its palette
                                 savedImages.Add(subfiledata);
@@ -569,7 +569,7 @@ namespace EPFExplorer
 
                                 if (file.RDTSpriteAlphaColour.A == 0 && file.RDTSpriteAlphaColour.R == 0 && file.RDTSpriteAlphaColour.G == 0 && file.RDTSpriteAlphaColour.B == 0)
                                     {
-                                    file.RDTSpriteAlphaColour = file.GetPalette(palettes[j], 1, file.RDTSpriteBPP)[0];
+                                    file.RDTSpriteAlphaColour = form1.GetPalette(palettes[j], 1, file.RDTSpriteBPP)[0];
                                     }
                                     
                                 Color[] coloursToAdd = Get_Unique_Colours(images, palette.Length);
