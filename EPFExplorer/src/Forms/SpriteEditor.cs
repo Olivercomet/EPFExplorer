@@ -202,6 +202,11 @@ namespace EPFExplorer
 
             bool failed = false;
 
+            if (tempPalette == null)
+                {
+                tempPalette = new List<Color>();
+                }
+
             rdtSubfileData oldImage = new rdtSubfileData(images[curFrame]);
             List<Color> oldPalette = new List<Color>(tempPalette);
 

@@ -169,6 +169,7 @@ namespace EPFExplorer
                 }
                 else if (activeSaveFile.embeddedArc.filebytes.Length > 0xF540)   //exceeds even the custom size
                 {
+                    //THIS DOES NOT WORK IN-GAME, so it has been dummied out here.
                     if (MessageBox.Show("That arc file would usually be too big.\nHowever, it can still be loaded if you use an action replay code on the EU version of the game.\nWould you like to do this?", "Arc file is too big, but there is a solution", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
                         {
                         activeSaveFile.extendedSaveMode = true;

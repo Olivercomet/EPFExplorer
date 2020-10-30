@@ -209,8 +209,8 @@ namespace EPFExplorer
                     case ".arc":
                         mode = Mode.Arc;
 
-                        randomizeRDTSpritesToolStripMenuItem.Enabled = false;
-                        massRDTExportToolStripMenuItem.Enabled = false;
+                        randomizeRDTSpritesToolStripMenuItem.Visible = false;
+                        massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = false;
 
                         ParseArc(openFileDialog1.FileName);
@@ -1805,7 +1805,6 @@ namespace EPFExplorer
 
                         for(int i = 0; i < framesAsBitmaps.Count; i++)
                             {
-                            Console.WriteLine("TEST");
                             for (int y = 0; y < framesAsBitmaps[i].Height; y++)
                                 {
                                 for (int x = 0; x < framesAsBitmaps[i].Width; x++)
@@ -1841,18 +1840,17 @@ namespace EPFExplorer
                             switch (s.name)
                                 {
                                 case "center":
-                                    s.X = (maxX - minX) / 2;
-                                    s.Y = (maxY - minY) / 2;
+                                    s.X = ((maxX - minX) + 1) / 2;
+                                    s.Y = ((maxY - minY) + 1) / 2;
                                     break;
                                 case "bounds":
                                     s.X = 0;
                                     s.Y = 0;
-                                    s.X2 = maxX - minX;
-                                    s.Y2 = maxY - minY;
+                                    s.X2 = (maxX - minX)+1;
+                                    s.Y2 = (maxY - minY)+1;
                                     break;
                                 }
                             }
-
 
                         for (int i = fileToBeReplaced.rdtSubfileDataList.Count - 1; i >= 0; i--)
                             {
@@ -1862,7 +1860,6 @@ namespace EPFExplorer
                                 }
                             }
 
-
                         for (int i = 0; i < framesAsBitmaps.Count; i++)
                             {
                             fileToBeReplaced.RDTSpriteFrameDurations.Add((ushort)(frameDurations[i] * 10));
@@ -1871,11 +1868,10 @@ namespace EPFExplorer
                             rdtSubfileData newGfx = new rdtSubfileData();
                             newGfx.graphicsType = "image";
                             newGfx.subfileType = 0x04;
-                            newGfx.offsetX = (short)(sizes.minX - minX);
-                            newGfx.offsetY = (short)(sizes.minY - minY);
+                            newGfx.offsetX = (short)((sizes.minX - minX)+1);
+                            newGfx.offsetY = (short)((sizes.minY - minY)+1);
 
-                            
-                            newGfx.image = new Bitmap(sizes.maxX - sizes.minX, sizes.maxY - sizes.minY);
+                            newGfx.image = new Bitmap((sizes.maxX - sizes.minX)+1, (sizes.maxY - sizes.minY)+1);
                             
                             for (int y = 0; y < newGfx.image.Height; y++)
                                 {
@@ -1892,7 +1888,6 @@ namespace EPFExplorer
                             fileToBeReplaced.rdtSubfileDataList.Add(newPal);
                             fileToBeReplaced.rdtSubfileDataList.Add(newGfx);
                             }
-
                         break;
                     }
                 }
@@ -1944,7 +1939,6 @@ namespace EPFExplorer
                 activeBin.ExportMusicSamples();
                 return;
                 }
-
 
             if (activeBin.binMode == binfile.binmode.sfx)
                 {
@@ -2015,7 +2009,6 @@ namespace EPFExplorer
                 saveFileDialog1.FileName = "Save wav files here";
                 }
             
-
             saveFileDialog1.Title = "Choose folder";
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.Filter = "Directory |directory";
