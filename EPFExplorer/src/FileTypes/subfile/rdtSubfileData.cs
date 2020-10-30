@@ -284,7 +284,7 @@ namespace EPFExplorer
         public short offsetX = 0;
         public short offsetY = 0;
 
-        public Image image = null;
+        public Bitmap image = null;
 
         public int writeAddress = 0; //for writing
 

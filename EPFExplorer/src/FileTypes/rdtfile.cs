@@ -66,17 +66,17 @@ namespace EPFExplorer
                     currentOffset = BitConverter.ToInt32(filebytes, 0x12 + (5 * i) + 1);
                     ParseRDTNode(currentOffset, (char)filebytes[0x12 + (5 * i)] + "");    //only parse the first node if the string actually begins with that letter, and it will recursively go down the tree
                 }
+            }
 
-                //now all the filenames should be parsed, let's check though
+            //now all the filenames should be parsed, let's check though
 
-                if (archivedfiles.Count == filecount)
-                {
-                    Console.WriteLine("All RDT files accounted for!");
-                }
-                else
-                {
-                    Console.WriteLine("ERROR! Either some files were missed, or we overcounted!");
-                }
+            if (archivedfiles.Count == filecount)
+            {
+                Console.WriteLine("All RDT files accounted for!");
+            }
+            else
+            {
+                Console.WriteLine("ERROR! Either some files were missed, or we overcounted!");
             }
         }
 
@@ -113,17 +113,6 @@ namespace EPFExplorer
                     }
                    
                 currentOffset += 4;
-            }
-
-            //now all the filenames should be parsed, let's check though
-
-            if (archivedfiles.Count == filecount)
-            {
-                Console.WriteLine("All RDT files accounted for!");
-            }
-            else
-            {
-                Console.WriteLine("ERROR! Either some files were missed, or we overcounted!");
             }
         }
 

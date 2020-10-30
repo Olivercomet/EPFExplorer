@@ -504,7 +504,6 @@ namespace EPFExplorer
                         spriteEditor.boundsX2.Value = s.X2;
                         spriteEditor.boundsY2.Value = s.Y2;
                         break;
-
                     default:
                         Console.WriteLine("unhandled name "+s.name);
                         break;

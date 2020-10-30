@@ -207,7 +207,7 @@ namespace EPFExplorer
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                images[curFrame].image = Image.FromFile(openFileDialog1.FileName);
+                images[curFrame].image = (Bitmap)Image.FromFile(openFileDialog1.FileName);
 
                 //make palette
                 tempPalette = new List<Color>();
