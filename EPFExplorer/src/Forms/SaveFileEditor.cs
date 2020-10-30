@@ -21,6 +21,9 @@ namespace EPFExplorer
 
         savefile activeSaveFile;
 
+        string saveExtenderCodeEU = "5211AAC8 020922F7\n1211AAC8 000022FF\n1211AAD8 000022FF\n1211AF3A 000022FF\n1211AF48 000022FF\n1211B0D2 000022FF\n1211BC36 0000BDF8\nD0000000 00000000";
+
+
         public Form1 form1;
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -43,6 +46,7 @@ namespace EPFExplorer
                 importDownloadArc.Enabled = true;
             }
         }
+
 
         private void currentMissionChooser_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -156,13 +160,34 @@ namespace EPFExplorer
 
                 activeSaveFile.embeddedArc.RebuildArc();
 
-                if (activeSaveFile.embeddedArc.filebytes.Length > 0xF540)   //exceeds even the custom size
+                if (activeSaveFile.embeddedArc.filebytes.Length > 0xF540)   //used to be 0xFEF0 when extended saves were allowed
                 {
-                    Console.WriteLine(activeSaveFile.embeddedArc.filebytes.Length);
                     MessageBox.Show("That arc file is too big.\nIt should be smaller than 61KB.", "Arc file is too big", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    activeSaveFile.embeddedArc = null;
+                    downloadableMissionNameDisplay.Text = "Downloadable Mission: None";
+                    exportDownloadArc.Enabled = false;
+                }
+                else if (activeSaveFile.embeddedArc.filebytes.Length > 0xF540)   //exceeds even the custom size
+                {
+                    if (MessageBox.Show("That arc file would usually be too big.\nHowever, it can still be loaded if you use an action replay code on the EU version of the game.\nWould you like to do this?", "Arc file is too big, but there is a solution", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        {
+                        activeSaveFile.extendedSaveMode = true;
+                        activeSaveFile.GetDownloadableMissionName();
+                        exportDownloadArc.Enabled = true;
+                        ShowActionReplayCodeForm ARform = new ShowActionReplayCodeForm();
+                        ARform.SetInfo(saveExtenderCodeEU,"Allow extended saves","For: Elite Penguin Force (EU version only)","Normal saves will be incompatible while the code is active.\nSaving the game is disabled while the code is active.");
+                        ARform.Show();
+                        }
+                    else
+                        {
+                        activeSaveFile.embeddedArc = null;
+                        downloadableMissionNameDisplay.Text = "Downloadable Mission: None";
+                        exportDownloadArc.Enabled = false;
+                        }
                 }
                 else
                 {
+                    activeSaveFile.extendedSaveMode = false;
                     activeSaveFile.GetDownloadableMissionName();
                     exportDownloadArc.Enabled = true;
                 }

@@ -28,8 +28,8 @@ namespace EPFExplorer
         public string oldOnlineName3 = ""; //so that it can be erased before the new one is put in
 
         public enum Game {
-            EPF = 0x424F4E44,
-            HR = 0x474F4C44
+            EPF = 0x424F4E44,       //BOND
+            HR = 0x474F4C44         //GOLD
         }
 
 
@@ -38,6 +38,7 @@ namespace EPFExplorer
 
         public arcfile embeddedArc;
 
+        public bool extendedSaveMode = false;
 
         public string[] MissionNamesEPF = new string[] {
         "M1: The Mystery Unfolds",
@@ -392,6 +393,7 @@ namespace EPFExplorer
                     {
                         //there's no embedded arc file
                         embeddedArc = null;
+                        extendedSaveMode = false;
                         saveFileEditor.downloadableMissionNameDisplay.Text = "Downloadable Mission: None";
                     }
                     else
@@ -447,6 +449,15 @@ namespace EPFExplorer
                         //File.WriteAllBytes(filepath+"image.raw",newsletterImage);
 
                         Console.WriteLine("Last offset was " + reader.BaseStream.Position);
+
+                        if (embeddedArc.filebytes.Length > 0xF540)
+                            {
+                            extendedSaveMode = true;
+                            }
+                        else
+                            {
+                            extendedSaveMode = false;
+                            }
                     }
 
                     //LOAD INVENTORY
@@ -612,15 +623,6 @@ namespace EPFExplorer
 
             if (game == Game.EPF)   //============ ELITE PENGUIN FORCE ============
             {
-                int endOfDownloadArc = 0;
-
-                if (embeddedArc != null)
-                {
-                    //WRITE DOWNLOADABLE MISSION    (maybe you should also clear a space for it beforehand? in case the old mission was bigger)
-
-                    Array.Copy(embeddedArc.filebytes, 0, filebytes, 0x100, embeddedArc.filebytes.Length);
-                }
-
 
                 //WRITE INVENTORY
 
@@ -736,9 +738,14 @@ namespace EPFExplorer
 
                 filebytes[0xF7FC] = (byte)(unlocks & 0xFF);
 
+                int endOfDownloadArc = 0;
 
                 if (embeddedArc != null)
-                    {
+                {
+                    //WRITE DOWNLOADABLE MISSION    (maybe you should also clear a space for it beforehand? in case the old mission was bigger)
+
+                    Array.Copy(embeddedArc.filebytes, 0, filebytes, 0x100, embeddedArc.filebytes.Length);
+
                     //DOWNLOAD.ARC CHECKSUM CALCULATION
                     //redoing the checksum here just in case
 
@@ -760,9 +767,16 @@ namespace EPFExplorer
 
                 //CHECKSUM CALCULATION EPF
 
-                checksumArea = new Byte[0xF700];
+                int checksumAreaSize = 0xF700;
 
-                Array.Copy(filebytes, 0x100, checksumArea, 0x0, 0xF700);
+                if (extendedSaveMode)
+                    {
+                    checksumAreaSize = 0xFF00;
+                    }
+
+                checksumArea = new Byte[checksumAreaSize];
+
+                Array.Copy(filebytes, 0x100, checksumArea, 0x0, checksumAreaSize);
 
                 checksum = Crc32.Compute(checksumArea);
                 WriteU32ToArray(filebytes, 0x0C, checksum);

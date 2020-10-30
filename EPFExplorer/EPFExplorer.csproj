@@ -98,6 +98,12 @@
     <Compile Include="src\Forms\MPB_TSB_EditorForm.Designer.cs">
       <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Forms\ShowActionReplayCodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\ShowActionReplayCodeForm.Designer.cs">
+      <DependentUpon>ShowActionReplayCodeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Forms\SpriteEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\SaveFileEditor.resx">
       <DependentUpon>SaveFileEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Forms\ShowActionReplayCodeForm.resx">
+      <DependentUpon>ShowActionReplayCodeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\SpriteEditor.resx">
       <DependentUpon>SpriteEditor.cs</DependentUpon>

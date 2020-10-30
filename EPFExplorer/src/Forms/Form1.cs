@@ -351,11 +351,10 @@ namespace EPFExplorer
             output |= (ushort)((input.G >> 3) << 5);
             output |= (ushort)((input.B >> 3) << 10);
 
-
             return output;
         }
 
-        public void WriteU32ToArray(Byte[] array, int offset, uint input)
+        public void WriteU32ToArray(byte[] array, int offset, uint input)
         {
             array[offset] = (byte)(input & 0x000000FF);
             array[offset + 1] = (byte)((input & 0x0000FF00) >> 8);
@@ -363,13 +362,13 @@ namespace EPFExplorer
             array[offset + 3] = (byte)((input & 0xFF000000) >> 24);
         }
 
-        public void WriteU16ToArray(Byte[] array, int offset, ushort input)
+        public void WriteU16ToArray(byte[] array, int offset, ushort input)
         {
             array[offset] = (byte)(input & 0x00FF);
             array[offset + 1] = (byte)((input & 0xFF00) >> 8);
         }
 
-        public void WriteS16ToArray(Byte[] array, int offset, short input)
+        public void WriteS16ToArray(byte[] array, int offset, short input)
         {
             array[offset] = (byte)(input & 0x00FF);
             array[offset + 1] = (byte)((input & 0xFF00) >> 8);
@@ -1835,7 +1834,7 @@ namespace EPFExplorer
                         fileToBeReplaced.RDTSpriteNumFrames = (ushort)framesAsBitmaps.Count;
                         fileToBeReplaced.RDTSpriteWidth = (ushort)(maxX - minX);
                         fileToBeReplaced.RDTSpriteHeight = (ushort)(maxY - minY);
-
+                        fileToBeReplaced.RDTSpriteFrameDurations.Clear();
 
                         foreach (rdtSubfileData.setting s in fileToBeReplaced.rdtSubfileDataList[1].spriteSettings)
                             {
