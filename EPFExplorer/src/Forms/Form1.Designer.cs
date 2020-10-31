@@ -36,11 +36,14 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileExtractorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.massRDTExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MPBTSBEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.randomizeRDTSpritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.massXMExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missionEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.massRDTExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomizeRDTSpritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RDTsettingVersionToolStripButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.RDTsettingVersionCP = new System.Windows.Forms.ToolStripMenuItem();
+            this.RDTSettingversionBen10 = new System.Windows.Forms.ToolStripMenuItem();
+            this.massXMExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.FileTree = new System.Windows.Forms.TreeView();
             this.archivedFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -71,9 +74,6 @@
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.RDTsettingVersionToolStripButton = new System.Windows.Forms.ToolStripMenuItem();
-            this.RDTsettingVersionCP = new System.Windows.Forms.ToolStripMenuItem();
-            this.RDTSettingversionBen10 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -105,14 +105,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -137,6 +137,20 @@
             this.saveFileExtractorToolStripMenuItem.Text = "Save File Editor";
             this.saveFileExtractorToolStripMenuItem.Click += new System.EventHandler(this.saveFileExtractorToolStripMenuItem_Click);
             // 
+            // MPBTSBEditorToolStripMenuItem
+            // 
+            this.MPBTSBEditorToolStripMenuItem.Name = "MPBTSBEditorToolStripMenuItem";
+            this.MPBTSBEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
+            this.MPBTSBEditorToolStripMenuItem.Text = "MPB/TSB Editor";
+            this.MPBTSBEditorToolStripMenuItem.Click += new System.EventHandler(this.MPBTSBEditorToolStripMenuItem_Click);
+            // 
+            // missionEditorToolStripMenuItem
+            // 
+            this.missionEditorToolStripMenuItem.Name = "missionEditorToolStripMenuItem";
+            this.missionEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
+            this.missionEditorToolStripMenuItem.Text = "Mission Editor";
+            this.missionEditorToolStripMenuItem.Click += new System.EventHandler(this.missionEditorToolStripMenuItem_Click);
+            // 
             // massRDTExportToolStripMenuItem
             // 
             this.massRDTExportToolStripMenuItem.Name = "massRDTExportToolStripMenuItem";
@@ -144,13 +158,6 @@
             this.massRDTExportToolStripMenuItem.Text = "Mass RDT Export";
             this.massRDTExportToolStripMenuItem.Visible = false;
             this.massRDTExportToolStripMenuItem.Click += new System.EventHandler(this.massRDTExportToolStripMenuItem_Click);
-            // 
-            // MPBTSBEditorToolStripMenuItem
-            // 
-            this.MPBTSBEditorToolStripMenuItem.Name = "MPBTSBEditorToolStripMenuItem";
-            this.MPBTSBEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
-            this.MPBTSBEditorToolStripMenuItem.Text = "MPB/TSB Editor";
-            this.MPBTSBEditorToolStripMenuItem.Click += new System.EventHandler(this.MPBTSBEditorToolStripMenuItem_Click);
             // 
             // randomizeRDTSpritesToolStripMenuItem
             // 
@@ -160,6 +167,29 @@
             this.randomizeRDTSpritesToolStripMenuItem.Visible = false;
             this.randomizeRDTSpritesToolStripMenuItem.Click += new System.EventHandler(this.randomizeRDTSpritesToolStripMenuItem_Click);
             // 
+            // RDTsettingVersionToolStripButton
+            // 
+            this.RDTsettingVersionToolStripButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RDTsettingVersionCP,
+            this.RDTSettingversionBen10});
+            this.RDTsettingVersionToolStripButton.Name = "RDTsettingVersionToolStripButton";
+            this.RDTsettingVersionToolStripButton.Size = new System.Drawing.Size(260, 26);
+            this.RDTsettingVersionToolStripButton.Text = "RDT settings version";
+            // 
+            // RDTsettingVersionCP
+            // 
+            this.RDTsettingVersionCP.Name = "RDTsettingVersionCP";
+            this.RDTsettingVersionCP.Size = new System.Drawing.Size(178, 26);
+            this.RDTsettingVersionCP.Text = "Club Penguin";
+            this.RDTsettingVersionCP.Click += new System.EventHandler(this.RDTsettingVersionCP_Click);
+            // 
+            // RDTSettingversionBen10
+            // 
+            this.RDTSettingversionBen10.Name = "RDTSettingversionBen10";
+            this.RDTSettingversionBen10.Size = new System.Drawing.Size(178, 26);
+            this.RDTSettingversionBen10.Text = "Ben 10";
+            this.RDTSettingversionBen10.Click += new System.EventHandler(this.RDTSettingversionBen10_Click);
+            // 
             // massXMExportToolStripMenuItem
             // 
             this.massXMExportToolStripMenuItem.Name = "massXMExportToolStripMenuItem";
@@ -167,13 +197,6 @@
             this.massXMExportToolStripMenuItem.Text = "Mass sound/music Export";
             this.massXMExportToolStripMenuItem.Visible = false;
             this.massXMExportToolStripMenuItem.Click += new System.EventHandler(this.massXMExportToolStripMenuItem_Click);
-            // 
-            // missionEditorToolStripMenuItem
-            // 
-            this.missionEditorToolStripMenuItem.Name = "missionEditorToolStripMenuItem";
-            this.missionEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
-            this.missionEditorToolStripMenuItem.Text = "Mission Editor";
-            this.missionEditorToolStripMenuItem.Click += new System.EventHandler(this.missionEditorToolStripMenuItem_Click);
             // 
             // button1
             // 
@@ -327,26 +350,26 @@
             this.deleteRDTarchivedfile});
             this.rdtSubfileContextMenu.Name = "contextMenuStrip1";
             this.rdtSubfileContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(133, 124);
+            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(211, 152);
             // 
             // openRDTarchivedfile
             // 
             this.openRDTarchivedfile.Name = "openRDTarchivedfile";
-            this.openRDTarchivedfile.Size = new System.Drawing.Size(132, 24);
+            this.openRDTarchivedfile.Size = new System.Drawing.Size(210, 24);
             this.openRDTarchivedfile.Text = "Open";
             this.openRDTarchivedfile.Click += new System.EventHandler(this.openRDTarchivedfile_Click);
             // 
             // replaceToolStripMenuItem1
             // 
             this.replaceToolStripMenuItem1.Name = "replaceToolStripMenuItem1";
-            this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.replaceToolStripMenuItem1.Text = "Replace";
             this.replaceToolStripMenuItem1.Click += new System.EventHandler(this.replaceToolStripMenuItem1_Click);
             // 
             // renameRDTarchfile
             // 
             this.renameRDTarchfile.Name = "renameRDTarchfile";
-            this.renameRDTarchfile.Size = new System.Drawing.Size(132, 24);
+            this.renameRDTarchfile.Size = new System.Drawing.Size(210, 24);
             this.renameRDTarchfile.Text = "Rename";
             this.renameRDTarchfile.Click += new System.EventHandler(this.renameRDTarchfile_Click);
             // 
@@ -354,10 +377,10 @@
             // 
             this.exportToolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rdtSpriteToPNGs,
-            this.rawDataToolStripMenuItem,
-            this.exportAsGIFAnimationToolStripMenuItem});
+            this.exportAsGIFAnimationToolStripMenuItem,
+            this.rawDataToolStripMenuItem});
             this.exportToolStripMenuItem2.Name = "exportToolStripMenuItem2";
-            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(132, 24);
+            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem2.Text = "Export";
             // 
             // rdtSpriteToPNGs
@@ -384,7 +407,7 @@
             // deleteRDTarchivedfile
             // 
             this.deleteRDTarchivedfile.Name = "deleteRDTarchivedfile";
-            this.deleteRDTarchivedfile.Size = new System.Drawing.Size(132, 24);
+            this.deleteRDTarchivedfile.Size = new System.Drawing.Size(210, 24);
             this.deleteRDTarchivedfile.Text = "Delete";
             this.deleteRDTarchivedfile.Click += new System.EventHandler(this.deleteRDTarchivedfile_Click);
             // 
@@ -411,29 +434,6 @@
             this.exportToolStripMenuItem3.Size = new System.Drawing.Size(131, 24);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
-            // 
-            // RDTsettingVersionToolStripButton
-            // 
-            this.RDTsettingVersionToolStripButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.RDTsettingVersionCP,
-            this.RDTSettingversionBen10});
-            this.RDTsettingVersionToolStripButton.Name = "RDTsettingVersionToolStripButton";
-            this.RDTsettingVersionToolStripButton.Size = new System.Drawing.Size(260, 26);
-            this.RDTsettingVersionToolStripButton.Text = "RDT settings version";
-            // 
-            // RDTsettingVersionCP
-            // 
-            this.RDTsettingVersionCP.Name = "RDTsettingVersionCP";
-            this.RDTsettingVersionCP.Size = new System.Drawing.Size(224, 26);
-            this.RDTsettingVersionCP.Text = "Club Penguin";
-            this.RDTsettingVersionCP.Click += new System.EventHandler(this.RDTsettingVersionCP_Click);
-            // 
-            // RDTSettingversionBen10
-            // 
-            this.RDTSettingversionBen10.Name = "RDTSettingversionBen10";
-            this.RDTSettingversionBen10.Size = new System.Drawing.Size(224, 26);
-            this.RDTSettingversionBen10.Text = "Ben 10";
-            this.RDTSettingversionBen10.Click += new System.EventHandler(this.RDTSettingversionBen10_Click);
             // 
             // Form1
             // 

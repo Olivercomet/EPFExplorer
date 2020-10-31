@@ -1,7 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 #region .NET Disclaimer/Info
 //===============================================================================
@@ -16,7 +23,7 @@ using System.IO;
 // $History:		$  
 //  
 //===============================================================================
-#endregion 
+#endregion
 
 #region Java
 /**
@@ -146,8 +153,7 @@ namespace NGif
 				return false;
 			}
 			bool ok = true;
-			try 
-			{
+
 				if (!sizeSet) 
 				{
 					// use first frame's size
@@ -174,11 +180,7 @@ namespace NGif
 				}
 				WritePixels(); // encode and write pixel data
 				firstFrame = false;
-			} 
-			catch
-			{
-				ok = false;
-			}
+			
 
 			return ok;
 		}
@@ -334,7 +336,7 @@ namespace NGif
 
 				for (int i = 0; i < nPix; i++)
 					{
-					Color c = Color.FromArgb(0xFF, pixels[nPix * 3]&0xF8, pixels[(nPix * 3) + 1]&0xF8, pixels[(nPix * 3) + 2]&0xF8);
+					Color c = Color.FromArgb(0xFF, pixels[i * 3], pixels[(i * 3) + 1], pixels[(i * 3) + 2]);
 					if (!cols.Contains(c))
 						{
 						cols.Add(c);
@@ -349,31 +351,39 @@ namespace NGif
 					colorTab[(i*3)+1] = cols[i].G;
 					colorTab[(i*3)+2] = cols[i].B;
 					}
+
+				//map image pixels to new palette
+
+				for (int i = 0; i < nPix; i++)
+					{
+					foreach (Color c in cols)
+						{
+						if (pixels[i*3] == c.R && pixels[(i * 3)+1] == c.G && pixels[(i*3)+2] == c.B)
+							{
+							usedEntry[cols.IndexOf(c)] = true;
+							indexedPixels[i] = (byte)cols.IndexOf(c);
+							break;
+							}
+						}
+					}
 				}
 			else
 				{
 				colorTab = nq.Process(); // create reduced palette
+
+				// map image pixels to new palette
+				int k = 0;
+				for (int i = 0; i < nPix; i++)
+					{
+					int index =
+						nq.Map(pixels[k++] & 0xff,
+						pixels[k++] & 0xff,
+						pixels[k++] & 0xff);
+					usedEntry[index] = true;
+					indexedPixels[i] = (byte)index;
+					}
 				}
 
-			// convert map from BGR to RGB
-//			for (int i = 0; i < colorTab.Length; i += 3) 
-//			{
-//				byte temp = colorTab[i];
-//				colorTab[i] = colorTab[i + 2];
-//				colorTab[i + 2] = temp;
-//				usedEntry[i / 3] = false;
-//			}
-			// map image pixels to new palette
-			int k = 0;
-			for (int i = 0; i < nPix; i++) 
-			{
-				int index =
-					nq.Map(pixels[k++] & 0xff,
-					pixels[k++] & 0xff,
-					pixels[k++] & 0xff);
-				usedEntry[index] = true;
-				indexedPixels[i] = (byte) index;
-			}
 			pixels = null;
 			colorDepth = 8;
 			palSize = 7;

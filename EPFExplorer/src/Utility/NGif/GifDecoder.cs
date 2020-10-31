@@ -384,15 +384,9 @@ namespace NGif
 		public int Read(String name) 
 		{
 			status = STATUS_OK;
-			try 
-			{
+
 				name = name.Trim().ToLower();
 				status = Read( new FileInfo( name ).OpenRead() );
-			} 
-			catch (IOException e) 
-			{
-				status = STATUS_OPEN_ERROR;
-			}
 
 			return status;
 		}
@@ -568,14 +562,8 @@ namespace NGif
 		protected int Read() 
 		{
 			int curByte = 0;
-			try 
-			{
-				curByte = inStream.ReadByte();
-			} 
-			catch (IOException e) 
-			{
-				status = STATUS_FORMAT_ERROR;
-			}
+
+			curByte = inStream.ReadByte();
 			return curByte;
 		}
 
@@ -590,8 +578,6 @@ namespace NGif
 			int n = 0;
 			if (blockSize > 0) 
 			{
-				try 
-				{
 					int count = 0;
 					while (n < blockSize) 
 					{
@@ -600,10 +586,6 @@ namespace NGif
 							break;
 						n += count;
 					}
-				} 
-				catch (IOException e) 
-				{
-				}
 
 				if (n < blockSize) 
 				{
@@ -625,13 +607,9 @@ namespace NGif
 			int[] tab = null;
 			byte[] c = new byte[nbytes];
 			int n = 0;
-			try 
-			{
-				n = inStream.Read(c, 0, c.Length );
-			} 
-			catch (IOException e) 
-			{
-			}
+
+			n = inStream.Read(c, 0, c.Length );
+
 			if (n < nbytes) 
 			{
 				status = STATUS_FORMAT_ERROR;

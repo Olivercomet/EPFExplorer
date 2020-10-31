@@ -28,6 +28,7 @@ namespace EPFExplorer
             base.OnClosing(e);
         }
 
+        public Form1 form1;
         public int curFrame = 0;
         public archivedfile sprite;
         public List<rdtSubfileData> images = new List<rdtSubfileData>();
@@ -37,8 +38,6 @@ namespace EPFExplorer
 
         public bool ready = false;
         public void RequestSpriteEditorImage(int frame) {
-
-
             ready = false;
 
             for (int i = 0; i < images.Count; i++)  //load all other images if not already loaded
@@ -47,11 +46,6 @@ namespace EPFExplorer
                 if (images[i].image == null && i != frame)
                 {
                     tempPalette = sprite.form1.GetPalette(palettes[i].filebytes, 1, sprite.RDTSpriteBPP).ToList();
-
-                    //for (int c = 0; c < tempPalette.Count; c++)
-                      //  {
-                        //tempPalette[c] = Color.FromArgb(0x00, tempPalette[c].R & 0xF8, tempPalette[c].G & 0xF8, tempPalette[c].B & 0xF8);
-                        //}
 
                     sprite.RDTSpriteAlphaColour = tempPalette[0];
                     images[i].LoadImage(tempPalette.ToArray());
@@ -63,14 +57,15 @@ namespace EPFExplorer
             {
                 palettes[frame].DecompressLZ10IfCompressed();
                 tempPalette = sprite.form1.GetPalette(palettes[frame].filebytes, 1, sprite.RDTSpriteBPP).ToList();
-                
-                //for (int c = 0; c < tempPalette.Count; c++)
-                //{
-                 //   tempPalette[c] = Color.FromArgb(0x00, tempPalette[c].R & 0xF8, tempPalette[c].G & 0xF8, tempPalette[c].B & 0xF8);
-                //}
 
                 sprite.RDTSpriteAlphaColour = tempPalette[0];
                 images[frame].LoadImage(tempPalette.ToArray());
+                SetAlphaColourDisplay();
+            }
+            else
+            {
+                tempPalette = form1.GetPaletteForImage(images[0].image);
+                sprite.RDTSpriteAlphaColour = tempPalette[0];
                 SetAlphaColourDisplay();
             }
 
@@ -92,13 +87,6 @@ namespace EPFExplorer
             durationBox.Value = sprite.RDTSpriteFrameDurations[curFrame];
 
             ready = true;
-        }
-      
-
-  
-        private void ImageBox_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void nextFrame_Click(object sender, EventArgs e)
@@ -347,9 +335,17 @@ namespace EPFExplorer
         }
 
         public void SetAlphaColourDisplay() {
+            int i = 0;
+            for (i = tempPalette.Count - 1; i >= 0; i--)
+                {
+                if ((tempPalette[i].R & 0xF8) == (sprite.RDTSpriteAlphaColour.R & 0xF8) && (tempPalette[i].G & 0xF8) == (sprite.RDTSpriteAlphaColour.G & 0xF8) && (tempPalette[i].B & 0xF8) == (sprite.RDTSpriteAlphaColour.B & 0xF8))
+                    {
+                    break;
+                    }
+                }
+            tempPalette[i] = Color.FromArgb(0xFF, tempPalette[i].R, tempPalette[i].G, tempPalette[i].B);
 
-            alphacolourdisplay.BackColor = tempPalette[tempPalette.IndexOf(sprite.RDTSpriteAlphaColour)];
-        
+            alphacolourdisplay.BackColor = tempPalette[i];
         }
 
         private void exportRawFilesButton_Click(object sender, EventArgs e)

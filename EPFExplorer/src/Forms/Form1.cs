@@ -798,6 +798,11 @@ namespace EPFExplorer
             openFileDialog1.CheckPathExists = true;
             openFileDialog1.Multiselect = true;
             openFileDialog1.Filter = "All files (*.*)|*.*";
+
+            if (mode == Mode.Rdt){
+                openFileDialog1.Filter = "1PP sprite files (*.sprite*)|*.sprite";
+            }
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if (mode == Mode.Arc)
@@ -1805,7 +1810,6 @@ namespace EPFExplorer
 
                         foreach (Bitmap frame in framesAsBitmaps)
                             {
-
                             for (int y = 0; y < frame.Height; y++)
                                 {
                                 for (int x = 0; x < frame.Width; x++)
@@ -2134,6 +2138,7 @@ namespace EPFExplorer
                 enc.Start(saveFileDialog1.FileName);
                 enc.SetRepeat(0);
                 enc.SetQuality(1); //best quality
+                enc.SetTransparent(selectedFile.RDTSpriteAlphaColour);
                 enc.perfectColours = true;
 
                 int width = 0;
@@ -2173,6 +2178,7 @@ namespace EPFExplorer
                             frame.SetPixel(x + offsetX,y + offsetY,selectedFile.spriteEditor.images[i].image.GetPixel(x,y));
                             }
                         }
+                    frame.Save("Test");
 
                     enc.AddFrame(frame);
                     enc.SetDelay((int)Math.Round((float)(selectedFile.RDTSpriteFrameDurations[i])));
@@ -2193,6 +2199,27 @@ namespace EPFExplorer
         private void RDTSettingversionBen10_Click(object sender, EventArgs e)
         {
             activeRdt.ben10mode = true;
+        }
+
+        public List<Color> GetPaletteForImage(Bitmap image) {
+
+            List<Color> output = new List<Color>();
+
+            for (int y = 0; y < image.Height; y++)
+            {
+                for (int x = 0; x < image.Width; x++)
+                {
+                    Color c = image.GetPixel(x, y);
+                    c = Color.FromArgb(0xFF, c.R & 0xF8, c.G & 0xF8, c.B & 0xF8);
+
+                    if (!output.Contains(c))
+                    {
+                        output.Add(c);
+                    }
+                }
+            }
+
+            return output;
         }
     }
 }

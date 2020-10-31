@@ -437,6 +437,7 @@ namespace EPFExplorer
                     }
 
                 spriteEditor = new SpriteEditor();
+                spriteEditor.form1 = form1;
                 spriteEditor.sprite = this;
                 if (showEditor)
                     {
