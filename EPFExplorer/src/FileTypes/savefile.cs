@@ -884,8 +884,6 @@ namespace EPFExplorer
                     }
                 }
 
-
-
                 //CHECKSUM CALCULATION HR
 
                 checksumArea = new Byte[0x130];
@@ -932,12 +930,42 @@ namespace EPFExplorer
             if (downloadstrings == null)
                 {
                 Console.WriteLine("downloadstrings was not found in that arc!");
+                saveFileEditor.downloadableMissionNameDisplay.Text = "Downloadable Mission: No name found";
                 }
             else
                 {
                 downloadstrings.ReadFile();
                 saveFileEditor.downloadableMissionNameDisplay.Text = "Downloadable Mission: " + downloadstrings.STstrings[0];
                 }
+        }
+
+        public void SetAuthorDetails()
+        {
+            archivedfile authorFile = embeddedArc.GetFileByName("/info.txt");
+
+            saveFileEditor.author.Text = "Author: None";
+            saveFileEditor.authorNote.Text = "Author's note: None";
+
+            if (authorFile != null)
+            {
+                authorFile.ReadFile();
+
+                string authorFileText = "";
+
+                for (int i = 0; i < authorFile.filebytes.Length; i++)
+                {
+                    authorFileText += (char)authorFile.filebytes[i];
+                }
+
+                string[] splitAuthorFile = authorFileText.Replace("\r", "").Split('\n');
+
+                saveFileEditor.author.Text = "Author: " + splitAuthorFile[0];
+
+                if (splitAuthorFile.Length > 1)
+                {
+                    saveFileEditor.authorNote.Text = "Author's note: " + splitAuthorFile[1].Replace("[newline]","\n");
+                }
+            }
         }
     }
 }

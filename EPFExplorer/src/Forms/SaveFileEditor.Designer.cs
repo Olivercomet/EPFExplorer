@@ -105,6 +105,8 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.chillToolTipEPF = new System.Windows.Forms.ToolTip(this.components);
+            this.author = new System.Windows.Forms.Label();
+            this.authorNote = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.singleplayerOrOnline.SuspendLayout();
@@ -396,6 +398,8 @@
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.authorNote);
+            this.tabPage5.Controls.Add(this.author);
             this.tabPage5.Controls.Add(this.downloadableMissionNameDisplay);
             this.tabPage5.Controls.Add(this.importDownloadArc);
             this.tabPage5.Controls.Add(this.exportDownloadArc);
@@ -409,7 +413,7 @@
             // downloadableMissionNameDisplay
             // 
             this.downloadableMissionNameDisplay.AutoSize = true;
-            this.downloadableMissionNameDisplay.Location = new System.Drawing.Point(16, 54);
+            this.downloadableMissionNameDisplay.Location = new System.Drawing.Point(16, 14);
             this.downloadableMissionNameDisplay.Name = "downloadableMissionNameDisplay";
             this.downloadableMissionNameDisplay.Size = new System.Drawing.Size(190, 17);
             this.downloadableMissionNameDisplay.TabIndex = 9;
@@ -418,7 +422,7 @@
             // importDownloadArc
             // 
             this.importDownloadArc.Enabled = false;
-            this.importDownloadArc.Location = new System.Drawing.Point(12, 78);
+            this.importDownloadArc.Location = new System.Drawing.Point(12, 38);
             this.importDownloadArc.Name = "importDownloadArc";
             this.importDownloadArc.Size = new System.Drawing.Size(181, 29);
             this.importDownloadArc.TabIndex = 8;
@@ -429,7 +433,7 @@
             // exportDownloadArc
             // 
             this.exportDownloadArc.Enabled = false;
-            this.exportDownloadArc.Location = new System.Drawing.Point(199, 78);
+            this.exportDownloadArc.Location = new System.Drawing.Point(199, 38);
             this.exportDownloadArc.Name = "exportDownloadArc";
             this.exportDownloadArc.Size = new System.Drawing.Size(181, 29);
             this.exportDownloadArc.TabIndex = 7;
@@ -901,6 +905,24 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Game-specific settings";
             // 
+            // author
+            // 
+            this.author.AutoSize = true;
+            this.author.Location = new System.Drawing.Point(18, 81);
+            this.author.Name = "author";
+            this.author.Size = new System.Drawing.Size(92, 17);
+            this.author.TabIndex = 10;
+            this.author.Text = "Author: None";
+            // 
+            // authorNote
+            // 
+            this.authorNote.AutoSize = true;
+            this.authorNote.Location = new System.Drawing.Point(18, 107);
+            this.authorNote.Name = "authorNote";
+            this.authorNote.Size = new System.Drawing.Size(134, 17);
+            this.authorNote.TabIndex = 11;
+            this.authorNote.Text = "Author\'s note: None";
+            // 
             // SaveFileEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1029,5 +1051,7 @@
         public System.Windows.Forms.TextBox topStoryBox;
         public System.Windows.Forms.Button exportNewspaperImage;
         public System.Windows.Forms.Button importNewspaperImage;
+        public System.Windows.Forms.Label author;
+        public System.Windows.Forms.Label authorNote;
     }
 }

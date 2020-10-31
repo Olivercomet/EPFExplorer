@@ -573,7 +573,7 @@ namespace EPFExplorer
                             file.MakeSTfromStringsEPF();
                             break;
                         default:
-                            Console.WriteLine("Don't know how to reformat a "+Path.GetExtension(file.filename)+" file for import! filename is "+file.filename);
+                            Console.WriteLine("There's no special method for reformatting a "+Path.GetExtension(file.filename)+" file for import, so we're just going to import it as-is. Filename is "+file.filename);
                             break;
                         }
                     }

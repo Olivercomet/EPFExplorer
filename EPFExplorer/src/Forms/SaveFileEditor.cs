@@ -146,14 +146,24 @@ namespace EPFExplorer
                 //make some recommended changes to the arc before import (so that it fits)
                 activeSaveFile.embeddedArc.ReadArc();
 
-                foreach (archivedfile file in activeSaveFile.embeddedArc.archivedfiles)
+                for (int i = activeSaveFile.embeddedArc.archivedfiles.Count - 1; i >= 0; i--)
                 {
-                    file.ReadFile();    //this may look redundant, as rebuildarc does this anyway, but we need to read it out before changing the compression information, otherwise rebuildarc's readarc call will try to decompress even if it's not actually compressed yet
+                    activeSaveFile.embeddedArc.archivedfiles[i].ReadFile();    //this may look redundant, as rebuildarc does this anyway, but we need to read it out before changing the compression information, otherwise rebuildarc's readarc call will try to decompress even if it's not actually compressed yet
                     
-                    if (!file.was_LZ10_compressed && !file.was_LZ11_compressed)
+                    if (!activeSaveFile.embeddedArc.archivedfiles[i].was_LZ10_compressed && !activeSaveFile.embeddedArc.archivedfiles[i].was_LZ11_compressed)
                         {
-                        file.has_LZ11_filesize = true;
-                        file.was_LZ11_compressed = true;
+                        activeSaveFile.embeddedArc.archivedfiles[i].has_LZ11_filesize = true;
+                        activeSaveFile.embeddedArc.archivedfiles[i].was_LZ11_compressed = true;
+                        }
+
+                    if (activeSaveFile.embeddedArc.archivedfiles[i].filename.ToLower() == "/info.txt")
+                        {
+                        activeSaveFile.SetAuthorDetails();
+                        activeSaveFile.embeddedArc.archivedfiles.RemoveAt(i);
+                        }
+                    else{
+                        author.Text = "Author: None";
+                        authorNote.Text = "Author's note: None";
                         }
                 }
 
@@ -163,7 +173,7 @@ namespace EPFExplorer
 
                 if (activeSaveFile.embeddedArc.filebytes.Length > 0xF540)   //used to be 0xFEF0 when extended saves were allowed
                 {
-                    MessageBox.Show("That arc file is too big.\nIt should be smaller than 61KB.", "Arc file is too big", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("That arc file is too big.\nIts effective size should be smaller than 61KB.\nYour arc was: "+((float)activeSaveFile.embeddedArc.filebytes.Length / (float)1024.00) +"KB.", "Arc file is too big", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     activeSaveFile.embeddedArc = null;
                     downloadableMissionNameDisplay.Text = "Downloadable Mission: None";
                     exportDownloadArc.Enabled = false;

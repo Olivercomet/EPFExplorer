@@ -836,6 +836,11 @@ namespace EPFExplorer
                             newfile.filename += "/";
                         }
 
+                        if (newfile.filename.Length == 0)
+                            {
+                            newfile.filename = "/";
+                            }
+
                         newfile.filename += Path.GetFileName(openedFileName);
 
                         newfile.filebytes = File.ReadAllBytes(openedFileName);
@@ -1776,7 +1781,6 @@ namespace EPFExplorer
                             fileToBeReplaced.ReadFile();
                             }
 
-
                         Image animatedImage = Image.FromFile(openFileDialog1.FileName);
 
                         List<Bitmap> framesAsBitmaps = new List<Bitmap>();
@@ -1814,14 +1818,12 @@ namespace EPFExplorer
                                 }
                             }
 
-
-                        if (fileToBeReplaced.RDTSpriteBPP == 4 && colors.Count > 16)
-                        {
+                        if (fileToBeReplaced.RDTSpriteBPP == 4 && colors.Count > 16 && colors.Count <= 256){
                             MessageBox.Show("This gif has " + colors.Count + " colours, which exceeds the maximum colour count for a 4BPP sprite (16). If you really want to import it, change this sprite's BPP to 8, then try again.");
                             return;
                         }
-                        if (colors.Count > 256)
-                        {
+
+                        if (colors.Count > 256){
                             MessageBox.Show("Too many colours! You had: " + colors.Count + " colours. The maximum allowed is 256.");
                             return;
                         }
