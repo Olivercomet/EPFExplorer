@@ -31,7 +31,9 @@ namespace EPFExplorer
 
         public bool isHR = false;
 
-        public Dictionary<Byte[], int> AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
+        public bool ben10mode = false;
+
+        public Dictionary<byte[], int> AlreadyProcessedFilesAndOffsetsInData = new Dictionary<Byte[], int>();
 
         public bool randomizeOnNextSave = false;
 

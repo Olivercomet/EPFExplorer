@@ -66,11 +66,14 @@
             this.exportToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.rdtSpriteToPNGs = new System.Windows.Forms.ToolStripMenuItem();
             this.rawDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportAsGIFAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRDTarchivedfile = new System.Windows.Forms.ToolStripMenuItem();
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportAsGIFAnimationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RDTsettingVersionToolStripButton = new System.Windows.Forms.ToolStripMenuItem();
+            this.RDTsettingVersionCP = new System.Windows.Forms.ToolStripMenuItem();
+            this.RDTSettingversionBen10 = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -102,14 +105,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -117,11 +120,12 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveFileExtractorToolStripMenuItem,
-            this.massRDTExportToolStripMenuItem,
             this.MPBTSBEditorToolStripMenuItem,
+            this.missionEditorToolStripMenuItem,
+            this.massRDTExportToolStripMenuItem,
             this.randomizeRDTSpritesToolStripMenuItem,
-            this.massXMExportToolStripMenuItem,
-            this.missionEditorToolStripMenuItem});
+            this.RDTsettingVersionToolStripButton,
+            this.massXMExportToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -323,26 +327,26 @@
             this.deleteRDTarchivedfile});
             this.rdtSubfileContextMenu.Name = "contextMenuStrip1";
             this.rdtSubfileContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(211, 152);
+            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(133, 124);
             // 
             // openRDTarchivedfile
             // 
             this.openRDTarchivedfile.Name = "openRDTarchivedfile";
-            this.openRDTarchivedfile.Size = new System.Drawing.Size(210, 24);
+            this.openRDTarchivedfile.Size = new System.Drawing.Size(132, 24);
             this.openRDTarchivedfile.Text = "Open";
             this.openRDTarchivedfile.Click += new System.EventHandler(this.openRDTarchivedfile_Click);
             // 
             // replaceToolStripMenuItem1
             // 
             this.replaceToolStripMenuItem1.Name = "replaceToolStripMenuItem1";
-            this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
+            this.replaceToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
             this.replaceToolStripMenuItem1.Text = "Replace";
             this.replaceToolStripMenuItem1.Click += new System.EventHandler(this.replaceToolStripMenuItem1_Click);
             // 
             // renameRDTarchfile
             // 
             this.renameRDTarchfile.Name = "renameRDTarchfile";
-            this.renameRDTarchfile.Size = new System.Drawing.Size(210, 24);
+            this.renameRDTarchfile.Size = new System.Drawing.Size(132, 24);
             this.renameRDTarchfile.Text = "Rename";
             this.renameRDTarchfile.Click += new System.EventHandler(this.renameRDTarchfile_Click);
             // 
@@ -353,7 +357,7 @@
             this.rawDataToolStripMenuItem,
             this.exportAsGIFAnimationToolStripMenuItem});
             this.exportToolStripMenuItem2.Name = "exportToolStripMenuItem2";
-            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
+            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(132, 24);
             this.exportToolStripMenuItem2.Text = "Export";
             // 
             // rdtSpriteToPNGs
@@ -370,10 +374,17 @@
             this.rawDataToolStripMenuItem.Text = "As .sprite file";
             this.rawDataToolStripMenuItem.Click += new System.EventHandler(this.rawDataToolStripMenuItem_Click);
             // 
+            // exportAsGIFAnimationToolStripMenuItem
+            // 
+            this.exportAsGIFAnimationToolStripMenuItem.Name = "exportAsGIFAnimationToolStripMenuItem";
+            this.exportAsGIFAnimationToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.exportAsGIFAnimationToolStripMenuItem.Text = "As GIF animation";
+            this.exportAsGIFAnimationToolStripMenuItem.Click += new System.EventHandler(this.exportAsGIFAnimationToolStripMenuItem_Click);
+            // 
             // deleteRDTarchivedfile
             // 
             this.deleteRDTarchivedfile.Name = "deleteRDTarchivedfile";
-            this.deleteRDTarchivedfile.Size = new System.Drawing.Size(210, 24);
+            this.deleteRDTarchivedfile.Size = new System.Drawing.Size(132, 24);
             this.deleteRDTarchivedfile.Text = "Delete";
             this.deleteRDTarchivedfile.Click += new System.EventHandler(this.deleteRDTarchivedfile_Click);
             // 
@@ -401,13 +412,28 @@
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
-            // exportAsGIFAnimationToolStripMenuItem
+            // RDTsettingVersionToolStripButton
             // 
-            this.exportAsGIFAnimationToolStripMenuItem.Name = "exportAsGIFAnimationToolStripMenuItem";
-            this.exportAsGIFAnimationToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.exportAsGIFAnimationToolStripMenuItem.Text = "As GIF animation";
-            this.exportAsGIFAnimationToolStripMenuItem.Visible = false;
-            this.exportAsGIFAnimationToolStripMenuItem.Click += new System.EventHandler(this.exportAsGIFAnimationToolStripMenuItem_Click);
+            this.RDTsettingVersionToolStripButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RDTsettingVersionCP,
+            this.RDTSettingversionBen10});
+            this.RDTsettingVersionToolStripButton.Name = "RDTsettingVersionToolStripButton";
+            this.RDTsettingVersionToolStripButton.Size = new System.Drawing.Size(260, 26);
+            this.RDTsettingVersionToolStripButton.Text = "RDT settings version";
+            // 
+            // RDTsettingVersionCP
+            // 
+            this.RDTsettingVersionCP.Name = "RDTsettingVersionCP";
+            this.RDTsettingVersionCP.Size = new System.Drawing.Size(224, 26);
+            this.RDTsettingVersionCP.Text = "Club Penguin";
+            this.RDTsettingVersionCP.Click += new System.EventHandler(this.RDTsettingVersionCP_Click);
+            // 
+            // RDTSettingversionBen10
+            // 
+            this.RDTSettingversionBen10.Name = "RDTSettingversionBen10";
+            this.RDTSettingversionBen10.Size = new System.Drawing.Size(224, 26);
+            this.RDTSettingversionBen10.Text = "Ben 10";
+            this.RDTSettingversionBen10.Click += new System.EventHandler(this.RDTSettingversionBen10_Click);
             // 
             // Form1
             // 
@@ -475,6 +501,9 @@
         private System.Windows.Forms.ToolStripMenuItem massXMExportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem missionEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportAsGIFAnimationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RDTsettingVersionToolStripButton;
+        private System.Windows.Forms.ToolStripMenuItem RDTsettingVersionCP;
+        private System.Windows.Forms.ToolStripMenuItem RDTSettingversionBen10;
     }
 }
 

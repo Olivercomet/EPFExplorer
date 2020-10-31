@@ -66,6 +66,8 @@ namespace EPFExplorer
             public byte A;
             public byte B;
 
+            public string str = "";
+
             public int FFcount = 0;
         }
 
@@ -83,12 +85,19 @@ namespace EPFExplorer
                 ushort stringLength = BitConverter.ToUInt16(filebytes, curOffset);
                 curOffset += 2;
 
+                if(stringLength > filebytes.Length)
+                    {
+                    parentfile.parentrdtfile.ben10mode = !parentfile.parentrdtfile.ben10mode;
+                    spriteSettings = new List<setting>();
+                    LoadSpriteSettings();
+                    return;
+                    }
+
                 for (int c = 0; c < stringLength; c++)
                     {
                     newSetting.name += (char)filebytes[curOffset];
                     curOffset++;
                     }
-
 
                 newSetting.type = BitConverter.ToUInt16(filebytes, curOffset);
                 curOffset += 2;
@@ -107,7 +116,12 @@ namespace EPFExplorer
                         newSetting.FFcount++;
                         curOffset++;
                         }
-                 }
+                    }
+
+                if (newSetting.type != 0x05 && newSetting.FFcount == 2) //If this ISN'T bounds but still only has an FFcount of 2, assume that ALL of them have an FFcount of two, meaning the bounds setting's special A & B variables do NOT apply, even though it has an FFcount of 2. But this isn't foolproof. If bounds (ID 0x05) is the first setting, it won't realise that something is wrong, and will read it incorrectly, messing up all the subsequent settings too.
+                    {
+                    parentfile.parentrdtfile.ben10mode = true;
+                    }
 
                 switch (newSetting.type)
                     {
@@ -127,7 +141,7 @@ namespace EPFExplorer
                         break;
 
                     case 0x05:  //2D rect
-                        if (newSetting.FFcount == 2)
+                        if (newSetting.FFcount == 2 && !parentfile.parentrdtfile.ben10mode)
                             {
                             newSetting.A = filebytes[curOffset];
                             curOffset++;
@@ -145,8 +159,19 @@ namespace EPFExplorer
                         curOffset += 4;
                              
                         break;
+                    case 0x06:   //string
+                        curOffset += 2;
+                        int strLength = BitConverter.ToInt16(filebytes, curOffset);
+                        curOffset+=2;
+                        
+                        for (int c = 0; c < strLength; c++)
+                            {
+                            newSetting.str += (char)filebytes[curOffset];
+                            curOffset++;
+                            }
+                        break;
                     default:
-                        MessageBox.Show("Unknown sprite setting with ID \""+newSetting.type+"\"", "Unrecognised item", MessageBoxButtons.OK);
+                        MessageBox.Show("Unknown sprite setting with ID \""+newSetting.type+"\". The name was: "+newSetting.name, "Unrecognised item", MessageBoxButtons.OK);
                         File.WriteAllBytes("temp", filebytes);
                         break;
                     }

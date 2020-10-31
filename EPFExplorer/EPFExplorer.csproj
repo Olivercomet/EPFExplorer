@@ -129,6 +129,11 @@
     </Compile>
     <Compile Include="src\FileTypes\sfxfile.cs" />
     <Compile Include="src\FileTypes\xmfile.cs" />
+    <Compile Include="src\Utility\NGif\AnimatedGifEncoder.cs" />
+    <Compile Include="src\Utility\NGif\GifDecoder.cs" />
+    <Compile Include="src\Utility\NGif\GifEncoder.cs" />
+    <Compile Include="src\Utility\NGif\LZWEncoder.cs" />
+    <Compile Include="src\Utility\NGif\NeuQuant.cs" />
     <EmbeddedResource Include="src\Forms\ChooseAlphaColourWindow.resx">
       <DependentUpon>ChooseAlphaColourWindow.cs</DependentUpon>
     </EmbeddedResource>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,6 @@ namespace EPFExplorer
 {
     public partial class Form1 : Form
     {
-
         public arcfile activeArc;
         public binfile activeBin;
         public rdtfile activeRdt;
@@ -212,6 +212,7 @@ namespace EPFExplorer
                         randomizeRDTSpritesToolStripMenuItem.Visible = false;
                         massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = false;
+                        RDTsettingVersionToolStripButton.Visible = false;
 
                         ParseArc(openFileDialog1.FileName);
                         activeArc.ViewArcInFileTree();
@@ -222,6 +223,7 @@ namespace EPFExplorer
                         randomizeRDTSpritesToolStripMenuItem.Visible = false;
                         massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = true;
+                        RDTsettingVersionToolStripButton.Visible = false;
 
                         ParseBin(openFileDialog1.FileName);
                         MakeFileTree();
@@ -232,6 +234,7 @@ namespace EPFExplorer
                         randomizeRDTSpritesToolStripMenuItem.Visible = true;
                         massRDTExportToolStripMenuItem.Visible = true;
                         massXMExportToolStripMenuItem.Visible = false;
+                        RDTsettingVersionToolStripButton.Visible = true;
 
                         ParseRdt(openFileDialog1.FileName);
                         MakeFileTree();
@@ -1785,15 +1788,15 @@ namespace EPFExplorer
 
                         List<Bitmap> framesAsBitmaps = new List<Bitmap>();
 
-                        System.Drawing.Imaging.PropertyItem metadata = animatedImage.PropertyItems[0];
+                        PropertyItem metadata = animatedImage.PropertyItems[0];
                         List<int> frameDurations = new List<int>();
 
-                        for (int i = 0; i < animatedImage.GetFrameCount(System.Drawing.Imaging.FrameDimension.Time); i++)
+                        for (int i = 0; i < animatedImage.GetFrameCount(FrameDimension.Time); i++)
                         {
-                            animatedImage.SelectActiveFrame(System.Drawing.Imaging.FrameDimension.Time, i);
+                            animatedImage.SelectActiveFrame(FrameDimension.Time, i);
                             
                             MemoryStream strm = new MemoryStream();
-                            animatedImage.Save(strm, System.Drawing.Imaging.ImageFormat.Png);
+                            animatedImage.Save(strm, ImageFormat.Png);
                             framesAsBitmaps.Add((Bitmap)Image.FromStream(strm));
                             frameDurations.Add(BitConverter.ToInt32(metadata.Value, i * 4));
                         }
@@ -1808,7 +1811,7 @@ namespace EPFExplorer
                                 for (int x = 0; x < frame.Width; x++)
                                     {
                                     Color c = frame.GetPixel(x, y);
-                                    c = Color.FromArgb(0xFF, c.R, c.G, c.B);
+                                    c = Color.FromArgb(0xFF, c.R & 0xF8, c.G & 0xF8, c.B & 0xF8);
 
                                     if (!colors.Contains(c))
                                         {
@@ -2108,7 +2111,88 @@ namespace EPFExplorer
 
         private void exportAsGIFAnimationToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            archivedfile selectedFile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
+            selectedFile.OpenRDTSubfileInEditor(false);
 
+            if (selectedFile.spriteEditor.images.Count == 0)
+                {
+                return;
+                }
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.FileName = Path.GetFileName(selectedFile.filename);
+
+            saveFileDialog1.Title = "Save "+Path.GetFileName(selectedFile.filename)+" as gif file";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "GIF animation (*.gif)|*.gif|All files (*.*)|*.*";
+
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                NGif.AnimatedGifEncoder enc = new NGif.AnimatedGifEncoder();
+                enc.Start(saveFileDialog1.FileName);
+                enc.SetRepeat(0);
+                enc.SetQuality(1); //best quality
+                enc.perfectColours = true;
+
+                int width = 0;
+                int height = 0;
+
+                foreach (rdtSubfileData image in selectedFile.spriteEditor.images)
+                    {
+                    if (image.offsetX + image.image.Width > width) { width = image.offsetX + image.image.Width; }
+                    if (image.offsetY + image.image.Height > height) { height = image.offsetY + image.image.Height; }
+                    }
+
+                //create a blank template background
+
+                Bitmap bg = new Bitmap(width,height);
+
+                for (int y = 0; y < bg.Height; y++)
+                {
+                    for (int x = 0; x < bg.Width; x++)
+                    {
+                        bg.SetPixel(x,y,selectedFile.RDTSpriteAlphaColour);
+                    }
+                }
+
+                //now adjust each image according to the offset and display it
+
+                for (int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
+                {
+                    Bitmap frame = new Bitmap(bg);
+
+                    int offsetX = selectedFile.spriteEditor.images[i].offsetX;
+                    int offsetY = selectedFile.spriteEditor.images[i].offsetY;
+
+                    for (int y = 0; y < selectedFile.spriteEditor.images[i].image.Height; y++)
+                        {
+                        for (int x = 0; x < selectedFile.spriteEditor.images[i].image.Width; x++)
+                            {
+                            frame.SetPixel(x + offsetX,y + offsetY,selectedFile.spriteEditor.images[i].image.GetPixel(x,y));
+                            }
+                        }
+
+                    enc.AddFrame(frame);
+                    enc.SetDelay((int)Math.Round((float)(selectedFile.RDTSpriteFrameDurations[i])));
+                }
+
+                enc.Finish();
+            }
+
+            selectedFile.spriteEditor.Close();
+            selectedFile.spriteEditor = null;
+        }
+
+        private void RDTsettingVersionCP_Click(object sender, EventArgs e)
+        {
+            activeRdt.ben10mode = false;
+        }
+
+        private void RDTSettingversionBen10_Click(object sender, EventArgs e)
+        {
+            activeRdt.ben10mode = true;
         }
     }
 }
