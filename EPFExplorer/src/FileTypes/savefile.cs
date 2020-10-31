@@ -70,7 +70,8 @@ namespace EPFExplorer
         "M7: The Veggie Villain",
         "M8: Suspect At Large",
         "M9: Herbert's Plan",
-        "M10: The Ultimate Mission"
+        "M10: The Ultimate Mission",
+        "All Missions complete"
         };
 
         public string[] PenguinColours = new string[] { //for HR, at least
