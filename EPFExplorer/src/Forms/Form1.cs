@@ -844,7 +844,7 @@ namespace EPFExplorer
                             newfile.filename += "/";
                         }
 
-                        if (newfile.filename.Length == 0)
+                        if (newfile.filename.Length == 0 && mode == Mode.Arc)
                             {
                             newfile.filename = "/";
                             }

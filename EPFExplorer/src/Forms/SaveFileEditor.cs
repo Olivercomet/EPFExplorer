@@ -146,6 +146,9 @@ namespace EPFExplorer
                 //make some recommended changes to the arc before import (so that it fits)
                 activeSaveFile.embeddedArc.ReadArc();
 
+                author.Text = "Author: None";
+                authorNote.Text = "Author's note: None";
+
                 for (int i = activeSaveFile.embeddedArc.archivedfiles.Count - 1; i >= 0; i--)
                 {
                     activeSaveFile.embeddedArc.archivedfiles[i].ReadFile();    //this may look redundant, as rebuildarc does this anyway, but we need to read it out before changing the compression information, otherwise rebuildarc's readarc call will try to decompress even if it's not actually compressed yet
@@ -160,10 +163,6 @@ namespace EPFExplorer
                         {
                         activeSaveFile.SetAuthorDetails();
                         activeSaveFile.embeddedArc.archivedfiles.RemoveAt(i);
-                        }
-                    else{
-                        author.Text = "Author: None";
-                        authorNote.Text = "Author's note: None";
                         }
                 }
 
