@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,7 +19,7 @@ namespace EPFExplorer
             InitializeComponent();
         }
 
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             sprite.spriteEditor = null;
 
@@ -327,11 +325,6 @@ namespace EPFExplorer
             }
 
             SetAlphaColourDisplay();
-        }
-
-        private void alphacolourdisplay_Click(object sender, EventArgs e)
-        {
-
         }
 
         public void SetAlphaColourDisplay() {

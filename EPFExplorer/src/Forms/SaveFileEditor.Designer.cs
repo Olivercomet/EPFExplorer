@@ -58,6 +58,8 @@
             this.label12 = new System.Windows.Forms.Label();
             this.onlineName1 = new System.Windows.Forms.TextBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.authorNote = new System.Windows.Forms.Label();
+            this.author = new System.Windows.Forms.Label();
             this.downloadableMissionNameDisplay = new System.Windows.Forms.Label();
             this.importDownloadArc = new System.Windows.Forms.Button();
             this.exportDownloadArc = new System.Windows.Forms.Button();
@@ -105,8 +107,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.chillToolTipEPF = new System.Windows.Forms.ToolTip(this.components);
-            this.author = new System.Windows.Forms.Label();
-            this.authorNote = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.singleplayerOrOnline.SuspendLayout();
@@ -198,7 +198,6 @@
             this.label1.Size = new System.Drawing.Size(106, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Current Mission";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // currentMissionChooser
             // 
@@ -208,7 +207,6 @@
             this.currentMissionChooser.Name = "currentMissionChooser";
             this.currentMissionChooser.Size = new System.Drawing.Size(195, 24);
             this.currentMissionChooser.TabIndex = 1;
-            this.currentMissionChooser.SelectedIndexChanged += new System.EventHandler(this.currentMissionChooser_SelectedIndexChanged);
             // 
             // groupBox2
             // 
@@ -219,7 +217,6 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "General settings";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // singleplayerOrOnline
             // 
@@ -303,7 +300,6 @@
             this.coinsChooser.Name = "coinsChooser";
             this.coinsChooser.Size = new System.Drawing.Size(145, 22);
             this.coinsChooser.TabIndex = 2;
-            this.coinsChooser.ValueChanged += new System.EventHandler(this.coinsChooser_ValueChanged);
             // 
             // label3
             // 
@@ -322,7 +318,6 @@
             this.colourChooser.Name = "colourChooser";
             this.colourChooser.Size = new System.Drawing.Size(195, 24);
             this.colourChooser.TabIndex = 4;
-            this.colourChooser.SelectedIndexChanged += new System.EventHandler(this.colourChooser_SelectedIndexChanged);
             // 
             // penguinNameTextBox
             // 
@@ -409,6 +404,24 @@
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "Download.arc";
             this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // authorNote
+            // 
+            this.authorNote.AutoSize = true;
+            this.authorNote.Location = new System.Drawing.Point(18, 107);
+            this.authorNote.Name = "authorNote";
+            this.authorNote.Size = new System.Drawing.Size(134, 17);
+            this.authorNote.TabIndex = 11;
+            this.authorNote.Text = "Author\'s note: None";
+            // 
+            // author
+            // 
+            this.author.AutoSize = true;
+            this.author.Location = new System.Drawing.Point(18, 81);
+            this.author.Name = "author";
+            this.author.Size = new System.Drawing.Size(92, 17);
+            this.author.TabIndex = 10;
+            this.author.Text = "Author: None";
             // 
             // downloadableMissionNameDisplay
             // 
@@ -905,24 +918,6 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Game-specific settings";
             // 
-            // author
-            // 
-            this.author.AutoSize = true;
-            this.author.Location = new System.Drawing.Point(18, 81);
-            this.author.Name = "author";
-            this.author.Size = new System.Drawing.Size(92, 17);
-            this.author.TabIndex = 10;
-            this.author.Text = "Author: None";
-            // 
-            // authorNote
-            // 
-            this.authorNote.AutoSize = true;
-            this.authorNote.Location = new System.Drawing.Point(18, 107);
-            this.authorNote.Name = "authorNote";
-            this.authorNote.Size = new System.Drawing.Size(134, 17);
-            this.authorNote.TabIndex = 11;
-            this.authorNote.Text = "Author\'s note: None";
-            // 
             // SaveFileEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -937,7 +932,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "SaveFileEditor";
             this.Text = "EPFExplorer Save File Editor";
-            this.Load += new System.EventHandler(this.SaveFileEditor_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -1032,7 +1026,6 @@
         public System.Windows.Forms.TextBox onlineName2;
         private System.Windows.Forms.Label label13;
         public System.Windows.Forms.TextBox onlineName3;
-        private System.Windows.Forms.Button importDownloadArc;
         private System.Windows.Forms.Label label16;
         public System.Windows.Forms.NumericUpDown lifetimeCoins;
         public System.Windows.Forms.GroupBox inventoryGroupBox;
@@ -1053,5 +1046,6 @@
         public System.Windows.Forms.Button importNewspaperImage;
         public System.Windows.Forms.Label author;
         public System.Windows.Forms.Label authorNote;
+        public System.Windows.Forms.Button importDownloadArc;
     }
 }

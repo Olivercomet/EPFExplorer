@@ -333,9 +333,6 @@ namespace EPFExplorer
             else { saveFileEditor.puffleChill.Checked = false; }
         }
 
-
-
-
         public void GetCurrentMission(ushort missionValue)     //For HR. Converts mission value into an index
         {
             currentMission = 0;
@@ -621,6 +618,11 @@ namespace EPFExplorer
                         saveFileEditor.currentMissionChooser.Items.Add(s);
                         }
 
+                    while (currentMission > saveFileEditor.currentMissionChooser.Items.Count - 1)
+                        {
+                        saveFileEditor.currentMissionChooser.Items.Add("Dummy mission");
+                        }
+
                     saveFileEditor.currentMissionChooser.SelectedIndex = currentMission;
 
                     //LOAD INVENTORY
@@ -633,13 +635,13 @@ namespace EPFExplorer
                         saveFileEditor.inventoryBox.Items.Add(ItemsHR[i]);
                         if (reader.ReadByte() == 0x01) { saveFileEditor.inventoryBox.SetItemChecked(i, true); }
                     }
-
                 }
                 else
                 {
                     filepath = null;
                     filebytes = null;
                 MessageBox.Show("That is not a Club Penguin DS save file!", "File magic not recognised", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                saveFileEditor.importDownloadArc.Enabled = false;
                 }
             }
         }

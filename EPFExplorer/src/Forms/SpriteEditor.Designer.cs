@@ -482,7 +482,6 @@
             this.alphacolourdisplay.Size = new System.Drawing.Size(36, 31);
             this.alphacolourdisplay.TabIndex = 10;
             this.alphacolourdisplay.TabStop = false;
-            this.alphacolourdisplay.Click += new System.EventHandler(this.alphacolourdisplay_Click);
             // 
             // offsetXUpDown
             // 

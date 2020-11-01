@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
 
 namespace EPFExplorer
 {
@@ -23,7 +18,6 @@ namespace EPFExplorer
 
         Dictionary<string, TreeNode> foldersProcessed = new Dictionary<string, TreeNode>();
         public Dictionary<TreeNode, archivedfile> treeNodesAndArchivedFiles = new Dictionary<TreeNode, archivedfile>();
-
 
         public List<string> extensions = new List<string>();
 
@@ -45,14 +39,14 @@ namespace EPFExplorer
             InitializeComponent();
 
             FileTree.NodeMouseClick += (sender, args) => FileTree.SelectedNode = args.Node;
-            FileTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.FileTree_NodeMouseClick);
+            FileTree.NodeMouseClick += new TreeNodeMouseClickEventHandler(this.FileTree_NodeMouseClick);
             FileTree.AfterLabelEdit += (sender, args) => FileTree.SelectedNode = args.Node;
-            FileTree.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.FileTree_AfterLabelEdit);
+            FileTree.AfterLabelEdit += new NodeLabelEditEventHandler(this.FileTree_AfterLabelEdit);
 
             ImageList myImageList = new ImageList();
             myImageList.ColorDepth = ColorDepth.Depth32Bit;
-            myImageList.Images.Add(EPFExplorer.Properties.Resources.foldericon);
-            myImageList.Images.Add(EPFExplorer.Properties.Resources.fileicon);
+            myImageList.Images.Add(Properties.Resources.foldericon);
+            myImageList.Images.Add(Properties.Resources.fileicon);
             FileTree.ImageList = myImageList;
 
             stringsEPF.Add("/WifiLogos.rdt");
@@ -335,9 +329,9 @@ namespace EPFExplorer
             //1101 1111 0110 1110
             //ABBB BBGG GGGR RRRR
 
-            int b = ((input & 0x7C00) >> 7);
-            int g = ((input & 0x03E0) >> 2);
-            int r = ((input & 0x001F) << 3);
+            int b = (input & 0x7C00) >> 7;
+            int g = (input & 0x03E0) >> 2;
+            int r = (input & 0x001F) << 3;
 
             int a = 0xFF;
 
@@ -377,7 +371,6 @@ namespace EPFExplorer
             array[offset + 1] = (byte)((input & 0xFF00) >> 8);
         }
 
-
         public string GetOrMakeDirectoryForFileName(string path)  //recursively make directories so that a given path exists
         {
             path = path.Replace("/", "\\");
@@ -401,14 +394,11 @@ namespace EPFExplorer
 
         public int Find_Closest_File_To(uint requested_hash, arcfile arc)   //this is how the game looks up files by hash, and if it can't find the exact one, it uses the closest one instead
         {
-            int i = 0;
+            int i;
 
             int arc_file_count = (int)arc.filecount;
 
             int startPosition = 0;
-
-            i = arc_file_count / 2;
-
 
             if (0 < arc_file_count)
             {
@@ -435,79 +425,6 @@ namespace EPFExplorer
             }
 
             return startPosition;   //returns index of the best match file
-        }
-
-        public List<string> GetFilenamePermutations(string input)   //get a bunch of variations on a filename
-        {
-            Console.WriteLine("NEVER USE THIS FOR LARGE ARRAYS OF FILENAMES");
-
-            List<string> output = new List<string>();
-
-            bool testedWithScripts = false;
-            bool testedWithChunks = false;
-            bool testedWithLuc = false;
-            bool testedWithLua = false;
-
-            string s = input;
-
-            anotherVariation:
-
-            output.Add(s);          //normal filename with path
-
-            if (s[0] == '/')
-            {
-                output.Add(s.Substring(1, s.Length - 1));  //normal with path, but without initial slash
-            }
-
-            output.Add(Path.GetFileName(s));    //normal with only filename
-
-            output.Add("/" + Path.GetFileName(s));  //normal with only filename, but with initial slash
-
-            output.Add(s.ToLower());          //lower case filename with path
-
-            output.Add("/" + Path.GetFileName(s.ToLower()));  //normal with only filename, but with initial slash
-
-            //now decide if we need to go round again with a new variation
-
-            if (input.Contains("chunks") && !testedWithScripts)
-            {
-                testedWithChunks = true;
-                s = input.Replace("chunks", "scripts");
-                s = input.Replace("Chunks", "Scripts");
-                goto anotherVariation;
-            }
-
-            if (input.Contains("scripts") && !testedWithChunks)
-            {
-                testedWithChunks = true;
-                s = input.Replace("scripts", "chunks");
-                s = input.Replace("Scripts", "Chunks");
-                goto anotherVariation;
-            }
-
-            if (input.Contains(".lua") && !testedWithLuc)
-            {
-                testedWithLuc = true;
-                s = input.Replace(".lua", ".luc");
-                goto anotherVariation;
-            }
-
-            if (input.Contains(".luc") && !testedWithLua)
-            {
-                testedWithLua = true;
-                s = input.Replace(".luc", ".lua");
-                goto anotherVariation;
-            }
-
-            // if (!input.Contains(".") && IndexInExtensionsArray < extensions.Count - 1)
-            //     {
-            //      s = input + extensions[IndexInExtensionsArray];
-            //    IndexInExtensionsArray++;
-            //    goto anotherVariation;
-            //   }
-
-
-            return output;
         }
 
         public uint readU32FromArray(Byte[] input, int offset)
@@ -1081,11 +998,6 @@ namespace EPFExplorer
             }
         }
 
-        private void exportRdtFileItem_Click(object sender, EventArgs e)
-        {
-            //strange remnant
-        }
-
         private void openRDTarchivedfile_Click(object sender, EventArgs e)          //OPEN RDT ARCHIVED FILE
         {
             treeNodesAndArchivedFiles[FileTree.SelectedNode].OpenRDTSubfileInEditor(true);
@@ -1163,13 +1075,52 @@ namespace EPFExplorer
                 }
             }
 
-            for (int i = 0; i < selectedFile.RDTSpriteNumFrames; i++)
+            //get total dimensions of the whole sprite once movement is taken into account
+
+            int width = 0;
+            int height = 0;
+
+            for(int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
             {
-                if (selectedFile.spriteEditor.images[i].image == null)
-                {
-                    selectedFile.spriteEditor.images[i].LoadImage(GetPalette(selectedFile.spriteEditor.palettes[i].filebytes, 1, selectedFile.RDTSpriteBPP));
+                rdtSubfileData image = selectedFile.spriteEditor.images[i];
+
+                if (image.image == null){
+                    image.LoadImage(GetPalette(selectedFile.spriteEditor.palettes[i].filebytes, 1, selectedFile.RDTSpriteBPP));
                 }
-                selectedFile.spriteEditor.images[i].image.Save(filename.Replace(".png", "") + "_" + (i + 1) + ".png");
+
+                if (image.offsetX + image.image.Width > width) { width = image.offsetX + image.image.Width; }
+                if (image.offsetY + image.image.Height > height) { height = image.offsetY + image.image.Height; }
+            }
+
+            //create a blank template background of that size
+
+            Bitmap bg = new Bitmap(width, height);
+
+            for (int y = 0; y < bg.Height; y++)
+            {
+                for (int x = 0; x < bg.Width; x++)
+                {
+                    bg.SetPixel(x, y, selectedFile.RDTSpriteAlphaColour);
+                }
+            }
+
+            //now adjust each image according to its offset and export it
+
+            for (int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
+            {
+                Bitmap frame = new Bitmap(bg);
+
+                int offsetX = selectedFile.spriteEditor.images[i].offsetX;
+                int offsetY = selectedFile.spriteEditor.images[i].offsetY;
+
+                for (int y = 0; y < selectedFile.spriteEditor.images[i].image.Height; y++)
+                {
+                    for (int x = 0; x < selectedFile.spriteEditor.images[i].image.Width; x++)
+                    {
+                        frame.SetPixel(x + offsetX, y + offsetY, selectedFile.spriteEditor.images[i].image.GetPixel(x, y));
+                    }
+                }
+                frame.Save(filename.Replace(".png", "") + "_" + (i + 1) + ".png");
             }
 
             if (OpenedSpriteEditorJustForThis)
@@ -1532,7 +1483,6 @@ namespace EPFExplorer
             return output;
         }
 
-
         public int FindIndexOfColorInPalette(Color[] p, Color c)
         {
             for (int i = 0; i < p.Length; i++)
@@ -1550,168 +1500,6 @@ namespace EPFExplorer
             return 0; //if it wasn't found
         }
 
-
-
-
-
-
-        //==============================================================================
-        //==============================================================================
-        //||                                                                          ||
-        //||                         Debug utilities                                  ||
-        //||                                                                          ||
-        //==============================================================================
-        //==============================================================================
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //Console.WriteLine(CalculateHash("/3d/SuperRobot/SuperRobotBeach.nsbmd"));
-
-
-            //Console.WriteLine(activeArc.GetFileWithHash(0x002FC601).filename);
-
-            //TestStringsAgainstHashes();
-
-            //count_unique_lua_instructions();
-
-            //StringCSVToOneLine();
-        }
-
-        public void TestStringsAgainstHashes()
-        {
-            string[] strings_to_test = new string[] { };
-
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Title = "Select arc file";
-            openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;
-            openFileDialog1.Filter = "arc (*.arc)|*.arc";
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                using (BinaryReader reader = new BinaryReader(File.Open(openFileDialog1.FileName, FileMode.Open)))
-                {
-                    uint count = reader.ReadUInt32();
-
-                    uint[] hashes = new uint[count];
-
-                    for (int i = 0; i < count; i++)
-                    {
-                        hashes[i] = reader.ReadUInt32();
-                        reader.BaseStream.Position += 0x08;
-                    }
-
-                    foreach (string s in strings_to_test)
-                    {
-                        foreach (uint hash in hashes)
-                        {
-                            if (CalculateHash(s) == hash)
-                            {
-                                Console.WriteLine("hooray!");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public void count_unique_lua_instructions()  //was used for finding out which lua instructions needed to be implemented
-        {
-
-            List<int> uniqueInstructions = new List<int>();
-
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Title = "Select lua files";
-            openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;
-            openFileDialog1.Filter = "Compiled lua files (*.lua,*.luc,*.luac)|*.lua;*.luc;*.luac";
-            openFileDialog1.Multiselect = true;
-
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                Byte[] filebytes = new byte[0];
-                foreach (string filename in openFileDialog1.FileNames)
-                {
-                    filebytes = File.ReadAllBytes(filename);
-
-                    int instrCount = BitConverter.ToInt32(filebytes, 0x1C);
-
-                    for (int i = 0; i < instrCount; i++)
-                    {
-                        int instr = filebytes[0x20 + (i * 4)] & 0x3F; //only the lower 6 bits
-                        if (!uniqueInstructions.Contains(instr))
-                        {
-                            uniqueInstructions.Add(instr);
-                            Console.WriteLine(instr + ", and an example can be found in:" + filename);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void StringCSVToOneLine()   //this is what you used to turn the csv of filename etc strings from ghidra into an array of strings
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Title = "Select file";
-            openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;
-            openFileDialog1.Filter = "csv (*.csv)|*.csv";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                string[] strings = File.ReadAllLines(openFileDialog1.FileName);
-
-                string output = "";
-
-                foreach (string s in strings)
-                {
-                    if (s.Contains("/") && !s.Contains("?") && s.Length > 2 && !s.Contains(":") && !s.Contains("|") && !s.Contains("[") && !s.Contains("]") && !s.Contains("%") && !s.Contains(":") && !s.Contains("<") && !s.Contains("(") && !s.Contains(";") && s[0] != 'u')
-                    {
-                        if (s[2] == '/')
-                        {
-                            output += "\"" + s.Substring(2, s.Length - 3) + ", ";
-                        }
-                        else
-                        {
-                            output += "\"/" + s.Substring(2, s.Length - 3) + ", ";
-                        }
-
-                    }
-                }
-                File.WriteAllText(openFileDialog1.FileName + "output", output);
-
-            }
-        }
-
-        private void HashTableToPlainText() //this is what you used to turn the table used for hashing in the game's ram into plaintext so that you could make the array more quickly
-        {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
-
-            openFileDialog1.Title = "Select file";
-            openFileDialog1.CheckFileExists = true;
-            openFileDialog1.CheckPathExists = true;
-            openFileDialog1.Filter = "Raw bytes (*.bytes)|*.bytes";
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                using (BinaryReader reader = new BinaryReader(File.Open(openFileDialog1.FileName, FileMode.Open)))
-                {
-                    string output = "";
-
-                    while (reader.BaseStream.Position < reader.BaseStream.Length)
-                    {
-                        output += (reader.ReadUInt32().ToString());
-                        output += (", ");
-                    }
-
-                    File.WriteAllText(openFileDialog1.FileName + "output", output);
-
-                }
-
-            }
-        }
-
         private void massRDTExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (mode == Mode.Rdt)
@@ -1723,17 +1511,6 @@ namespace EPFExplorer
                 }
             }
         }
-
-        private void exportRDTSpriteToPNGs_Click(object sender, EventArgs e)
-        {
-            //strange remnant
-        }
-
-        private void renameRDTarchivedfile_Click(object sender, EventArgs e)
-        {
-            //strange remnant
-        }
-
 
         public class GifFrameExtraInfo{
             public int minX = 99999;
@@ -1845,8 +1622,7 @@ namespace EPFExplorer
 
                         Color AlphaColor = colors[alphaColorIndexForGifImport];
 
-                       
-
+                      
                         //get the overall extreme pixels of all the images that isn't the alpha colour
                         //these are going to be the boundaries from which offsets are measured etc
 
@@ -2218,6 +1994,165 @@ namespace EPFExplorer
                     }
                 }
             }
+
+            return output;
+        }
+
+
+        //==============================================================================
+        //==============================================================================
+        //||                                                                          ||
+        //||                         Debug utilities                                  ||
+        //||                                                                          ||
+        //==============================================================================
+        //==============================================================================
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //TestStringsAgainstHashes();
+
+            //StringCSVToOneLine();
+        }
+
+        public void TestStringsAgainstHashes()
+        {
+            string[] strings_to_test = new string[] { };
+
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.Title = "Select arc file";
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.CheckPathExists = true;
+            openFileDialog1.Filter = "arc (*.arc)|*.arc";
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                using (BinaryReader reader = new BinaryReader(File.Open(openFileDialog1.FileName, FileMode.Open)))
+                {
+                    uint count = reader.ReadUInt32();
+
+                    uint[] hashes = new uint[count];
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        hashes[i] = reader.ReadUInt32();
+                        reader.BaseStream.Position += 0x08;
+                    }
+
+                    foreach (string s in strings_to_test)
+                    {
+                        foreach (uint hash in hashes)
+                        {
+                            if (CalculateHash(s) == hash)
+                            {
+                                Console.WriteLine("hooray!");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void StringCSVToOneLine()   //this is what was used to turn the csv of filename etc strings from ghidra into an array of strings
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.Title = "Select file";
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.CheckPathExists = true;
+            openFileDialog1.Filter = "csv (*.csv)|*.csv";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string[] strings = File.ReadAllLines(openFileDialog1.FileName);
+
+                string output = "";
+
+                foreach (string s in strings)
+                {
+                    if (s.Contains("/") && !s.Contains("?") && s.Length > 2 && !s.Contains(":") && !s.Contains("|") && !s.Contains("[") && !s.Contains("]") && !s.Contains("%") && !s.Contains(":") && !s.Contains("<") && !s.Contains("(") && !s.Contains(";") && s[0] != 'u')
+                    {
+                        if (s[2] == '/')
+                        {
+                            output += "\"" + s.Substring(2, s.Length - 3) + ", ";
+                        }
+                        else
+                        {
+                            output += "\"/" + s.Substring(2, s.Length - 3) + ", ";
+                        }
+                    }
+                }
+                File.WriteAllText(openFileDialog1.FileName + "output", output);
+            }
+        }
+
+        public List<string> GetFilenamePermutations(string input)   //get a bunch of variations on a filename
+        {
+            Console.WriteLine("NEVER USE THIS FOR LARGE ARRAYS OF FILENAMES");
+
+            List<string> output = new List<string>();
+
+            bool testedWithScripts = false;
+            bool testedWithChunks = false;
+            bool testedWithLuc = false;
+            bool testedWithLua = false;
+
+            string s = input;
+
+            anotherVariation:
+
+            output.Add(s);          //normal filename with path
+
+            if (s[0] == '/')
+            {
+                output.Add(s.Substring(1, s.Length - 1));  //normal with path, but without initial slash
+            }
+
+            output.Add(Path.GetFileName(s));    //normal with only filename
+
+            output.Add("/" + Path.GetFileName(s));  //normal with only filename, but with initial slash
+
+            output.Add(s.ToLower());          //lower case filename with path
+
+            output.Add("/" + Path.GetFileName(s.ToLower()));  //normal with only filename, but with initial slash
+
+            //now decide if we need to go round again with a new variation
+
+            if (input.Contains("chunks") && !testedWithScripts)
+            {
+                testedWithChunks = true;
+                s = input.Replace("chunks", "scripts");
+                s = input.Replace("Chunks", "Scripts");
+                goto anotherVariation;
+            }
+
+            if (input.Contains("scripts") && !testedWithChunks)
+            {
+                testedWithChunks = true;
+                s = input.Replace("scripts", "chunks");
+                s = input.Replace("Scripts", "Chunks");
+                goto anotherVariation;
+            }
+
+            if (input.Contains(".lua") && !testedWithLuc)
+            {
+                testedWithLuc = true;
+                s = input.Replace(".lua", ".luc");
+                goto anotherVariation;
+            }
+
+            if (input.Contains(".luc") && !testedWithLua)
+            {
+                testedWithLua = true;
+                s = input.Replace(".luc", ".lua");
+                goto anotherVariation;
+            }
+
+            // if (!input.Contains(".") && IndexInExtensionsArray < extensions.Count - 1)
+            //     {
+            //      s = input + extensions[IndexInExtensionsArray];
+            //    IndexInExtensionsArray++;
+            //    goto anotherVariation;
+            //   }
 
             return output;
         }

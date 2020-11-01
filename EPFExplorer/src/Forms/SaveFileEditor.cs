@@ -21,8 +21,6 @@ namespace EPFExplorer
 
         savefile activeSaveFile;
 
-        string saveExtenderCodeEU = "5211AAC8 020922F7\n1211AAC8 000022FF\n1211AAD8 000022FF\n1211AF3A 000022FF\n1211AF48 000022FF\n1211B0D2 000022FF\n1211BC36 0000BDF8\nD0000000 00000000";
-
 
         public Form1 form1;
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -49,12 +47,6 @@ namespace EPFExplorer
             }
         }
 
-
-        private void currentMissionChooser_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (activeSaveFile == null)
@@ -65,42 +57,12 @@ namespace EPFExplorer
             activeSaveFile.SaveToFile();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void SaveFileEditor_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void penguinNameTextBox_TextChanged(object sender, EventArgs e)
         {
             if (penguinNameTextBox.TextLength > 0x0C)
             {
                 penguinNameTextBox.Text = penguinNameTextBox.Text.Substring(0, 0x0C);
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void containsDownloadable_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void coinsChooser_ValueChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void exportDownloadArc_Click(object sender, EventArgs e)
@@ -186,7 +148,7 @@ namespace EPFExplorer
                         activeSaveFile.GetDownloadableMissionName();
                         exportDownloadArc.Enabled = true;
                         ShowActionReplayCodeForm ARform = new ShowActionReplayCodeForm();
-                        ARform.SetInfo(saveExtenderCodeEU,"Allow extended saves","For: Elite Penguin Force (EU version only)","Normal saves will be incompatible while the code is active.\nSaving the game is disabled while the code is active.");
+                        //ARform.SetInfo(saveExtenderCodeEU,"Allow extended saves","For: Elite Penguin Force (EU version only)","Normal saves will be incompatible while the code is active.\nSaving the game is disabled while the code is active.");
                         ARform.Show();
                         }
                     else
@@ -203,11 +165,6 @@ namespace EPFExplorer
                     exportDownloadArc.Enabled = true;
                 }
             }
-        }
-
-        private void colourChooser_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void quickLaunchButton_Click(object sender, EventArgs e)

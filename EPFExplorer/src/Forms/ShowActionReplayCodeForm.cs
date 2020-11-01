@@ -23,10 +23,5 @@ namespace EPFExplorer
             ForLabel.Text = forText;
             sideEffectsLabel.Text = sideEffectsText;
         }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }
