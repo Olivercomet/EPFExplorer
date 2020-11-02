@@ -994,7 +994,6 @@ namespace EPFExplorer
                 {
                     MessageBox.Show("That feature is only for music XMs!");
                 }
-
             }
         }
 
@@ -1648,7 +1647,7 @@ namespace EPFExplorer
                                     {
                                     Color c = framesAsBitmaps[i].GetPixel(x, y);
 
-                                    if (!(c.R == AlphaColor.R && c.G == AlphaColor.G && c.B == AlphaColor.B))
+                                    if (!((c.R & 0xF8) == (AlphaColor.R & 0xF8) && (c.G & 0xF8) == (AlphaColor.G & 0xF8) && (c.B & 0xF8) == (AlphaColor.B & 0xF8)))
                                         {
                                         if (x < minX) { minX = x; }
                                         if (y < minY) { minY = y; }
@@ -1677,14 +1676,14 @@ namespace EPFExplorer
                             switch (s.name)
                                 {
                                 case "center":
-                                    s.X = ((maxX - minX) + 1) / 2;
-                                    s.Y = ((maxY - minY) + 1) / 2;
+                                    s.X = framesAsBitmaps[0].Width / 2;
+                                    s.Y = framesAsBitmaps[0].Height / 2;
                                     break;
                                 case "bounds":
-                                    s.X = 0;
-                                    s.Y = 0;
-                                    s.X2 = (maxX - minX)+1;
-                                    s.Y2 = (maxY - minY)+1;
+                                    s.X = minX;
+                                    s.Y = minY;
+                                    s.X2 = minX+(maxX - minX)+1;
+                                    s.Y2 = minY+(maxY - minY)+1;
                                     break;
                                 }
                             }
@@ -1705,8 +1704,8 @@ namespace EPFExplorer
                             rdtSubfileData newGfx = new rdtSubfileData();
                             newGfx.graphicsType = "image";
                             newGfx.subfileType = 0x04;
-                            newGfx.offsetX = (short)((sizes.minX - minX)+1);
-                            newGfx.offsetY = (short)((sizes.minY - minY)+1);
+                            newGfx.offsetX = (short)((sizes.minX)+1);
+                            newGfx.offsetY = (short)((sizes.minY)+1);
 
                             newGfx.image = new Bitmap((sizes.maxX - sizes.minX)+1, (sizes.maxY - sizes.minY)+1);
                             
@@ -1725,6 +1724,11 @@ namespace EPFExplorer
                             fileToBeReplaced.rdtSubfileDataList.Add(newPal);
                             fileToBeReplaced.rdtSubfileDataList.Add(newGfx);
                             }
+                        if (fileToBeReplaced.spriteEditor != null)
+                            {
+                            fileToBeReplaced.spriteEditor.Close();
+                            }
+                        fileToBeReplaced.spriteEditor = null;
                         break;
                     }
                 }

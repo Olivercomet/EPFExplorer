@@ -468,10 +468,34 @@ namespace EPFExplorer
             foreach (archivedfile f in downloadArc.archivedfiles)
             {
                 f.ReadFile();
+
+                int rememberCompression = 0;
+                
+                if (f.was_LZ10_compressed)
+                {
+                    rememberCompression = 10;
+                }
+                else if (f.was_LZ11_compressed)
+                {
+                    rememberCompression = 11;
+                }
                 f.CompressFileLZ11();
-                f.was_LZ10_compressed = false;
+
                 size += f.filebytes.Length;
                 f.DecompressFile();
+
+                f.was_LZ11_compressed = false;
+                f.has_LZ11_filesize = false;
+
+                if (rememberCompression == 10)
+                    {
+                    f.was_LZ10_compressed = true;
+                    }
+                else if (rememberCompression == 11)
+                    {
+                    f.was_LZ11_compressed = true;
+                    f.has_LZ11_filesize = true;
+                    }
             }
 
             while (size % 4 != 0)
