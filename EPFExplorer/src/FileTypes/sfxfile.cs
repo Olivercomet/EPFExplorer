@@ -32,7 +32,8 @@ namespace EPFExplorer
         public bool isPCM = false;
         public envelope volenv = new envelope();
         public envelope panenv = new envelope();
-        public uint unk1;
+
+        public int indexInBin;
 
         public string customExportFolder = "";
         public static T Clamp<T>(T val, T min, T max) where T : IComparable<T> {
@@ -108,7 +109,7 @@ namespace EPFExplorer
                 {
                     SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-                    saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + offset + ".wav";
+                    saveFileDialog1.FileName = Path.GetFileName(parentbinfile.filename) + indexInBin + ".wav";
 
                     saveFileDialog1.Title = "Save .wav file";
                     saveFileDialog1.CheckPathExists = true;
@@ -216,7 +217,6 @@ namespace EPFExplorer
                     output[0x1A] = 0x00;
                     output[0x1B] = 0x00;
                 }
-
 
                 output[0x1C] = 0xA8;    //data rate
                 output[0x1D] = 0x2B;

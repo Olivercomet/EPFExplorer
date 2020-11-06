@@ -261,6 +261,7 @@ namespace EPFExplorer
             newbin.binname = Path.GetFileName(filename);
             newbin.filename = filename;
             newbin.filebytes = File.ReadAllBytes(filename);
+            newbin.form1 = this;
 
             DialogResult dialogResult = MessageBox.Show("Is this a music archive?", "Music or sfx?", MessageBoxButtons.YesNo);
 
@@ -483,7 +484,7 @@ namespace EPFExplorer
                     foreach (sfxfile sfx in activeBin.sfxfiles)
                     {
                         archivedfile newArchivedFile = new archivedfile();
-                        newArchivedFile.filename = Path.GetFileName(activeBin.filename) + sfx.offset;
+                        newArchivedFile.filename = Path.GetFileName(activeBin.filename) + sfx.indexInBin;
                         newArchivedFile.linkedSfx = sfx;
                         archivedfiles.Add(newArchivedFile);
                     }
@@ -676,6 +677,11 @@ namespace EPFExplorer
                     {
                         //file
                         binFileContextMenu.Show(Cursor.Position);
+                    }
+                    else
+                    {
+                        //folder
+                        binFolderContextMenu.Show(Cursor.Position);
                     }
                 }
 
@@ -985,15 +991,10 @@ namespace EPFExplorer
             }
             else if (mode == Mode.Bin)
             {
-                if (activeBin.binMode == binfile.binmode.music)
-                {
+                if (activeBin.binMode == binfile.binmode.music){
                     MessageBox.Show("Note: this is an experimental feature.");
-                    activeBin.SaveBin();
-                }
-                else
-                {
-                    MessageBox.Show("That feature is only for music XMs!");
-                }
+                    }
+                activeBin.SaveBin();
             }
         }
 
@@ -2159,6 +2160,81 @@ namespace EPFExplorer
             //   }
 
             return output;
+        }
+
+        private void addSoundFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode parentNode = FileTree.SelectedNode;
+
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.Title = "Select new audio clip file";
+            openFileDialog1.CheckFileExists = true;
+            openFileDialog1.CheckPathExists = true;
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.Filter = "IMA ADPCM WAV files (*.wav*)|*.wav*|All files (*.*)|*.*";
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                foreach (string filename in openFileDialog1.FileNames)
+                {
+                    byte[] wavFile = File.ReadAllBytes(filename);
+
+                    //look for fmt chunk
+                    int i = 0;
+                    while (!(wavFile[i] == (byte)'f' && wavFile[i + 1] == (byte)'m' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == 0x20))
+                    {
+                        i++;
+                    }
+
+                    i += 8;
+
+                    if (wavFile[i] != 0x11) //if not ADPCM
+                    {
+                        MessageBox.Show("Only IMA ADPCM .wav files are allowed!\nYou can export these from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
+                        continue;
+                    }
+
+                    i += 4;
+
+                    sfxfile newSfxFile = new sfxfile();
+                    newSfxFile.samplerate = BitConverter.ToUInt32(wavFile, i);
+
+                    //look for data chunk
+                    while (!(wavFile[i] == (byte)'d' && wavFile[i + 1] == (byte)'a' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == (byte)'a'))
+                    {
+                        i++;
+                    }
+
+                    i += 0x08;
+
+                    newSfxFile.filebytes = new byte[wavFile.Length - i];
+
+                    int startOfData = i;
+
+                    for (i = startOfData; i < wavFile.Length; i++)
+                    {
+                        newSfxFile.filebytes[i - startOfData] = wavFile[i];
+                    }
+
+                    archivedfile newArchivedFile = new archivedfile();
+
+                    newSfxFile.isPCM = false;
+                    newSfxFile.indexInBin = activeBin.sfxfiles.Count;
+                    newSfxFile.parentbinfile = activeBin;
+
+                    newArchivedFile.linkedSfx = newSfxFile;
+                    newArchivedFile.filename = Path.GetFileName(filename) + " (" + Path.GetFileName(activeBin.filename) + newSfxFile.indexInBin + ")";
+
+                    activeBin.sfxfiles.Add(newSfxFile);
+
+                    newArchivedFile.treeNode = parentNode.Nodes.Add(newArchivedFile.filename);
+                    newArchivedFile.treeNode.ImageIndex = 1;
+                    newArchivedFile.treeNode.SelectedImageIndex = 1;
+
+                    treeNodesAndArchivedFiles.Add(newArchivedFile.treeNode, newArchivedFile);
+                }
+            }
         }
     }
 }

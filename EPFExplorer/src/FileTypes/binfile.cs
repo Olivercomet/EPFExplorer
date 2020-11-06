@@ -10,6 +10,8 @@ namespace EPFExplorer
 {
     public class binfile
     {
+        public Form1 form1;
+
         public string binname;
         public string filename;
         public byte[] filebytes;
@@ -225,18 +227,14 @@ namespace EPFExplorer
             }
         }
 
-
         public void ReadBin()
         {
-
             using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
             {
                 filemagic = reader.ReadUInt16();
-
                
                 filecount = reader.ReadUInt16();
                 
-                    
                 for (int i = 0; i < filecount; i++)
                 {
                     sfxfile newsfxfile = new sfxfile();
@@ -250,9 +248,8 @@ namespace EPFExplorer
                         reader.BaseStream.Position += 0x04;
                         }
                     newsfxfile.samplerate = reader.ReadUInt16();
-                    
-                    newsfxfile.unk1 = reader.ReadUInt16();
-                  
+                    newsfxfile.indexInBin = i;
+                    newsfxfile.isPCM = reader.ReadUInt16() != 2;    //because 0x02 is ADPCM format
                 }
 
                 for (int i = 0; i < sfxfiles.Count; i++)
@@ -266,7 +263,6 @@ namespace EPFExplorer
                 }
             }
         }
-
 
         public void ExportMusicSamples()
         {
@@ -293,7 +289,6 @@ namespace EPFExplorer
                 }
         }
 
-
         public void ApplyEPFMusicFileNames() {
 
             for (int i = 0; i < xmfiles.Count; i++)
@@ -312,39 +307,124 @@ namespace EPFExplorer
 
         }
 
+        public void SaveBin()
+        {
 
+            if (binMode == binmode.music)
+            {
+                List<byte> musicdataSections = RebuildMusicDataSections();
 
-        public void SaveBin() {
+                List<byte> newFileBytes = new List<byte>();
 
-            List<byte> musicdataSections = RebuildMusicDataSections();
-
-            List<byte> newFileBytes = new List<byte>();
-
-            for (int i = 0; i < offsetOfMusicInstructionData; i++)
+                for (int i = 0; i < offsetOfMusicInstructionData; i++)
                 {
-                newFileBytes.Add(filebytes[i]);
+                    newFileBytes.Add(filebytes[i]);
                 }
 
-            //now add new data
+                //now add new data
 
-            for (int i = 0; i < musicdataSections.Count; i++)
+                for (int i = 0; i < musicdataSections.Count; i++)
                 {
-                newFileBytes.Add(musicdataSections[i]);
+                    newFileBytes.Add(musicdataSections[i]);
                 }
 
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-            saveFileDialog1.Title = "Save bin file";
-            saveFileDialog1.CheckPathExists = true;
-            saveFileDialog1.Filter = "1PP music binary (*.bin)|*.bin|All files (*.*)|*.*";
+                saveFileDialog1.Title = "Save bin file";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.Filter = "1PP music binary (*.bin)|*.bin|All files (*.*)|*.*";
 
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                File.WriteAllBytes(saveFileDialog1.FileName, newFileBytes.ToArray());
+                    File.WriteAllBytes(saveFileDialog1.FileName, newFileBytes.ToArray());
                 }
             }
+            else
+            {
+                //sfx archives
 
+                int outputFileSize = 4; //for version and filecount
 
+                //add file list size
+
+                foreach (sfxfile sfx in sfxfiles)
+                {
+                    outputFileSize += 0x0C;
+                }
+
+                //pad to multiple of 0x200
+
+                while (outputFileSize % 0x200 != 0)
+                {
+                    outputFileSize++;
+                }
+
+                //remember this for later
+
+                int pos_in_output = outputFileSize;
+
+                //add space for the files themselves, padding after each one
+
+                foreach (sfxfile sfx in sfxfiles)
+                {
+                    outputFileSize += sfx.filebytes.Length;
+                    while (outputFileSize % 0x200 != 0)
+                    {
+                        outputFileSize++;
+                    }
+                }
+
+                //now write to the output array
+
+                byte[] output = new byte[outputFileSize];
+
+                output[0] = 0x01;
+                output[1] = 0x01;
+                output[2] = (byte)sfxfiles.Count;
+                output[3] = (byte)(sfxfiles.Count >> 8);
+
+                for (int i = 0; i < sfxfiles.Count; i++)
+                {
+                    form1.WriteU32ToArray(output, 4 + (i * 0x0C), (uint)pos_in_output);  //write start position
+                    form1.WriteU32ToArray(output, 8 + (i * 0x0C), (uint)(sfxfiles[i].filebytes.Length / 4));   //write size divided by 4
+                    form1.WriteU16ToArray(output, 0x0C + (i * 0x0C), (ushort)(sfxfiles[i].samplerate));   //write sample rate
+                    if (sfxfiles[i].isPCM)
+                    { //write format
+                        form1.WriteU16ToArray(output, 0x0E + (i * 0x0C), 0x00);
+                    }
+                    else
+                    {
+                        form1.WriteU16ToArray(output, 0x0E + (i * 0x0C), 0x02);
+                    }
+
+                    for (int j = 0; j < sfxfiles[i].filebytes.Length; j++)  //write file contents to its proper location in the output array
+                    {
+                        output[pos_in_output] = sfxfiles[i].filebytes[j];
+                        pos_in_output++;
+                    }
+
+                    //add padding
+
+                    while ((pos_in_output % 0x200) != 0)
+                    {
+                        pos_in_output++;
+                    }
+                }
+
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+                saveFileDialog1.FileName = null;
+
+                saveFileDialog1.Title = "Save new sfx.bin archive";
+                saveFileDialog1.CheckPathExists = true;
+                saveFileDialog1.Filter = "1PP sfx binary (*.bin)|*.bin|All files (*.*)|*.*";
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllBytes(saveFileDialog1.FileName,output);
+                }
+            }
+        }
 
         public List<byte> RebuildMusicDataSections() {
 

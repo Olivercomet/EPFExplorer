@@ -74,11 +74,14 @@
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.binFolderContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addSoundFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
             this.rdtSubfileContextMenu.SuspendLayout();
             this.binFileContextMenu.SuspendLayout();
+            this.binFolderContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip2
@@ -105,14 +108,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -175,18 +178,19 @@
             this.RDTsettingVersionToolStripButton.Name = "RDTsettingVersionToolStripButton";
             this.RDTsettingVersionToolStripButton.Size = new System.Drawing.Size(260, 26);
             this.RDTsettingVersionToolStripButton.Text = "RDT settings version";
+            this.RDTsettingVersionToolStripButton.Visible = false;
             // 
             // RDTsettingVersionCP
             // 
             this.RDTsettingVersionCP.Name = "RDTsettingVersionCP";
-            this.RDTsettingVersionCP.Size = new System.Drawing.Size(178, 26);
+            this.RDTsettingVersionCP.Size = new System.Drawing.Size(224, 26);
             this.RDTsettingVersionCP.Text = "Club Penguin";
             this.RDTsettingVersionCP.Click += new System.EventHandler(this.RDTsettingVersionCP_Click);
             // 
             // RDTSettingversionBen10
             // 
             this.RDTSettingversionBen10.Name = "RDTSettingversionBen10";
-            this.RDTSettingversionBen10.Size = new System.Drawing.Size(178, 26);
+            this.RDTSettingversionBen10.Size = new System.Drawing.Size(224, 26);
             this.RDTSettingversionBen10.Text = "Ben 10";
             this.RDTSettingversionBen10.Click += new System.EventHandler(this.RDTSettingversionBen10_Click);
             // 
@@ -426,6 +430,21 @@
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
+            // binFolderContextMenu
+            // 
+            this.binFolderContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.binFolderContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addSoundFileToolStripMenuItem});
+            this.binFolderContextMenu.Name = "binFolderContextMenu";
+            this.binFolderContextMenu.Size = new System.Drawing.Size(211, 56);
+            // 
+            // addSoundFileToolStripMenuItem
+            // 
+            this.addSoundFileToolStripMenuItem.Name = "addSoundFileToolStripMenuItem";
+            this.addSoundFileToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.addSoundFileToolStripMenuItem.Text = "Add File";
+            this.addSoundFileToolStripMenuItem.Click += new System.EventHandler(this.addSoundFileToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -445,6 +464,7 @@
             this.archivedFolderContextMenu.ResumeLayout(false);
             this.rdtSubfileContextMenu.ResumeLayout(false);
             this.binFileContextMenu.ResumeLayout(false);
+            this.binFolderContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -495,6 +515,8 @@
         private System.Windows.Forms.ToolStripMenuItem RDTsettingVersionToolStripButton;
         private System.Windows.Forms.ToolStripMenuItem RDTsettingVersionCP;
         private System.Windows.Forms.ToolStripMenuItem RDTSettingversionBen10;
+        private System.Windows.Forms.ContextMenuStrip binFolderContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem addSoundFileToolStripMenuItem;
     }
 }
 
