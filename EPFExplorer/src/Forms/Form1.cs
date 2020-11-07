@@ -1864,6 +1864,8 @@ namespace EPFExplorer
                     selectedFile.linkedSfx.isPCM = false;
 
                     selectedFile.filename = Path.GetFileName(openFileDialog1.FileName) + " (" + Path.GetFileName(activeBin.filename) + selectedFile.linkedSfx.indexInBin + ")";
+                
+                    //THE GAME ASSUMES A BLOCK ALIGNMENT OF 0xFFFF. If your imported audio file has anything else, it will sound messed up. I don't know how one would go about making WAV files with the correct block aligment. Audacity seems to decide it automatically.
                 }
             }
         }
