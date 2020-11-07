@@ -170,22 +170,21 @@ namespace EPFExplorer
                 output[0x16] = 0x01;    //num channels
                 output[0x17] = 0x00;
 
-                if (samplerate == 44100) {
-                    output[0x18] = 0x44;    //sample rate
-                    output[0x19] = 0xAC;
-                    output[0x1A] = 0x00;
-                    output[0x1B] = 0x00;
-                } else {
-                    output[0x18] = 0x22;    //sample rate
-                    output[0x19] = 0x56;
-                    output[0x1A] = 0x00;
-                    output[0x1B] = 0x00;
-                }
+                output[0x18] = (byte)samplerate;    //sample rate
+                output[0x19] = (byte)(samplerate >> 8);
+                output[0x1A] = (byte)(samplerate >> 16);
+                output[0x1B] = (byte)(samplerate >> 24);
 
-                output[0x1C] = 0xA8;    //data rate
-                output[0x1D] = 0x2B;
-                output[0x1E] = 0x00;
-                output[0x1F] = 0x00;
+                uint samplecount = (uint)(filebytes.Length * 2);
+
+                float LengthInSeconds = (float)((float)samplecount / (float)samplerate);
+
+                uint datarate = (uint)Math.Round((float)filebytes.Length / LengthInSeconds);
+
+                output[0x1C] = (byte)datarate;    //data rate
+                output[0x1D] = (byte)(datarate >> 8);
+                output[0x1E] = (byte)(datarate >> 16);
+                output[0x1F] = (byte)(datarate >> 24);
 
                 output[0x20] = 0x02;    //data block size
                 output[0x21] = 0x00;
@@ -206,22 +205,21 @@ namespace EPFExplorer
                 output[0x16] = 0x01;    //num channels
                 output[0x17] = 0x00;
 
-                if (samplerate == 44100) {
-                    output[0x18] = 0x44;    //sample rate
-                    output[0x19] = 0xAC;
-                    output[0x1A] = 0x00;
-                    output[0x1B] = 0x00;
-                } else {
-                    output[0x18] = 0x22;    //sample rate
-                    output[0x19] = 0x56;
-                    output[0x1A] = 0x00;
-                    output[0x1B] = 0x00;
-                }
+                output[0x18] = (byte)samplerate;    //sample rate
+                output[0x19] = (byte)(samplerate>>8);
+                output[0x1A] = (byte)(samplerate>>16);
+                output[0x1B] = (byte)(samplerate>>24);
 
-                output[0x1C] = 0xA8;    //data rate
-                output[0x1D] = 0x2B;
-                output[0x1E] = 0x00;
-                output[0x1F] = 0x00;
+                uint samplecount = (uint)(filebytes.Length * 2);
+
+                float LengthInSeconds = (float)((float)samplecount / (float)samplerate);
+
+                uint datarate = (uint)Math.Round((float)filebytes.Length / LengthInSeconds);
+
+                output[0x1C] = (byte)datarate;    //data rate
+                output[0x1D] = (byte)(datarate >> 8);
+                output[0x1E] = (byte)(datarate >> 16);
+                output[0x1F] = (byte)(datarate >> 24);
 
                 output[0x20] = 0xFF;    //data block size apparently, but this works
                 output[0x21] = 0xFF;
@@ -244,8 +242,6 @@ namespace EPFExplorer
                 output[0x2D] = 0x00;
                 output[0x2E] = 0x00;
                 output[0x2F] = 0x00;
-
-                uint samplecount = (uint)(filebytes.Length * 2);
 
                 output[0x30] = (byte)samplecount;  //sample count
                 output[0x31] = (byte)(samplecount >> 8);

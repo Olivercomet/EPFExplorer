@@ -15,12 +15,11 @@ namespace EPFExplorer
     {
         public SaveFileEditor saveFileEditor;
 
-        public Byte[] filebytes = new byte[0];
+        public byte[] filebytes = new byte[0];
 
         public string filepath = "";
 
         public Game game = Game.EPF;
-
 
         public string oldPenguinName = ""; //so that it can be erased before the new one is put in
         public string oldOnlineName1 = ""; //so that it can be erased before the new one is put in

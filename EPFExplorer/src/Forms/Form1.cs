@@ -1852,11 +1852,11 @@ namespace EPFExplorer
 
                     i += 0x08;
 
-                    selectedFile.linkedSfx.filebytes = new byte[wavFile.Length - i];
+                    selectedFile.linkedSfx.filebytes = new byte[(wavFile.Length - i) - 0x6A];
 
                     int startOfData = i;
 
-                    for (i = startOfData; i < wavFile.Length; i++)
+                    for (i = startOfData; i < wavFile.Length - 0x6A; i++)
                     {
                         selectedFile.linkedSfx.filebytes[i - startOfData] = wavFile[i];
                     }
@@ -2259,11 +2259,11 @@ namespace EPFExplorer
 
                     i += 0x08;
 
-                    newSfxFile.filebytes = new byte[wavFile.Length - i];
-
+                    newSfxFile.filebytes = new byte[(wavFile.Length - i) - 0x6A];
+                   
                     int startOfData = i;
 
-                    for (i = startOfData; i < wavFile.Length; i++)
+                    for (i = startOfData; i < wavFile.Length - 0x6A; i++)
                     {
                         newSfxFile.filebytes[i - startOfData] = wavFile[i];
                     }
