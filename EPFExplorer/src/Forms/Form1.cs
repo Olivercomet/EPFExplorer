@@ -1798,6 +1798,8 @@ namespace EPFExplorer
 
             if (activeBin.binMode == binfile.binmode.music)
             {
+                MessageBox.Show("This feature is experimental and may produce unexpected results in-game.");
+
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
                 openFileDialog1.Title = "Replace "+ Path.GetFileName(selectedFile.filename);
@@ -1812,9 +1814,58 @@ namespace EPFExplorer
             }
             else
             {
-                MessageBox.Show("This feature is only for music.bin!");
-            }
+                OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
+                openFileDialog1.Title = "Replace " + Path.GetFileName(selectedFile.filename);
+                openFileDialog1.CheckFileExists = true;
+                openFileDialog1.CheckPathExists = true;
+                openFileDialog1.Filter = "ADPCM WAV (*.wav)|*.wav";
+
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    byte[] wavFile = File.ReadAllBytes(openFileDialog1.FileName);
+
+                    //look for fmt chunk
+                    int i = 0;
+                    while (!(wavFile[i] == (byte)'f' && wavFile[i + 1] == (byte)'m' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == 0x20))
+                    {
+                        i++;
+                    }
+
+                    i += 8;
+
+                    if (wavFile[i] != 0x11) //if not ADPCM
+                    {
+                        MessageBox.Show("Only IMA ADPCM .wav files are allowed!\nYou can export these from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
+                        return;
+                    }
+
+                    i += 4;
+
+                    selectedFile.linkedSfx.samplerate = BitConverter.ToUInt32(wavFile, i);
+
+                    //look for data chunk
+                    while (!(wavFile[i] == (byte)'d' && wavFile[i + 1] == (byte)'a' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == (byte)'a'))
+                    {
+                        i++;
+                    }
+
+                    i += 0x08;
+
+                    selectedFile.linkedSfx.filebytes = new byte[wavFile.Length - i];
+
+                    int startOfData = i;
+
+                    for (i = startOfData; i < wavFile.Length; i++)
+                    {
+                        selectedFile.linkedSfx.filebytes[i - startOfData] = wavFile[i];
+                    }
+
+                    selectedFile.linkedSfx.isPCM = false;
+
+                    selectedFile.filename = Path.GetFileName(openFileDialog1.FileName) + " (" + Path.GetFileName(activeBin.filename) + selectedFile.linkedSfx.indexInBin + ")";
+                }
+            }
         }
 
         private void randomizeRDTSpritesToolStripMenuItem_Click(object sender, EventArgs e)

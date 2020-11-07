@@ -108,14 +108,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -183,14 +183,14 @@
             // RDTsettingVersionCP
             // 
             this.RDTsettingVersionCP.Name = "RDTsettingVersionCP";
-            this.RDTsettingVersionCP.Size = new System.Drawing.Size(224, 26);
+            this.RDTsettingVersionCP.Size = new System.Drawing.Size(178, 26);
             this.RDTsettingVersionCP.Text = "Club Penguin";
             this.RDTsettingVersionCP.Click += new System.EventHandler(this.RDTsettingVersionCP_Click);
             // 
             // RDTSettingversionBen10
             // 
             this.RDTSettingversionBen10.Name = "RDTSettingversionBen10";
-            this.RDTSettingversionBen10.Size = new System.Drawing.Size(224, 26);
+            this.RDTSettingversionBen10.Size = new System.Drawing.Size(178, 26);
             this.RDTSettingversionBen10.Text = "Ben 10";
             this.RDTSettingversionBen10.Click += new System.EventHandler(this.RDTSettingversionBen10_Click);
             // 
@@ -413,20 +413,19 @@
             this.replaceXM,
             this.exportToolStripMenuItem3});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(132, 52);
+            this.binFileContextMenu.Size = new System.Drawing.Size(211, 80);
             // 
             // replaceXM
             // 
             this.replaceXM.Name = "replaceXM";
-            this.replaceXM.Size = new System.Drawing.Size(131, 24);
+            this.replaceXM.Size = new System.Drawing.Size(210, 24);
             this.replaceXM.Text = "Replace";
-            this.replaceXM.Visible = false;
             this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
             // 
             // exportToolStripMenuItem3
             // 
             this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(131, 24);
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
@@ -436,12 +435,12 @@
             this.binFolderContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addSoundFileToolStripMenuItem});
             this.binFolderContextMenu.Name = "binFolderContextMenu";
-            this.binFolderContextMenu.Size = new System.Drawing.Size(211, 56);
+            this.binFolderContextMenu.Size = new System.Drawing.Size(134, 28);
             // 
             // addSoundFileToolStripMenuItem
             // 
             this.addSoundFileToolStripMenuItem.Name = "addSoundFileToolStripMenuItem";
-            this.addSoundFileToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.addSoundFileToolStripMenuItem.Size = new System.Drawing.Size(133, 24);
             this.addSoundFileToolStripMenuItem.Text = "Add File";
             this.addSoundFileToolStripMenuItem.Click += new System.EventHandler(this.addSoundFileToolStripMenuItem_Click);
             // 

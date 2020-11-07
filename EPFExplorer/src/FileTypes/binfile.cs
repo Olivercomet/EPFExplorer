@@ -42,7 +42,6 @@ namespace EPFExplorer
 
         int offset_of_end_of_index_table = 0;
 
-
         public enum binmode { 
         sfx = 0x00,
         music = 0x01
@@ -295,7 +294,6 @@ namespace EPFExplorer
             {
                 xmfiles[i].name = MusicNamesEPF[i] + ".xm";
             }
-
         }
 
         public void ApplyHRMusicFileNames() { 
@@ -309,7 +307,6 @@ namespace EPFExplorer
 
         public void SaveBin()
         {
-
             if (binMode == binmode.music)
             {
                 List<byte> musicdataSections = RebuildMusicDataSections();
@@ -483,7 +480,6 @@ namespace EPFExplorer
                     }
                 }
             }
-
 
             //correct the row data section size at the start of music.bin
 
