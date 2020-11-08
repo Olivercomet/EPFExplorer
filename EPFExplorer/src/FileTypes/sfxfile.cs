@@ -164,7 +164,7 @@ namespace EPFExplorer
                 output[0x12] = 0x00;
                 output[0x13] = 0x00;
 
-                output[0x14] = 0x01;    //ADPCM
+                output[0x14] = 0x01;    //PCM
                 output[0x15] = 0x00;
 
                 output[0x16] = 0x01;    //num channels

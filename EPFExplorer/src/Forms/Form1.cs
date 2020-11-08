@@ -1834,9 +1834,13 @@ namespace EPFExplorer
 
                     i += 8;
 
-                    if (wavFile[i] != 0x11) //if not ADPCM
+                    if (wavFile[i] == 0x01 || wavFile[i] == 0x11)
+                    { //if not ADPCM
+                        selectedFile.linkedSfx.isPCM = (wavFile[i] == 0x01);
+                    }
+                    else
                     {
-                        MessageBox.Show("Only IMA ADPCM .wav files are allowed!\nYou can export these from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
+                        MessageBox.Show("Only PCM or IMA ADPCM .wav files are allowed!\nYou can export IMA ADPCM from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
                         return;
                     }
 
@@ -1850,18 +1854,20 @@ namespace EPFExplorer
                         i++;
                     }
 
-                    i += 0x08;
+                    i += 0x04;
 
-                    selectedFile.linkedSfx.filebytes = new byte[(wavFile.Length - i) - 0x6A];
+                    uint len = BitConverter.ToUInt32(wavFile, i);    //read length of data
+
+                    i += 0x04;
+
+                    selectedFile.linkedSfx.filebytes = new byte[len];
 
                     int startOfData = i;
 
-                    for (i = startOfData; i < wavFile.Length - 0x6A; i++)
+                    for (i = 0; i < len; i++)
                     {
-                        selectedFile.linkedSfx.filebytes[i - startOfData] = wavFile[i];
+                        selectedFile.linkedSfx.filebytes[i] = wavFile[startOfData + i];
                     }
-
-                    selectedFile.linkedSfx.isPCM = false;
 
                     selectedFile.filename = Path.GetFileName(openFileDialog1.FileName) + " (" + Path.GetFileName(activeBin.filename) + selectedFile.linkedSfx.indexInBin + ")";
                 
@@ -2242,37 +2248,40 @@ namespace EPFExplorer
 
                     i += 8;
 
-                    if (wavFile[i] != 0x11) //if not ADPCM
-                    {
-                        MessageBox.Show("Only IMA ADPCM .wav files are allowed!\nYou can export these from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
+                    sfxfile newSfxFile = new sfxfile();
+
+                    if (wavFile[i] == 0x01 || wavFile[i] == 0x11){ //if not ADPCM
+                        newSfxFile.isPCM = (wavFile[i] == 0x01);
+                    }
+                    else{
+                        MessageBox.Show("Only PCM or IMA ADPCM .wav files are allowed!\nYou can export IMA ADPCM from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
                         continue;
                     }
-
                     i += 4;
 
-                    sfxfile newSfxFile = new sfxfile();
                     newSfxFile.samplerate = BitConverter.ToUInt32(wavFile, i);
 
                     //look for data chunk
-                    while (!(wavFile[i] == (byte)'d' && wavFile[i + 1] == (byte)'a' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == (byte)'a'))
-                    {
+                    while (!(wavFile[i] == (byte)'d' && wavFile[i + 1] == (byte)'a' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == (byte)'a')){
                         i++;
                     }
 
-                    i += 0x08;
+                    i += 0x04;
 
-                    newSfxFile.filebytes = new byte[(wavFile.Length - i) - 0x6A];
+                    uint len = BitConverter.ToUInt32(wavFile,i);    //read length of data
+
+                    i += 0x04;
+
+                    newSfxFile.filebytes = new byte[len];
                    
                     int startOfData = i;
 
-                    for (i = startOfData; i < wavFile.Length - 0x6A; i++)
-                    {
-                        newSfxFile.filebytes[i - startOfData] = wavFile[i];
+                    for (i = 0; i < len; i++){
+                        newSfxFile.filebytes[i] = wavFile[startOfData + i];
                     }
 
                     archivedfile newArchivedFile = new archivedfile();
 
-                    newSfxFile.isPCM = false;
                     newSfxFile.indexInBin = activeBin.sfxfiles.Count;
                     newSfxFile.parentbinfile = activeBin;
 
