@@ -780,20 +780,44 @@ namespace EPFExplorer
 
                     //write the text
 
-                    for (int i = 0; i < saveFileEditor.topStoryBox.Text.Length; i++)
+                    for (int i = 0; i < 0x96; i++)
                         {
-                        filebytes[0xC960 + (i * 2)] = (byte)saveFileEditor.topStoryBox.Text[i];
+                        if (i < saveFileEditor.topStoryBox.Text.Length)
+                            {
+                            filebytes[0xC960 + (i * 2)] = (byte)saveFileEditor.topStoryBox.Text[i]; 
+                            }
+                        else 
+                            {
+                            filebytes[0xC960 + (i * 2)] = 0x00;
+                            }
+                        filebytes[0xC961 + (i * 2)] = 0x00;
                         }
 
-                    for (int i = 0; i < saveFileEditor.tipsAndSecretsTextBox.Text.Length; i++)
+                    for (int i = 0; i < 0x96; i++)
+                    {
+                        if (i < saveFileEditor.tipsAndSecretsTextBox.Text.Length)
                         {
-                        filebytes[0xCA8C + (i * 2)] = (byte)saveFileEditor.tipsAndSecretsTextBox.Text[i];
+                            filebytes[0xCA8C + (i * 2)] = (byte)saveFileEditor.tipsAndSecretsTextBox.Text[i];
                         }
+                        else
+                        {
+                            filebytes[0xCA8C + (i * 2)] = 0x00;
+                        }
+                        filebytes[0xCA8D + (i * 2)] = 0x00;
+                    }
 
-                    for (int i = 0; i < saveFileEditor.jokeTextBox.Text.Length; i++)
+                    for (int i = 0; i < 0x96; i++)
+                    {
+                        if (i < saveFileEditor.jokeTextBox.Text.Length)
                         {
-                        filebytes[0xCBB8 + (i * 2)] = (byte)saveFileEditor.jokeTextBox.Text[i];
+                            filebytes[0xCBB8 + (i * 2)] = (byte)saveFileEditor.jokeTextBox.Text[i];
                         }
+                        else
+                        {
+                            filebytes[0xCBB8 + (i * 2)] = 0x00;
+                        }
+                        filebytes[0xCBB9 + (i * 2)] = 0x00;
+                    }
 
                     Array.Copy(newsletterImage, 0, filebytes, 0xCD10, 0x2940);  //copy newsletter image into save file
 
