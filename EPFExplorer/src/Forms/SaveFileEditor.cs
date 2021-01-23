@@ -19,7 +19,7 @@ namespace EPFExplorer
             inventoryBox.Items.Clear();
         }
 
-        savefile activeSaveFile;
+        public savefile activeSaveFile;
 
 
         public Form1 form1;

@@ -13,6 +13,8 @@ A tool for extracting/modifying the files of the Elite Penguin Force DS games.
 
 The music replacing also currently has issues with some tracks (e.g. Dojo and Gadget Room, among others)
 
+The custom missions 'The Lost Signal' and 'The Way Home' can be found in the 'Useful stuff' folder of this repository.
+
 ### With thanks to
 - [Fireboyd78](https://github.com/Fireboyd78) for creating a [C# port of unluac](https://github.com/Fireboyd78/UnluacNET) (originally by [tehtmi](https://sourceforge.net/projects/unluac/))
 - [No$GBA](http://problemkaputt.de/gba.htm) for its invaluable debugging tools

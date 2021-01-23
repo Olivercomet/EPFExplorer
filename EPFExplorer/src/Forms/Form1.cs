@@ -195,7 +195,7 @@ namespace EPFExplorer
                 openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeRdt.filename);
             }
 
-            openFileDialog1.Filter = "1PP archives (*.arc,*.rdt,*.bin)|*.arc;*.rdt;*.bin";
+            openFileDialog1.Filter = "1PP archives (*.arc,*.rdt,*.bin)|*.arc;*.rdt;*.bin;*.sav;*.dsv"; //also accommodate save files in case they try to open them from here
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 switch (Path.GetExtension(openFileDialog1.FileName))
@@ -232,6 +232,20 @@ namespace EPFExplorer
 
                         ParseRdt(openFileDialog1.FileName);
                         MakeFileTree();
+                        break;
+                    case ".dsv":
+                    case ".sav":
+                        SaveFileEditor sfe = new SaveFileEditor();
+                        sfe.form1 = this;
+                        sfe.Show();
+                        sfe.activeSaveFile = new savefile();
+                        sfe.activeSaveFile.saveFileEditor = sfe;
+                        sfe.activeSaveFile.LoadFromFile(openFileDialog1.FileName);
+                        Properties.Settings.Default.DSSaveFileDir = Path.GetDirectoryName(openFileDialog1.FileName);
+                        Properties.Settings.Default.Save();
+                        sfe.importDownloadArc.Enabled = true;
+                        sfe.importNewspaperImage.Enabled = true;
+                        sfe.exportNewspaperImage.Enabled = true;
                         break;
                 }
             }
@@ -2276,9 +2290,10 @@ namespace EPFExplorer
                    
                     int startOfData = i;
 
-                    for (i = 0; i < len; i++){
-                        newSfxFile.filebytes[i] = wavFile[startOfData + i];
-                    }
+                    for (i = 0; i < len; i++)
+                        {
+                            newSfxFile.filebytes[i] = wavFile[startOfData + i];
+                        }
 
                     archivedfile newArchivedFile = new archivedfile();
 
