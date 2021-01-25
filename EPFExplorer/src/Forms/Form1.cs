@@ -207,6 +207,7 @@ namespace EPFExplorer
                         massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = false;
                         RDTsettingVersionToolStripButton.Visible = false;
+                        ExportAsSpriteSheetToolStripMenuItem.Visible = false;
 
                         ParseArc(openFileDialog1.FileName);
                         activeArc.ViewArcInFileTree();
@@ -218,6 +219,7 @@ namespace EPFExplorer
                         massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = true;
                         RDTsettingVersionToolStripButton.Visible = false;
+                        ExportAsSpriteSheetToolStripMenuItem.Visible = false;
 
                         ParseBin(openFileDialog1.FileName);
                         MakeFileTree();
@@ -229,6 +231,7 @@ namespace EPFExplorer
                         massRDTExportToolStripMenuItem.Visible = true;
                         massXMExportToolStripMenuItem.Visible = false;
                         RDTsettingVersionToolStripButton.Visible = true;
+                        ExportAsSpriteSheetToolStripMenuItem.Visible = true;
 
                         ParseRdt(openFileDialog1.FileName);
                         MakeFileTree();
@@ -915,10 +918,6 @@ namespace EPFExplorer
             if (mode == Mode.Arc)
             {
                 activeArc.ExportFolder(FileTree.SelectedNode);
-            }
-            else if (mode == Mode.Rdt)
-            {
-                MessageBox.Show("Folder exports are not supported for RDT files.", "Not supported", MessageBoxButtons.OK);
             }
         }
 
@@ -2312,6 +2311,124 @@ namespace EPFExplorer
                     treeNodesAndArchivedFiles.Add(newArchivedFile.treeNode, newArchivedFile);
                 }
             }
+        }
+
+        public void AddAllChildNodesToListRecursive(TreeNode node, List<TreeNode> list)
+        {
+            foreach (TreeNode child in node.Nodes)
+            {
+                list.Add(child);
+                AddAllChildNodesToListRecursive(child, list);
+            }
+        }
+
+
+        private void ExportAsSpriteSheetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode targetNode = FileTree.SelectedNode;        //get all subnodes of the selected folder and put them in a list
+            List<TreeNode> allChildren = new List<TreeNode>();
+            AddAllChildNodesToListRecursive(targetNode, allChildren);
+
+            int maxRequiredWidth = 0;
+            int maxRequiredHeight = 0;
+
+            foreach (TreeNode node in allChildren)
+            {
+                if (treeNodesAndArchivedFiles.ContainsKey(node))    //if it's a file
+                {
+                    archivedfile sprite = treeNodesAndArchivedFiles[node];
+
+                    sprite.OpenRDTSubfileInEditor(false);
+
+                    if (sprite.spriteEditor.images.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    int cumulative_width_for_this = 12;
+                    int max_height_for_this = 0;
+
+                    foreach (rdtSubfileData image in sprite.spriteEditor.images)
+                    {
+                        cumulative_width_for_this += image.image.Width + 1;
+
+                        if (image.image.Height > max_height_for_this)
+                        {
+                            max_height_for_this = image.image.Height;
+                        }
+                    }
+
+                    if (cumulative_width_for_this > maxRequiredWidth)
+                    {
+                        maxRequiredWidth = cumulative_width_for_this;
+                    }
+
+                    maxRequiredHeight += max_height_for_this + 20;
+
+                    sprite.spriteEditor.Close();
+                    sprite.spriteEditor = null;
+                }
+            }
+
+            maxRequiredHeight += 40;
+
+            Bitmap SpriteSheetOutput = new Bitmap(maxRequiredWidth, maxRequiredHeight);    //make a big image for the sprite sheet 
+
+            //write all the sprites to it
+
+            int topLeftX = 12;
+            int topLeftY = 20;
+
+            foreach (TreeNode node in allChildren)
+            {
+                if (treeNodesAndArchivedFiles.ContainsKey(node))    //if it's a file
+                {
+                    archivedfile sprite = treeNodesAndArchivedFiles[node];
+
+                    sprite.OpenRDTSubfileInEditor(false);
+
+                    if (sprite.spriteEditor.images.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    topLeftX = 12;
+
+                    int maxHeight = 0;
+
+                    foreach (rdtSubfileData img in sprite.spriteEditor.images)
+                    {
+                        for (int y = 0; y < img.image.Height; y++)
+                        {
+                            for (int x = 0; x < img.image.Width; x++)
+                            {
+                                SpriteSheetOutput.SetPixel(x + topLeftX, y + topLeftY, img.image.GetPixel(x, y));
+                            }
+                        }
+
+                        if (img.image.Height > maxHeight)
+                        {
+                            maxHeight = img.image.Height;
+                        }
+
+                        topLeftX += img.image.Width + 1;
+                    }
+
+                    topLeftY += maxHeight + 20;
+                    sprite.spriteEditor.Close();
+                    sprite.spriteEditor = null;
+                }
+            }
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "PNG images (*.png)|*.png";
+            saveFileDialog1.Title = "Save sprite sheet";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                SpriteSheetOutput.Save(saveFileDialog1.FileName);
+            }
+
         }
     }
 }

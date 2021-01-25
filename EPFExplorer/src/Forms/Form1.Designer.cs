@@ -76,6 +76,7 @@
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.binFolderContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSoundFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportAsSpriteSheetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -267,7 +268,7 @@
             this.exportToolStripMenuItem1,
             this.deleteFolder});
             this.archivedFolderContextMenu.Name = "archivedFolderContextMenu";
-            this.archivedFolderContextMenu.Size = new System.Drawing.Size(133, 100);
+            this.archivedFolderContextMenu.Size = new System.Drawing.Size(211, 128);
             // 
             // addToolStripMenuItem1
             // 
@@ -275,41 +276,43 @@
             this.addFileToFolder,
             this.addFolderToFolder});
             this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
-            this.addToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.addToolStripMenuItem1.Size = new System.Drawing.Size(222, 24);
             this.addToolStripMenuItem1.Text = "Add";
             // 
             // addFileToFolder
             // 
             this.addFileToFolder.Name = "addFileToFolder";
-            this.addFileToFolder.Size = new System.Drawing.Size(134, 26);
+            this.addFileToFolder.Size = new System.Drawing.Size(224, 26);
             this.addFileToFolder.Text = "File";
             this.addFileToFolder.Click += new System.EventHandler(this.addFileToFolder_Click);
             // 
             // addFolderToFolder
             // 
             this.addFolderToFolder.Name = "addFolderToFolder";
-            this.addFolderToFolder.Size = new System.Drawing.Size(134, 26);
+            this.addFolderToFolder.Size = new System.Drawing.Size(224, 26);
             this.addFolderToFolder.Text = "Folder";
             this.addFolderToFolder.Click += new System.EventHandler(this.addFolderToFolder_Click);
             // 
             // renameFolderToolStripMenuItem
             // 
             this.renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
-            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(222, 24);
             this.renameFolderToolStripMenuItem.Text = "Rename";
             this.renameFolderToolStripMenuItem.Click += new System.EventHandler(this.renameFolderToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem1
             // 
+            this.exportToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ExportAsSpriteSheetToolStripMenuItem});
             this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
-            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem1.Text = "Export";
             this.exportToolStripMenuItem1.Click += new System.EventHandler(this.exportToolStripMenuItem1_Click);
             // 
             // deleteFolder
             // 
             this.deleteFolder.Name = "deleteFolder";
-            this.deleteFolder.Size = new System.Drawing.Size(132, 24);
+            this.deleteFolder.Size = new System.Drawing.Size(222, 24);
             this.deleteFolder.Text = "Delete";
             this.deleteFolder.Click += new System.EventHandler(this.deleteFolder_Click);
             // 
@@ -381,21 +384,21 @@
             // rdtSpriteToPNGs
             // 
             this.rdtSpriteToPNGs.Name = "rdtSpriteToPNGs";
-            this.rdtSpriteToPNGs.Size = new System.Drawing.Size(204, 26);
+            this.rdtSpriteToPNGs.Size = new System.Drawing.Size(224, 26);
             this.rdtSpriteToPNGs.Text = "As PNG images";
             this.rdtSpriteToPNGs.Click += new System.EventHandler(this.rdtSpriteToPNGs_Click);
             // 
             // exportAsGIFAnimationToolStripMenuItem
             // 
             this.exportAsGIFAnimationToolStripMenuItem.Name = "exportAsGIFAnimationToolStripMenuItem";
-            this.exportAsGIFAnimationToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.exportAsGIFAnimationToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.exportAsGIFAnimationToolStripMenuItem.Text = "As GIF animation";
             this.exportAsGIFAnimationToolStripMenuItem.Click += new System.EventHandler(this.exportAsGIFAnimationToolStripMenuItem_Click);
             // 
             // rawDataToolStripMenuItem
             // 
             this.rawDataToolStripMenuItem.Name = "rawDataToolStripMenuItem";
-            this.rawDataToolStripMenuItem.Size = new System.Drawing.Size(204, 26);
+            this.rawDataToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.rawDataToolStripMenuItem.Text = "As .sprite file";
             this.rawDataToolStripMenuItem.Click += new System.EventHandler(this.rawDataToolStripMenuItem_Click);
             // 
@@ -413,19 +416,19 @@
             this.replaceXM,
             this.exportToolStripMenuItem3});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(211, 80);
+            this.binFileContextMenu.Size = new System.Drawing.Size(132, 52);
             // 
             // replaceXM
             // 
             this.replaceXM.Name = "replaceXM";
-            this.replaceXM.Size = new System.Drawing.Size(210, 24);
+            this.replaceXM.Size = new System.Drawing.Size(131, 24);
             this.replaceXM.Text = "Replace";
             this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
             // 
             // exportToolStripMenuItem3
             // 
             this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(131, 24);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
@@ -443,6 +446,14 @@
             this.addSoundFileToolStripMenuItem.Size = new System.Drawing.Size(133, 24);
             this.addSoundFileToolStripMenuItem.Text = "Add File";
             this.addSoundFileToolStripMenuItem.Click += new System.EventHandler(this.addSoundFileToolStripMenuItem_Click);
+            // 
+            // ExportAsSpriteSheetToolStripMenuItem
+            // 
+            this.ExportAsSpriteSheetToolStripMenuItem.Name = "ExportAsSpriteSheetToolStripMenuItem";
+            this.ExportAsSpriteSheetToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.ExportAsSpriteSheetToolStripMenuItem.Text = "As Sprite Sheet";
+            this.ExportAsSpriteSheetToolStripMenuItem.Visible = false;
+            this.ExportAsSpriteSheetToolStripMenuItem.Click += new System.EventHandler(this.ExportAsSpriteSheetToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -516,6 +527,7 @@
         private System.Windows.Forms.ToolStripMenuItem RDTSettingversionBen10;
         private System.Windows.Forms.ContextMenuStrip binFolderContextMenu;
         private System.Windows.Forms.ToolStripMenuItem addSoundFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExportAsSpriteSheetToolStripMenuItem;
     }
 }
 
