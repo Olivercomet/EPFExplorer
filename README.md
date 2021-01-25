@@ -4,12 +4,14 @@ A tool for extracting/modifying the files of the Elite Penguin Force DS games.
 
 - Opening and editing .ARC archives (Both EPF and HR)
 - Opening and editing .RDT resource data files (EPF. HR is viewing/exporting only.)
+	-Exporting sprites to PNG sequence, GIF, or (for folders) sprite sheets.
 - Opening and editing TSB/MPB tiled images. (Both EPF and HR)
 - Exporting and reimporting Lua scripts.
 - Editing save files. (Both EPF and HR)
 - Exporting audio clips to .wav (PCM or ADPCM format wav, openable if FFMPEG is installed)
 - Exporting and replacing music tracks in .XM format, with all sample data
 - Opening and editing the game's DLC mission (download.arc)
+
 
 The music replacing also currently has issues with some tracks (e.g. Dojo and Gadget Room, among others)
 
