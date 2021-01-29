@@ -98,6 +98,12 @@
     <Compile Include="src\Forms\MPB_TSB_EditorForm.Designer.cs">
       <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Forms\ProgressBarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\ProgressBarForm.Designer.cs">
+      <DependentUpon>ProgressBarForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Forms\ShowActionReplayCodeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +162,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\MPB_TSB_EditorForm.resx">
       <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Forms\ProgressBarForm.resx">
+      <DependentUpon>ProgressBarForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\SaveFileEditor.resx">
       <DependentUpon>SaveFileEditor.cs</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,13 @@ namespace EPFExplorer
 {
     public partial class Form1 : Form
     {
+        BackgroundWorker MassExporter = new BackgroundWorker();
+
+        TreeNode MassExportTargetNode;
+        string MassExportPath;
+        string MassExportType = "PNG";
+        List<TreeNode> MassExportAllChildren = new List<TreeNode>();
+
         public arcfile activeArc;
         public binfile activeBin;
         public rdtfile activeRdt;
@@ -37,6 +45,11 @@ namespace EPFExplorer
         public Form1()
         {
             InitializeComponent();
+
+            MassExporter.WorkerReportsProgress = true;
+            MassExporter.WorkerSupportsCancellation = true;
+            MassExporter.DoWork +=
+            new DoWorkEventHandler(MassExporter_DoWork);
 
             FileTree.NodeMouseClick += (sender, args) => FileTree.SelectedNode = args.Node;
             FileTree.NodeMouseClick += new TreeNodeMouseClickEventHandler(this.FileTree_NodeMouseClick);
@@ -204,10 +217,11 @@ namespace EPFExplorer
                         mode = Mode.Arc;
 
                         randomizeRDTSpritesToolStripMenuItem.Visible = false;
-                        massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = false;
                         RDTsettingVersionToolStripButton.Visible = false;
                         ExportAsSpriteSheetToolStripMenuItem.Visible = false;
+                        exportContentsAsGIFsToolStripMenuItem.Visible = false;
+                        exportContentsAsPNGSequencesToolStripMenuItem.Visible = false;
 
                         ParseArc(openFileDialog1.FileName);
                         activeArc.ViewArcInFileTree();
@@ -216,10 +230,11 @@ namespace EPFExplorer
                         mode = Mode.Bin;
 
                         randomizeRDTSpritesToolStripMenuItem.Visible = false;
-                        massRDTExportToolStripMenuItem.Visible = false;
                         massXMExportToolStripMenuItem.Visible = true;
                         RDTsettingVersionToolStripButton.Visible = false;
                         ExportAsSpriteSheetToolStripMenuItem.Visible = false;
+                        exportContentsAsGIFsToolStripMenuItem.Visible = false;
+                        exportContentsAsPNGSequencesToolStripMenuItem.Visible = false;
 
                         ParseBin(openFileDialog1.FileName);
                         MakeFileTree();
@@ -228,10 +243,11 @@ namespace EPFExplorer
                         mode = Mode.Rdt;
 
                         randomizeRDTSpritesToolStripMenuItem.Visible = true;
-                        massRDTExportToolStripMenuItem.Visible = true;
                         massXMExportToolStripMenuItem.Visible = false;
                         RDTsettingVersionToolStripButton.Visible = true;
                         ExportAsSpriteSheetToolStripMenuItem.Visible = true;
+                        exportContentsAsGIFsToolStripMenuItem.Visible = true;
+                        exportContentsAsPNGSequencesToolStripMenuItem.Visible = true;
 
                         ParseRdt(openFileDialog1.FileName);
                         MakeFileTree();
@@ -1037,7 +1053,7 @@ namespace EPFExplorer
         {
             archivedfile selectedFile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
 
-            ExportRdtSpriteAsPNG(selectedFile, true);
+            ExportRdtSpriteAsPNG(selectedFile, true, "");
         }
 
         private void deleteRDTarchivedfile_Click(object sender, EventArgs e)        //DELETE RDT ARCHIVED FILE
@@ -1053,7 +1069,7 @@ namespace EPFExplorer
             }
         }
 
-        public void ExportRdtSpriteAsPNG(archivedfile selectedFile, bool askDir)
+        public void ExportRdtSpriteAsPNG(archivedfile selectedFile, bool askDir, string customExportPath)
         {
 
             bool OpenedSpriteEditorJustForThis = false;
@@ -1068,7 +1084,6 @@ namespace EPFExplorer
             {
                 return;
             }
-
 
             string filename = Path.GetFileName(selectedFile.filename);
 
@@ -1087,6 +1102,12 @@ namespace EPFExplorer
                     filename = saveFileDialog1.FileName;
                 }
             }
+
+            if (customExportPath != null && customExportPath != "") {
+                filename = customExportPath;
+            }
+
+            GetOrMakeDirectoryForFileName(filename);
 
             //get total dimensions of the whole sprite once movement is taken into account
 
@@ -1513,17 +1534,6 @@ namespace EPFExplorer
             return 0; //if it wasn't found
         }
 
-        private void massRDTExportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (mode == Mode.Rdt)
-            {
-                MessageBox.Show("Files will be exported to the same directory as EPFExplorer's exe.");
-                foreach (archivedfile f in activeRdt.archivedfiles)
-                {
-                    ExportRdtSpriteAsPNG(f, false);
-                }
-            }
-        }
 
         public class GifFrameExtraInfo{
             public int minX = 99999;
@@ -1987,62 +1997,74 @@ namespace EPFExplorer
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                NGif.AnimatedGifEncoder enc = new NGif.AnimatedGifEncoder();
-                enc.Start(saveFileDialog1.FileName);
-                enc.SetRepeat(0);
-                enc.SetQuality(1); //best quality
-                enc.SetTransparent(selectedFile.RDTSpriteAlphaColour);
-                enc.perfectColours = true;
-
-                int width = 0;
-                int height = 0;
-
-                foreach (rdtSubfileData image in selectedFile.spriteEditor.images)
-                    {
-                    if (image.offsetX + image.image.Width > width) { width = image.offsetX + image.image.Width; }
-                    if (image.offsetY + image.image.Height > height) { height = image.offsetY + image.image.Height; }
-                    }
-
-                //create a blank template background
-
-                Bitmap bg = new Bitmap(width,height);
-
-                for (int y = 0; y < bg.Height; y++)
-                {
-                    for (int x = 0; x < bg.Width; x++)
-                    {
-                        bg.SetPixel(x,y,selectedFile.RDTSpriteAlphaColour);
-                    }
-                }
-
-                //now adjust each image according to the offset and display it
-
-                for (int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
-                {
-                    Bitmap frame = new Bitmap(bg);
-
-                    int offsetX = selectedFile.spriteEditor.images[i].offsetX;
-                    int offsetY = selectedFile.spriteEditor.images[i].offsetY;
-
-                    for (int y = 0; y < selectedFile.spriteEditor.images[i].image.Height; y++)
-                        {
-                        for (int x = 0; x < selectedFile.spriteEditor.images[i].image.Width; x++)
-                            {
-                            frame.SetPixel(x + offsetX,y + offsetY,selectedFile.spriteEditor.images[i].image.GetPixel(x,y));
-                            }
-                        }
-                    frame.Save("Test");
-
-                    enc.AddFrame(frame);
-                    enc.SetDelay((int)Math.Round((float)(selectedFile.RDTSpriteFrameDurations[i])));
-                }
-
-                enc.Finish();
+                GIFExport(selectedFile, saveFileDialog1.FileName);   
             }
 
             selectedFile.spriteEditor.Close();
             selectedFile.spriteEditor = null;
         }
+
+        public void GIFExport(archivedfile selectedFile, string destinationFilename) {
+
+            GetOrMakeDirectoryForFileName(destinationFilename);
+
+            NGif.AnimatedGifEncoder enc = new NGif.AnimatedGifEncoder();
+            enc.Start(destinationFilename);
+            enc.SetRepeat(0);
+            enc.SetQuality(1); //best quality
+            enc.SetTransparent(selectedFile.RDTSpriteAlphaColour);
+            enc.perfectColours = true;
+
+            int width = 0;
+            int height = 0;
+
+            foreach (rdtSubfileData image in selectedFile.spriteEditor.images)
+            {
+                if (image.offsetX + image.image.Width > width) { width = image.offsetX + image.image.Width; }
+                if (image.offsetY + image.image.Height > height) { height = image.offsetY + image.image.Height; }
+            }
+
+            //create a blank template background
+
+            Bitmap bg = new Bitmap(width, height);
+
+            for (int y = 0; y < bg.Height; y++)
+            {
+                for (int x = 0; x < bg.Width; x++)
+                {
+                    bg.SetPixel(x, y, selectedFile.RDTSpriteAlphaColour);
+                }
+            }
+
+            //now adjust each image according to the offset and display it
+
+            for (int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
+            {
+                Bitmap frame = new Bitmap(bg);
+
+                int offsetX = selectedFile.spriteEditor.images[i].offsetX;
+                int offsetY = selectedFile.spriteEditor.images[i].offsetY;
+
+                for (int y = 0; y < selectedFile.spriteEditor.images[i].image.Height; y++)
+                {
+                    for (int x = 0; x < selectedFile.spriteEditor.images[i].image.Width; x++)
+                    {
+                        frame.SetPixel(x + offsetX, y + offsetY, selectedFile.spriteEditor.images[i].image.GetPixel(x, y));
+                    }
+                }
+                frame.Save("Test");
+
+                enc.AddFrame(frame);
+                enc.SetDelay((int)Math.Round((float)(selectedFile.RDTSpriteFrameDurations[i])));
+            }
+
+            enc.Finish();
+
+
+
+        }
+
+
 
         private void RDTsettingVersionCP_Click(object sender, EventArgs e)
         {
@@ -2429,6 +2451,129 @@ namespace EPFExplorer
                 SpriteSheetOutput.Save(saveFileDialog1.FileName);
             }
 
+        }
+
+        private void exportContentsAsGIFsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MassExporter.IsBusy){
+                MessageBox.Show("Please wait for the current export task to finish before starting another one.");
+                return;
+            }
+
+            MassExportTargetNode = FileTree.SelectedNode;        //get all subnodes of the selected folder and put them in a list
+            MassExportAllChildren = new List<TreeNode>();
+            AddAllChildNodesToListRecursive(MassExportTargetNode, MassExportAllChildren);
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.FileName = "Save here";
+
+            saveFileDialog1.Title = "Select output folder";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                MassExportPath = saveFileDialog1.FileName;
+                MassExportType = "GIF";
+                MassExporter.RunWorkerAsync();
+            }
+        }
+
+        private void exportContentsAsPNGSequencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MassExporter.IsBusy) {
+                MessageBox.Show("Please wait for the current export task to finish before starting another one.");
+                return;
+            }
+
+            MassExportTargetNode = FileTree.SelectedNode;        //get all subnodes of the selected folder and put them in a list
+            MassExportAllChildren = new List<TreeNode>();
+            AddAllChildNodesToListRecursive(MassExportTargetNode, MassExportAllChildren);
+
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.FileName = "Save here";
+
+            saveFileDialog1.Title = "Select output folder";
+            saveFileDialog1.CheckPathExists = true;
+            saveFileDialog1.Filter = "";
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                MassExportPath = saveFileDialog1.FileName;
+                MassExportType = "PNG";
+                MassExporter.RunWorkerAsync();
+            }
+        }
+
+
+
+        public void MassExporter_DoWork(object sender, DoWorkEventArgs e)
+        {
+            ProgressBarForm progressBar = new ProgressBarForm();
+
+            progressBar.Show();
+            progressBar.progressBar1.Maximum = MassExportAllChildren.Count;
+
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            Console.WriteLine("background worker is ready");
+
+            if (MassExportType == "PNG")
+            {
+                foreach (TreeNode node in MassExportAllChildren)
+                {
+                    
+                    if (worker.CancellationPending == true)
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+
+                    if (treeNodesAndArchivedFiles.ContainsKey(node))    //if it's a file
+                    {
+                        archivedfile selectedFile = treeNodesAndArchivedFiles[node];
+
+                        selectedFile.OpenRDTSubfileInEditor(false);
+
+                        if (selectedFile.spriteEditor.images.Count == 0)
+                        {
+                            return;
+                        }
+
+                        ExportRdtSpriteAsPNG(selectedFile, false, Path.Combine(Path.Combine(Path.GetDirectoryName(MassExportPath), MassExportTargetNode.Text + "EXPORTED"), node.FullPath.Replace(MassExportTargetNode.FullPath + "\\", "")));
+                    }
+                    progressBar.progressBar1.Value++;
+                }
+            }
+            else if (MassExportType == "GIF")
+            {
+                foreach (TreeNode node in MassExportAllChildren)
+                {
+                    if (worker.CancellationPending == true)
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+
+                    if (treeNodesAndArchivedFiles.ContainsKey(node))    //if it's a file
+                    {
+                        archivedfile selectedFile = treeNodesAndArchivedFiles[node];
+
+                        selectedFile.OpenRDTSubfileInEditor(false);
+
+                        if (selectedFile.spriteEditor.images.Count == 0)
+                        {
+                            return;
+                        }
+
+                        GIFExport(selectedFile, Path.Combine(Path.Combine(Path.GetDirectoryName(MassExportPath), MassExportTargetNode.Text + "_EXPORTED"), node.FullPath.Replace(MassExportTargetNode.FullPath + "\\", "")) + ".gif");
+                    }
+                    progressBar.progressBar1.Value++;
+                }
+            }
+            progressBar.Close();
         }
     }
 }

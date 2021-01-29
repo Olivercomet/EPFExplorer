@@ -378,7 +378,7 @@ namespace EPFExplorer
 
                 //now read the subfile table
                 int numlists = BitConverter.ToInt32(subfileTable.filebytes,0);  //number of lists e.g. 2: the list of centre bounds, the list of compressed files
-                Console.WriteLine(numlists);
+                //Console.WriteLine(numlists);
 
                 int curOffset = 4;  //offset in subfile table filebytes
 
