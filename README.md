@@ -9,7 +9,7 @@ A tool for extracting/modifying the files of the Elite Penguin Force DS games.
 - Exporting and reimporting Lua scripts.
 - Editing save files. (Both EPF and HR)
 - Exporting audio clips to .wav (PCM or ADPCM format wav, openable if FFMPEG is installed)
-- Exporting and replacing music tracks in .XM format, with all sample data
+- Exporting and music tracks in .XM format, with all sample data
 - Opening and editing the game's DLC mission (download.arc)
 
 
