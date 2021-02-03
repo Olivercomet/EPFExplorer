@@ -44,6 +44,8 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.label2 = new System.Windows.Forms.Label();
+            this.thirdBitAddAmountTemp = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -51,6 +53,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ImageWidthInTiles)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.thirdBitAddAmountTemp)).BeginInit();
             this.SuspendLayout();
             // 
             // pixelBox1
@@ -203,11 +206,35 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Save";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(897, 98);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(139, 17);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Third bit add amount";
+            // 
+            // thirdBitAddAmountTemp
+            // 
+            this.thirdBitAddAmountTemp.Location = new System.Drawing.Point(923, 129);
+            this.thirdBitAddAmountTemp.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.thirdBitAddAmountTemp.Name = "thirdBitAddAmountTemp";
+            this.thirdBitAddAmountTemp.Size = new System.Drawing.Size(84, 22);
+            this.thirdBitAddAmountTemp.TabIndex = 6;
+            this.thirdBitAddAmountTemp.ValueChanged += new System.EventHandler(this.thirdBitAddAmountTemp_ValueChanged);
+            // 
             // MPB_TSB_EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(876, 619);
+            this.ClientSize = new System.Drawing.Size(859, 619);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.thirdBitAddAmountTemp);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -225,7 +252,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.ImageWidthInTiles)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.thirdBitAddAmountTemp)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -234,7 +263,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button chooseTileset;
         private System.Windows.Forms.Button chooseTilemap;
-        private System.Windows.Forms.NumericUpDown ImageWidthInTiles;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button LOAD;
         private System.Windows.Forms.Panel panel1;
@@ -245,5 +273,8 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ColorDialog colorDialog1;
         public RedCell.UI.Controls.PixelBox pixelBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown thirdBitAddAmountTemp;
+        public System.Windows.Forms.NumericUpDown ImageWidthInTiles;
     }
 }

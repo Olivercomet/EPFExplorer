@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\FileTypes\arcfile.cs" />
+    <Compile Include="src\FileTypes\FNTfile.cs" />
     <Compile Include="src\FileTypes\mpbfile.cs" />
     <Compile Include="src\FileTypes\subfile\archivedfile.cs" />
     <Compile Include="src\FileTypes\binfile.cs" />
@@ -85,6 +86,12 @@
     </Compile>
     <Compile Include="src\Forms\ChooseAlphaColourWindow.Designer.cs">
       <DependentUpon>ChooseAlphaColourWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Forms\FontEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\FontEditor.Designer.cs">
+      <DependentUpon>FontEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Forms\MissionEditor.cs">
       <SubType>Form</SubType>
@@ -142,6 +149,9 @@
     <Compile Include="src\Utility\NGif\NeuQuant.cs" />
     <EmbeddedResource Include="src\Forms\ChooseAlphaColourWindow.resx">
       <DependentUpon>ChooseAlphaColourWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Forms\FontEditor.resx">
+      <DependentUpon>FontEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

@@ -43,6 +43,7 @@
             this.RDTsettingVersionCP = new System.Windows.Forms.ToolStripMenuItem();
             this.RDTSettingversionBen10 = new System.Windows.Forms.ToolStripMenuItem();
             this.massXMExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fontEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
             this.FileTree = new System.Windows.Forms.TreeView();
             this.archivedFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -111,14 +112,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -130,7 +131,8 @@
             this.missionEditorToolStripMenuItem,
             this.randomizeRDTSpritesToolStripMenuItem,
             this.RDTsettingVersionToolStripButton,
-            this.massXMExportToolStripMenuItem});
+            this.massXMExportToolStripMenuItem,
+            this.fontEditorToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -196,6 +198,14 @@
             this.massXMExportToolStripMenuItem.Visible = false;
             this.massXMExportToolStripMenuItem.Click += new System.EventHandler(this.massXMExportToolStripMenuItem_Click);
             // 
+            // fontEditorToolStripMenuItem
+            // 
+            this.fontEditorToolStripMenuItem.Name = "fontEditorToolStripMenuItem";
+            this.fontEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
+            this.fontEditorToolStripMenuItem.Text = "Font Editor";
+            this.fontEditorToolStripMenuItem.Visible = false;
+            this.fontEditorToolStripMenuItem.Click += new System.EventHandler(this.fontEditorToolStripMenuItem_Click);
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(1097, 140);
@@ -223,6 +233,7 @@
             this.deleteArchivedFile});
             this.archivedFileContextMenu.Name = "contextMenuStrip1";
             this.archivedFileContextMenu.Size = new System.Drawing.Size(133, 100);
+            this.archivedFileContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.archivedFileContextMenu_Opening);
             // 
             // replaceToolStripMenuItem
             // 
@@ -477,6 +488,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "EPFExplorer";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.archivedFileContextMenu.ResumeLayout(false);
@@ -539,6 +551,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportContentsAsGIFsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportContentsAsPNGSequencesToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripMenuItem fontEditorToolStripMenuItem;
     }
 }
 

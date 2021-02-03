@@ -11,13 +11,6 @@ namespace EPFExplorer
 {
     public partial class Form1 : Form
     {
-        BackgroundWorker MassExporter = new BackgroundWorker();
-
-        TreeNode MassExportTargetNode;
-        string MassExportPath;
-        string MassExportType = "PNG";
-        List<TreeNode> MassExportAllChildren = new List<TreeNode>();
-
         public arcfile activeArc;
         public binfile activeBin;
         public rdtfile activeRdt;
@@ -34,6 +27,13 @@ namespace EPFExplorer
         public List<Room> rooms = new List<Room>();
 
         public int alphaColorIndexForGifImport = 0;
+
+        BackgroundWorker MassExporter = new BackgroundWorker();
+
+        TreeNode MassExportTargetNode;
+        string MassExportPath;
+        string MassExportType = "PNG";
+        List<TreeNode> MassExportAllChildren = new List<TreeNode>();
 
         public enum Mode {
             None = 0x00,
@@ -1160,6 +1160,7 @@ namespace EPFExplorer
             if (OpenedSpriteEditorJustForThis)
             {
                 selectedFile.spriteEditor.Close();
+                selectedFile.spriteEditor = null;
             }
         }
 
@@ -1533,7 +1534,6 @@ namespace EPFExplorer
 
             return 0; //if it wasn't found
         }
-
 
         public class GifFrameExtraInfo{
             public int minX = 99999;
@@ -2060,8 +2060,8 @@ namespace EPFExplorer
 
             enc.Finish();
 
-
-
+            selectedFile.spriteEditor.Close();
+            selectedFile.spriteEditor = null;
         }
 
 
@@ -2543,6 +2543,12 @@ namespace EPFExplorer
                         }
 
                         ExportRdtSpriteAsPNG(selectedFile, false, Path.Combine(Path.Combine(Path.GetDirectoryName(MassExportPath), MassExportTargetNode.Text + "EXPORTED"), node.FullPath.Replace(MassExportTargetNode.FullPath + "\\", "")));
+
+                        if (selectedFile.spriteEditor != null) {
+                            selectedFile.spriteEditor.Close();
+                            selectedFile.spriteEditor = null;
+                        }
+                        
                     }
                     progressBar.progressBar1.Value++;
                 }
@@ -2574,6 +2580,22 @@ namespace EPFExplorer
                 }
             }
             progressBar.Close();
+        }
+
+        private void fontEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FontEditor fontEditor = new FontEditor();
+            fontEditor.Show();
+        }
+
+        private void archivedFileContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

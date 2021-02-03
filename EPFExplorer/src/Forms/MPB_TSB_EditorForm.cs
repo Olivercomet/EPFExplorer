@@ -27,6 +27,9 @@ namespace EPFExplorer
 
         public Image image;
 
+        public bool userDisagreedWithWidth = false;
+
+        public bool justAutoCorrected = false;
 
         public class Tile
         {
@@ -37,6 +40,48 @@ namespace EPFExplorer
             public bool hasSimilarTile = false;
             public Tile SimilarTile;    //the master tile that this one stores a reference to. (although this one can still have its own unique flipping etc)
         }
+
+        public Dictionary<string, int> MPBFilesAndWidthsInTiles = new Dictionary<string, int>() {
+
+             /* {"Beach0_map_0.mpb", 149},
+              {"Beacon0_map_0.mpb",106},
+              {"BoilerRoom0_map_0.mpb", 179},
+              {"BookRoom0_map_0.mpb", 150},
+              {"Catalog1_map_0.mpb",32},
+              {"Catalog2_map_0.mpb",32},
+              {"Catalog3_map_0.mpb",32},
+              {"Catalog4_map_0.mpb",32},
+              {"Catalog5_map_0.mpb",32},
+              {"Catalog6_map_0.mpb",32},
+              {"Catalog7_map_0.mpb",32},
+              {"Catalog8_map_0.mpb",32},
+              {"Catalog9_map_0.mpb",32},
+              {"Catalog10_map_0.mpb",32},
+              {"Catalog11_map_0.mpb",32},
+              {"Catalog12_map_0.mpb",32},
+              {"Catalog13_map_0.mpb",32},
+              {"Catalog14_map_0.mpb",32},
+              {"Catalog15_map_0.mpb",32},
+              {"Catalog16_map_0.mpb",32},
+              {"Catalog17_map_0.mpb",32},
+              {"CoffeeShop0_map_0.mpb", 150},
+              {"CommandRoom0_map_0.mpb", 100},
+              {"Dock0_map_0.mpb", 176},
+              {"Dojo0_map_0.mpb", 76},
+              {"Fishing0_map_0.mpb", 82},*/
+              {"GrapplingHookC3TallestMtn_map_0.mpb", 192},
+              {"GrapplingSkiHill_map_0.mpb", 432},
+              {"GrapplingHookC2HerbBase_map_0.mpb", 164}
+
+
+
+
+        };
+
+
+
+
+
 
         private void chooseTileset_Click(object sender, EventArgs e)
         {
@@ -72,6 +117,7 @@ namespace EPFExplorer
             {
                 activeMpb = new mpbfile();
                 activeMpb.form1 = form1;
+                activeMpb.editorForm = this;
                 activeMpb.filepath = openFileDialog1.FileName;
                 activeMpb.filebytes = File.ReadAllBytes(activeMpb.filepath);
                 activeMpb.Load();
@@ -80,10 +126,12 @@ namespace EPFExplorer
 
         public void LoadBoth() {
 
-            if (activeMpb.known_tile_width != 0 && ImageWidthInTiles.Value != activeMpb.known_tile_width)
+            if (!userDisagreedWithWidth && (activeMpb.known_tile_width != 0 && ImageWidthInTiles.Value != activeMpb.known_tile_width))
             {
                 ImageWidthInTiles.Value = activeMpb.known_tile_width;
+                userDisagreedWithWidth = true;  //we have given them one chance to keep this the same, and then just let them change it after that if they really want to
             }
+                
 
             if (activeMpb == null)
             {
@@ -122,6 +170,7 @@ namespace EPFExplorer
                     
                     bool flipX = false;
                     bool flipY = false;
+                    bool thirdBitFlag = false;
 
                     if ((IndexFromMPB & 0x8000) == 0x8000)        
                         {
@@ -135,14 +184,18 @@ namespace EPFExplorer
 
                     if ((IndexFromMPB & 0x2000) == 0x2000)
                         {
-                        Console.WriteLine("The third bit was set in the MPB tile info! Not sure what it does...");
+                        thirdBitFlag = true;        
                         }
 
+                    int offset_of_tile_in_tsb = 0;
 
-                    int offset_of_tile_in_tsb = 0x200 + (64 * (0x1FFF & IndexFromMPB)); //cut the highest two bits off the index, as they were tile-flipping booleans
+                    if (thirdBitFlag){
+                        offset_of_tile_in_tsb = 0x200 + (64 * (0x2000 + (0x1FFF & IndexFromMPB)));    //cut the highest three bits off the index, as they were tile-flipping booleans and an 'add 0x2000' flag
+                    }
+                    else{
+                       offset_of_tile_in_tsb = 0x200 + (64 * (0x1FFF & IndexFromMPB));  //cut the highest three bits off the index, as they were tile-flipping booleans and an 'add 0x2000' flag
+                    }
 
-
-                 
                     if (!flipX && !flipY)
                         {
                         for (int i = 0; i < 8; i++)
@@ -189,7 +242,13 @@ namespace EPFExplorer
 
         private void ImageWidthInTiles_ValueChanged(object sender, EventArgs e)
         {
-            LoadBoth();
+            if (justAutoCorrected)
+            {
+                justAutoCorrected = false;
+            }
+            else {
+                LoadBoth();
+            }
         }
 
         private void LOAD_Click(object sender, EventArgs e)
@@ -272,6 +331,7 @@ namespace EPFExplorer
             {
                 activeTsb = new tsbfile();
                 activeMpb = new mpbfile();
+                activeMpb.editorForm = this;
 
                 Bitmap image = (Bitmap)Image.FromFile(openFileDialog1.FileName);
 
@@ -582,7 +642,9 @@ namespace EPFExplorer
             return 0;   //the tiles are not similar
             }
 
-
-
+        private void thirdBitAddAmountTemp_ValueChanged(object sender, EventArgs e)
+        {
+            LoadBoth();
+        }
     }
 }
