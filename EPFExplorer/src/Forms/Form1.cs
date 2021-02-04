@@ -2000,8 +2000,10 @@ namespace EPFExplorer
                 GIFExport(selectedFile, saveFileDialog1.FileName);   
             }
 
-            selectedFile.spriteEditor.Close();
-            selectedFile.spriteEditor = null;
+            if (selectedFile.spriteEditor != null){
+                selectedFile.spriteEditor.Close();
+                selectedFile.spriteEditor = null;
+            }
         }
 
         public void GIFExport(archivedfile selectedFile, string destinationFilename) {

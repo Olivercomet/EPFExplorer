@@ -42,8 +42,8 @@ namespace EPFExplorer
         }
 
         public Dictionary<string, int> MPBFilesAndWidthsInTiles = new Dictionary<string, int>() {
-
-             /* {"Beach0_map_0.mpb", 149},
+            /*
+              {"Beach0_map_0.mpb", 149},
               {"Beacon0_map_0.mpb",106},
               {"BoilerRoom0_map_0.mpb", 179},
               {"BookRoom0_map_0.mpb", 150},
@@ -66,12 +66,17 @@ namespace EPFExplorer
               {"Catalog17_map_0.mpb",32},
               {"CoffeeShop0_map_0.mpb", 150},
               {"CommandRoom0_map_0.mpb", 100},
-              {"Dock0_map_0.mpb", 176},
-              {"Dojo0_map_0.mpb", 76},
-              {"Fishing0_map_0.mpb", 82},*/
-              {"GrapplingHookC3TallestMtn_map_0.mpb", 192},
-              {"GrapplingSkiHill_map_0.mpb", 432},
-              {"GrapplingHookC2HerbBase_map_0.mpb", 164}
+              {"Dock0_map_0.mpb",176},
+              {"Dojo0_map_0.mpb",76},
+              {"Fishing0_map_0.mpb",82},
+              {"GrapplingHookC3TallestMtn_map_0.mpb",192},
+              {"GrapplingSkiHill_map_0.mpb",432},
+              {"GrapplingHookC2HerbBase_map_0.mpb",164},
+              {"Forest0_map_0.mpb",150},
+              { "GadgetRoom0_map_0.mpb",174},
+              { "GadgetRoom1_map_0.mpb",174},
+              { "GarysRoom0_map_0.mpb",176},
+              { "GiftShop0_map_0.mpb",185},*/
 
 
 
