@@ -2054,7 +2054,6 @@ namespace EPFExplorer
                         frame.SetPixel(x + offsetX, y + offsetY, selectedFile.spriteEditor.images[i].image.GetPixel(x, y));
                     }
                 }
-                frame.Save("Test");
 
                 enc.AddFrame(frame);
                 enc.SetDelay((int)Math.Round((float)(selectedFile.RDTSpriteFrameDurations[i])));
