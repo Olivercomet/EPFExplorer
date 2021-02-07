@@ -166,7 +166,7 @@ namespace EPFExplorer
 
         public bool LuaUtiliesExist() {
 
-            string LuaCompilerDir = Path.Combine(Application.StartupPath, "LuaCompiler");
+            string LuaCompilerDir = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "LuaCompiler");
             Console.WriteLine(LuaCompilerDir);
 
         if (Directory.Exists(LuaCompilerDir))

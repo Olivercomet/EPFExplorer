@@ -532,7 +532,12 @@ namespace EPFExplorer
                         {
                         //then write a reference to the similar tile instead
 
-                        tileDescriptor = (ushort)uniqueTiles.IndexOf(tiles[t].SimilarTile);    
+                        tileDescriptor = (ushort)uniqueTiles.IndexOf(tiles[t].SimilarTile);
+
+                        if (tileDescriptor > 8191) {    //if it's 8192 or above, start counting from zero again and set the third bit. Yeah it seems like this is what should happen anyway, but the third bit seemed to be doing weird things before, and this method works.
+                            tileDescriptor -= 8192;
+                            tileDescriptor |= 0x2000;
+                        }
 
                         if (tiles[t].flipX)
                         {
@@ -554,13 +559,12 @@ namespace EPFExplorer
                     activeMpb.filebytes[(t * 2) + 1] = (byte)(tileDescriptor >> 8);
                 }
 
-
                 LoadBoth();
             }
         }
 
 
-        public Byte AreTilesSimilar(Tile tile1, Tile tile2)
+        public byte AreTilesSimilar(Tile tile1, Tile tile2)
             {
             //test for completely identical tiles
 

@@ -926,9 +926,9 @@ namespace EPFExplorer
                 UpdateLuaScriptComboBox();
             }
 
-            File.WriteAllText("lua_TEMP_FOR_COMPILING", luaRichText.Text);
-            scriptToSave.filebytes = scriptToSave.LuaFromFileToLuc(scriptToSave.filebytes, "lua_TEMP_FOR_COMPILING");
-            File.Delete("lua_TEMP_FOR_COMPILING");
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "lua_TEMP_FOR_COMPILING"), luaRichText.Text);
+            scriptToSave.filebytes = scriptToSave.LuaFromFileToLuc(scriptToSave.filebytes, Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "lua_TEMP_FOR_COMPILING"));
+            File.Delete(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "lua_TEMP_FOR_COMPILING"));
             AddCurrentRoomObjectsToComboBox();
             if (roomObjectsComboBox.Items.Count > 0)
                 {
@@ -1322,11 +1322,7 @@ namespace EPFExplorer
             tilemapArchivedFile.ReadFile();
             tilemap.filebytes = tilemapArchivedFile.filebytes;
 
-            if (selectedRoom.tilemapWidth != 0)
-            {
-                tilemap.known_tile_width = selectedRoom.tilemapWidth;
-            }
-
+           
             //Try to get tileset from download.arc if it's there. If not, fall back to vanilla.
             archivedfile tilesetArchivedFile = downloadArc.GetFileByName(tilesetPathInArc.ToLower());
 
@@ -1346,6 +1342,13 @@ namespace EPFExplorer
 
             tilemap.Load();
             tileset.Load();
+
+            if (selectedRoom.tilemapWidth != 0)
+            {
+                tilemap.known_tile_width = selectedRoom.tilemapWidth;
+                mpb_tsb_editor.ImageWidthInTiles.Value = tilemap.known_tile_width;
+            }
+
 
             mpb_tsb_editor.LoadBoth();
 
@@ -1570,9 +1573,9 @@ namespace EPFExplorer
             }
 
 
-            File.WriteAllText("lua_TEMP_FOR_COMPILING", newTuxedoDL);
-            tuxedoDL.filebytes = tuxedoDL.LuaFromFileToLuc(tuxedoDL.filebytes, "lua_TEMP_FOR_COMPILING");
-            File.Delete("lua_TEMP_FOR_COMPILING");
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "lua_TEMP_FOR_COMPILING"), newTuxedoDL);
+            tuxedoDL.filebytes = tuxedoDL.LuaFromFileToLuc(tuxedoDL.filebytes, Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "lua_TEMP_FOR_COMPILING"));
+            File.Delete(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "lua_TEMP_FOR_COMPILING"));
 
             downloadArc.archivedfiles.Add(tuxedoDL);
 
