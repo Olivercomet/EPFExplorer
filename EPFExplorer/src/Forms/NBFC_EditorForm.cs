@@ -21,7 +21,7 @@ namespace EPFExplorer
         public Form1 form1;
 
         public nbfcTilesetFile activeNbfc;
-        public mpbfile activeMpb;
+        public mpbfile activeNbfs;
         public nbfpfile activeNbfp;
 
         public Color TSBAlphaColour;
@@ -79,25 +79,25 @@ namespace EPFExplorer
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                activeMpb = new mpbfile();
-                activeMpb.form1 = form1;
-                //activeMpb.editorForm = this;
-                activeMpb.filepath = openFileDialog1.FileName;
-                activeMpb.filebytes = File.ReadAllBytes(activeMpb.filepath);
-                activeMpb.Load();
+                activeNbfs = new mpbfile();
+                activeNbfs.form1 = form1;
+                //activeNbfs.editorForm = this;
+                activeNbfs.filepath = openFileDialog1.FileName;
+                activeNbfs.filebytes = File.ReadAllBytes(activeNbfs.filepath);
+                activeNbfs.Load();
             }
         }
 
         public void LoadBoth() {
 
-            if (!userDisagreedWithWidth && (activeMpb.known_tile_width != 0 && ImageWidthInTiles.Value != activeMpb.known_tile_width))
+            if (!userDisagreedWithWidth && (activeNbfs.known_tile_width != 0 && ImageWidthInTiles.Value != activeNbfs.known_tile_width))
             {
-                ImageWidthInTiles.Value = activeMpb.known_tile_width;
+                ImageWidthInTiles.Value = activeNbfs.known_tile_width;
                 userDisagreedWithWidth = true;  //we have given them one chance to keep this the same, and then just let them change it after that if they really want to
             }
                 
 
-            if (activeMpb == null)
+            if (activeNbfs == null)
             {
                 MessageBox.Show("No tilemap loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -116,13 +116,13 @@ namespace EPFExplorer
             }
 
 
-            if ((activeMpb.highest_tile_offset) / 64 > activeNbfc.number_of_tiles)
+            if ((activeNbfs.highest_tile_offset) / 64 > activeNbfc.number_of_tiles)
             {
-            MessageBox.Show("That tilemap references tiles that are beyond the end of the tileset!\nTileset number of tiles: "+activeNbfc.number_of_tiles+".\nThe tilemap's highest tile is: "+ ((activeMpb.highest_tile_offset) / 64), "Tilemap is too big for tileset", MessageBoxButtons.OK,MessageBoxIcon.Information);
+            MessageBox.Show("That tilemap references tiles that are beyond the end of the tileset!\nTileset number of tiles: "+activeNbfc.number_of_tiles+".\nThe tilemap's highest tile is: "+ ((activeNbfs.highest_tile_offset) / 64), "Tilemap is too big for tileset", MessageBoxButtons.OK,MessageBoxIcon.Information);
             return;
             }
 
-            int heightInTiles = (activeMpb.filebytes.Length / 2) / (int)ImageWidthInTiles.Value;
+            int heightInTiles = (activeNbfs.filebytes.Length / 2) / (int)ImageWidthInTiles.Value;
 
             Byte[] imageForDisplay = new byte[((int)ImageWidthInTiles.Value*8)*(heightInTiles*8)];
 
@@ -136,41 +136,24 @@ namespace EPFExplorer
                 {
                 for (int x = 0; x < (int)ImageWidthInTiles.Value; x++)
                     {
-                    ushort IndexFromMPB = BitConverter.ToUInt16(activeMpb.filebytes, (y * 2 * (int)ImageWidthInTiles.Value) + (x * 2)); ;
+                    ushort IndexFromMPB = BitConverter.ToUInt16(activeNbfs.filebytes, (y * 2 * (int)ImageWidthInTiles.Value) + (x * 2)); ;
                     
                     bool flipX = false;
                     bool flipY = false;
-                    bool thirdBitFlag = false;
-                    bool mysteryFlag = false;
 
-                    if ((IndexFromMPB & 0x8000) == 0x8000)        
+                    if ((IndexFromMPB & 0x0800) == 0x0800)        
                         {
                         flipY = true;
                         }
 
-                    if ((IndexFromMPB & 0x4000) == 0x4000)
+                    if ((IndexFromMPB & 0x0400) == 0x0400)
                         {
                         flipX = true;
                         }
 
-                    if ((IndexFromMPB & 0x2000) == 0x2000)
-                        {
-                        thirdBitFlag = true;        
-                        }
-
-                    if ((IndexFromMPB & 0x0400) == 0x0400)
-                    {
-                        mysteryFlag = true;
-                    }
-
                     int offset_of_tile_in_tsb = 0;
 
-                    if (thirdBitFlag){
-                        offset_of_tile_in_tsb = 64 * (0x2000 + (0x03FF & IndexFromMPB));    //cut the highest three bits off the index, as they were tile-flipping booleans and an 'add 0x2000' flag
-                    }
-                    else{
-                       offset_of_tile_in_tsb = 64 * (0x03FF & IndexFromMPB);  //cut the highest three bits off the index, as they were tile-flipping booleans and an 'add 0x2000' flag
-                    }
+                    offset_of_tile_in_tsb = 64 * (0x03FF & IndexFromMPB);
 
                     if (!flipX && !flipY)
                         {
@@ -234,7 +217,7 @@ namespace EPFExplorer
 
         private void SaveToTSBAndMPB_Click(object sender, EventArgs e)
         {
-            if (activeMpb == null)
+            if (activeNbfs == null)
             {
                 MessageBox.Show("No MPB loaded", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -254,7 +237,7 @@ namespace EPFExplorer
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                File.WriteAllBytes(saveFileDialog1.FileName, activeMpb.filebytes);
+                File.WriteAllBytes(saveFileDialog1.FileName, activeNbfs.filebytes);
             }
             else
             {
@@ -320,8 +303,9 @@ namespace EPFExplorer
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 activeNbfc = new nbfcTilesetFile();
-                activeMpb = new mpbfile();
-               // activeMpb.editorForm = this;
+                activeNbfs = new mpbfile();
+                activeNbfp = new nbfpfile();
+                // activeNbfs.editorForm = this;
 
                 Bitmap image = (Bitmap)Image.FromFile(openFileDialog1.FileName);
 
@@ -360,16 +344,16 @@ namespace EPFExplorer
                     }
 
                 if (palette.Count < 256 && !palette.Contains(Color.FromArgb(0xFF, 0xFF, 0x00, 0xFF)) && !palette.Contains(Color.FromArgb(0x00, 0xFF, 0x00, 0xFF)))  //if there's space for it, sneakily add the magenta alpha anyway
-                    {
+                {
                     palette.Add(Color.FromArgb(0xFF, 0xFF, 0x00, 0xFF));
-                    }
+                }
+
+                MessageBox.Show("Alpha colour is enforced as RGB 0xFF00FF (a bright magenta). If you want transparency in your image, use this colour.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 TSBAlphaColour = Color.FromArgb(0xFF,0xFF,0x00,0xFF);
 
-                MessageBox.Show("Alpha colour is enforced as RGB 0xFF00FF (a bright magenta). If you don't have this colour in your image, an unexpected colour may turn transparent in-game!", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //swap the alpha colour to the start
 
-                    //swap the alpha colour to the start
-                    
                     for (int c = 0; c < palette.Count; c++)
                         {
                         if ((palette[c].R & 0xF8) == (TSBAlphaColour.R & 0xF8) && (palette[c].G & 0xF8) == (TSBAlphaColour.G & 0xF8) && (palette[c].B & 0xF8) == (TSBAlphaColour.B & 0xF8))
@@ -478,6 +462,8 @@ namespace EPFExplorer
 
                 //now write palette to nbfp
 
+                activeNbfp.filebytes = new byte[0x200];
+
                 for (int c = 0; c < palette.Count; c++)
                     {
                     ushort ABGR1555Colour = form1.ColorToABGR1555(palette[c]);
@@ -506,7 +492,7 @@ namespace EPFExplorer
 
                 //MPB
 
-                activeMpb.filebytes = new byte[tiles.Count * 2];
+                activeNbfs.filebytes = new byte[tiles.Count * 2];
 
 
                 for (int t = 0; t < tiles.Count; t++)
@@ -519,19 +505,15 @@ namespace EPFExplorer
 
                         tileDescriptor = (ushort)uniqueTiles.IndexOf(tiles[t].SimilarTile);
 
-                        if (tileDescriptor > 8191) {    //if it's 8192 or above, start counting from zero again and set the third bit. Yeah it seems like this is what should happen anyway, but the third bit seemed to be doing weird things before, and this method appears to have fixed that problem.
-                            tileDescriptor -= 8192;
-                            tileDescriptor |= 0x2000;
-                        }
 
                         if (tiles[t].flipX)
                         {
-                            tileDescriptor |= 0x4000;
+                            tileDescriptor |= 0x0400;
                         }
 
                         if (tiles[t].flipY)
                         {
-                            tileDescriptor |= 0x8000;
+                            tileDescriptor |= 0x0800;
                         }
 
                     }
@@ -540,8 +522,8 @@ namespace EPFExplorer
                         tileDescriptor = (ushort)uniqueTiles.IndexOf(tiles[t]);                        
                     }
 
-                    activeMpb.filebytes[(t * 2)] = (byte)tileDescriptor;
-                    activeMpb.filebytes[(t * 2) + 1] = (byte)(tileDescriptor >> 8);
+                    activeNbfs.filebytes[(t * 2)] = (byte)tileDescriptor;
+                    activeNbfs.filebytes[(t * 2) + 1] = (byte)(tileDescriptor >> 8);
                 }
 
                 LoadBoth();
