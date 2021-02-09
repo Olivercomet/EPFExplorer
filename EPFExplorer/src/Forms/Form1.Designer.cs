@@ -80,6 +80,7 @@
             this.binFolderContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSoundFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.NBFCEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -128,6 +129,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveFileExtractorToolStripMenuItem,
             this.MPBTSBEditorToolStripMenuItem,
+            this.NBFCEditorToolStripMenuItem,
             this.missionEditorToolStripMenuItem,
             this.randomizeRDTSpritesToolStripMenuItem,
             this.RDTsettingVersionToolStripButton,
@@ -475,6 +477,13 @@
             this.addSoundFileToolStripMenuItem.Text = "Add File";
             this.addSoundFileToolStripMenuItem.Click += new System.EventHandler(this.addSoundFileToolStripMenuItem_Click);
             // 
+            // NBFCEditorToolStripMenuItem
+            // 
+            this.NBFCEditorToolStripMenuItem.Name = "NBFCEditorToolStripMenuItem";
+            this.NBFCEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
+            this.NBFCEditorToolStripMenuItem.Text = "NBFC Editor";
+            this.NBFCEditorToolStripMenuItem.Click += new System.EventHandler(this.NBFCEditorToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -552,6 +561,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportContentsAsPNGSequencesToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem fontEditorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem NBFCEditorToolStripMenuItem;
     }
 }
 

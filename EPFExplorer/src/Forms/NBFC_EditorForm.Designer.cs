@@ -1,6 +1,6 @@
 ﻿namespace EPFExplorer
 {
-    partial class MPB_TSB_EditorForm
+    partial class NBFC_EditorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,11 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MPB_TSB_EditorForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NBFC_EditorForm));
             this.pixelBox1 = new RedCell.UI.Controls.PixelBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.choosePalette = new System.Windows.Forms.Button();
             this.LOAD = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ImageWidthInTiles = new System.Windows.Forms.NumericUpDown();
@@ -86,6 +87,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.choosePalette);
             this.groupBox2.Controls.Add(this.LOAD);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.ImageWidthInTiles);
@@ -93,16 +95,26 @@
             this.groupBox2.Controls.Add(this.chooseTileset);
             this.groupBox2.Location = new System.Drawing.Point(13, 478);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(345, 128);
+            this.groupBox2.Size = new System.Drawing.Size(345, 158);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Load";
             // 
+            // choosePalette
+            // 
+            this.choosePalette.Location = new System.Drawing.Point(18, 112);
+            this.choosePalette.Name = "choosePalette";
+            this.choosePalette.Size = new System.Drawing.Size(170, 34);
+            this.choosePalette.TabIndex = 6;
+            this.choosePalette.Text = "Choose palette (.nbfp)";
+            this.choosePalette.UseVisualStyleBackColor = true;
+            this.choosePalette.Click += new System.EventHandler(this.choosePalette_Click);
+            // 
             // LOAD
             // 
-            this.LOAD.Location = new System.Drawing.Point(196, 78);
+            this.LOAD.Location = new System.Drawing.Point(198, 90);
             this.LOAD.Name = "LOAD";
-            this.LOAD.Size = new System.Drawing.Size(134, 34);
+            this.LOAD.Size = new System.Drawing.Size(134, 56);
             this.LOAD.TabIndex = 5;
             this.LOAD.Text = "LOAD DISPLAY";
             this.LOAD.UseVisualStyleBackColor = true;
@@ -111,7 +123,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(204, 30);
+            this.label1.Location = new System.Drawing.Point(206, 32);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(126, 17);
             this.label1.TabIndex = 3;
@@ -119,7 +131,7 @@
             // 
             // ImageWidthInTiles
             // 
-            this.ImageWidthInTiles.Location = new System.Drawing.Point(219, 50);
+            this.ImageWidthInTiles.Location = new System.Drawing.Point(221, 52);
             this.ImageWidthInTiles.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -129,7 +141,7 @@
             this.ImageWidthInTiles.Size = new System.Drawing.Size(84, 22);
             this.ImageWidthInTiles.TabIndex = 2;
             this.ImageWidthInTiles.Value = new decimal(new int[] {
-            72,
+            10,
             0,
             0,
             0});
@@ -137,31 +149,31 @@
             // 
             // chooseTilemap
             // 
-            this.chooseTilemap.Location = new System.Drawing.Point(16, 78);
+            this.chooseTilemap.Location = new System.Drawing.Point(18, 72);
             this.chooseTilemap.Name = "chooseTilemap";
             this.chooseTilemap.Size = new System.Drawing.Size(170, 34);
             this.chooseTilemap.TabIndex = 1;
-            this.chooseTilemap.Text = "Choose tilemap (.mpb)";
+            this.chooseTilemap.Text = "Choose tilemap (.nbfs)";
             this.chooseTilemap.UseVisualStyleBackColor = true;
             this.chooseTilemap.Click += new System.EventHandler(this.chooseTilemap_Click);
             // 
             // chooseTileset
             // 
-            this.chooseTileset.Location = new System.Drawing.Point(16, 38);
+            this.chooseTileset.Location = new System.Drawing.Point(18, 32);
             this.chooseTileset.Name = "chooseTileset";
             this.chooseTileset.Size = new System.Drawing.Size(170, 34);
             this.chooseTileset.TabIndex = 0;
-            this.chooseTileset.Text = "Choose tileset (.tsb)";
+            this.chooseTileset.Text = "Choose tileset (.nbfc)";
             this.chooseTileset.UseVisualStyleBackColor = true;
             this.chooseTileset.Click += new System.EventHandler(this.chooseTileset_Click);
             // 
             // SaveToTSBAndMPB
             // 
-            this.SaveToTSBAndMPB.Location = new System.Drawing.Point(28, 49);
+            this.SaveToTSBAndMPB.Location = new System.Drawing.Point(6, 51);
             this.SaveToTSBAndMPB.Name = "SaveToTSBAndMPB";
-            this.SaveToTSBAndMPB.Size = new System.Drawing.Size(241, 44);
+            this.SaveToTSBAndMPB.Size = new System.Drawing.Size(296, 35);
             this.SaveToTSBAndMPB.TabIndex = 10;
-            this.SaveToTSBAndMPB.Text = "Save new TSB and MPB";
+            this.SaveToTSBAndMPB.Text = "Save as new tileset, tilemap and palette";
             this.SaveToTSBAndMPB.UseVisualStyleBackColor = true;
             this.SaveToTSBAndMPB.Click += new System.EventHandler(this.SaveToTSBAndMPB_Click);
             // 
@@ -189,9 +201,9 @@
             // 
             this.groupBox3.Controls.Add(this.exportToPNG);
             this.groupBox3.Controls.Add(this.importFromPNG);
-            this.groupBox3.Location = new System.Drawing.Point(364, 478);
+            this.groupBox3.Location = new System.Drawing.Point(364, 479);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(184, 128);
+            this.groupBox3.Size = new System.Drawing.Size(184, 157);
             this.groupBox3.TabIndex = 11;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Modify / Extract";
@@ -201,7 +213,7 @@
             this.groupBox4.Controls.Add(this.SaveToTSBAndMPB);
             this.groupBox4.Location = new System.Drawing.Point(554, 479);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(308, 128);
+            this.groupBox4.Size = new System.Drawing.Size(308, 157);
             this.groupBox4.TabIndex = 12;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Save";
@@ -228,11 +240,11 @@
             this.thirdBitAddAmountTemp.TabIndex = 6;
             this.thirdBitAddAmountTemp.ValueChanged += new System.EventHandler(this.thirdBitAddAmountTemp_ValueChanged);
             // 
-            // MPB_TSB_EditorForm
+            // NBFC_EditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(874, 619);
+            this.ClientSize = new System.Drawing.Size(873, 640);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.thirdBitAddAmountTemp);
             this.Controls.Add(this.groupBox4);
@@ -241,8 +253,8 @@
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "MPB_TSB_EditorForm";
-            this.Text = "EPFExplorer MPB/TSB Editor";
+            this.Name = "NBFC_EditorForm";
+            this.Text = "EPFExplorer NBFC Editor";
             ((System.ComponentModel.ISupportInitialize)(this.pixelBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
@@ -276,5 +288,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown thirdBitAddAmountTemp;
         public System.Windows.Forms.NumericUpDown ImageWidthInTiles;
+        private System.Windows.Forms.Button choosePalette;
     }
 }

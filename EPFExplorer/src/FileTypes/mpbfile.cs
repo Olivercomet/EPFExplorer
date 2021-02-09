@@ -40,7 +40,7 @@ namespace EPFExplorer
             {
                 string justName = Path.GetFileName(filepath);
 
-                if (editorForm.MPBFilesAndWidthsInTiles.ContainsKey(justName))
+                if (editorForm != null && editorForm.MPBFilesAndWidthsInTiles.ContainsKey(justName))
                 {
                     known_tile_width = editorForm.MPBFilesAndWidthsInTiles[justName];
                     editorForm.justAutoCorrected = true;

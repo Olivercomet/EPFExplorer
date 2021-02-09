@@ -77,9 +77,11 @@
     <Compile Include="src\FileTypes\arcfile.cs" />
     <Compile Include="src\FileTypes\FNTfile.cs" />
     <Compile Include="src\FileTypes\mpbfile.cs" />
+    <Compile Include="src\FileTypes\nbfpfile.cs" />
     <Compile Include="src\FileTypes\subfile\archivedfile.cs" />
     <Compile Include="src\FileTypes\binfile.cs" />
     <Compile Include="src\FileTypes\subfile\rdtSubfileData.cs" />
+    <Compile Include="src\FileTypes\nbfcTilesetFile.cs" />
     <Compile Include="src\FileTypes\tsbfile.cs" />
     <Compile Include="src\Forms\ChooseAlphaColourWindow.cs">
       <SubType>Form</SubType>
@@ -98,6 +100,12 @@
     </Compile>
     <Compile Include="src\Forms\MissionEditor.Designer.cs">
       <DependentUpon>MissionEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="src\Forms\NBFC_EditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\NBFC_EditorForm.Designer.cs">
+      <DependentUpon>NBFC_EditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="src\Forms\MPB_TSB_EditorForm.cs">
       <SubType>Form</SubType>
@@ -169,6 +177,9 @@
     </Compile>
     <EmbeddedResource Include="src\Forms\MissionEditor.resx">
       <DependentUpon>MissionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Forms\NBFC_EditorForm.resx">
+      <DependentUpon>NBFC_EditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\MPB_TSB_EditorForm.resx">
       <DependentUpon>MPB_TSB_EditorForm.cs</DependentUpon>

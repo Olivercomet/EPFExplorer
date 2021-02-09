@@ -1164,7 +1164,7 @@ namespace EPFExplorer
             }
         }
 
-        public Color[] GetPalette(Byte[] input, int offset, byte bpp)
+        public Color[] GetPalette(byte[] input, int offset, byte bpp)
         {
 
             Color[] palette = new Color[0];
@@ -1286,8 +1286,13 @@ namespace EPFExplorer
             }
         }
 
-        public Bitmap NBFCtoImage(Byte[] input, int offset, int width, int height, Color[] palette, byte bpp)  //palettes aren't always the same length, this function is designed for the image in the downloadable newsletter
+        public Bitmap NBFCtoImage(byte[] input, int offset, int width, int height, Color[] palette, byte bpp)  //palettes aren't always the same length, this function is designed for the image in the downloadable newsletter
         {
+            if (height == 0) {
+                MessageBox.Show("That tile width is too large!");
+                return null;
+            }
+
             Bitmap bm = new Bitmap(width, height);
 
             int curOffset = offset;
@@ -2597,6 +2602,13 @@ namespace EPFExplorer
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void NBFCEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NBFC_EditorForm nbfc_editor = new NBFC_EditorForm();
+            nbfc_editor.form1 = this;
+            nbfc_editor.Show();
         }
     }
 }
