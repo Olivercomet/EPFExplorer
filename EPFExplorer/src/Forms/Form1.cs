@@ -1020,9 +1020,6 @@ namespace EPFExplorer
             }
             else if (mode == Mode.Bin)
             {
-                if (activeBin.binMode == binfile.binmode.music){
-                    MessageBox.Show("Note: this is an experimental feature.");
-                    }
                 activeBin.SaveBin();
             }
         }
@@ -1826,8 +1823,6 @@ namespace EPFExplorer
 
             if (activeBin.binMode == binfile.binmode.music)
             {
-                MessageBox.Show("This feature is experimental and may produce unexpected results in-game.");
-
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
                 openFileDialog1.Title = "Replace "+ Path.GetFileName(selectedFile.filename);
@@ -2609,6 +2604,31 @@ namespace EPFExplorer
             NBFC_EditorForm nbfc_editor = new NBFC_EditorForm();
             nbfc_editor.form1 = this;
             nbfc_editor.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DebugMenu debugMenu = new DebugMenu();
+            debugMenu.form1 = this;
+            debugMenu.Show();
+        }
+
+        private void exportRawXMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            xmfile selectedXM = treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedXm;
+
+            if (activeBin.binMode == binfile.binmode.music)
+            {
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK) {
+                    File.WriteAllBytes(saveFileDialog1.FileName, selectedXM.filebytes);
+                }
+            }
+            else
+            {
+                MessageBox.Show("This feature is only intended for music XMs");
+            }
         }
     }
 }

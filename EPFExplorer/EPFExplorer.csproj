@@ -89,6 +89,12 @@
     <Compile Include="src\Forms\ChooseAlphaColourWindow.Designer.cs">
       <DependentUpon>ChooseAlphaColourWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Forms\DebugMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\DebugMenu.Designer.cs">
+      <DependentUpon>DebugMenu.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Forms\FontEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +163,9 @@
     <Compile Include="src\Utility\NGif\NeuQuant.cs" />
     <EmbeddedResource Include="src\Forms\ChooseAlphaColourWindow.resx">
       <DependentUpon>ChooseAlphaColourWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="src\Forms\DebugMenu.resx">
+      <DependentUpon>DebugMenu.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\FontEditor.resx">
       <DependentUpon>FontEditor.cs</DependentUpon>

@@ -247,11 +247,11 @@
             // downloadArcLabel
             // 
             this.downloadArcLabel.AutoSize = true;
-            this.downloadArcLabel.Location = new System.Drawing.Point(157, 37);
+            this.downloadArcLabel.Location = new System.Drawing.Point(157, 26);
             this.downloadArcLabel.Name = "downloadArcLabel";
-            this.downloadArcLabel.Size = new System.Drawing.Size(102, 17);
+            this.downloadArcLabel.Size = new System.Drawing.Size(235, 34);
             this.downloadArcLabel.TabIndex = 10;
-            this.downloadArcLabel.Text = "None selected!";
+            this.downloadArcLabel.Text = "None selected!\r\nLeave blank to start with a template.";
             // 
             // chooseDownloadArc
             // 

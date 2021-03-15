@@ -37,6 +37,7 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileExtractorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MPBTSBEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NBFCEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missionEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.randomizeRDTSpritesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RDTsettingVersionToolStripButton = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,7 +81,8 @@
             this.binFolderContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSoundFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.NBFCEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.button2 = new System.Windows.Forms.Button();
+            this.exportRawXMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -97,7 +99,7 @@
             this.toolsToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
-            this.menuStrip2.Size = new System.Drawing.Size(981, 28);
+            this.menuStrip2.Size = new System.Drawing.Size(965, 28);
             this.menuStrip2.TabIndex = 1;
             this.menuStrip2.Text = "menuStrip2";
             // 
@@ -152,6 +154,13 @@
             this.MPBTSBEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
             this.MPBTSBEditorToolStripMenuItem.Text = "MPB/TSB Editor";
             this.MPBTSBEditorToolStripMenuItem.Click += new System.EventHandler(this.MPBTSBEditorToolStripMenuItem_Click);
+            // 
+            // NBFCEditorToolStripMenuItem
+            // 
+            this.NBFCEditorToolStripMenuItem.Name = "NBFCEditorToolStripMenuItem";
+            this.NBFCEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
+            this.NBFCEditorToolStripMenuItem.Text = "NBFC Editor";
+            this.NBFCEditorToolStripMenuItem.Click += new System.EventHandler(this.NBFCEditorToolStripMenuItem_Click);
             // 
             // missionEditorToolStripMenuItem
             // 
@@ -444,21 +453,22 @@
             this.binFileContextMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.binFileContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.replaceXM,
-            this.exportToolStripMenuItem3});
+            this.exportToolStripMenuItem3,
+            this.exportRawXMToolStripMenuItem});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(132, 52);
+            this.binFileContextMenu.Size = new System.Drawing.Size(211, 104);
             // 
             // replaceXM
             // 
             this.replaceXM.Name = "replaceXM";
-            this.replaceXM.Size = new System.Drawing.Size(131, 24);
+            this.replaceXM.Size = new System.Drawing.Size(210, 24);
             this.replaceXM.Text = "Replace";
             this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
             // 
             // exportToolStripMenuItem3
             // 
             this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(131, 24);
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
@@ -477,18 +487,29 @@
             this.addSoundFileToolStripMenuItem.Text = "Add File";
             this.addSoundFileToolStripMenuItem.Click += new System.EventHandler(this.addSoundFileToolStripMenuItem_Click);
             // 
-            // NBFCEditorToolStripMenuItem
+            // button2
             // 
-            this.NBFCEditorToolStripMenuItem.Name = "NBFCEditorToolStripMenuItem";
-            this.NBFCEditorToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
-            this.NBFCEditorToolStripMenuItem.Text = "NBFC Editor";
-            this.NBFCEditorToolStripMenuItem.Click += new System.EventHandler(this.NBFCEditorToolStripMenuItem_Click);
+            this.button2.Location = new System.Drawing.Point(631, 209);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(104, 58);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Debug stuff";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // exportRawXMToolStripMenuItem
+            // 
+            this.exportRawXMToolStripMenuItem.Name = "exportRawXMToolStripMenuItem";
+            this.exportRawXMToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.exportRawXMToolStripMenuItem.Text = "Export raw";
+            this.exportRawXMToolStripMenuItem.Click += new System.EventHandler(this.exportRawXMToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(981, 510);
+            this.ClientSize = new System.Drawing.Size(965, 510);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.FileTree);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.menuStrip2);
@@ -562,6 +583,8 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem fontEditorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NBFCEditorToolStripMenuItem;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ToolStripMenuItem exportRawXMToolStripMenuItem;
     }
 }
 

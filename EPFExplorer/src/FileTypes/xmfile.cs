@@ -82,7 +82,7 @@ namespace EPFExplorer
 
             //extract control bytes from a run-on series of bits, where each section of 5 bits is a control byte
 
-            Byte[] controlBytes = new byte[numchannels];
+            byte[] controlBytes = new byte[numchannels];
 
             int b = 0;
             bool loopStart = true;
@@ -229,7 +229,7 @@ namespace EPFExplorer
             unkValue1 = filebytes[10];
             unkValue2 = filebytes[11];
             unkValue3 = filebytes[12];
-            unkOffset = BitConverter.ToInt32(filebytes,0x13);
+            unkOffset = BitConverter.ToInt32(filebytes,13);
 
             int pos = 0x28;
 
@@ -552,26 +552,32 @@ namespace EPFExplorer
 
             int pos = 0x50;
 
-            for (int i = 0; i < number_of_patterns_in_one_loop; i++)
+            for (int i = 0; i < numpatterns; i++)   //initialise as many patterns as we require
             {
-                if (GetPatternWithIndex(patterns, newXMfilebytes[pos]) == null)
+                if (GetPatternWithIndex(patterns, i) == null)
                 {
                     Pattern newPattern = new Pattern();
 
-                    newPattern.index = newXMfilebytes[pos];
+                    newPattern.index = i;
 
                     patterns.Add(newPattern);
+                }
+            }
 
-                    patternsInPlayingOrder.Add(newPattern);
+            for (int i = 0; i < number_of_patterns_in_one_loop; i++)    //get playing order of patterns
+            {
+                if (GetPatternWithIndex(patterns, newXMfilebytes[pos]) != null)
+                {
+                    patternsInPlayingOrder.Add(GetPatternWithIndex(patterns, newXMfilebytes[pos]));
                 }
                 else
                 {
-                    patternsInPlayingOrder.Add(GetPatternWithIndex(patterns, newXMfilebytes[pos]));
+                    Console.WriteLine("??? Playing order uses a pattern that doesn't exist: pattern "+ newXMfilebytes[pos]);
                 }
                 pos++;
             }
 
-            while(newXMfilebytes[pos] == 0x00)
+            while (newXMfilebytes[pos] == 0x00)
                 {
                 pos++;
                 }
@@ -698,7 +704,7 @@ namespace EPFExplorer
 
             number_of_bytes_needed_for_control_bytes /= 8;  //now it is done
 
-            Byte[] ControlBytes = new byte[number_of_bytes_needed_for_control_bytes];
+            byte[] ControlBytes = new byte[number_of_bytes_needed_for_control_bytes];
 
             int current_byte_in_controlbytes = 0;
             int current_bit_in_byte = 0;
@@ -723,13 +729,18 @@ namespace EPFExplorer
 
                 if ((input[pos] & 0x80) == 0x80)
                 {
-                    for (int mask = 0x01; mask <= 0x10; mask *= 2)       //convert control byte to EPF format and add to bit list
+                    byte[] controlBitsInOrderTheyShouldBeProcessed = new byte[] {0x01,0x02,0x08,0x04,0x10};
+
+                    for (int i = 0; i < controlBitsInOrderTheyShouldBeProcessed.Length; i++)       //convert control byte to EPF format and add to bit list
                     {
-                        if ((input[pos] & mask) == mask)    //check note/instr/vol/effect/effect params
-                        {
-                            ControlBytes[current_byte_in_controlbytes] |= (byte)(1 << (7 - current_bit_in_byte));
+                        byte mask = controlBitsInOrderTheyShouldBeProcessed[i];
+
+                        if ((input[pos] & mask) == mask)    //If the bit was there, put it in the EPF format one too, in the available bit position. If not, then the available bit position is left as zero.
+                            {
+                            ControlBytes[current_byte_in_controlbytes] |= (byte)(0x01 << (7 - current_bit_in_byte));
                             number_of_data_bytes++;
-                        }
+                            }
+
                         current_bit_in_byte++;
 
                         if (current_bit_in_byte > 7)
@@ -765,8 +776,5 @@ namespace EPFExplorer
 
             return output.ToArray();
             }
-
-
-
     }
 }
