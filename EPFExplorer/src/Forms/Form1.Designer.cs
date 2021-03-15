@@ -99,7 +99,7 @@
             this.toolsToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 0);
             this.menuStrip2.Name = "menuStrip2";
-            this.menuStrip2.Size = new System.Drawing.Size(965, 28);
+            this.menuStrip2.Size = new System.Drawing.Size(946, 28);
             this.menuStrip2.TabIndex = 1;
             this.menuStrip2.Text = "menuStrip2";
             // 
@@ -456,19 +456,19 @@
             this.exportToolStripMenuItem3,
             this.exportRawXMToolStripMenuItem});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(211, 104);
+            this.binFileContextMenu.Size = new System.Drawing.Size(150, 76);
             // 
             // replaceXM
             // 
             this.replaceXM.Name = "replaceXM";
-            this.replaceXM.Size = new System.Drawing.Size(210, 24);
+            this.replaceXM.Size = new System.Drawing.Size(149, 24);
             this.replaceXM.Text = "Replace";
             this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
             // 
             // exportToolStripMenuItem3
             // 
             this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 24);
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(149, 24);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
             // 
@@ -489,7 +489,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(631, 209);
+            this.button2.Location = new System.Drawing.Point(1011, 174);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(104, 58);
             this.button2.TabIndex = 5;
@@ -500,7 +500,7 @@
             // exportRawXMToolStripMenuItem
             // 
             this.exportRawXMToolStripMenuItem.Name = "exportRawXMToolStripMenuItem";
-            this.exportRawXMToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
+            this.exportRawXMToolStripMenuItem.Size = new System.Drawing.Size(149, 24);
             this.exportRawXMToolStripMenuItem.Text = "Export raw";
             this.exportRawXMToolStripMenuItem.Click += new System.EventHandler(this.exportRawXMToolStripMenuItem_Click);
             // 
@@ -508,7 +508,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(965, 510);
+            this.ClientSize = new System.Drawing.Size(946, 510);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.FileTree);
             this.Controls.Add(this.button1);
