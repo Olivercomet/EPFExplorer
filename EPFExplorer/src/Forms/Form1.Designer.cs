@@ -78,11 +78,11 @@
             this.binFileContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.replaceXM = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportRawXMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.binFolderContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSoundFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.button2 = new System.Windows.Forms.Button();
-            this.exportRawXMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -456,21 +456,29 @@
             this.exportToolStripMenuItem3,
             this.exportRawXMToolStripMenuItem});
             this.binFileContextMenu.Name = "binFileContextMenu";
-            this.binFileContextMenu.Size = new System.Drawing.Size(150, 76);
+            this.binFileContextMenu.Size = new System.Drawing.Size(211, 110);
             // 
             // replaceXM
             // 
             this.replaceXM.Name = "replaceXM";
-            this.replaceXM.Size = new System.Drawing.Size(149, 24);
+            this.replaceXM.Size = new System.Drawing.Size(210, 26);
             this.replaceXM.Text = "Replace";
             this.replaceXM.Click += new System.EventHandler(this.replaceXM_Click);
             // 
             // exportToolStripMenuItem3
             // 
             this.exportToolStripMenuItem3.Name = "exportToolStripMenuItem3";
-            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(149, 24);
+            this.exportToolStripMenuItem3.Size = new System.Drawing.Size(210, 26);
             this.exportToolStripMenuItem3.Text = "Export";
             this.exportToolStripMenuItem3.Click += new System.EventHandler(this.exportToolStripMenuItem3_Click);
+            // 
+            // exportRawXMToolStripMenuItem
+            // 
+            this.exportRawXMToolStripMenuItem.Name = "exportRawXMToolStripMenuItem";
+            this.exportRawXMToolStripMenuItem.Size = new System.Drawing.Size(210, 26);
+            this.exportRawXMToolStripMenuItem.Text = "Export raw";
+            this.exportRawXMToolStripMenuItem.Visible = false;
+            this.exportRawXMToolStripMenuItem.Click += new System.EventHandler(this.exportRawXMToolStripMenuItem_Click);
             // 
             // binFolderContextMenu
             // 
@@ -496,13 +504,6 @@
             this.button2.Text = "Debug stuff";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // exportRawXMToolStripMenuItem
-            // 
-            this.exportRawXMToolStripMenuItem.Name = "exportRawXMToolStripMenuItem";
-            this.exportRawXMToolStripMenuItem.Size = new System.Drawing.Size(149, 24);
-            this.exportRawXMToolStripMenuItem.Text = "Export raw";
-            this.exportRawXMToolStripMenuItem.Click += new System.EventHandler(this.exportRawXMToolStripMenuItem_Click);
             // 
             // Form1
             // 
