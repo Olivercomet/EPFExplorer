@@ -711,35 +711,40 @@ namespace EPFExplorer
 
             int pos = 0;
 
+            bool requires_8_4_swap = false;
+
             for (int channel = 0; channel < numchannels; channel++)
-                {
+            {
+                List<byte> hasTheseFlags = new List<Byte>();
+
                 int number_of_data_bytes = 0;
 
                 if (input[pos] == 0x80) //if it's just a blank note
-                    {
+                {
                     for (int i = 0; i < 5; i++) //write zeroes to the bit list
-                        {
+                    {
                         current_bit_in_byte++;
                         if (current_bit_in_byte > 7)
-                            { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
-                        }
+                        { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
+                    }
                     pos++;
                     continue;   //and go to the next control byte in the input
-                    }
-
-                if ((input[pos] & 0x80) == 0x80)
+                }
+                else if ((input[pos] & 0x80) == 0x80)  //if it's a compressed note, with the different bits telling us which sections are included
                 {
-                    byte[] controlBitsInOrderTheyShouldBeProcessed = new byte[] {0x01,0x02,0x08,0x04,0x10};
+                    byte[] controlBitsInOrderTheyShouldBeProcessed = new byte[] { 0x01, 0x02, 0x08, 0x04, 0x10 };
 
                     for (int i = 0; i < controlBitsInOrderTheyShouldBeProcessed.Length; i++)       //convert control byte to EPF format and add to bit list
                     {
                         byte mask = controlBitsInOrderTheyShouldBeProcessed[i];
 
                         if ((input[pos] & mask) == mask)    //If the bit was there, put it in the EPF format one too, in the available bit position. If not, then the available bit position is left as zero.
-                            {
+                        {
+                            hasTheseFlags.Add(mask);
+
                             ControlBytes[current_byte_in_controlbytes] |= (byte)(0x01 << (7 - current_bit_in_byte));
                             number_of_data_bytes++;
-                            }
+                        }
 
                         current_bit_in_byte++;
 
@@ -749,7 +754,7 @@ namespace EPFExplorer
 
                     pos++;
                 }
-                else
+                else   //if it's an uncompressed note with all sections included
                 {
                     for (int i = 0; i < 5; i++) //write ones to the bit list
                     {
@@ -758,17 +763,31 @@ namespace EPFExplorer
                         if (current_bit_in_byte > 7)
                         { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
                     }
-                    number_of_data_bytes = 5;
+                    number_of_data_bytes = 5;             
                 }
 
                 //now add its data bytes
-               
+
                 for (int i = 0; i < number_of_data_bytes; i++)
-                    {
+                {
                     data.Add(input[pos]);
                     pos++;
-                    }
                 }
+
+                    //swap the two pesky bytes that show up in the wrong order (if they are both there)
+
+                    for (int i = 0; i < number_of_data_bytes; i++)
+                    {
+                        if (i == hasTheseFlags.IndexOf(0x08) && (i + 1 == hasTheseFlags.IndexOf(0x04)))
+                        {
+                            byte temp = data[(data.Count - number_of_data_bytes) + i];
+                            data[(data.Count - number_of_data_bytes) + i] = data[(data.Count - number_of_data_bytes) + i + 1];
+                            data[(data.Count - number_of_data_bytes) + i + 1] = temp;
+                            break;
+                        }
+                    }
+                
+            }
 
             List<byte> output = new List<byte>();
             output.AddRange(ControlBytes);
