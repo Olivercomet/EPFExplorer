@@ -711,8 +711,6 @@ namespace EPFExplorer
 
             int pos = 0;
 
-            bool requires_8_4_swap = false;
-
             for (int channel = 0; channel < numchannels; channel++)
             {
                 List<byte> hasTheseFlags = new List<Byte>();
