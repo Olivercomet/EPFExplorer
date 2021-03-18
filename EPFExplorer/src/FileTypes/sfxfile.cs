@@ -33,6 +33,8 @@ namespace EPFExplorer
         public envelope volenv = new envelope();
         public envelope panenv = new envelope();
 
+        public string name;
+
         public int indexInBin;
 
         public string customExportFolder = "";

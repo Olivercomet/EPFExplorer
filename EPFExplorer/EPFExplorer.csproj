@@ -101,6 +101,12 @@
     <Compile Include="src\Forms\FontEditor.Designer.cs">
       <DependentUpon>FontEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="src\Forms\InstrumentMappingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="src\Forms\InstrumentMappingForm.Designer.cs">
+      <DependentUpon>InstrumentMappingForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="src\Forms\MissionEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -184,6 +190,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="src\Forms\InstrumentMappingForm.resx">
+      <DependentUpon>InstrumentMappingForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="src\Forms\MissionEditor.resx">
       <DependentUpon>MissionEditor.cs</DependentUpon>
     </EmbeddedResource>

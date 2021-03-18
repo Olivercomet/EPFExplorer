@@ -423,10 +423,16 @@ namespace EPFExplorer
             }
         }
 
+        public class potentialNewInstrument {
+            public xmfile xm;
+            public xmfile.InstrumentForImport instrument;
+        }
         public List<byte> RebuildMusicDataSections() {
 
             List<byte> rowData = new List<byte>();
             List<byte> songInfos = new List<byte>();
+
+            List<potentialNewInstrument> potentialNewInstruments = new List<potentialNewInstrument>();  //so that we know which instruments' sample data needs to be replaced
 
             List<int> partialSongInfoOffsets = new List<int>();
 
@@ -477,9 +483,14 @@ namespace EPFExplorer
                         songInfos.Add((byte)(offset_in_row_data >> 8));
                         songInfos.Add((byte)(offset_in_row_data >> 16));
                         songInfos.Add((byte)(offset_in_row_data >> 24));
+                        }
+                    }
+
+                foreach (xmfile.InstrumentForImport instr in xm.usedInstrumentsOnImport)  //add its instruments for consideration
+                    {
+                    potentialNewInstruments.Add(new potentialNewInstrument (){ instrument = instr, xm = xm});
                     }
                 }
-            }
 
             //correct the row data section size at the start of music.bin
 

@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EPFExplorer   
+namespace EPFExplorer
 {
-    public class xmfile        
+    public class xmfile
     {
         public uint offset;
         public Byte[] filebytes;
@@ -41,7 +41,17 @@ namespace EPFExplorer
 
         public string customExportFolder = "";
 
-        public class Pattern {
+        public List<InstrumentForImport> usedInstrumentsOnImport = new List<InstrumentForImport>();//only used when importing from an xm file
+
+        public class InstrumentForImport{  //only used when importing from an xm file
+            public byte ID;
+            public byte MapOntoID;
+            public List<sfxfile> samples = new List<sfxfile>();
+            public string name;
+        }
+
+        public class Pattern
+        {
             public int index;
             public int number_of_rows;
             public int patternSize;
@@ -49,11 +59,12 @@ namespace EPFExplorer
             public List<Byte[]> rows = new List<Byte[]>();
         }
 
-        public Pattern GetPatternWithIndex(List<Pattern> patternList, int index) { 
-        
-        foreach (Pattern p in patternList)
+        public Pattern GetPatternWithIndex(List<Pattern> patternList, int index)
+        {
+
+            foreach (Pattern p in patternList)
             {
-            if (p.index == index)
+                if (p.index == index)
                 {
                     return p;
                 }
@@ -63,21 +74,22 @@ namespace EPFExplorer
         }
 
 
-        public Byte[] GetRow(binfile bin, int pos) {
+        public Byte[] GetRow(binfile bin, int pos)
+        {
 
             int initialPos = pos;
 
             List<Byte> output = new List<Byte>();
 
             if (pos == -1)  //return a blank row
-                 {
-                 for (int i = 0; i < numchannels; i++)
-                    {
-                    output.Add(0x80);    
-                    }
+            {
+                for (int i = 0; i < numchannels; i++)
+                {
+                    output.Add(0x80);
+                }
 
-                 return output.ToArray();
-                 }
+                return output.ToArray();
+            }
 
 
             //extract control bytes from a run-on series of bits, where each section of 5 bits is a control byte
@@ -136,7 +148,7 @@ namespace EPFExplorer
             if (!loopStart) pos++;
 
             for (int i = 0; i < controlBytes.Length; i++)
-                {
+            {
                 if (controlBytes[i] == 0x00)
                 {
                     controlBytes[i] = 0x80;
@@ -147,9 +159,9 @@ namespace EPFExplorer
                     byte correctedControlByte = 0x80;
 
                     if ((controlBytes[i] & 0x10) == 0x10)  //note
-                        {
+                    {
                         correctedControlByte |= 0x01;
-                        }
+                    }
                     if ((controlBytes[i] & 0x08) == 0x08)  //instr
                     {
                         correctedControlByte |= 0x02;
@@ -180,18 +192,28 @@ namespace EPFExplorer
                         if ((controlBytes[i] & mask) == mask)
                         {
                             //add byte
-                            if ((controlBytes[i] & 0x06) == 0x06 && (mask == 0x04 || mask == 0x02)) {
-                                if (mask == 0x04) {
+                            if ((controlBytes[i] & 0x06) == 0x06 && (mask == 0x04 || mask == 0x02))
+                            {
+                                if (mask == 0x04)
+                                {
                                     output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos + 1]);
-                                } else {
+                                }
+                                else
+                                {
                                     output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1]);
                                     effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos - 1];
                                 }
-                            } else if (mask == 0x01 && effect == 0x09) {
+                            }
+                            else if (mask == 0x01 && effect == 0x09)
+                            {
                                 output.Add((byte)(bin.filebytes[bin.offsetOfMusicInstructionData + pos] >> 1));
-                            } else if (mask == 0x01 && effect == 0x04) {
+                            }
+                            else if (mask == 0x01 && effect == 0x04)
+                            {
                                 output.Add((byte)((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0xF0) | ((bin.filebytes[bin.offsetOfMusicInstructionData + pos] & 0x0F) >> 1)));
-                            } else {
+                            }
+                            else
+                            {
                                 output.Add(bin.filebytes[bin.offsetOfMusicInstructionData + pos]);
                                 if (mask == 0x04) effect = bin.filebytes[bin.offsetOfMusicInstructionData + pos];
                             }
@@ -202,18 +224,16 @@ namespace EPFExplorer
                     }
                 }
             }
-
             return output.ToArray();
         }
 
-
-
-        public void ReadSongInfo() {
+        public void ReadSongInfo()
+        {
 
             if (filebytes.Length == 0)
-                {
+            {
                 return;
-                }
+            }
 
             numchannels = filebytes[0];
             numpatterns = filebytes[1];
@@ -229,7 +249,7 @@ namespace EPFExplorer
             unkValue1 = filebytes[10];
             unkValue2 = filebytes[11];
             unkValue3 = filebytes[12];
-            unkOffset = BitConverter.ToInt32(filebytes,13);
+            unkOffset = BitConverter.ToInt32(filebytes, 13);
 
             int pos = 0x28;
 
@@ -238,10 +258,10 @@ namespace EPFExplorer
             patternsInPlayingOrder = new List<Pattern>();
 
             for (int i = 0; i < number_of_patterns_in_one_loop; i++)
-                {
+            {
 
-                if (GetPatternWithIndex(patterns,filebytes[pos]) == null)
-                    {
+                if (GetPatternWithIndex(patterns, filebytes[pos]) == null)
+                {
                     Pattern newPattern = new Pattern();
 
                     newPattern.index = filebytes[pos];
@@ -249,40 +269,41 @@ namespace EPFExplorer
                     patterns.Add(newPattern);
 
                     patternsInPlayingOrder.Add(newPattern);
-                    }
+                }
                 else
-                    {
-                    patternsInPlayingOrder.Add(GetPatternWithIndex(patterns,filebytes[pos]));
-                    }
-               
-                pos++;
+                {
+                    patternsInPlayingOrder.Add(GetPatternWithIndex(patterns, filebytes[pos]));
                 }
 
-            while (pos % 4 != 0)
-                {
                 pos++;
-                }
+            }
+
+            while (pos % 4 != 0)
+            {
+                pos++;
+            }
 
 
             //start of the actual pattern info
 
 
-            foreach(Pattern p in patterns)
-                {
-                p.number_of_rows = BitConverter.ToInt32(filebytes,pos);
+            foreach (Pattern p in patterns)
+            {
+                p.number_of_rows = BitConverter.ToInt32(filebytes, pos);
                 pos += 4;
-            
+
                 for (int i = 0; i < p.number_of_rows; i++)
-                    {
-                    p.rows.Add(GetRow(parentbinfile,BitConverter.ToInt32(filebytes, pos)));
+                {
+                    p.rows.Add(GetRow(parentbinfile, BitConverter.ToInt32(filebytes, pos)));
                     p.patternSize += p.rows[p.rows.Count - 1].Length;
 
                     pos += 4;
-                    }
                 }
+            }
         }
 
-        public List<Byte> MakeXM() {
+        public List<Byte> MakeXM()
+        {
 
             List<Byte> output = new List<byte>();
 
@@ -291,7 +312,7 @@ namespace EPFExplorer
                 output.Add((byte)c);
             }
 
-            for (int i = 0; i < Math.Min(name.Length-3, 20); i++)
+            for (int i = 0; i < Math.Min(name.Length - 3, 20); i++)
             {
                 output.Add((byte)name[i]);
             }
@@ -337,7 +358,7 @@ namespace EPFExplorer
             output.Add((byte)parentbinfile.samplecount);
             output.Add((byte)(parentbinfile.samplecount >> 8));
 
-            output.Add(0x01);     
+            output.Add(0x01);
             output.Add(0x00);
 
             output.Add((byte)tempo);
@@ -347,17 +368,17 @@ namespace EPFExplorer
             output.Add((byte)(bpm >> 8));
 
             for (int i = 0; i < patternsInPlayingOrder.Count; i++)
-                {
+            {
                 output.Add((byte)patternsInPlayingOrder[i].index);
-                }
+            }
 
             while (output.Count < 0x150)
-                {
+            {
                 output.Add(0x00);
-                }
+            }
 
             foreach (Pattern p in patterns)
-                {
+            {
                 output.Add(0x09);
                 output.Add(0x00);
                 output.Add(0x00);
@@ -370,22 +391,23 @@ namespace EPFExplorer
 
                 output.Add((byte)(p.patternSize));
                 output.Add((byte)((p.patternSize) >> 8));
-                
-                foreach (Byte[] row in p.rows)
+
+                foreach (byte[] row in p.rows)
+                {
+                    foreach (byte b in row)
                     {
-                    foreach (Byte b in row)
-                        {
                         output.Add(b);
-                        }
                     }
                 }
+            }
 
             //write instrument section
 
             string instrument_name = "instrument_";
             string sample_name = "sample_";
 
-            for (int i = 0; i < samples.Count; i++) {
+            for (int i = 0; i < samples.Count; i++)
+            {
                 sfxfile sample = (i >= 0 && i < samples.Count && samples[i] != null) ? samples[i] : null;
                 output.Add(252);
                 output.Add(0);
@@ -394,12 +416,14 @@ namespace EPFExplorer
 
                 int namelength = 0;
 
-                foreach (char c in (instrument_name + i.ToString())) {
+                foreach (char c in (instrument_name + i.ToString()))
+                {
                     output.Add((byte)c);
                     namelength++;
                 }
 
-                while (namelength < 0x16) {
+                while (namelength < 0x16)
+                {
                     output.Add(0x00);
                     namelength++;
                 }
@@ -413,12 +437,15 @@ namespace EPFExplorer
                 output.Add(0);
                 output.Add(0);
                 for (int j = 0; j < 96; j++) output.Add(0);
-                if (sample != null) {
-                    for (int j = 0; j < 24; j++) {
+                if (sample != null)
+                {
+                    for (int j = 0; j < 24; j++)
+                    {
                         output.Add(sample != null ? (byte)(sample.volenv.nodes[j] & 0xFF) : (byte)0);
                         output.Add(sample != null ? (byte)(sample.volenv.nodes[j] >> 8) : (byte)0);
                     }
-                    for (int j = 0; j < 24; j++) {
+                    for (int j = 0; j < 24; j++)
+                    {
                         output.Add(sample != null ? (byte)(sample.panenv.nodes[j] & 0xFF) : (byte)0);
                         output.Add(sample != null ? (byte)(sample.panenv.nodes[j] >> 8) : (byte)0);
                     }
@@ -446,7 +473,9 @@ namespace EPFExplorer
                     output.Add(0);
                     output.Add(0);
                     output.Add(0);
-                } else {
+                }
+                else
+                {
                     for (int j = 0; j < 96 + 16; j++) output.Add(0);
                 }
                 for (int j = 0; j < 11; j++) output.Add(0);
@@ -455,16 +484,19 @@ namespace EPFExplorer
                 output.Add((byte)(((pcm.Length * 2) >> 8) & 0xFF));
                 output.Add((byte)(((pcm.Length * 2) >> 16) & 0xFF));
                 output.Add((byte)(((pcm.Length * 2) >> 24) & 0xFF));
-                if (sample != null) {
+                if (sample != null)
+                {
                     output.Add((byte)((sample.loopstart * 4) & 0xFF));
                     output.Add((byte)(((sample.loopstart * 4) >> 8) & 0xFF));
                     output.Add((byte)(((sample.loopstart * 4) >> 16) & 0xFF));
                     output.Add((byte)(((sample.loopstart * 4) >> 24) & 0xFF));
-                    output.Add((byte)((( sample.loopend) * 4) & 0xFF));
+                    output.Add((byte)(((sample.loopend) * 4) & 0xFF));
                     output.Add((byte)((((sample.loopend) * 4) >> 8) & 0xFF));
                     output.Add((byte)((((sample.loopend) * 4) >> 16) & 0xFF));
                     output.Add((byte)((((sample.loopend) * 4) >> 24) & 0xFF));
-                } else {
+                }
+                else
+                {
                     for (int j = 0; j < 8; j++) output.Add(0);
                 }
                 output.Add(sample != null ? sample.defaultvol : (byte)0);
@@ -476,26 +508,27 @@ namespace EPFExplorer
 
                 namelength = 0;
 
-                foreach (char c in (sample_name + i.ToString())) {
+                foreach (char c in (sample_name + i.ToString()))
+                {
                     output.Add((byte)c);
                     namelength++;
                 }
 
-                while (namelength < 0x16) {
+                while (namelength < 0x16)
+                {
                     output.Add(0x00);
                     namelength++;
                 }
 
                 short old = 0;
-                for (int j = 0; j < pcm.Length; j++) {
+                for (int j = 0; j < pcm.Length; j++)
+                {
                     short n = (short)(pcm[j] - old);
                     output.Add((byte)(n & 0xFF));
                     output.Add((byte)((n >> 8) & 0xFF));
                     old = pcm[j];
                 }
             }
-
-
 
             return output;
         }
@@ -508,7 +541,7 @@ namespace EPFExplorer
             if (filebytes != null)
             {
                 if (customExportFolder == "" || customExportFolder == null)
-                    {
+                {
                     SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
                     saveFileDialog1.FileName = name;
@@ -518,21 +551,21 @@ namespace EPFExplorer
                     saveFileDialog1.Filter = "Extended Module (*.xm)|*.xm|All files (*.*)|*.*";
 
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                        {
-                        File.WriteAllBytes(saveFileDialog1.FileName, MakeXM().ToArray());
-                        }
-                    }
-                else
                     {
-                    File.WriteAllBytes(Path.Combine(customExportFolder,name), MakeXM().ToArray());
-                    customExportFolder = "";
+                        File.WriteAllBytes(saveFileDialog1.FileName, MakeXM().ToArray());
                     }
-                
+                }
+                else
+                {
+                    File.WriteAllBytes(Path.Combine(customExportFolder, name), MakeXM().ToArray());
+                    customExportFolder = "";
+                }
             }
         }
 
 
-        public void Replace_With_New_XM (string filename) {
+        public void Replace_With_New_XM(string filename)
+        {
 
             byte[] newXMfilebytes = File.ReadAllBytes(filename);
 
@@ -541,12 +574,12 @@ namespace EPFExplorer
 
             // read XM from file
 
-            number_of_patterns_in_one_loop = BitConverter.ToUInt16(newXMfilebytes,0x40);
+            number_of_patterns_in_one_loop = BitConverter.ToUInt16(newXMfilebytes, 0x40);
             restartPosition = BitConverter.ToUInt16(newXMfilebytes, 0x42);
             numchannels = BitConverter.ToUInt16(newXMfilebytes, 0x44);
             numpatterns = BitConverter.ToUInt16(newXMfilebytes, 0x46);
             numinstruments = BitConverter.ToUInt16(newXMfilebytes, 0x48);
-     
+
             tempo = BitConverter.ToUInt16(newXMfilebytes, 0x4C);
             bpm = BitConverter.ToUInt16(newXMfilebytes, 0x4E);
 
@@ -572,85 +605,275 @@ namespace EPFExplorer
                 }
                 else
                 {
-                    Console.WriteLine("??? Playing order uses a pattern that doesn't exist: pattern "+ newXMfilebytes[pos]);
+                    Console.WriteLine("??? Playing order uses a pattern that doesn't exist: pattern " + newXMfilebytes[pos]);
                 }
                 pos++;
             }
 
             while (newXMfilebytes[pos] == 0x00)
-                {
+            {
                 pos++;
-                }
+            }
 
             //start of pattern data
 
+            usedInstrumentsOnImport = new List<InstrumentForImport>();
+
             for (int i = 0; i < numpatterns; i++)
-                {
+            {
                 pos += 5;
 
-                patterns[i].number_of_rows = BitConverter.ToUInt16(newXMfilebytes,pos);
+                patterns[i].number_of_rows = BitConverter.ToUInt16(newXMfilebytes, pos);
                 pos += 2;
                 patterns[i].patternSize = BitConverter.ToUInt16(newXMfilebytes, pos);
                 pos += 2;
 
                 patterns[i].rows = new List<byte[]>();
 
+                if (patterns[i].patternSize == 0) { //if pattern size is zero, do this instead
+                    List<byte> blankRow = new List<byte>();
+                    for (int b = 0; b < numchannels; b++){
+                        blankRow.Add(0x80);
+                        }
+                    for (int r = 0; r < patterns[i].number_of_rows; r++) {
+                        patterns[i].rows.Add(blankRow.ToArray());
+                    }
+                    continue;
+                    }
+
                 for (int r = 0; r < patterns[i].number_of_rows; r++)        //add rows
-                    {
-                    patterns[i].rows.Add(GetRegularXMRow(newXMfilebytes,pos));
+                {
+                    patterns[i].rows.Add(GetRegularXMRow(newXMfilebytes, pos));
                     pos += patterns[i].rows[patterns[i].rows.Count - 1].Length;
+                    ConvertRowToEPFFormat(patterns[i].rows[patterns[i].rows.Count - 1]);   //This isn't actually converting the row right at this moment. It's so that we find out which instruments need to be loaded.
+                }
+            }
+
+            /*
+            samples = new List<sfxfile>();
+
+            for (int i = 0; i < numinstruments; i++)
+            {
+                Console.WriteLine("pos is " + pos);
+                InstrumentForImport newInstrument = new InstrumentForImport();
+
+                newInstrument.ID = (byte)i;
+                newInstrument.MapOntoID = (byte)i;
+
+                pos += 4;
+
+                for (int c = 0; c < 0x16; c++)
+                {
+                    if ((char)newXMfilebytes[pos] != 0x00)
+                    {
+                        newInstrument.name += (char)newXMfilebytes[pos];
+                    }
+                    pos++;
+                }
+
+                Console.WriteLine("end of instr name " + pos);
+
+                pos++;
+
+                int num_samples_in_this_instrument = BitConverter.ToInt16(newXMfilebytes,pos);
+                pos += 2;
+
+                pos += 100;
+
+                Console.WriteLine("start of vol env " + pos);
+
+
+                sfxfile.envelope volenv = new sfxfile.envelope();
+                    sfxfile.envelope panenv = new sfxfile.envelope();
+
+                    for (int j = 0; j < 24; j++)
+                        {
+                        volenv.nodes[j] = (short)(newXMfilebytes[pos] | (newXMfilebytes[pos+1] << 8));
+                        pos += 2;
+                        }
+
+                pos += 16;
+
+                Console.WriteLine("start of pan env " + pos);
+
+                    for (int j = 0; j < 24; j++)
+                        {
+                        panenv.nodes[j] = (short)(newXMfilebytes[pos] | (newXMfilebytes[pos + 1] << 8));
+                        pos += 2;
+                        }
+
+                pos += 16;
+
+                Console.WriteLine("end of panning envelope "+pos);
+
+                    volenv.count = newXMfilebytes[pos];
+                    pos++;
+                    panenv.count = newXMfilebytes[pos];
+                    pos++;
+
+                    volenv.sustainPoint = newXMfilebytes[pos] != 0 ? newXMfilebytes[pos] : (byte)0xFF;
+                    pos++;
+                    volenv.loopStart = newXMfilebytes[pos] != 0 ? newXMfilebytes[pos] : (byte)0xFF;
+                    pos++;
+                    volenv.loopEnd = newXMfilebytes[pos] != 0 ? newXMfilebytes[pos] : (byte)0xFF;
+                    pos++;
+
+                    panenv.sustainPoint = newXMfilebytes[pos] != 0 ? newXMfilebytes[pos] : (byte)0xFF;
+                    pos++;
+                    panenv.loopStart = newXMfilebytes[pos] != 0 ? newXMfilebytes[pos] : (byte)0xFF;
+                    pos++;
+                    panenv.loopEnd = newXMfilebytes[pos] != 0 ? newXMfilebytes[pos] : (byte)0xFF;
+                    pos++;
+
+                    pos++; //skip over volume byte
+                    pos++; //skip over pan byte
+
+                    pos += 6;
+
+
+                for (int s = 0; s < num_samples_in_this_instrument; s++)
+                {
+                    Console.WriteLine("start of sample header at " + pos);
+                    sfxfile newSample = new sfxfile();
+
+                    newSample.volenv = volenv;
+                    newSample.panenv = panenv;
+
+                    pos += 11;
+
+                    int sampleLength = BitConverter.ToInt32(newXMfilebytes, pos);
+                    pos += 4;
+
+                    short[] pcm = new short[sampleLength];
+
+                    newSample.loopstart = BitConverter.ToUInt32(newXMfilebytes, pos) / 4;
+                    pos += 4;
+
+                    newSample.loopend = BitConverter.ToUInt32(newXMfilebytes, pos) / 4;
+                    pos += 4;
+
+                    newSample.defaultvol = newXMfilebytes[pos];
+                    pos++;
+
+                    int finetune = newXMfilebytes[pos];
+                    if (finetune > 0x7F) {
+                        finetune -= 256;
+                    }
+                    newSample.finetune = (sbyte)finetune;
+                    pos++;
+
+                    pos++; //skip sample type
+
+                    newSample.defaultpan = newXMfilebytes[pos];
+                    pos++;
+
+                    int transpose = newXMfilebytes[pos];
+                    if (transpose > 0x7F)
+                    {
+                        transpose -= 256;
+                    }
+                    newSample.transpose = (sbyte)transpose;
+                    pos++;
+
+                    pos++;
+
+                    newSample.name = "";
+
+                    for (int c = 0; c < 0x16; c++)
+                    {
+                        if ((char)newXMfilebytes[pos] != 0x00)
+                        {
+                            newSample.name += (char)newXMfilebytes[pos];
+                        }
+                        pos++;
+                    }
+
+                    short old = 0;
+                    for (int j = 0; j < sampleLength * 2; j++)
+                    {
+                        short diff = BitConverter.ToInt16(newXMfilebytes, pos);
+                        pos += 2;
+
+                        pcm[j] = (short)(old + diff);
+                        old = pcm[j];
+                    }
+
+                    newSample.isPCM = true;
+                    newInstrument.samples.Add(newSample);
+                }
+
+            foreach (InstrumentForImport instr in usedInstrumentsOnImport) {    //if this instrument we've just processed is actually used, then update it in the list, otherwise leave it out
+
+                    if (instr.ID == i) {
+                        usedInstrumentsOnImport[i] = newInstrument;
+                        break;
                     }
                 }
+
+                if (usedInstrumentsOnImport[i] != newInstrument) {  //null the instrument if we decided it shouldn't be in the list
+                    newInstrument = null;
+                }
+            }
+
+             if (samples.Count < parentbinfile.samplecount)  //if the sample count is less than the sample count of the entire game, assume it's a custom XM and that it requires instrument remapping onto the game's instruments
+             {
+                 InstrumentMappingForm instrumentMappingForm = new InstrumentMappingForm();
+
+                instrumentMappingForm.InitializeLists(this);
+
+                 instrumentMappingForm.Show();
+            }*/
         }
 
-
-        public byte[] GetRegularXMRow(byte[] bytes, int pos) {
+        public byte[] GetRegularXMRow(byte[] bytes, int pos)
+        {
 
             List<byte> output = new List<byte>();
 
             int channelsProcessed = 0;
-        
+
             while (channelsProcessed < numchannels)
-                {
+            {
                 if ((bytes[pos] & 0x80) == 0x80)    //if it's a compressed command
-                    {
+                {
                     //then check the number of compressed bytes that follow and add those
                     int number_of_bytes_to_use = 0;
 
                     for (int mask = 0x01; mask <= 0x10; mask *= 2)
-                        {
+                    {
                         if ((bytes[pos] & mask) == mask)
-                            {
+                        {
                             number_of_bytes_to_use++;
-                            }
                         }
+                    }
 
                     output.Add(bytes[pos]);
                     pos++;
 
                     for (int i = 0; i < number_of_bytes_to_use; i++)
-                        {
+                    {
                         output.Add(bytes[pos]);
                         pos++;
-                        }
                     }
+                }
                 else
-                    {
+                {
                     //but if it's not a compressed command, just add five bytes
                     for (int i = 0; i < 5; i++)
-                        {
+                    {
                         output.Add(bytes[pos]);
                         pos++;
-                        }
                     }
-                channelsProcessed++;
                 }
+                channelsProcessed++;
+            }
 
             return output.ToArray();
         }
 
 
-        public List<byte> MakeEPFXMHeader() {
+        public List<byte> MakeEPFXMHeader()
+        {
 
             List<byte> output = new List<byte>();
 
@@ -673,34 +896,33 @@ namespace EPFExplorer
             output.Add((byte)(unkOffset >> 24));
 
             while (output.Count < 0x28)
-                {
+            {
                 output.Add(0x00);
-                }
+            }
 
             foreach (Pattern p in patternsInPlayingOrder)
-                {
+            {
                 output.Add((byte)p.index);
-                }
+            }
 
             while (output.Count % 4 != 0)
-                {
+            {
                 output.Add(0x00);
-                }
+            }
 
             return output;
         }
 
-
         public byte[] ConvertRowToEPFFormat(byte[] input)
-            {
+        {
             List<byte> data = new List<byte>();
 
             int number_of_bytes_needed_for_control_bytes = (numchannels * 5);   //not done yet
 
             while (number_of_bytes_needed_for_control_bytes % 8 != 0)
-                {
+            {
                 number_of_bytes_needed_for_control_bytes++;
-                }
+            }
 
             number_of_bytes_needed_for_control_bytes /= 8;  //now it is done
 
@@ -761,7 +983,7 @@ namespace EPFExplorer
                         if (current_bit_in_byte > 7)
                         { current_byte_in_controlbytes++; current_bit_in_byte = 0; }
                     }
-                    number_of_data_bytes = 5;             
+                    number_of_data_bytes = 5;
                 }
 
                 //now add its data bytes
@@ -772,19 +994,34 @@ namespace EPFExplorer
                     pos++;
                 }
 
-                    //swap the two pesky bytes that show up in the wrong order (if they are both there)
 
-                    for (int i = 0; i < number_of_data_bytes; i++)
+                for (int i = 0; i < number_of_data_bytes; i++)  //and now just correct some things
+                {
+                    //make a note of the instruments used
+                    if (i == hasTheseFlags.IndexOf(0x02))
                     {
-                        if (i == hasTheseFlags.IndexOf(0x08) && (i + 1 == hasTheseFlags.IndexOf(0x04)))
-                        {
-                            byte temp = data[(data.Count - number_of_data_bytes) + i];
-                            data[(data.Count - number_of_data_bytes) + i] = data[(data.Count - number_of_data_bytes) + i + 1];
-                            data[(data.Count - number_of_data_bytes) + i + 1] = temp;
-                            break;
+                        bool alreadyProcessedInstrument = false;
+
+                        foreach (InstrumentForImport instr in usedInstrumentsOnImport) {
+                            if (instr.ID == data[(data.Count - number_of_data_bytes) + i])
+                                {
+                                alreadyProcessedInstrument = true;
+                                break;
+                                }
+                            }
+
+                        if (!alreadyProcessedInstrument) {
+                            usedInstrumentsOnImport.Add(new InstrumentForImport() { ID = data[(data.Count - number_of_data_bytes) + i] });
                         }
                     }
-                
+                    //swap the two pesky bytes that show up in the wrong order (if they are both there)
+                    else if (i == hasTheseFlags.IndexOf(0x08) && (i + 1 == hasTheseFlags.IndexOf(0x04)))
+                    {
+                        byte temp = data[(data.Count - number_of_data_bytes) + i];
+                        data[(data.Count - number_of_data_bytes) + i] = data[(data.Count - number_of_data_bytes) + i + 1];
+                        data[(data.Count - number_of_data_bytes) + i + 1] = temp;
+                    }
+                }
             }
 
             List<byte> output = new List<byte>();
@@ -792,6 +1029,6 @@ namespace EPFExplorer
             output.AddRange(data);
 
             return output.ToArray();
-            }
+        }
     }
 }
