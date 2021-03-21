@@ -77,16 +77,7 @@ namespace EPFExplorer
               { "GadgetRoom1_map_0.mpb",174},
               { "GarysRoom0_map_0.mpb",176},
               { "GiftShop0_map_0.mpb",185},*/
-
-
-
-
         };
-
-
-
-
-
 
         private void chooseTileset_Click(object sender, EventArgs e)
         {

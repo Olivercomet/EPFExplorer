@@ -17,7 +17,7 @@ namespace EPFExplorer
         public string arcname;
         public string filename;
         public byte[] filebytes;
-
+       
         uint filecount;
 
         public List<archivedfile> archivedfiles = new List<archivedfile>();

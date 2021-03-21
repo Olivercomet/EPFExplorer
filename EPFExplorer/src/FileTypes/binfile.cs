@@ -39,6 +39,8 @@ namespace EPFExplorer
 
         public List<string> MusicNamesEPF = new List<string>() { "Main Theme", "Unused UI Theme", "Command Room", "Coffee Shop (1)", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Coffee Shop (2)", "Test Robots Theme", "Cart Surfer", "Ice Fishing", "Gadget Room", "Night Club", "Dojo", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Jet Pack Adventure", "Snowboarding", "Snow Trekker", "Mission Complete", "Nothing" };
         public List<string> MusicNamesHR = new List<string>() { "Command Room", "Coffee Shop", "Ski Village", "HQ", "Town", "Gift Shop", "Ski Lodge", "Pizza Parlor", "Ice Fishing", "Gadget Room", "Night Club", "Spy Snake (1)", "Boiler Room", "Menu", "Stage", "Beach", "Mine Shack", "Mine", "Grapple Gadget", "Main Theme", "Herbert's Base", "Herbert's Base (Extended)", "Herbert behind Ski Lodge", "Herbert's Theme", "Geyser Theme", "Unused", "Aqua Rescue", "Tallest Mountain", "Tallest Mountain (Shortened)", "Puffle Training Caves", "Spy Snake (2)", "Credits" };
+        public List<string> MusicNamesZCCOS = new List<string>() { "Main Theme", "Hotel Lobby", "Hotel Floors", "Basement", "Haunted Floors", "Sewers", "Carnival", "House of Mirrors", "High Security", "Secret Area", "Sneak Theme", "Maddie's Theme", "London's Theme", "Arwin's Theme", "Final Boss", "Boss", "Death", "Win", "Nothing" }; //The Suite Life of Zack & Cody: Circle of Spies
+
 
         int offset_of_end_of_index_table = 0;
 
@@ -106,6 +108,10 @@ namespace EPFExplorer
                     {
                     ApplyHRMusicFileNames();
                     }
+                else if (xmfiles[2].offset == 2041152)
+                {
+                    ApplyZCCOSMusicFileNames();
+                }
                 else
                     {
                     foreach (xmfile xm in xmfiles)
@@ -303,6 +309,14 @@ namespace EPFExplorer
                 xmfiles[i].name = MusicNamesHR[i] + ".xm";
                 }
 
+        }
+        public void ApplyZCCOSMusicFileNames()
+        {
+
+            for (int i = 0; i < xmfiles.Count; i++)
+            {
+                xmfiles[i].name = MusicNamesZCCOS[i] + ".xm";
+            }
         }
 
         public void SaveBin()
