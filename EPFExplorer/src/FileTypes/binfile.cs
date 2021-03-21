@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -108,9 +108,9 @@ namespace EPFExplorer
                     ApplyHRMusicFileNames();
                     }
                 else if (xmfiles[2].offset == 2041152)
-                    {
+                {
                     ApplyZCCOSMusicFileNames();
-                    }
+                }
                 else
                     {
                     foreach (xmfile xm in xmfiles)
@@ -304,12 +304,11 @@ namespace EPFExplorer
         public void ApplyHRMusicFileNames() { 
         
             for (int i = 0; i < xmfiles.Count; i++)
-            {
+                {
                 xmfiles[i].name = MusicNamesHR[i] + ".xm";
-            }
+                }
 
         }
-
         public void ApplyZCCOSMusicFileNames()
         {
 
