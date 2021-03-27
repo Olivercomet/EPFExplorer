@@ -23,10 +23,6 @@ namespace EPFExplorer
         public List<sfxfile> sfxfiles = new List<sfxfile>();
         public List<xmfile> xmfiles = new List<xmfile>();
 
-        public Dictionary<uint, int> uniquefilemagicsandfreq = new Dictionary<uint, int>();
-
-        public Dictionary<uint, string> knownfilemagic = new Dictionary<uint, string>();
-
         public uint offsetOfMusicInstructionData;
 
         public binmode binMode;

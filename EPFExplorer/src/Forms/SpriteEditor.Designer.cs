@@ -96,7 +96,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(894, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(910, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -131,7 +131,7 @@
             this.groupBox1.Controls.Add(this.OAMSpriteCheckbox);
             this.groupBox1.Location = new System.Drawing.Point(616, 42);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(266, 246);
+            this.groupBox1.Size = new System.Drawing.Size(282, 246);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Settings";
@@ -182,15 +182,15 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(161, 174);
+            this.label6.Location = new System.Drawing.Point(178, 170);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(25, 17);
+            this.label6.Size = new System.Drawing.Size(18, 17);
             this.label6.TabIndex = 17;
-            this.label6.Text = "Y2";
+            this.label6.Text = "H";
             // 
             // boundsY2
             // 
-            this.boundsY2.Location = new System.Drawing.Point(188, 174);
+            this.boundsY2.Location = new System.Drawing.Point(202, 170);
             this.boundsY2.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -209,15 +209,15 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(63, 176);
+            this.label7.Location = new System.Drawing.Point(71, 174);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(25, 17);
+            this.label7.Size = new System.Drawing.Size(21, 17);
             this.label7.TabIndex = 15;
-            this.label7.Text = "X2";
+            this.label7.Text = "W";
             // 
             // boundsX2
             // 
-            this.boundsX2.Location = new System.Drawing.Point(94, 176);
+            this.boundsX2.Location = new System.Drawing.Point(94, 172);
             this.boundsX2.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -236,7 +236,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(165, 146);
+            this.label4.Location = new System.Drawing.Point(178, 146);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(17, 17);
             this.label4.TabIndex = 13;
@@ -244,7 +244,7 @@
             // 
             // boundsY
             // 
-            this.boundsY.Location = new System.Drawing.Point(188, 146);
+            this.boundsY.Location = new System.Drawing.Point(201, 144);
             this.boundsY.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -412,7 +412,7 @@
             this.groupBox2.Controls.Add(this.curFrameDisplay);
             this.groupBox2.Controls.Add(this.nextFrame);
             this.groupBox2.Controls.Add(this.prevFrame);
-            this.groupBox2.Location = new System.Drawing.Point(616, 294);
+            this.groupBox2.Location = new System.Drawing.Point(625, 294);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(266, 340);
             this.groupBox2.TabIndex = 3;
@@ -624,7 +624,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(894, 646);
+            this.ClientSize = new System.Drawing.Size(910, 646);
             this.Controls.Add(this.ImageBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);

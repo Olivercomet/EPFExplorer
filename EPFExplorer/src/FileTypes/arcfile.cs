@@ -130,8 +130,9 @@ namespace EPFExplorer
 
                             Console.WriteLine(path);
                             file.ReadFile();
-                            File.WriteAllBytes(form1.GetOrMakeDirectoryForFileName(path.Replace('/', '\\')), file.filebytes);
-                            }
+
+                            file.Export(form1.GetOrMakeDirectoryForFileName(path.Replace('/', '\\').Replace(".luc",".lua")));
+                        }
                     }
                 }
             }

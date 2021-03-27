@@ -150,7 +150,9 @@ namespace EPFExplorer
 
             int heightInTiles = (activeMpb.filebytes.Length / 2) / (int)ImageWidthInTiles.Value;
 
-            Byte[] imageForDisplay = new byte[((int)ImageWidthInTiles.Value*8)*(heightInTiles*8)];
+            byte[] imageForDisplay = new byte[((int)ImageWidthInTiles.Value*8)*(heightInTiles*8)];
+
+
 
             //make an epf format image from the tiles, and then convert it to an Image and display it
 
