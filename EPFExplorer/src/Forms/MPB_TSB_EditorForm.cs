@@ -122,7 +122,7 @@ namespace EPFExplorer
 
         public void LoadBoth() {
 
-            if (!userDisagreedWithWidth && (activeMpb.known_tile_width != 0 && ImageWidthInTiles.Value != activeMpb.known_tile_width))
+            if (activeMpb != null && !userDisagreedWithWidth && (activeMpb.known_tile_width != 0 && ImageWidthInTiles.Value != activeMpb.known_tile_width))
             {
                 ImageWidthInTiles.Value = activeMpb.known_tile_width;
                 userDisagreedWithWidth = true;  //we have given them one chance to keep this the same, and then just let them change it after that if they really want to
