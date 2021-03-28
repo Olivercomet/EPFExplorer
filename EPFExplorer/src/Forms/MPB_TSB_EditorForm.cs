@@ -194,11 +194,15 @@ namespace EPFExplorer
                        offset_of_tile_in_tsb = 0x200 + (64 * (0x1FFF & IndexFromMPB));  //cut the highest three bits off the index, as they were tile-flipping booleans and an 'add 0x2000' flag
                     }
 
+                    if (offset_of_tile_in_tsb >= activeTsb.filebytes.Length) {
+                        continue;
+                    }
+
                     if (!flipX && !flipY)
                         {
                         for (int i = 0; i < 8; i++)
                             {
-                            Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + (i * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
+                                Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + (i * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
                             }
                         }
                      else if (flipX && flipY)
@@ -207,7 +211,7 @@ namespace EPFExplorer
                             {
                             for (int j = 0; j < 8; j++)
                                 {
-                                imageForDisplay[pos_in_output_image + ((7-i) * (int)ImageWidthInTiles.Value * 8) + (7-j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
+                                    imageForDisplay[pos_in_output_image + ((7 - i) * (int)ImageWidthInTiles.Value * 8) + (7 - j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
                                 }
                             }
                         }
@@ -217,7 +221,7 @@ namespace EPFExplorer
                             {
                             for (int j = 0; j < 8; j++)
                                 {
-                                imageForDisplay[pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8) + (7-j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
+                                    imageForDisplay[pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8) + (7 - j)] = activeTsb.filebytes[offset_of_tile_in_tsb + (i * 8) + j];
                                 }
                             }
                         }
@@ -225,7 +229,7 @@ namespace EPFExplorer
                         {
                         for (int i = 0; i < 8; i++)
                             {
-                            Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + ((7 - i) * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
+                                Array.Copy(activeTsb.filebytes, offset_of_tile_in_tsb + ((7 - i) * 8), imageForDisplay, pos_in_output_image + (i * (int)ImageWidthInTiles.Value * 8), 8);
                             }
                         }
 
