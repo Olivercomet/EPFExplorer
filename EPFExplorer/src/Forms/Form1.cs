@@ -1337,10 +1337,10 @@ namespace EPFExplorer
                     for (int x = 0; x < width; x++)
                     { //each nibble is one pixel
 
-                        //first nibble
+                        //second nibble
                         Color c = palette[input[curOffset] & 0x07];
 
-                        //second nibble (alpha)
+                        //first nibble (alpha)
                         c = Color.FromArgb((input[curOffset] & 0xF0), c.R, c.G, c.B);
                         bm.SetPixel(x, y, c);
                         curOffset++;
@@ -1357,15 +1357,12 @@ namespace EPFExplorer
                        c = Color.FromArgb(input[offset + (y * width) + x] & 0xE0, c.R, c.G, c.B);
 
                        bm.SetPixel(x, y, c);
-
                     }
                 }
             }
 
             return bm;
         }
-
-
 
 
         public Byte[] ImageToNBFC(Bitmap input, byte BPP, Color[] palette) {
