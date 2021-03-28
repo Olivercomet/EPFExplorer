@@ -25,11 +25,12 @@ namespace EPFExplorer
 
             //check for compression
 
-            if (filebytes[0] == 0x11 && (filebytes[5] == 0x00) || (filebytes[1] == 0x00 && filebytes[2] == 0x00))
+
+            if (filebytes[0] == 0x11)
             {
                 Console.WriteLine("we will guess at LZ11 compression");
                 filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ11());
-            } else if (filebytes[0] == 0x10 && (filebytes[4] == 0x00 || filebytes[5] == 0x00))
+            } else if (filebytes[0] == 0x10)
             {
                 Console.WriteLine("we will guess at LZ10 compression");
                 filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ10());
