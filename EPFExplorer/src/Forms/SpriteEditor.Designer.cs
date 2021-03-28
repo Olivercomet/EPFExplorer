@@ -32,6 +32,8 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.BPP_5_radioButton = new System.Windows.Forms.RadioButton();
+            this.BPP_3_radioButton = new System.Windows.Forms.RadioButton();
             this.exportRawFilesButton = new System.Windows.Forms.Button();
             this.BPP_8_radioButton = new System.Windows.Forms.RadioButton();
             this.BPP_4_radioButton = new System.Windows.Forms.RadioButton();
@@ -108,6 +110,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.BPP_5_radioButton);
+            this.groupBox1.Controls.Add(this.BPP_3_radioButton);
             this.groupBox1.Controls.Add(this.exportRawFilesButton);
             this.groupBox1.Controls.Add(this.BPP_8_radioButton);
             this.groupBox1.Controls.Add(this.BPP_4_radioButton);
@@ -131,10 +135,34 @@
             this.groupBox1.Controls.Add(this.OAMSpriteCheckbox);
             this.groupBox1.Location = new System.Drawing.Point(616, 42);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(282, 246);
+            this.groupBox1.Size = new System.Drawing.Size(282, 271);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "General Settings";
+            // 
+            // BPP_5_radioButton
+            // 
+            this.BPP_5_radioButton.AutoSize = true;
+            this.BPP_5_radioButton.Location = new System.Drawing.Point(177, 241);
+            this.BPP_5_radioButton.Name = "BPP_5_radioButton";
+            this.BPP_5_radioButton.Size = new System.Drawing.Size(74, 21);
+            this.BPP_5_radioButton.TabIndex = 23;
+            this.BPP_5_radioButton.TabStop = true;
+            this.BPP_5_radioButton.Text = "3a5bgr";
+            this.BPP_5_radioButton.UseVisualStyleBackColor = true;
+            this.BPP_5_radioButton.CheckedChanged += new System.EventHandler(this.BPP_5_radioButton_CheckedChanged);
+            // 
+            // BPP_3_radioButton
+            // 
+            this.BPP_3_radioButton.AutoSize = true;
+            this.BPP_3_radioButton.Location = new System.Drawing.Point(101, 241);
+            this.BPP_3_radioButton.Name = "BPP_3_radioButton";
+            this.BPP_3_radioButton.Size = new System.Drawing.Size(74, 21);
+            this.BPP_3_radioButton.TabIndex = 22;
+            this.BPP_3_radioButton.TabStop = true;
+            this.BPP_3_radioButton.Text = "4a4bgr";
+            this.BPP_3_radioButton.UseVisualStyleBackColor = true;
+            this.BPP_3_radioButton.CheckedChanged += new System.EventHandler(this.BPP_3_radioButton_CheckedChanged);
             // 
             // exportRawFilesButton
             // 
@@ -412,7 +440,7 @@
             this.groupBox2.Controls.Add(this.curFrameDisplay);
             this.groupBox2.Controls.Add(this.nextFrame);
             this.groupBox2.Controls.Add(this.prevFrame);
-            this.groupBox2.Location = new System.Drawing.Point(625, 294);
+            this.groupBox2.Location = new System.Drawing.Point(625, 319);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(266, 340);
             this.groupBox2.TabIndex = 3;
@@ -615,7 +643,7 @@
             this.ImageBox.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             this.ImageBox.Location = new System.Drawing.Point(12, 42);
             this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(598, 592);
+            this.ImageBox.Size = new System.Drawing.Size(598, 617);
             this.ImageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.ImageBox.TabIndex = 4;
             this.ImageBox.TabStop = false;
@@ -624,7 +652,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(910, 646);
+            this.ClientSize = new System.Drawing.Size(910, 671);
             this.Controls.Add(this.ImageBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -702,5 +730,7 @@
         private System.Windows.Forms.Label label11;
         public System.Windows.Forms.NumericUpDown offsetXUpDown;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.RadioButton BPP_5_radioButton;
+        private System.Windows.Forms.RadioButton BPP_3_radioButton;
     }
 }

@@ -1294,10 +1294,9 @@ namespace EPFExplorer
 
             int curOffset = offset;
 
+
             if (bpp == 4)
             {
-                bm = new Bitmap(width, height);
-
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
@@ -1329,133 +1328,36 @@ namespace EPFExplorer
                     {
                         Color c = palette[input[offset + (y * width) + x]];
                         bm.SetPixel(x, y, c);
-
                     }
                 }
             }
-            else if (bpp == 3) //it seems this doesn't produce the correct image. However, it at least allows for 3BPP and prevents an exception
-            {
-                bm = new Bitmap(width, height);
-
-                int currentBitInByte = 0;
-
+            else if (bpp == 3) {    //actually, it's 8bpp, with 4 bits for the colour and 4 bits for the alpha. But it is given the ID 3.
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
-                    {
-                        if (x >= width) //check whether or not the line ended midway through the byte
-                        {
-                            curOffset++;
-                            continue;
-                        }
+                    { //each nibble is one pixel
 
-                        if (currentBitInByte > 7)
-                        {
-                            currentBitInByte = 0 + (currentBitInByte - 7);
-                            curOffset++;
-                        }
+                        //first nibble
+                        Color c = palette[input[curOffset] & 0x07];
 
-                        //3 bits
-                        Color c = palette[(input[curOffset] >> currentBitInByte) & 0x07];
+                        //second nibble (alpha)
+                        c = Color.FromArgb((input[curOffset] & 0xF0), c.R, c.G, c.B);
                         bm.SetPixel(x, y, c);
-                        currentBitInByte += 3;
+                        curOffset++;
                     }
                 }
             }
             else if (bpp == 5)
             {
-                Console.WriteLine("5BPP image not yet handled");
-
-                bm = new Bitmap(width, height);
-
-                int currentBitInByte = 0;
-                Color c;
-
-                int stage = 0;
-
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
                     {
-                        if (x >= width) //check whether or not the line ended midway through the byte
-                        {
-                            //curOffset++;
-                            continue;
-                        }
+                       Color c = palette[input[offset + (y * width) + x] & 0x1F];
+                       c = Color.FromArgb(input[offset + (y * width) + x] & 0xE0, c.R, c.G, c.B);
 
-                        int temp = 0;
-                        switch (stage) //not the best way of doing it, but the other method wasn't working. (and this also doesn't work)
-                        {
-                            case 0:
-                                //5 bits
-                                c = palette[(input[curOffset]) >> 3];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 1:
-                                //5 bits
-                                temp = (input[curOffset]) & 0x07;
-                                curOffset++;
-                                temp |= (input[curOffset]) >> 3;
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 2:
-                                //5 bits
-                                temp = (input[curOffset] >> 1) & 0x1F;
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 3:
-                                //5 bits
-                                temp = (input[curOffset] & 0x01);
-                                curOffset++;
-                                temp |= (input[curOffset] >> 3);
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 4:
-                                //5 bits
-                                temp = (input[curOffset] & 0x0F);
+                       bm.SetPixel(x, y, c);
 
-                                curOffset++;
-                                temp |= (input[curOffset] >> 3) & 0x10;
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 5:
-                                //5 bits
-                                temp = (input[curOffset] >> 2) & 0x1F;
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 6:
-                                //5 bits
-                                temp = (input[curOffset] & 0x03);
-                                curOffset++;
-                                temp |= (input[curOffset] >> 3) & 0x1C;
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-                                break;
-                            case 7:
-                                //5 bits
-                                temp = input[curOffset] & 0x1F;
-                                curOffset++;
-                                c = palette[temp];
-                                bm.SetPixel(x, y, c);
-
-                                if ((curOffset - 8) % 5 != 0)
-                                {
-                                    Console.WriteLine("out of sync");
-                                }
-                                break;
-                        }
-
-                        stage++;
-
-                        if (stage > 7)
-                        {
-                            stage = 0;
-                        }
                     }
                 }
             }

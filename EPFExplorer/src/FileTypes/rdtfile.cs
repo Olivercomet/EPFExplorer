@@ -491,8 +491,8 @@ namespace EPFExplorer
                         {
                         if (subfiledata.graphicsType == "image")
                             {   
-                            if (subfiledata.image != null) //if it was modified or viewed by the user, use the modified one
-                                {
+                            if (subfiledata.image != null && !(file.RDTSpriteBPP == 3 || file.RDTSpriteBPP == 5)) //if it was modified or viewed by the user, use the modified one
+                                {                               //oh, and we're ignoring modifications to "3BPP" and "5BPP" images (the ones with variable alpha)
                                 images.Add(subfiledata.image);
                                 savedImages.Add(subfiledata);
                                 is_modified = true;

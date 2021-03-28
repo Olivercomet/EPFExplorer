@@ -67,14 +67,20 @@ namespace EPFExplorer
                 SetAlphaColourDisplay();
             }
 
-            if (sprite.RDTSpriteBPP == 8)
-                {
-                BPP_8_radioButton.Checked = true;    
-                }
-            else
-                {
-                BPP_4_radioButton.Checked = true;
-                }
+            switch (sprite.RDTSpriteBPP) {
+                case 8:
+                    BPP_8_radioButton.Checked = true;
+                    break;
+                case 5:
+                    BPP_5_radioButton.Checked = true;
+                    break;
+                case 4:
+                    BPP_4_radioButton.Checked = true;
+                    break;
+                case 3:
+                    BPP_3_radioButton.Checked = true;
+                    break;
+            }
 
             offsetXUpDown.Value = images[frame].offsetX;
 
@@ -367,6 +373,26 @@ namespace EPFExplorer
         private void BPP_8_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             sprite.RDTSpriteBPP = 8;
+        }
+
+        private void BPP_3_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            sprite.RDTSpriteBPP = 3;
+
+            if (BPP_3_radioButton.Checked && Visible) {
+                MessageBox.Show("Please note: 4a4bgr images cannot be imported into the game at this time.\nThey can still be viewed and exported, though!");
+            }
+
+        }
+
+        private void BPP_5_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            sprite.RDTSpriteBPP = 5;
+
+            if (BPP_3_radioButton.Checked && Visible)
+            {
+                MessageBox.Show("Please note: 3a5bgr images cannot be imported into the game at this time.\nThey can still be viewed and exported, though!");
+            }
         }
 
         private void offsetXUpDown_ValueChanged(object sender, EventArgs e)
