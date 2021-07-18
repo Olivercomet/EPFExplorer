@@ -95,15 +95,15 @@ namespace EPFExplorer
                 }
 
 
-                if (xmfiles[2].offset == 2054556)
+                if (xmfiles.Count >= 3 && xmfiles[2].offset == 2054556)
                     {
                     ApplyEPFMusicFileNames();
                     }
-                else if (xmfiles[2].offset == 2339468)
+                else if (xmfiles.Count >= 3 && xmfiles[2].offset == 2339468)
                     {
                     ApplyHRMusicFileNames();
                     }
-                else if (xmfiles[2].offset == 2041152)
+                else if (xmfiles.Count >= 3 && xmfiles[2].offset == 2041152)
                 {
                     ApplyZCCOSMusicFileNames();
                 }

@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\FileTypes\nintendoarcfile.cs" />
     <Compile Include="src\FileTypes\arcfile.cs" />
     <Compile Include="src\FileTypes\FNTfile.cs" />
     <Compile Include="src\FileTypes\mpbfile.cs" />

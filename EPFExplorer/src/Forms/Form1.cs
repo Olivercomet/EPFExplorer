@@ -14,6 +14,7 @@ namespace EPFExplorer
         public arcfile activeArc;
         public binfile activeBin;
         public rdtfile activeRdt;
+        public nintendoarcfile activeNintendoArc;
 
         public Mode mode = Mode.None;
 
@@ -39,7 +40,8 @@ namespace EPFExplorer
             None = 0x00,
             Arc = 0x01,
             Rdt = 0x02,
-            Bin = 0x03
+            Bin = 0x03,
+            NintendoArc = 0x04
         }
 
         public Form1()
@@ -208,7 +210,7 @@ namespace EPFExplorer
                 openFileDialog1.InitialDirectory = Path.GetDirectoryName(activeRdt.filename);
             }
 
-            openFileDialog1.Filter = "1PP archives (*.arc,*.rdt,*.bin)|*.arc;*.rdt;*.bin;*.sav;*.dsv"; //also accommodate save files in case they try to open them from here
+            openFileDialog1.Filter = "1PP archives (*.arc,*.rdt,*.bin)|*.arc;*.rdt;*.bin;*.tsb;*.mpb;*.sav;*.dsv|Game day archive (TESTING ONLY) (*.cmparc)|*.cmparc"; //also accommodate save files in case they try to open them from here
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 switch (Path.GetExtension(openFileDialog1.FileName))
@@ -265,6 +267,51 @@ namespace EPFExplorer
                         sfe.importDownloadArc.Enabled = true;
                         sfe.importNewspaperImage.Enabled = true;
                         sfe.exportNewspaperImage.Enabled = true;
+                        break;
+                    case ".tsb":
+                        { 
+                        MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
+                        mpb_tsb_editor.form1 = this;
+
+                        mpb_tsb_editor.activeTsb = new tsbfile();
+                        mpb_tsb_editor.activeTsb.form1 = this;
+                        mpb_tsb_editor.activeTsb.filepath = openFileDialog1.FileName;
+                        mpb_tsb_editor.activeTsb.filebytes = File.ReadAllBytes(mpb_tsb_editor.activeTsb.filepath);
+                        mpb_tsb_editor.activeTsb.Load();
+                            
+                        mpb_tsb_editor.Show();
+                        MessageBox.Show("TSB loaded. Now you need to use the buttons at the bottom left to load a MPB as well.", "Success");
+                        }
+                        break;
+                    case ".mpb":
+                        { 
+                        MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
+                        mpb_tsb_editor.form1 = this;
+
+                        mpb_tsb_editor.activeMpb = new mpbfile();
+                        mpb_tsb_editor.activeMpb.form1 = this;
+                        mpb_tsb_editor.activeMpb.filepath = openFileDialog1.FileName;
+                        mpb_tsb_editor.activeMpb.filebytes = File.ReadAllBytes(mpb_tsb_editor.activeMpb.filepath);
+                        mpb_tsb_editor.activeMpb.editorForm = mpb_tsb_editor;
+                        mpb_tsb_editor.activeMpb.Load();
+
+                        mpb_tsb_editor.Show();
+                        MessageBox.Show("MPB loaded. Now you need to use the buttons at the bottom left to load a TSB as well.","Success");
+                        }
+                        break;
+                    case ".cmparc":
+                        MessageBox.Show("Early testing only, may not even do anything");
+                        mode = Mode.NintendoArc;
+
+                        randomizeRDTSpritesToolStripMenuItem.Visible = false;
+                        massXMExportToolStripMenuItem.Visible = false;
+                        RDTsettingVersionToolStripButton.Visible = false;
+                        ExportAsSpriteSheetToolStripMenuItem.Visible = false;
+                        exportContentsAsGIFsToolStripMenuItem.Visible = false;
+                        exportContentsAsPNGSequencesToolStripMenuItem.Visible = false;
+
+                        ParseGameDayArc(openFileDialog1.FileName);
+                        activeNintendoArc.ViewArcInFileTree();
                         break;
                 }
             }
@@ -327,6 +374,29 @@ namespace EPFExplorer
             newrdt.filebytes = File.ReadAllBytes(filename);
             newrdt.form1 = this;
             newrdt.ReadRdt();
+        }
+
+        public void ParseGameDayArc(string filename)
+        {
+            nintendoarcfile newarc = new nintendoarcfile();
+
+            activeNintendoArc = newarc;
+            newarc.arcname = Path.GetFileName(filename);
+            newarc.filename = filename;
+            newarc.filebytes = File.ReadAllBytes(filename);
+            newarc.form1 = this;
+
+            switch ((newarc.filebytes[0] & 0xF0) - 0x10) {
+                case 0x00: //LZ11
+                    newarc.filebytes[0] = 0x11;
+                    newarc.filebytes = DSDecmp.NewestProgram.Decompress(newarc.filebytes, new DSDecmp.Formats.Nitro.LZ11());
+                    break;
+                default:
+                    Console.WriteLine("don't know how to read cmparc compression type "+ ((newarc.filebytes[0] & 0xF0) - 0x10));
+                    break;
+            }
+
+            newarc.ReadArc();
         }
 
         private void saveFileExtractorToolStripMenuItem_Click(object sender, EventArgs e)
@@ -464,6 +534,20 @@ namespace EPFExplorer
         public uint readU32FromArray(Byte[] input, int offset)
         {
             uint output = (uint)input[offset] + ((uint)input[offset + 1] * 0x100) + ((uint)input[offset + 2] * 0x10000) + ((uint)input[offset + 3] * 0x1000000);
+
+            return output;
+        }
+
+        public uint readBigEndianU32FromArray(Byte[] input, int offset)
+        {
+            uint output = (uint)input[offset + 3] + ((uint)input[offset + 2] * 0x100) + ((uint)input[offset + 1] * 0x10000) + ((uint)input[offset] * 0x1000000);
+
+            return output;
+        }
+
+        public int readBigEndianIntFromArray(Byte[] input, int offset)
+        {
+            int output = (int)input[offset + 3] + ((int)input[offset + 2] * 0x100) + ((int)input[offset + 1] * 0x10000) + ((int)input[offset] * 0x1000000);
 
             return output;
         }

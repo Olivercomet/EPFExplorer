@@ -73,6 +73,12 @@ namespace EPFExplorer
         "All Missions complete"
         };
 
+
+        public string[] SideMissionStatesEPF = new string[] {
+        "RorySkiVillage, PetShop, PizzaParlor",
+        "PetShop, PizzaParlor"
+        };
+
         public string[] PenguinColours = new string[] { //for HR, at least
         "Unchosen",
         "Light Blue",
@@ -719,11 +725,31 @@ namespace EPFExplorer
                 //WRITE NEW COINS
                 WriteU32ToArray(filebytes, 0xF7E4, (uint)saveFileEditor.coinsChooser.Value);
 
+                //I get the feeling that 0xF7E8 could be a bitfield for which side missions you've completed (although it doesn't seem to control which ones are AVAILABLE)
+
                 //WRITE CURRENT MISSION
                 filebytes[0xF7EC] = (byte)saveFileEditor.currentMissionChooser.SelectedIndex;
 
                 //WRITE NEW COLOUR
                 filebytes[0xF7F0] = (byte)saveFileEditor.colourChooser.SelectedIndex;
+
+                //WRITE CURRENT SIDEMISSION COMPLETEDNESS at 0xF7F4, and something else relevant might be at 0xF7F6?
+
+                //When the relevant mask is set, the mission has been completed (and is no longer available).
+                //However, the initial availability of the mission is somewhere else.
+                //supposedly a bitfield, here are the bitmasks for now:
+
+                
+                //0x0001: A Wrench in the Works (ski village)
+                //0x0002: Cart surfing mission (mine)
+                //0x0004: Tour guide lost in forest mission (forest)
+                //0x0008: Pizza ordering mission (pizza parlor)
+                //0x0010: Wrong pizzas mission (pizza parlor)
+                //0x0020: Finding sailboats mission (dock)
+                //0x0040: Alien messages mission (forest)
+                //0x0080: Lost scarf mission (ski hill)
+                //0x0100: Rory fixing clock mission (snow forts)
+                //0x0200: Hide and Seek (pet shop)
 
                 //WRITE PUFFLES
 
