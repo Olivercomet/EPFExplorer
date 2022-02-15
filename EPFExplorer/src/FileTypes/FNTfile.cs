@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPFExplorer
 {
@@ -19,7 +16,8 @@ namespace EPFExplorer
 
         public List<letter> letters = new List<letter>();
 
-        public class letter {
+        public class letter
+        {
             public char name;
 
             public int type;
@@ -28,9 +26,10 @@ namespace EPFExplorer
 
             public int height;
             public int width;
-        } 
+        }
 
-        public void Load() {
+        public void Load()
+        {
             letters = new List<letter>();
             int pos = 0;
             metaDataSize = BitConverter.ToInt32(filebytes, pos);
@@ -44,8 +43,9 @@ namespace EPFExplorer
             characterHeightInPixels = BitConverter.ToInt16(filebytes, pos);
             pos = 0x14;
 
-            for (int i = 0; i < numLetters; i++) {
-                letter newLetter = new letter() { name = (char)BitConverter.ToInt16(filebytes, pos)};
+            for (int i = 0; i < numLetters; i++)
+            {
+                letter newLetter = new letter() { name = (char)BitConverter.ToInt16(filebytes, pos) };
                 pos += 2;
                 pos += 2;
                 letters.Add(newLetter);
@@ -53,7 +53,8 @@ namespace EPFExplorer
 
             pos += 0x10;
 
-            foreach (letter l in letters) {
+            foreach (letter l in letters)
+            {
                 l.height = filebytes[pos];
                 pos += 2;
                 l.width = filebytes[pos];
@@ -64,16 +65,18 @@ namespace EPFExplorer
                 pos++;
                 l.type = filebytes[pos];
                 pos++;
-                
+
             }
 
-            foreach (letter l in letters) {
+            foreach (letter l in letters)
+            {
 
                 int numVersions = 1;
 
                 if (l.type != 0)
                 {
-                    for (int bitShiftedTemp = l.type; bitShiftedTemp > 0; bitShiftedTemp >>= 1) {
+                    for (int bitShiftedTemp = l.type; bitShiftedTemp > 0; bitShiftedTemp >>= 1)
+                    {
                         numVersions += bitShiftedTemp & 0x01;
                     }
                     numVersions = 2;

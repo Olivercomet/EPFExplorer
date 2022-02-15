@@ -83,6 +83,8 @@
             this.addSoundFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.button2 = new System.Windows.Forms.Button();
+            this.exportContentsAsTransparentPNGSequencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.asTransparentPNGImagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip2.SuspendLayout();
             this.archivedFileContextMenu.SuspendLayout();
             this.archivedFolderContextMenu.SuspendLayout();
@@ -115,14 +117,14 @@
             // Toolstrip_Open
             // 
             this.Toolstrip_Open.Name = "Toolstrip_Open";
-            this.Toolstrip_Open.Size = new System.Drawing.Size(224, 26);
+            this.Toolstrip_Open.Size = new System.Drawing.Size(128, 26);
             this.Toolstrip_Open.Text = "Open";
             this.Toolstrip_Open.Click += new System.EventHandler(this.Toolstrip_Open_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(128, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -291,7 +293,7 @@
             this.addFileToFolder,
             this.addFolderToFolder});
             this.addToolStripMenuItem1.Name = "addToolStripMenuItem1";
-            this.addToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.addToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.addToolStripMenuItem1.Text = "Add";
             // 
             // addFileToFolder
@@ -311,7 +313,7 @@
             // renameFolderToolStripMenuItem
             // 
             this.renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
-            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(132, 24);
+            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(210, 24);
             this.renameFolderToolStripMenuItem.Text = "Rename";
             this.renameFolderToolStripMenuItem.Click += new System.EventHandler(this.renameFolderToolStripMenuItem_Click);
             // 
@@ -320,16 +322,17 @@
             this.exportToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ExportAsSpriteSheetToolStripMenuItem,
             this.exportContentsAsGIFsToolStripMenuItem,
-            this.exportContentsAsPNGSequencesToolStripMenuItem});
+            this.exportContentsAsPNGSequencesToolStripMenuItem,
+            this.exportContentsAsTransparentPNGSequencesToolStripMenuItem});
             this.exportToolStripMenuItem1.Name = "exportToolStripMenuItem1";
-            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(132, 24);
+            this.exportToolStripMenuItem1.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem1.Text = "Export";
             this.exportToolStripMenuItem1.Click += new System.EventHandler(this.exportToolStripMenuItem1_Click);
             // 
             // ExportAsSpriteSheetToolStripMenuItem
             // 
             this.ExportAsSpriteSheetToolStripMenuItem.Name = "ExportAsSpriteSheetToolStripMenuItem";
-            this.ExportAsSpriteSheetToolStripMenuItem.Size = new System.Drawing.Size(318, 26);
+            this.ExportAsSpriteSheetToolStripMenuItem.Size = new System.Drawing.Size(397, 26);
             this.ExportAsSpriteSheetToolStripMenuItem.Text = "Export contents as sprite sheet";
             this.ExportAsSpriteSheetToolStripMenuItem.Visible = false;
             this.ExportAsSpriteSheetToolStripMenuItem.Click += new System.EventHandler(this.ExportAsSpriteSheetToolStripMenuItem_Click);
@@ -337,21 +340,21 @@
             // exportContentsAsGIFsToolStripMenuItem
             // 
             this.exportContentsAsGIFsToolStripMenuItem.Name = "exportContentsAsGIFsToolStripMenuItem";
-            this.exportContentsAsGIFsToolStripMenuItem.Size = new System.Drawing.Size(318, 26);
+            this.exportContentsAsGIFsToolStripMenuItem.Size = new System.Drawing.Size(397, 26);
             this.exportContentsAsGIFsToolStripMenuItem.Text = "Export contents as GIF animations";
             this.exportContentsAsGIFsToolStripMenuItem.Click += new System.EventHandler(this.exportContentsAsGIFsToolStripMenuItem_Click);
             // 
             // exportContentsAsPNGSequencesToolStripMenuItem
             // 
             this.exportContentsAsPNGSequencesToolStripMenuItem.Name = "exportContentsAsPNGSequencesToolStripMenuItem";
-            this.exportContentsAsPNGSequencesToolStripMenuItem.Size = new System.Drawing.Size(318, 26);
+            this.exportContentsAsPNGSequencesToolStripMenuItem.Size = new System.Drawing.Size(397, 26);
             this.exportContentsAsPNGSequencesToolStripMenuItem.Text = "Export contents as PNG sequences";
             this.exportContentsAsPNGSequencesToolStripMenuItem.Click += new System.EventHandler(this.exportContentsAsPNGSequencesToolStripMenuItem_Click);
             // 
             // deleteFolder
             // 
             this.deleteFolder.Name = "deleteFolder";
-            this.deleteFolder.Size = new System.Drawing.Size(132, 24);
+            this.deleteFolder.Size = new System.Drawing.Size(210, 24);
             this.deleteFolder.Text = "Delete";
             this.deleteFolder.Click += new System.EventHandler(this.deleteFolder_Click);
             // 
@@ -387,7 +390,7 @@
             this.deleteRDTarchivedfile});
             this.rdtSubfileContextMenu.Name = "contextMenuStrip1";
             this.rdtSubfileContextMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(133, 124);
+            this.rdtSubfileContextMenu.Size = new System.Drawing.Size(211, 152);
             // 
             // openRDTarchivedfile
             // 
@@ -414,10 +417,11 @@
             // 
             this.exportToolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.rdtSpriteToPNGs,
+            this.asTransparentPNGImagesToolStripMenuItem,
             this.exportAsGIFAnimationToolStripMenuItem,
             this.rawDataToolStripMenuItem});
             this.exportToolStripMenuItem2.Name = "exportToolStripMenuItem2";
-            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(132, 24);
+            this.exportToolStripMenuItem2.Size = new System.Drawing.Size(210, 24);
             this.exportToolStripMenuItem2.Text = "Export";
             // 
             // rdtSpriteToPNGs
@@ -505,6 +509,20 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // exportContentsAsTransparentPNGSequencesToolStripMenuItem
+            // 
+            this.exportContentsAsTransparentPNGSequencesToolStripMenuItem.Name = "exportContentsAsTransparentPNGSequencesToolStripMenuItem";
+            this.exportContentsAsTransparentPNGSequencesToolStripMenuItem.Size = new System.Drawing.Size(397, 26);
+            this.exportContentsAsTransparentPNGSequencesToolStripMenuItem.Text = "Export contents as transparent PNG sequences";
+            this.exportContentsAsTransparentPNGSequencesToolStripMenuItem.Click += new System.EventHandler(this.exportContentsAsTransparentPNGSequencesToolStripMenuItem_Click);
+            // 
+            // asTransparentPNGImagesToolStripMenuItem
+            // 
+            this.asTransparentPNGImagesToolStripMenuItem.Name = "asTransparentPNGImagesToolStripMenuItem";
+            this.asTransparentPNGImagesToolStripMenuItem.Size = new System.Drawing.Size(272, 26);
+            this.asTransparentPNGImagesToolStripMenuItem.Text = "As transparent PNG images";
+            this.asTransparentPNGImagesToolStripMenuItem.Click += new System.EventHandler(this.asTransparentPNGImagesToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -586,6 +604,8 @@
         private System.Windows.Forms.ToolStripMenuItem NBFCEditorToolStripMenuItem;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem exportRawXMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportContentsAsTransparentPNGSequencesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem asTransparentPNGImagesToolStripMenuItem;
     }
 }
 

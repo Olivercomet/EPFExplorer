@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -43,7 +40,8 @@ namespace EPFExplorer
 
         public List<InstrumentForImport> usedInstrumentsOnImport = new List<InstrumentForImport>();//only used when importing from an xm file
 
-        public class InstrumentForImport{  //only used when importing from an xm file
+        public class InstrumentForImport
+        {  //only used when importing from an xm file
             public byte ID;
             public byte MapOntoID;
             public List<sfxfile> samples = new List<sfxfile>();
@@ -631,16 +629,19 @@ namespace EPFExplorer
 
                 patterns[i].rows = new List<byte[]>();
 
-                if (patterns[i].patternSize == 0) { //if pattern size is zero, do this instead
+                if (patterns[i].patternSize == 0)
+                { //if pattern size is zero, do this instead
                     List<byte> blankRow = new List<byte>();
-                    for (int b = 0; b < numchannels; b++){
+                    for (int b = 0; b < numchannels; b++)
+                    {
                         blankRow.Add(0x80);
-                        }
-                    for (int r = 0; r < patterns[i].number_of_rows; r++) {
+                    }
+                    for (int r = 0; r < patterns[i].number_of_rows; r++)
+                    {
                         patterns[i].rows.Add(blankRow.ToArray());
                     }
                     continue;
-                    }
+                }
 
                 for (int r = 0; r < patterns[i].number_of_rows; r++)        //add rows
                 {
@@ -1003,15 +1004,17 @@ namespace EPFExplorer
                     {
                         bool alreadyProcessedInstrument = false;
 
-                        foreach (InstrumentForImport instr in usedInstrumentsOnImport) {
+                        foreach (InstrumentForImport instr in usedInstrumentsOnImport)
+                        {
                             if (instr.ID == data[(data.Count - number_of_data_bytes) + i])
-                                {
+                            {
                                 alreadyProcessedInstrument = true;
                                 break;
-                                }
                             }
+                        }
 
-                        if (!alreadyProcessedInstrument) {
+                        if (!alreadyProcessedInstrument)
+                        {
                             usedInstrumentsOnImport.Add(new InstrumentForImport() { ID = data[(data.Count - number_of_data_bytes) + i] });
                         }
                     }

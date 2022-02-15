@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -35,7 +32,8 @@ namespace EPFExplorer
         public List<Color> tempPalette;
 
         public bool ready = false;
-        public void RequestSpriteEditorImage(int frame) {
+        public void RequestSpriteEditorImage(int frame)
+        {
             ready = false;
 
             for (int i = 0; i < images.Count; i++)  //load all other images if not already loaded
@@ -67,7 +65,8 @@ namespace EPFExplorer
                 SetAlphaColourDisplay();
             }
 
-            switch (sprite.RDTSpriteBPP) {
+            switch (sprite.RDTSpriteBPP)
+            {
                 case 8:
                     BPP_8_radioButton.Checked = true;
                     break;
@@ -87,7 +86,7 @@ namespace EPFExplorer
             offsetYUpDown.Value = images[frame].offsetY;
 
             ImageBox.Image = images[frame].image;
-            curFrameDisplay.Text = "Frame " + (frame+1) + " / "+sprite.RDTSpriteNumFrames;
+            curFrameDisplay.Text = "Frame " + (frame + 1) + " / " + sprite.RDTSpriteNumFrames;
             durationBox.Value = sprite.RDTSpriteFrameDurations[curFrame];
 
             ready = true;
@@ -109,28 +108,28 @@ namespace EPFExplorer
             if (loopingCheckbox.Checked && curFrame <= 0) { curFrame = sprite.RDTSpriteNumFrames; }
 
             if (curFrame > 0)
-                {
-                    curFrame--;
-                    RequestSpriteEditorImage(curFrame); 
-                }
+            {
+                curFrame--;
+                RequestSpriteEditorImage(curFrame);
+            }
         }
 
         private void deleteFrame_Click(object sender, EventArgs e)
         {
             if (images.Count < 2)
-                {
+            {
                 MessageBox.Show("You can't have zero frames!", "Cannot delete frame", MessageBoxButtons.OK);
                 return;
-                }
+            }
 
             images.RemoveAt(curFrame);
             palettes.RemoveAt(curFrame);
             sprite.RDTSpriteFrameDurations.RemoveAt(curFrame);
 
             if (curFrame >= images.Count)
-                {
+            {
                 curFrame = images.Count - 1;
-                }
+            }
 
             sprite.RDTSpriteNumFrames--;
 
@@ -138,7 +137,8 @@ namespace EPFExplorer
         }
 
 
-        public void SendUpdateToRDT() {
+        public void SendUpdateToRDT()
+        {
 
             ready = false;
 
@@ -183,7 +183,8 @@ namespace EPFExplorer
         }
 
 
-        public void GetNewFrameImageFromFile(bool addingFrame) {
+        public void GetNewFrameImageFromFile(bool addingFrame)
+        {
 
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
@@ -195,15 +196,15 @@ namespace EPFExplorer
             bool failed = false;
 
             if (tempPalette == null)
-                {
+            {
                 tempPalette = new List<Color>();
-                }
+            }
 
             rdtSubfileData oldImage = new rdtSubfileData(images[curFrame]);
             List<Color> oldPalette = new List<Color>(tempPalette);
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
+            {
                 images[curFrame].image = (Bitmap)Image.FromFile(openFileDialog1.FileName);
 
                 //make palette
@@ -212,64 +213,64 @@ namespace EPFExplorer
                 Color potentialNewColour;
 
                 for (int y = 0; y < images[curFrame].image.Height; y++)
-                    {
+                {
                     for (int x = 0; x < images[curFrame].image.Width; x++)
-                        {
-                        potentialNewColour = ((Bitmap)images[curFrame].image).GetPixel(x,y);
+                    {
+                        potentialNewColour = ((Bitmap)images[curFrame].image).GetPixel(x, y);
                         potentialNewColour = Color.FromArgb(0x00, potentialNewColour.R & 0xF8, potentialNewColour.G & 0xF8, potentialNewColour.B & 0xF8);
 
                         if (!tempPalette.Contains(potentialNewColour))
-                            {
+                        {
                             tempPalette.Add(potentialNewColour);
-                            }
-                        
+                        }
+
                         if (tempPalette.Count > 256)
-                            {
+                        {
                             break;
-                            }
                         }
                     }
+                }
 
                 if (sprite.RDTSpriteBPP == 4 && tempPalette.Count > 16)
-                    {
-                    MessageBox.Show("For a 4BPP sprite, you should have a maximum of 16 colours.\nYou had: "+tempPalette.Count + " colours.", "Too many colours!", MessageBoxButtons.OK);
+                {
+                    MessageBox.Show("For a 4BPP sprite, you should have a maximum of 16 colours.\nYou had: " + tempPalette.Count + " colours.", "Too many colours!", MessageBoxButtons.OK);
                     failed = true;
-                    }
+                }
                 else if (sprite.RDTSpriteBPP == 8 && tempPalette.Count > 256)
-                    {
-                    MessageBox.Show("For an 8BPP sprite, you should have a maximum of 256 colours.\nYou had: " + tempPalette.Count+" colours.", "Too many colours!", MessageBoxButtons.OK);
+                {
+                    MessageBox.Show("For an 8BPP sprite, you should have a maximum of 256 colours.\nYou had: " + tempPalette.Count + " colours.", "Too many colours!", MessageBoxButtons.OK);
                     failed = true;
-                    }
+                }
 
                 if (!failed)
-                    {
+                {
                     //guess alpha colour
                     sprite.RDTSpriteAlphaColour = ((Bitmap)images[curFrame].image).GetPixel(0, 0);   //assume the top left corner is the alpha colour. The user can change this later if they wish
                     sprite.RDTSpriteAlphaColour = Color.FromArgb(0x00, sprite.RDTSpriteAlphaColour.R & 0xF8, sprite.RDTSpriteAlphaColour.G & 0xF8, sprite.RDTSpriteAlphaColour.B & 0xF8);
                     SetAlphaColourDisplay();
-                    }
                 }
+            }
             else
-                {
+            {
                 failed = true;
-                }
+            }
 
             if (failed)
-                {
+            {
                 if (addingFrame)    //undo the addition of the new frame
-                    {
+                {
                     images.RemoveAt(curFrame);
                     palettes.RemoveAt(curFrame);
                     sprite.RDTSpriteFrameDurations.RemoveAt(curFrame);
                     sprite.RDTSpriteNumFrames--;
                     curFrame--;
-                    }
+                }
                 else                //revert to the old frame
-                    {
+                {
                     images[curFrame] = oldImage;
                     tempPalette = oldPalette;
-                    }
                 }
+            }
 
 
             SendUpdateToRDT();
@@ -282,7 +283,7 @@ namespace EPFExplorer
 
             rdtSubfileData newSubFileData = new rdtSubfileData(images[curFrame - 1]);
 
-            images.Insert(curFrame,newSubFileData);   //create new dummy image for this to fill
+            images.Insert(curFrame, newSubFileData);   //create new dummy image for this to fill
             palettes.Insert(curFrame, palettes[curFrame - 1]); //create new dummy image for this to fill
             sprite.RDTSpriteFrameDurations.Insert(curFrame, sprite.RDTSpriteFrameDurations[curFrame - 1]);
 
@@ -294,7 +295,7 @@ namespace EPFExplorer
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.Title = "Save frame";
-            saveFileDialog1.FileName = Path.GetFileName(sprite.filename+"_"+(curFrame+1));
+            saveFileDialog1.FileName = Path.GetFileName(sprite.filename + "_" + (curFrame + 1));
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.DefaultExt = ".png";
             saveFileDialog1.Filter = "png (*.png)|*.png";
@@ -308,13 +309,13 @@ namespace EPFExplorer
         private void alphaColourPrev_Click(object sender, EventArgs e)
         {
             if (tempPalette.IndexOf(sprite.RDTSpriteAlphaColour) > 0)
-                {
+            {
                 sprite.RDTSpriteAlphaColour = tempPalette[tempPalette.IndexOf(sprite.RDTSpriteAlphaColour) - 1];
-                }
+            }
             else
-                {
+            {
                 sprite.RDTSpriteAlphaColour = tempPalette[tempPalette.Count - 1];
-                }
+            }
 
             SetAlphaColourDisplay();
         }
@@ -333,15 +334,16 @@ namespace EPFExplorer
             SetAlphaColourDisplay();
         }
 
-        public void SetAlphaColourDisplay() {
+        public void SetAlphaColourDisplay()
+        {
             int i = 0;
             for (i = tempPalette.Count - 1; i >= 0; i--)
-                {
+            {
                 if ((tempPalette[i].R & 0xF8) == (sprite.RDTSpriteAlphaColour.R & 0xF8) && (tempPalette[i].G & 0xF8) == (sprite.RDTSpriteAlphaColour.G & 0xF8) && (tempPalette[i].B & 0xF8) == (sprite.RDTSpriteAlphaColour.B & 0xF8))
-                    {
+                {
                     break;
-                    }
                 }
+            }
             tempPalette[i] = Color.FromArgb(0xFF, tempPalette[i].R, tempPalette[i].G, tempPalette[i].B);
 
             alphacolourdisplay.BackColor = tempPalette[i];
@@ -357,12 +359,12 @@ namespace EPFExplorer
 
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
+            {
                 foreach (rdtSubfileData f in sprite.rdtSubfileDataList)
-                    {
+                {
                     File.WriteAllBytes(openFileDialog1.FileName + "_" + sprite.rdtSubfileDataList.IndexOf(f), f.filebytes);
-                    }
                 }
+            }
         }
 
         private void BPP_4_radioButton_CheckedChanged(object sender, EventArgs e)
@@ -379,7 +381,8 @@ namespace EPFExplorer
         {
             sprite.RDTSpriteBPP = 3;
 
-            if (BPP_3_radioButton.Checked && Visible) {
+            if (BPP_3_radioButton.Checked && Visible)
+            {
                 MessageBox.Show("Please note: 4a4bgr images cannot be imported into the game at this time.\nThey can still be viewed and exported, though!");
             }
 
@@ -405,42 +408,43 @@ namespace EPFExplorer
         private void offsetYUpDown_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-           images[curFrame].offsetY = (short)offsetYUpDown.Value;
+            images[curFrame].offsetY = (short)offsetYUpDown.Value;
             SendUpdateToRDT();
         }
 
         private void centreX_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            ChangeSpriteSetting("center",(int)centreX.Value, (int)centreY.Value, 0, 0);
+            ChangeSpriteSetting("center", (int)centreX.Value, (int)centreY.Value, 0, 0);
             SendUpdateToRDT();
         }
 
 
-        public void ChangeSpriteSetting(string settingName, int value1, int value2, int value3, int value4) {
+        public void ChangeSpriteSetting(string settingName, int value1, int value2, int value3, int value4)
+        {
 
             List<rdtSubfileData.setting> spriteSettings = sprite.rdtSubfileDataList[1].spriteSettings;
 
             if (spriteSettings == null || !ready)
-                {
+            {
                 return;
-                }
+            }
 
             foreach (rdtSubfileData.setting s in spriteSettings)
-                {
+            {
                 if (s.name == settingName)
-                    {
+                {
                     switch (s.type)
-                        {
+                    {
                         case 0x03: //bool
                             if (value1 == 1)
-                                {
+                            {
                                 s.trueOrFalse = true;
-                                }
+                            }
                             else
-                                {
+                            {
                                 s.trueOrFalse = false;
-                                }
+                            }
                             break;
                         case 0x04: //vector2
                             s.X = value1;
@@ -453,10 +457,10 @@ namespace EPFExplorer
                             s.X2 = value3;
                             s.Y2 = value4;
                             break;
-                        }
-                    return;
                     }
+                    return;
                 }
+            }
 
             //if it gets to this point, then the setting wasn't found, so create it, then run the function again.
 
@@ -464,7 +468,7 @@ namespace EPFExplorer
             newSetting.name = settingName;
 
             switch (settingName)
-                {
+            {
                 case "looping":
                 case "rotatable":
                 case "isOAMSprite":
@@ -476,45 +480,45 @@ namespace EPFExplorer
                 case "bounds":
                     newSetting.type = 0x05;
                     break;
-                }
+            }
 
             spriteSettings.Add(newSetting);
 
             ChangeSpriteSetting(settingName, value1, value2, value3, value4);
-            }
+        }
 
         private void centreY_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            ChangeSpriteSetting( "center", (int)centreX.Value, (int)centreY.Value, 0, 0);
+            ChangeSpriteSetting("center", (int)centreX.Value, (int)centreY.Value, 0, 0);
             SendUpdateToRDT();
         }
 
         private void boundsX_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            ChangeSpriteSetting("bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
             SendUpdateToRDT();
         }
 
         private void boundsX2_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            ChangeSpriteSetting("bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
             SendUpdateToRDT();
         }
 
         private void boundsY_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            ChangeSpriteSetting("bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
             SendUpdateToRDT();
         }
 
         private void boundsY2_ValueChanged(object sender, EventArgs e)
         {
             if (!ready) { return; }
-            ChangeSpriteSetting( "bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
+            ChangeSpriteSetting("bounds", (int)boundsX.Value, (int)boundsY.Value, (int)boundsX2.Value, (int)boundsY2.Value);
             SendUpdateToRDT();
         }
 
@@ -524,11 +528,11 @@ namespace EPFExplorer
 
             if (OAMSpriteCheckbox.Checked)
             {
-                ChangeSpriteSetting( "isOAMSprite", 1, 0, 0, 0);
+                ChangeSpriteSetting("isOAMSprite", 1, 0, 0, 0);
             }
             else
             {
-                ChangeSpriteSetting( "isOAMSprite", 0, 0, 0, 0);
+                ChangeSpriteSetting("isOAMSprite", 0, 0, 0, 0);
             }
             SendUpdateToRDT();
         }
@@ -539,26 +543,26 @@ namespace EPFExplorer
 
             if (loopingCheckbox.Checked)
             {
-                ChangeSpriteSetting( "looping", 1, 0, 0, 0);
+                ChangeSpriteSetting("looping", 1, 0, 0, 0);
             }
             else
             {
-                ChangeSpriteSetting( "looping", 0, 0, 0, 0);
+                ChangeSpriteSetting("looping", 0, 0, 0, 0);
             }
             SendUpdateToRDT();
         }
 
         private void rotatableCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            if(!ready){return;}
+            if (!ready) { return; }
 
             if (rotatableCheckbox.Checked)
             {
-                ChangeSpriteSetting( "rotatable", 1, 0, 0, 0);
+                ChangeSpriteSetting("rotatable", 1, 0, 0, 0);
             }
             else
             {
-                ChangeSpriteSetting( "rotatable", 0, 0, 0, 0);
+                ChangeSpriteSetting("rotatable", 0, 0, 0, 0);
             }
             SendUpdateToRDT();
         }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EPFExplorer
 {
@@ -21,7 +17,8 @@ namespace EPFExplorer
 
         public int known_tile_width = 0;
 
-        public void Load() {
+        public void Load()
+        {
 
             //check for compression
 
@@ -30,7 +27,8 @@ namespace EPFExplorer
             {
                 Console.WriteLine("we will guess at LZ11 compression");
                 filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ11());
-            } else if (filebytes[0] == 0x10)
+            }
+            else if (filebytes[0] == 0x10)
             {
                 Console.WriteLine("we will guess at LZ10 compression");
                 filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ10());
@@ -51,19 +49,20 @@ namespace EPFExplorer
 
             highest_tile_offset = 0;
 
-            for (int i = 0; i < filebytes.Length; i+=2)
+            for (int i = 0; i < filebytes.Length; i += 2)
+            {
+                int potentialHighestOffset = BitConverter.ToUInt16(filebytes, i) & 0x1FFF;
+
+                if ((BitConverter.ToUInt16(filebytes, i) & 0x2000) == 0x2000)
                 {
-                    int potentialHighestOffset = BitConverter.ToUInt16(filebytes, i) & 0x1FFF;
-
-                    if ((BitConverter.ToUInt16(filebytes, i) & 0x2000) == 0x2000) {
-                        potentialHighestOffset += 8192;
-                        }
-
-                    if (potentialHighestOffset > highest_tile_offset)
-                        {
-                        highest_tile_offset = potentialHighestOffset;
-                        }
+                    potentialHighestOffset += 8192;
                 }
+
+                if (potentialHighestOffset > highest_tile_offset)
+                {
+                    highest_tile_offset = potentialHighestOffset;
+                }
+            }
         }
     }
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace EPFExplorer
 {
@@ -17,7 +9,8 @@ namespace EPFExplorer
             InitializeComponent();
         }
 
-        public void SetInfo(string ARcode, string titleText, string forText, string sideEffectsText) {
+        public void SetInfo(string ARcode, string titleText, string forText, string sideEffectsText)
+        {
             richTextBox1.Text = ARcode;
             TitleLabel.Text = titleText;
             ForLabel.Text = forText;
