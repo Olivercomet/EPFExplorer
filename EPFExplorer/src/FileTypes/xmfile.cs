@@ -486,15 +486,15 @@ namespace EPFExplorer
                 output.Add((byte)(((pcm.Length * 2) >> 24) & 0xFF));
                 if (sample != null)
                 {
-                    output.Add((byte)(((sample.loopstart) * 4) & 0xFF));
+                    output.Add((byte)((sample.loopstart * 4) & 0xFF));
                     output.Add((byte)(((sample.loopstart * 4) >> 8) & 0xFF));
                     output.Add((byte)(((sample.loopstart * 4) >> 16) & 0xFF));
                     output.Add((byte)(((sample.loopstart * 4) >> 24) & 0xFF));
-                    
-                    output.Add((byte)((((sample.loopend) * 4) - 0x10) & 0xFF));
-                    output.Add((byte)((((sample.loopend) * 4) >> 8) & 0xFF));
-                    output.Add((byte)((((sample.loopend) * 4) >> 16) & 0xFF));
-                    output.Add((byte)((((sample.loopend) * 4) >> 24) & 0xFF));
+
+                    output.Add((byte)(((sample.loopend * 4) - 0x10) & 0xFF));
+                    output.Add((byte)(((sample.loopend * 4) >> 8) & 0xFF));
+                    output.Add((byte)(((sample.loopend * 4) >> 16) & 0xFF));
+                    output.Add((byte)(((sample.loopend * 4) >> 24) & 0xFF));
                 }
                 else
                 {
