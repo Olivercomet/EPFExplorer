@@ -1,4 +1,4 @@
-A tool for extracting/modifying the files of the Elite Penguin Force DS games.
+A tool for extracting/modifying the files of First Playable Productions DS games; mainly designed for EPF and Herbert's Revenge.
 
 ### Current features:
 
