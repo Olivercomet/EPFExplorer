@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.ComponentModel;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -36,7 +36,8 @@ namespace EPFExplorer
         string MassExportType = "PNG";
         List<TreeNode> MassExportAllChildren = new List<TreeNode>();
 
-        public enum Mode {
+        public enum Mode
+        {
             None = 0x00,
             Arc = 0x01,
             Rdt = 0x02,
@@ -269,34 +270,34 @@ namespace EPFExplorer
                         sfe.exportNewspaperImage.Enabled = true;
                         break;
                     case ".tsb":
-                        { 
-                        MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
-                        mpb_tsb_editor.form1 = this;
+                        {
+                            MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
+                            mpb_tsb_editor.form1 = this;
 
-                        mpb_tsb_editor.activeTsb = new tsbfile();
-                        mpb_tsb_editor.activeTsb.form1 = this;
-                        mpb_tsb_editor.activeTsb.filepath = openFileDialog1.FileName;
-                        mpb_tsb_editor.activeTsb.filebytes = File.ReadAllBytes(mpb_tsb_editor.activeTsb.filepath);
-                        mpb_tsb_editor.activeTsb.Load();
-                            
-                        mpb_tsb_editor.Show();
-                        MessageBox.Show("TSB loaded. Now you need to use the buttons at the bottom left to load a MPB as well.", "Success");
+                            mpb_tsb_editor.activeTsb = new tsbfile();
+                            mpb_tsb_editor.activeTsb.form1 = this;
+                            mpb_tsb_editor.activeTsb.filepath = openFileDialog1.FileName;
+                            mpb_tsb_editor.activeTsb.filebytes = File.ReadAllBytes(mpb_tsb_editor.activeTsb.filepath);
+                            mpb_tsb_editor.activeTsb.Load();
+
+                            mpb_tsb_editor.Show();
+                            MessageBox.Show("TSB loaded. Now you need to use the buttons at the bottom left to load a MPB as well.", "Success");
                         }
                         break;
                     case ".mpb":
-                        { 
-                        MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
-                        mpb_tsb_editor.form1 = this;
+                        {
+                            MPB_TSB_EditorForm mpb_tsb_editor = new MPB_TSB_EditorForm();
+                            mpb_tsb_editor.form1 = this;
 
-                        mpb_tsb_editor.activeMpb = new mpbfile();
-                        mpb_tsb_editor.activeMpb.form1 = this;
-                        mpb_tsb_editor.activeMpb.filepath = openFileDialog1.FileName;
-                        mpb_tsb_editor.activeMpb.filebytes = File.ReadAllBytes(mpb_tsb_editor.activeMpb.filepath);
-                        mpb_tsb_editor.activeMpb.editorForm = mpb_tsb_editor;
-                        mpb_tsb_editor.activeMpb.Load();
+                            mpb_tsb_editor.activeMpb = new mpbfile();
+                            mpb_tsb_editor.activeMpb.form1 = this;
+                            mpb_tsb_editor.activeMpb.filepath = openFileDialog1.FileName;
+                            mpb_tsb_editor.activeMpb.filebytes = File.ReadAllBytes(mpb_tsb_editor.activeMpb.filepath);
+                            mpb_tsb_editor.activeMpb.editorForm = mpb_tsb_editor;
+                            mpb_tsb_editor.activeMpb.Load();
 
-                        mpb_tsb_editor.Show();
-                        MessageBox.Show("MPB loaded. Now you need to use the buttons at the bottom left to load a TSB as well.","Success");
+                            mpb_tsb_editor.Show();
+                            MessageBox.Show("MPB loaded. Now you need to use the buttons at the bottom left to load a TSB as well.", "Success");
                         }
                         break;
                     case ".cmparc":
@@ -386,13 +387,14 @@ namespace EPFExplorer
             newarc.filebytes = File.ReadAllBytes(filename);
             newarc.form1 = this;
 
-            switch ((newarc.filebytes[0] & 0xF0) - 0x10) {
+            switch ((newarc.filebytes[0] & 0xF0) - 0x10)
+            {
                 case 0x00: //LZ11
                     newarc.filebytes[0] = 0x11;
                     newarc.filebytes = DSDecmp.NewestProgram.Decompress(newarc.filebytes, new DSDecmp.Formats.Nitro.LZ11());
                     break;
                 default:
-                    Console.WriteLine("don't know how to read cmparc compression type "+ ((newarc.filebytes[0] & 0xF0) - 0x10));
+                    Console.WriteLine("don't know how to read cmparc compression type " + ((newarc.filebytes[0] & 0xF0) - 0x10));
                     break;
             }
 
@@ -839,7 +841,8 @@ namespace EPFExplorer
             openFileDialog1.Multiselect = true;
             openFileDialog1.Filter = "All files (*.*)|*.*";
 
-            if (mode == Mode.Rdt){
+            if (mode == Mode.Rdt)
+            {
                 openFileDialog1.Filter = "1PP sprite files (*.sprite*)|*.sprite";
             }
 
@@ -885,9 +888,9 @@ namespace EPFExplorer
                         }
 
                         if (newfile.filename.Length == 0 && mode == Mode.Arc)
-                            {
+                        {
                             newfile.filename = "/";
-                            }
+                        }
 
                         newfile.filename += Path.GetFileName(openedFileName);
 
@@ -1134,7 +1137,14 @@ namespace EPFExplorer
         {
             archivedfile selectedFile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
 
-            ExportRdtSpriteAsPNG(selectedFile, true, "");
+            ExportRdtSpriteAsPNG(selectedFile, true, "", false);
+        }
+
+        private void asTransparentPNGImagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            archivedfile selectedFile = treeNodesAndArchivedFiles[FileTree.SelectedNode];
+
+            ExportRdtSpriteAsPNG(selectedFile, true, "", true);
         }
 
         private void deleteRDTarchivedfile_Click(object sender, EventArgs e)        //DELETE RDT ARCHIVED FILE
@@ -1150,7 +1160,7 @@ namespace EPFExplorer
             }
         }
 
-        public void ExportRdtSpriteAsPNG(archivedfile selectedFile, bool askDir, string customExportPath)
+        public void ExportRdtSpriteAsPNG(archivedfile selectedFile, bool askDir, string customExportPath, bool useTransparency)
         {
 
             bool OpenedSpriteEditorJustForThis = false;
@@ -1184,7 +1194,8 @@ namespace EPFExplorer
                 }
             }
 
-            if (customExportPath != null && customExportPath != "") {
+            if (customExportPath != null && customExportPath != "")
+            {
                 filename = customExportPath;
             }
 
@@ -1195,27 +1206,42 @@ namespace EPFExplorer
             int width = 0;
             int height = 0;
 
-            for(int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
+            Bitmap[] imgs = new Bitmap[selectedFile.spriteEditor.images.Count];
+
+            for (int i = 0; i < selectedFile.spriteEditor.images.Count; i++)
             {
                 rdtSubfileData image = selectedFile.spriteEditor.images[i];
 
-                if (image.image == null){
+                if (image.image == null)
+                {
                     image.LoadImage(GetPalette(selectedFile.spriteEditor.palettes[i].filebytes, 1, selectedFile.RDTSpriteBPP));
                 }
 
-                if (image.offsetX + image.image.Width > width) { width = image.offsetX + image.image.Width; }
-                if (image.offsetY + image.image.Height > height) { height = image.offsetY + image.image.Height; }
+                imgs[i] = image.image;
+
+                if (image.offsetX + imgs[i].Width > width) { width = image.offsetX + imgs[i].Width; }
+                if (image.offsetY + imgs[i].Height > height) { height = image.offsetY + imgs[i].Height; }
             }
 
             //create a blank template background of that size
 
             Bitmap bg = new Bitmap(width, height);
+            Color bgCol;
+
+            if (useTransparency)
+            {
+                bgCol = Color.Transparent;
+            }
+            else
+            {
+                bgCol = selectedFile.RDTSpriteAlphaColour;
+            }
 
             for (int y = 0; y < bg.Height; y++)
             {
                 for (int x = 0; x < bg.Width; x++)
                 {
-                    bg.SetPixel(x, y, selectedFile.RDTSpriteAlphaColour);
+                    bg.SetPixel(x, y, bgCol);
                 }
             }
 
@@ -1228,11 +1254,19 @@ namespace EPFExplorer
                 int offsetX = selectedFile.spriteEditor.images[i].offsetX;
                 int offsetY = selectedFile.spriteEditor.images[i].offsetY;
 
-                for (int y = 0; y < selectedFile.spriteEditor.images[i].image.Height; y++)
+                for (int y = 0; y < imgs[i].Height; y++)
                 {
-                    for (int x = 0; x < selectedFile.spriteEditor.images[i].image.Width; x++)
+                    for (int x = 0; x < imgs[i].Width; x++)
                     {
-                        frame.SetPixel(x + offsetX, y + offsetY, selectedFile.spriteEditor.images[i].image.GetPixel(x, y));
+                        Color col = imgs[i].GetPixel(x, y);
+
+                        if (useTransparency && (((col.R & 0xF8) == (selectedFile.RDTSpriteAlphaColour.R & 0xF8)) && ((col.G & 0xF8) == (selectedFile.RDTSpriteAlphaColour.G & 0xF8)) && ((col.B & 0xF8) == (selectedFile.RDTSpriteAlphaColour.B & 0xF8)) && ((col.A & 0xF8) == (selectedFile.RDTSpriteAlphaColour.A & 0xF8))))
+                        {
+                            frame.SetPixel(x + offsetX, y + offsetY, Color.Transparent);
+                        }
+                        else {
+                            frame.SetPixel(x + offsetX, y + offsetY, col);
+                        }
                     }
                 }
                 frame.Save(filename.Replace(".png", "") + "_" + (i + 1) + ".png");
@@ -1369,7 +1403,8 @@ namespace EPFExplorer
 
         public Bitmap NBFCtoImage(byte[] input, int offset, int width, int height, Color[] palette, byte bpp)  //palettes aren't always the same length, this function is designed for the image in the downloadable newsletter
         {
-            if (height == 0) {
+            if (height == 0)
+            {
                 MessageBox.Show("That tile width is too large!");
                 return null;
             }
@@ -1415,7 +1450,8 @@ namespace EPFExplorer
                     }
                 }
             }
-            else if (bpp == 3) {    //actually, it's 8bpp, with 4 bits for the colour and 4 bits for the alpha. But it is given the ID 3.
+            else if (bpp == 3)
+            {    //actually, it's 8bpp, with 4 bits for the colour and 4 bits for the alpha. But it is given the ID 3.
                 for (int y = 0; y < height; y++)
                 {
                     for (int x = 0; x < width; x++)
@@ -1437,10 +1473,10 @@ namespace EPFExplorer
                 {
                     for (int x = 0; x < width; x++)
                     {
-                       Color c = palette[input[offset + (y * width) + x] & 0x1F];
-                       c = Color.FromArgb(input[offset + (y * width) + x] & 0xE0, c.R, c.G, c.B);
+                        Color c = palette[input[offset + (y * width) + x] & 0x1F];
+                        c = Color.FromArgb(input[offset + (y * width) + x] & 0xE0, c.R, c.G, c.B);
 
-                       bm.SetPixel(x, y, c);
+                        bm.SetPixel(x, y, c);
                     }
                 }
             }
@@ -1449,7 +1485,8 @@ namespace EPFExplorer
         }
 
 
-        public Byte[] ImageToNBFC(Bitmap input, byte BPP, Color[] palette) {
+        public Byte[] ImageToNBFC(Bitmap input, byte BPP, Color[] palette)
+        {
 
             Byte[] output = new byte[0];
 
@@ -1520,7 +1557,8 @@ namespace EPFExplorer
             return 0; //if it wasn't found
         }
 
-        public class GifFrameExtraInfo{
+        public class GifFrameExtraInfo
+        {
             public int minX = 99999;
             public int minY = 99999;
             public int maxX = 0;
@@ -1542,15 +1580,15 @@ namespace EPFExplorer
             openFileDialog1.Filter = "1PP sprite data, GIF image (*.sprite, .gif)|*.sprite;*.gif";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                {
+            {
                 switch (Path.GetExtension(openFileDialog1.FileName))
                 {
                     case ".sprite":
 
                         if (fileToBeReplaced.spriteEditor != null)
-                            {
+                        {
                             fileToBeReplaced.spriteEditor.Close();
-                            }
+                        }
                         rdtfile newSprite = new rdtfile();
 
                         newSprite.arcname = Path.GetFileName(openFileDialog1.FileName);
@@ -1570,9 +1608,10 @@ namespace EPFExplorer
                             fileToBeReplaced.spriteEditor.Close();
                         }
 
-                        if (fileToBeReplaced.rdtSubfileDataList.Count == 0){
+                        if (fileToBeReplaced.rdtSubfileDataList.Count == 0)
+                        {
                             fileToBeReplaced.ReadFile();
-                            }
+                        }
 
                         Image animatedImage = Image.FromFile(openFileDialog1.FileName);
 
@@ -1584,7 +1623,7 @@ namespace EPFExplorer
                         for (int i = 0; i < animatedImage.GetFrameCount(FrameDimension.Time); i++)
                         {
                             animatedImage.SelectActiveFrame(FrameDimension.Time, i);
-                            
+
                             MemoryStream strm = new MemoryStream();
                             animatedImage.Save(strm, ImageFormat.Png);
                             framesAsBitmaps.Add((Bitmap)Image.FromStream(strm));
@@ -1594,28 +1633,30 @@ namespace EPFExplorer
                         List<Color> colors = new List<Color>();
 
                         foreach (Bitmap frame in framesAsBitmaps)
-                            {
+                        {
                             for (int y = 0; y < frame.Height; y++)
-                                {
+                            {
                                 for (int x = 0; x < frame.Width; x++)
-                                    {
+                                {
                                     Color c = frame.GetPixel(x, y);
                                     c = Color.FromArgb(0xFF, c.R & 0xF8, c.G & 0xF8, c.B & 0xF8);
 
                                     if (!colors.Contains(c))
-                                        {
+                                    {
                                         colors.Add(c);
-                                        }
                                     }
                                 }
                             }
+                        }
 
-                        if (fileToBeReplaced.RDTSpriteBPP == 4 && colors.Count > 16 && colors.Count <= 256){
+                        if (fileToBeReplaced.RDTSpriteBPP == 4 && colors.Count > 16 && colors.Count <= 256)
+                        {
                             MessageBox.Show("This gif has " + colors.Count + " colours, which exceeds the maximum colour count for a 4BPP sprite (16). If you really want to import it, change this sprite's BPP to 8, then try again.");
                             return;
                         }
 
-                        if (colors.Count > 256){
+                        if (colors.Count > 256)
+                        {
                             MessageBox.Show("Too many colours! You had: " + colors.Count + " colours. The maximum allowed is 256.");
                             return;
                         }
@@ -1630,7 +1671,7 @@ namespace EPFExplorer
 
                         Color AlphaColor = colors[alphaColorIndexForGifImport];
 
-                      
+
                         //get the overall extreme pixels of all the images that isn't the alpha colour
                         //these are going to be the boundaries from which offsets are measured etc
 
@@ -1643,21 +1684,21 @@ namespace EPFExplorer
 
                         List<GifFrameExtraInfo> extraInfo = new List<GifFrameExtraInfo>();
 
-                        for(int i = 0; i < framesAsBitmaps.Count; i++)
-                            {
+                        for (int i = 0; i < framesAsBitmaps.Count; i++)
+                        {
                             extraInfo.Add(new GifFrameExtraInfo());
-                            }
+                        }
 
-                        for(int i = 0; i < framesAsBitmaps.Count; i++)
-                            {
+                        for (int i = 0; i < framesAsBitmaps.Count; i++)
+                        {
                             for (int y = 0; y < framesAsBitmaps[i].Height; y++)
-                                {
+                            {
                                 for (int x = 0; x < framesAsBitmaps[i].Width; x++)
-                                    {
+                                {
                                     Color c = framesAsBitmaps[i].GetPixel(x, y);
 
                                     if (!((c.R & 0xF8) == (AlphaColor.R & 0xF8) && (c.G & 0xF8) == (AlphaColor.G & 0xF8) && (c.B & 0xF8) == (AlphaColor.B & 0xF8)))
-                                        {
+                                    {
                                         if (x < minX) { minX = x; }
                                         if (y < minY) { minY = y; }
                                         if (x > maxX) { maxX = x; }
@@ -1667,10 +1708,10 @@ namespace EPFExplorer
                                         if (y < extraInfo[i].minY) { extraInfo[i].minY = y; }
                                         if (x > extraInfo[i].maxX) { extraInfo[i].maxX = x; }
                                         if (y > extraInfo[i].maxY) { extraInfo[i].maxY = y; }
-                                        }
                                     }
                                 }
                             }
+                        }
 
                         //and now actually cut out and add the images
 
@@ -1681,9 +1722,9 @@ namespace EPFExplorer
                         fileToBeReplaced.RDTSpriteFrameDurations.Clear();
 
                         foreach (rdtSubfileData.setting s in fileToBeReplaced.rdtSubfileDataList[1].spriteSettings)
-                            {
+                        {
                             switch (s.name)
-                                {
+                            {
                                 case "center":
                                     s.X = framesAsBitmaps[0].Width / 2;
                                     s.Y = framesAsBitmaps[0].Height / 2;
@@ -1691,40 +1732,40 @@ namespace EPFExplorer
                                 case "bounds":
                                     s.X = minX;
                                     s.Y = minY;
-                                    s.X2 = minX+(maxX - minX)+1;
-                                    s.Y2 = minY+(maxY - minY)+1;
+                                    s.X2 = minX + (maxX - minX) + 1;
+                                    s.Y2 = minY + (maxY - minY) + 1;
                                     break;
-                                }
                             }
+                        }
 
                         for (int i = fileToBeReplaced.rdtSubfileDataList.Count - 1; i >= 0; i--)
-                            {
+                        {
                             if (fileToBeReplaced.rdtSubfileDataList[i].graphicsType == "image" || fileToBeReplaced.rdtSubfileDataList[i].graphicsType == "palette")
-                                {
+                            {
                                 fileToBeReplaced.rdtSubfileDataList.RemoveAt(i);
-                                }
                             }
+                        }
 
                         for (int i = 0; i < framesAsBitmaps.Count; i++)
-                            {
+                        {
                             fileToBeReplaced.RDTSpriteFrameDurations.Add((ushort)(frameDurations[i] * 10));
                             GifFrameExtraInfo sizes = extraInfo[i];
 
                             rdtSubfileData newGfx = new rdtSubfileData();
                             newGfx.graphicsType = "image";
                             newGfx.subfileType = 0x04;
-                            newGfx.offsetX = (short)((sizes.minX)+1);
-                            newGfx.offsetY = (short)((sizes.minY)+1);
+                            newGfx.offsetX = (short)((sizes.minX) + 1);
+                            newGfx.offsetY = (short)((sizes.minY) + 1);
 
-                            newGfx.image = new Bitmap((sizes.maxX - sizes.minX)+1, (sizes.maxY - sizes.minY)+1);
-                            
+                            newGfx.image = new Bitmap((sizes.maxX - sizes.minX) + 1, (sizes.maxY - sizes.minY) + 1);
+
                             for (int y = 0; y < newGfx.image.Height; y++)
-                                {
+                            {
                                 for (int x = 0; x < newGfx.image.Width; x++)
-                                    {
-                                    newGfx.image.SetPixel(x,y,framesAsBitmaps[i].GetPixel(sizes.minX+x,sizes.minY+y));
-                                    }
+                                {
+                                    newGfx.image.SetPixel(x, y, framesAsBitmaps[i].GetPixel(sizes.minX + x, sizes.minY + y));
                                 }
+                            }
 
                             rdtSubfileData newPal = new rdtSubfileData();
                             newPal.graphicsType = "palette";
@@ -1732,15 +1773,15 @@ namespace EPFExplorer
                             newPal.filebytes = new byte[32];    //I think this only needs to be a dummy palette
                             fileToBeReplaced.rdtSubfileDataList.Add(newPal);
                             fileToBeReplaced.rdtSubfileDataList.Add(newGfx);
-                            }
+                        }
                         if (fileToBeReplaced.spriteEditor != null)
-                            {
+                        {
                             fileToBeReplaced.spriteEditor.Close();
-                            }
+                        }
                         fileToBeReplaced.spriteEditor = null;
                         break;
-                    }
                 }
+            }
         }
 
         private void rawDataToolStripMenuItem_Click(object sender, EventArgs e) //EXPORT RDT SPRITE RAW DATA
@@ -1759,7 +1800,7 @@ namespace EPFExplorer
             forExport.RebuildRDT();
 
             targetfile = BackupArchivedfile;
-            
+
         }
 
         private void deleteArchivedFile_Click(object sender, EventArgs e)
@@ -1785,19 +1826,19 @@ namespace EPFExplorer
         private void exportToolStripMenuItem3_Click(object sender, EventArgs e) //EXPORT FROM BIN FILE
         {
             if (treeNodesAndArchivedFiles[FileTree.SelectedNode].filename.Contains(".sampleCollection"))
-                {
+            {
                 activeBin.ExportMusicSamples();
                 return;
-                }
+            }
 
             if (activeBin.binMode == binfile.binmode.sfx)
-                {
+            {
                 treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedSfx.Export();
-                }
+            }
             else
-                {
+            {
                 treeNodesAndArchivedFiles[FileTree.SelectedNode].linkedXm.Export();
-                }
+            }
         }
 
         private void replaceXM_Click(object sender, EventArgs e)
@@ -1808,15 +1849,15 @@ namespace EPFExplorer
             {
                 OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-                openFileDialog1.Title = "Replace "+ Path.GetFileName(selectedFile.filename);
+                openFileDialog1.Title = "Replace " + Path.GetFileName(selectedFile.filename);
                 openFileDialog1.CheckFileExists = true;
                 openFileDialog1.CheckPathExists = true;
                 openFileDialog1.Filter = "Extended Module (*.xm)|*.xm";
 
                 if (openFileDialog1.ShowDialog() == DialogResult.OK)
-                    {
+                {
                     selectedFile.linkedXm.Replace_With_New_XM(openFileDialog1.FileName);
-                    }
+                }
             }
             else
             {
@@ -1876,7 +1917,7 @@ namespace EPFExplorer
                     }
 
                     selectedFile.filename = Path.GetFileName(openFileDialog1.FileName) + " (" + Path.GetFileName(activeBin.filename) + selectedFile.linkedSfx.indexInBin + ")";
-                
+
                     //THE GAME ASSUMES A BLOCK ALIGNMENT OF 0xFFFF. If your imported audio file has anything else, it will sound messed up. I don't know how one would go about making WAV files with the correct block aligment. Audacity seems to decide it automatically.
                 }
             }
@@ -1884,20 +1925,20 @@ namespace EPFExplorer
 
         private void randomizeRDTSpritesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-        if (mode == Mode.Rdt)
+            if (mode == Mode.Rdt)
             {
                 DialogResult result = MessageBox.Show("Randomize the RDT sprites on next save?", "Randomize RDT sprites?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
-                    {
+                {
                     activeRdt.randomizeOnNextSave = true;
-                    }
+                }
                 else if (result == DialogResult.No)
-                    {
+                {
                     activeRdt.randomizeOnNextSave = false;
                 }
             }
-        else
+            else
             {
                 MessageBox.Show("That feature is only for RDT files!", "RDT file required", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -1908,14 +1949,14 @@ namespace EPFExplorer
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             if (activeBin.binMode == binfile.binmode.music)
-                {
+            {
                 saveFileDialog1.FileName = "Save XM files here";
-                }
+            }
             else
-                {
+            {
                 saveFileDialog1.FileName = "Save wav files here";
-                }
-            
+            }
+
             saveFileDialog1.Title = "Choose folder";
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.Filter = "Directory |directory";
@@ -1923,20 +1964,20 @@ namespace EPFExplorer
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if (activeBin.binMode == binfile.binmode.music)
-                    {
+                {
                     foreach (TreeNode node in treeNodesAndArchivedFiles.Keys)
-                        {
+                    {
                         if (treeNodesAndArchivedFiles[node].linkedXm == null)
-                            {
+                        {
                             continue;
-                            }
+                        }
 
                         treeNodesAndArchivedFiles[node].linkedXm.customExportFolder = Path.GetDirectoryName(saveFileDialog1.FileName);
                         treeNodesAndArchivedFiles[node].linkedXm.Export();
-                        }
                     }
+                }
                 else
-                    {
+                {
                     foreach (TreeNode node in treeNodesAndArchivedFiles.Keys)
                     {
                         if (treeNodesAndArchivedFiles[node].linkedSfx == null)
@@ -1965,31 +2006,33 @@ namespace EPFExplorer
             selectedFile.OpenRDTSubfileInEditor(false);
 
             if (selectedFile.spriteEditor.images.Count == 0)
-                {
+            {
                 return;
-                }
+            }
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
             saveFileDialog1.FileName = Path.GetFileName(selectedFile.filename);
 
-            saveFileDialog1.Title = "Save "+Path.GetFileName(selectedFile.filename)+" as gif file";
+            saveFileDialog1.Title = "Save " + Path.GetFileName(selectedFile.filename) + " as gif file";
             saveFileDialog1.CheckPathExists = true;
             saveFileDialog1.Filter = "GIF animation (*.gif)|*.gif|All files (*.*)|*.*";
 
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                GIFExport(selectedFile, saveFileDialog1.FileName);   
+                GIFExport(selectedFile, saveFileDialog1.FileName);
             }
 
-            if (selectedFile.spriteEditor != null){
+            if (selectedFile.spriteEditor != null)
+            {
                 selectedFile.spriteEditor.Close();
                 selectedFile.spriteEditor = null;
             }
         }
 
-        public void GIFExport(archivedfile selectedFile, string destinationFilename) {
+        public void GIFExport(archivedfile selectedFile, string destinationFilename)
+        {
 
             GetOrMakeDirectoryForFileName(destinationFilename);
 
@@ -2060,7 +2103,8 @@ namespace EPFExplorer
             activeRdt.ben10mode = true;
         }
 
-        public List<Color> GetPaletteForImage(Bitmap image) {
+        public List<Color> GetPaletteForImage(Bitmap image)
+        {
 
             List<Color> output = new List<Color>();
 
@@ -2181,7 +2225,7 @@ namespace EPFExplorer
 
             string s = input;
 
-            anotherVariation:
+        anotherVariation:
 
             output.Add(s);          //normal filename with path
 
@@ -2269,10 +2313,12 @@ namespace EPFExplorer
 
                     sfxfile newSfxFile = new sfxfile();
 
-                    if (wavFile[i] == 0x01 || wavFile[i] == 0x11){ //if not ADPCM
+                    if (wavFile[i] == 0x01 || wavFile[i] == 0x11)
+                    { //if not ADPCM
                         newSfxFile.isPCM = (wavFile[i] == 0x01);
                     }
-                    else{
+                    else
+                    {
                         MessageBox.Show("Only PCM or IMA ADPCM .wav files are allowed!\nYou can export IMA ADPCM from Audacity by choosing 'other uncompressed files' in the dropdown menu when saving the WAV file. \n(If it's not there, you may need to install FFMPEG.)");
                         continue;
                     }
@@ -2281,24 +2327,25 @@ namespace EPFExplorer
                     newSfxFile.samplerate = BitConverter.ToUInt32(wavFile, i);
 
                     //look for data chunk
-                    while (!(wavFile[i] == (byte)'d' && wavFile[i + 1] == (byte)'a' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == (byte)'a')){
+                    while (!(wavFile[i] == (byte)'d' && wavFile[i + 1] == (byte)'a' && wavFile[i + 2] == (byte)'t' && wavFile[i + 3] == (byte)'a'))
+                    {
                         i++;
                     }
 
                     i += 0x04;
 
-                    uint len = BitConverter.ToUInt32(wavFile,i);    //read length of data
+                    uint len = BitConverter.ToUInt32(wavFile, i);    //read length of data
 
                     i += 0x04;
 
                     newSfxFile.filebytes = new byte[len];
-                   
+
                     int startOfData = i;
 
                     for (i = 0; i < len; i++)
-                        {
-                            newSfxFile.filebytes[i] = wavFile[startOfData + i];
-                        }
+                    {
+                        newSfxFile.filebytes[i] = wavFile[startOfData + i];
+                    }
 
                     archivedfile newArchivedFile = new archivedfile();
 
@@ -2439,7 +2486,8 @@ namespace EPFExplorer
 
         private void exportContentsAsGIFsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MassExporter.IsBusy){
+            if (MassExporter.IsBusy)
+            {
                 MessageBox.Show("Please wait for the current export task to finish before starting another one.");
                 return;
             }
@@ -2466,12 +2514,30 @@ namespace EPFExplorer
 
         private void exportContentsAsPNGSequencesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MassExporter.IsBusy) {
+            if (MassExporter.IsBusy)
+            {
                 MessageBox.Show("Please wait for the current export task to finish before starting another one.");
                 return;
             }
 
-            MassExportTargetNode = FileTree.SelectedNode;        //get all subnodes of the selected folder and put them in a list
+            exportAsPNGsequences(FileTree.SelectedNode, false);
+        }
+
+        private void exportContentsAsTransparentPNGSequencesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MassExporter.IsBusy)
+            {
+                MessageBox.Show("Please wait for the current export task to finish before starting another one.");
+                return;
+            }
+
+            exportAsPNGsequences(FileTree.SelectedNode, true);
+        }
+
+        private void exportAsPNGsequences(TreeNode selectedNode, bool useTransparency)
+        {
+
+            MassExportTargetNode = selectedNode;        //get all subnodes of the selected folder and put them in a list
             MassExportAllChildren = new List<TreeNode>();
             AddAllChildNodesToListRecursive(MassExportTargetNode, MassExportAllChildren);
 
@@ -2486,12 +2552,17 @@ namespace EPFExplorer
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 MassExportPath = saveFileDialog1.FileName;
-                MassExportType = "PNG";
+                if (useTransparency)
+                {
+                    MassExportType = "PNGalpha";
+                }
+                else
+                {
+                    MassExportType = "PNG";
+                }
                 MassExporter.RunWorkerAsync();
             }
         }
-
-
 
         public void MassExporter_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -2504,11 +2575,11 @@ namespace EPFExplorer
 
             Console.WriteLine("background worker is ready");
 
-            if (MassExportType == "PNG")
+            if (MassExportType == "PNG" || MassExportType == "PNGalpha")
             {
                 foreach (TreeNode node in MassExportAllChildren)
                 {
-                    
+
                     if (worker.CancellationPending == true)
                     {
                         e.Cancel = true;
@@ -2526,13 +2597,14 @@ namespace EPFExplorer
                             return;
                         }
 
-                        ExportRdtSpriteAsPNG(selectedFile, false, Path.Combine(Path.Combine(Path.GetDirectoryName(MassExportPath), MassExportTargetNode.Text + "EXPORTED"), node.FullPath.Replace(MassExportTargetNode.FullPath + "\\", "")));
+                        ExportRdtSpriteAsPNG(selectedFile, false, Path.Combine(Path.Combine(Path.GetDirectoryName(MassExportPath), MassExportTargetNode.Text + "EXPORTED"), node.FullPath.Replace(MassExportTargetNode.FullPath + "\\", "")), (MassExportType == "PNGalpha"));
 
-                        if (selectedFile.spriteEditor != null) {
+                        if (selectedFile.spriteEditor != null)
+                        {
                             selectedFile.spriteEditor.Close();
                             selectedFile.spriteEditor = null;
                         }
-                        
+
                     }
                     progressBar.progressBar1.Value++;
                 }
@@ -2604,7 +2676,8 @@ namespace EPFExplorer
             {
                 SaveFileDialog saveFileDialog1 = new SaveFileDialog();
 
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK) {
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                {
                     File.WriteAllBytes(saveFileDialog1.FileName, selectedXM.filebytes);
                 }
             }
@@ -2613,5 +2686,7 @@ namespace EPFExplorer
                 MessageBox.Show("This feature is only intended for music XMs");
             }
         }
+
+
     }
 }

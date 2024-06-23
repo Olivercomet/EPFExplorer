@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
 {
     public class sfxfile
     {
-        public class envelope {
+        public class envelope
+        {
             public short[] nodes = new short[24];
             public int count;
             public byte sustainPoint;
@@ -38,7 +36,8 @@ namespace EPFExplorer
         public int indexInBin;
 
         public string customExportFolder = "";
-        public static T Clamp<T>(T val, T min, T max) where T : IComparable<T> {
+        public static T Clamp<T>(T val, T min, T max) where T : IComparable<T>
+        {
             if (val.CompareTo(min) < 0) return min;
             else if (val.CompareTo(max) > 0) return max;
             else return val;
@@ -63,18 +62,24 @@ namespace EPFExplorer
           15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794, 32767
         };
 
-        public short[] ConvertToPCM() {
-            if (isPCM) {
+        public short[] ConvertToPCM()
+        {
+            if (isPCM)
+            {
                 short[] output = new short[filebytes.Length / 2];
-                for (int i = 0; i < filebytes.Length / 2; i++) {
+                for (int i = 0; i < filebytes.Length / 2; i++)
+                {
                     output[i] = (short)(filebytes[i * 2] | (filebytes[i * 2 + 1] << 8));
                 }
                 return output;
-            } else {
+            }
+            else
+            {
                 List<short> output = new List<short>();
                 int predictor = (short)(filebytes[0] | (filebytes[1] << 8));
                 int step_index = filebytes[2], step;
-                for (int i = 4; i < filebytes.Length; i++) {
+                for (int i = 4; i < filebytes.Length; i++)
+                {
                     int diff;
                     byte nl = (byte)(filebytes[i] & 0x0f);
                     step = ima_step_table[step_index];
@@ -102,7 +107,8 @@ namespace EPFExplorer
             }
         }
 
-        public void Export() {
+        public void Export()
+        {
 
             if (filebytes != null)
             {
@@ -118,10 +124,10 @@ namespace EPFExplorer
                     saveFileDialog1.Filter = isPCM ? "PCM WAV (*.wav)|*.wav|All files (*.*)|*.*" : "ADPCM WAV (*.wav)|*.wav|All files (*.*)|*.*";
 
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                        {
+                    {
                         ConvertToWAV();
                         File.WriteAllBytes(saveFileDialog1.FileName, filebytes);
-                        }
+                    }
                 }
                 else
                 {
@@ -132,7 +138,8 @@ namespace EPFExplorer
             }
         }
 
-        public void ConvertToWAV() {
+        public void ConvertToWAV()
+        {
 
             byte[] output = new byte[(isPCM ? 0x2C : 0x3C) + filebytes.Length];
 
@@ -160,7 +167,8 @@ namespace EPFExplorer
 
             int dataOffset;
 
-            if (isPCM) {
+            if (isPCM)
+            {
                 output[0x10] = 0x10;    //fmt chunk length
                 output[0x11] = 0x00;
                 output[0x12] = 0x00;
@@ -195,7 +203,9 @@ namespace EPFExplorer
                 output[0x23] = 0x00;
 
                 dataOffset = 0x24;
-            } else {
+            }
+            else
+            {
                 output[0x10] = 0x14;    //fmt chunk length
                 output[0x11] = 0x00;
                 output[0x12] = 0x00;
@@ -208,9 +218,9 @@ namespace EPFExplorer
                 output[0x17] = 0x00;
 
                 output[0x18] = (byte)samplerate;    //sample rate
-                output[0x19] = (byte)(samplerate>>8);
-                output[0x1A] = (byte)(samplerate>>16);
-                output[0x1B] = (byte)(samplerate>>24);
+                output[0x19] = (byte)(samplerate >> 8);
+                output[0x1A] = (byte)(samplerate >> 16);
+                output[0x1B] = (byte)(samplerate >> 24);
 
                 uint samplecount = (uint)(filebytes.Length * 2);
 
@@ -254,16 +264,16 @@ namespace EPFExplorer
             }
 
             output[dataOffset] = (byte)'d';
-            output[dataOffset+1] = (byte)'a';
-            output[dataOffset+2] = (byte)'t';
-            output[dataOffset+3] = (byte)'a';
+            output[dataOffset + 1] = (byte)'a';
+            output[dataOffset + 2] = (byte)'t';
+            output[dataOffset + 3] = (byte)'a';
 
-            output[dataOffset+4] = (byte)filebytes.Length; //data size (aka, the size of filebytes from before)
-            output[dataOffset+5] = (byte)(filebytes.Length >> 8);
-            output[dataOffset+6] = (byte)(filebytes.Length >> 16);
-            output[dataOffset+7] = (byte)(filebytes.Length >> 24);
+            output[dataOffset + 4] = (byte)filebytes.Length; //data size (aka, the size of filebytes from before)
+            output[dataOffset + 5] = (byte)(filebytes.Length >> 8);
+            output[dataOffset + 6] = (byte)(filebytes.Length >> 16);
+            output[dataOffset + 7] = (byte)(filebytes.Length >> 24);
 
-            Array.Copy(filebytes, 0, output, dataOffset+8, filebytes.Length);   //copy ADPCM data into wav
+            Array.Copy(filebytes, 0, output, dataOffset + 8, filebytes.Length);   //copy ADPCM data into wav
 
             filebytes = output;
         }

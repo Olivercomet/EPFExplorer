@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -45,16 +38,20 @@ namespace EPFExplorer
 
                 listBox1.Items.Clear();
 
-                foreach (FNTfile.letter l in activeFont.letters) {
+                foreach (FNTfile.letter l in activeFont.letters)
+                {
                     listBox1.Items.Add(l.name);
                 }
             }
         }
 
-        public void SelectLetterForEdit(char letter) {
+        public void SelectLetterForEdit(char letter)
+        {
 
-            foreach (FNTfile.letter l in activeFont.letters) {
-                if (l.name == letter) {
+            foreach (FNTfile.letter l in activeFont.letters)
+            {
+                if (l.name == letter)
+                {
                     selectedLetter = l;
                     pixelBox1.Image = selectedLetter.images[0];
 
@@ -65,7 +62,8 @@ namespace EPFExplorer
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (activeFont == null) {
+            if (activeFont == null)
+            {
                 return;
             }
 

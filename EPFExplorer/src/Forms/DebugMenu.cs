@@ -1,12 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -56,16 +50,18 @@ namespace EPFExplorer
 
                     List<string> report = new List<string>();
 
-                    foreach (archivedfile f in arc1.archivedfiles) {
+                    foreach (archivedfile f in arc1.archivedfiles)
+                    {
 
-                        if (arc2.GetFileWithHash(f.hash) == null) { //if arc2 straight up doesn't have it
+                        if (arc2.GetFileWithHash(f.hash) == null)
+                        { //if arc2 straight up doesn't have it
                             string evaluatedFilename = f.filename;
                             if (f.filename == "FILENAME_NOT_SET")
                             {
                                 evaluatedFilename = f.hash.ToString();
                             }
 
-                            report.Add("File "+evaluatedFilename+ " was present in " + Path.GetFileNameWithoutExtension(arc1.filename) + ", but not " + Path.GetFileNameWithoutExtension(arc2.filename) + "!");
+                            report.Add("File " + evaluatedFilename + " was present in " + Path.GetFileNameWithoutExtension(arc1.filename) + ", but not " + Path.GetFileNameWithoutExtension(arc2.filename) + "!");
                         }
                         else
                         {
@@ -77,7 +73,8 @@ namespace EPFExplorer
                                 if (f.filebytes.Length != equivalent.filebytes.Length)
                                 { //if it's present in both, but with different filesizes
                                     string evaluatedFilename = f.filename;
-                                    if (f.filename == "FILENAME_NOT_SET") {
+                                    if (f.filename == "FILENAME_NOT_SET")
+                                    {
                                         evaluatedFilename = f.hash.ToString();
                                     }
 
@@ -96,7 +93,7 @@ namespace EPFExplorer
                             {
                                 evaluatedFilename = f.hash.ToString();
                             }
-                            report.Add("File " + evaluatedFilename + " was present in "+Path.GetFileNameWithoutExtension(arc2.filename)+ ", but not "+Path.GetFileNameWithoutExtension(arc1.filename)+"!");
+                            report.Add("File " + evaluatedFilename + " was present in " + Path.GetFileNameWithoutExtension(arc2.filename) + ", but not " + Path.GetFileNameWithoutExtension(arc1.filename) + "!");
                         }
                         //don't need to do the second part again because it was already two-way
                     }
@@ -105,8 +102,9 @@ namespace EPFExplorer
                     saveFileDialog1.Filter = ".txt files (*.txt)|*.txt";
                     saveFileDialog1.Title = "Save report";
 
-                    if (saveFileDialog1.ShowDialog() == DialogResult.OK){
-                        File.WriteAllLines(saveFileDialog1.FileName,report.ToArray());
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        File.WriteAllLines(saveFileDialog1.FileName, report.ToArray());
                     }
                 }
             }

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -12,14 +9,14 @@ namespace EPFExplorer
     public class rdtSubfileData
     {
         public rdtSubfileData()
-            {
-            }
+        {
+        }
 
         public rdtSubfileData(rdtSubfileData basis)
         {
             parentfile = basis.parentfile;
             filebytes = new byte[basis.filebytes.Length];
-            Array.Copy(basis.filebytes,0,filebytes,0,basis.filebytes.Length);
+            Array.Copy(basis.filebytes, 0, filebytes, 0, basis.filebytes.Length);
             IndexInList = basis.IndexInList;
             subfileType = basis.subfileType;
             spriteSettings = basis.spriteSettings;
@@ -35,7 +32,7 @@ namespace EPFExplorer
             image = basis.image;
 
             writeAddress = basis.writeAddress;
-            }
+        }
 
         public archivedfile parentfile;
 
@@ -51,7 +48,8 @@ namespace EPFExplorer
 
         public List<setting> spriteSettings = new List<setting>();
 
-        public class setting {
+        public class setting
+        {
             public string name = "";
             public ushort type;    //0x03 bool, 0x04 vector2, 0x05 2D rect
 
@@ -71,7 +69,8 @@ namespace EPFExplorer
             public int FFcount = 0;
         }
 
-        public void LoadSpriteSettings() {    //load sprite settings file (centre, bounds, etc)
+        public void LoadSpriteSettings()
+        {    //load sprite settings file (centre, bounds, etc)
 
             int curOffset = 6;
 
@@ -79,25 +78,25 @@ namespace EPFExplorer
             curOffset += 2;
 
             for (int i = 0; i < settingCount; i++)
-                {
+            {
                 setting newSetting = new setting();
 
                 ushort stringLength = BitConverter.ToUInt16(filebytes, curOffset);
                 curOffset += 2;
 
-                if(stringLength > filebytes.Length)
-                    {
+                if (stringLength > filebytes.Length)
+                {
                     parentfile.parentrdtfile.ben10mode = !parentfile.parentrdtfile.ben10mode;
                     spriteSettings = new List<setting>();
                     LoadSpriteSettings();
                     return;
-                    }
+                }
 
                 for (int c = 0; c < stringLength; c++)
-                    {
+                {
                     newSetting.name += (char)filebytes[curOffset];
                     curOffset++;
-                    }
+                }
 
                 newSetting.type = BitConverter.ToUInt16(filebytes, curOffset);
                 curOffset += 2;
@@ -105,31 +104,31 @@ namespace EPFExplorer
                 newSetting.FFcount = 0;
 
                 if (filebytes[curOffset] != 0xFF)
-                    {
+                {
                     newSetting.FFcount = 2;     //Hopefully this holds true for all cases. I've only seen the FFs absent on FFcount 2.
                     curOffset += 2;
-                    }
+                }
                 else
-                    {
+                {
                     while (filebytes[curOffset] == 0xFF && newSetting.FFcount < 4)
-                        {
+                    {
                         newSetting.FFcount++;
                         curOffset++;
-                        }
                     }
+                }
 
                 if (newSetting.type != 0x05 && newSetting.FFcount == 2) //If this ISN'T bounds but still only has an FFcount of 2, assume that ALL of them have an FFcount of two, meaning the bounds setting's special A & B variables do NOT apply, even though it has an FFcount of 2. But this isn't foolproof. If bounds (ID 0x05) is the first setting, it won't realise that something is wrong, and will read it incorrectly, messing up all the subsequent settings too.
-                    {
+                {
                     parentfile.parentrdtfile.ben10mode = true;
-                    }
+                }
 
                 switch (newSetting.type)
-                    {
+                {
                     case 0x03:  //bool
                         if (filebytes[curOffset] == 0x01)
-                            {
-                            newSetting.trueOrFalse = true;  
-                            }
+                        {
+                            newSetting.trueOrFalse = true;
+                        }
                         curOffset++;
                         break;
 
@@ -142,12 +141,12 @@ namespace EPFExplorer
 
                     case 0x05:  //2D rect
                         if (newSetting.FFcount == 2 && !parentfile.parentrdtfile.ben10mode)
-                            {
+                        {
                             newSetting.A = filebytes[curOffset];
                             curOffset++;
                             newSetting.B = filebytes[curOffset];
                             curOffset++;
-                            }
+                        }
 
                         newSetting.X = BitConverter.ToInt32(filebytes, curOffset);
                         curOffset += 4;
@@ -157,47 +156,48 @@ namespace EPFExplorer
                         curOffset += 4;
                         newSetting.Y2 = BitConverter.ToInt32(filebytes, curOffset);
                         curOffset += 4;
-                             
+
                         break;
                     case 0x06:   //string
                         curOffset += 2;
                         int strLength = BitConverter.ToInt16(filebytes, curOffset);
-                        curOffset+=2;
-                        
+                        curOffset += 2;
+
                         for (int c = 0; c < strLength; c++)
-                            {
+                        {
                             newSetting.str += (char)filebytes[curOffset];
                             curOffset++;
-                            }
+                        }
                         break;
                     default:
-                        MessageBox.Show("Unknown sprite setting with ID \""+newSetting.type+"\". The name was: "+newSetting.name, "Unrecognised item", MessageBoxButtons.OK);
+                        MessageBox.Show("Unknown sprite setting with ID \"" + newSetting.type + "\". The name was: " + newSetting.name, "Unrecognised item", MessageBoxButtons.OK);
                         File.WriteAllBytes("temp", filebytes);
                         break;
-                    }
-                spriteSettings.Add(newSetting);
                 }
+                spriteSettings.Add(newSetting);
+            }
         }
 
 
-        public void RebuildFilebytesFromSettings() {
+        public void RebuildFilebytesFromSettings()
+        {
 
             int size = 8;
 
             foreach (setting s in spriteSettings)
+            {
+                if (s.FFcount == 2)
                 {
-                if(s.FFcount == 2)
-                    {
                     size += 6;
-                    }
+                }
                 else
-                    {
+                {
                     size += 8;
-                    }
+                }
 
                 size += s.name.Length;
-                switch(s.type)
-                    {
+                switch (s.type)
+                {
                     case 0x03:
                         size += 1;
                         break;
@@ -206,13 +206,13 @@ namespace EPFExplorer
                         break;
                     case 0x05:
                         size += 16;
-                        if(s.FFcount == 2)
-                            {
+                        if (s.FFcount == 2)
+                        {
                             size += 2;
-                            }
+                        }
                         break;
-                    }
                 }
+            }
 
             filebytes = new byte[size];
 
@@ -220,39 +220,39 @@ namespace EPFExplorer
 
             parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)spriteSettings.Count);   //write setting count
             curOffset += 2;
-          
+
             foreach (setting s in spriteSettings)
-                {
-                parentfile.form1.WriteU16ToArray(filebytes,curOffset,(ushort)s.name.Length);    //write name length
+            {
+                parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)s.name.Length);    //write name length
                 curOffset += 2;
 
                 for (int c = 0; c < s.name.Length; c++) //write name
-                    {
+                {
                     filebytes[curOffset] = (byte)s.name[c];
                     curOffset++;
-                    }
+                }
 
                 parentfile.form1.WriteU16ToArray(filebytes, curOffset, (ushort)s.type);     //write setting type
                 curOffset += 2;
 
                 if (s.FFcount == 2)
-                    {
+                {
                     parentfile.form1.WriteU16ToArray(filebytes, curOffset, 0xFFFF);     //write FFcount 2 padding
                     curOffset += 2;
-                    }
+                }
                 else
-                    {
+                {
                     parentfile.form1.WriteU32ToArray(filebytes, curOffset, 0xFFFFFFFF);     //write FFcount 4 padding
                     curOffset += 4;
-                    }
-                
+                }
+
                 switch (s.type)
                 {
                     case 0x03:
                         if (s.trueOrFalse == true)
-                            {
+                        {
                             filebytes[curOffset] = 0x01;
-                            }
+                        }
                         curOffset++;
                         break;
                     case 0x04:
@@ -316,52 +316,54 @@ namespace EPFExplorer
         //generic functions follow
 
         public void ReadRawData(Byte[] bytes, int offset)
-            {
+        {
             if (offset > bytes.Length || offset < 0)
-                {
+            {
                 return;
-                }
+            }
 
-            subfileType = BitConverter.ToUInt16(bytes,offset);
-            int size = BitConverter.ToInt32(bytes,offset+2);
+            subfileType = BitConverter.ToUInt16(bytes, offset);
+            int size = BitConverter.ToInt32(bytes, offset + 2);
 
             if (size < 0 || size > parentfile.parentrdtfile.filebytes.Length)
-                {
+            {
                 return;
-                }
+            }
 
             filebytes = new byte[size];
-            
 
-           Array.Copy(bytes,offset+6,filebytes,0,size);
+
+            Array.Copy(bytes, offset + 6, filebytes, 0, size);
 
             DecompressLZ10IfCompressed();
 
             if (subfileType == 2)
-                {
+            {
                 LoadSpriteSettings();
-                }
             }
-        public void DecompressLZ10IfCompressed() {
+        }
+        public void DecompressLZ10IfCompressed()
+        {
             if (filebytes[0] == 0x10 && BitConverter.ToInt32(filebytes, 1) > 0)
             {
                 filebytes = DSDecmp.NewestProgram.Decompress(filebytes, new DSDecmp.Formats.Nitro.LZ10());
             }
         }
-        public void Parse() { 
+        public void Parse()
+        {
 
             if (graphicsType == "GraphicsMetadata")
-                {
+            {
                 LoadGraphicsMetadata();
                 return;
-                }
+            }
             else if (graphicsType == "GraphicsFrameDurations")
-                {
+            {
                 LoadFrameDurations();
                 return;
-                }
-        
-        switch (subfileType)
+            }
+
+            switch (subfileType)
             {
                 case 0x02:
                     graphicsType = null;
@@ -381,36 +383,39 @@ namespace EPFExplorer
             }
         }
 
-        public void LoadGraphicsMetadata() {
+        public void LoadGraphicsMetadata()
+        {
             if (filebytes == null || filebytes.Length == 0)
-                {
+            {
                 return;
-                }
+            }
 
-            parentfile.RDTSpriteNumFrames = BitConverter.ToUInt16(filebytes,0);
+            parentfile.RDTSpriteNumFrames = BitConverter.ToUInt16(filebytes, 0);
             parentfile.RDTSpriteWidth = BitConverter.ToUInt16(filebytes, 2);
             parentfile.RDTSpriteHeight = BitConverter.ToUInt16(filebytes, 4);
             parentfile.RDTSpriteBPP = filebytes[6];
         }
 
-        public void LoadFrameDurations() {
+        public void LoadFrameDurations()
+        {
 
             parentfile.RDTSpriteFrameDurations = new List<ushort>();
 
-            for (int i = 0; i < filebytes.Length; i+=2)
-                {
-                parentfile.RDTSpriteFrameDurations.Add(BitConverter.ToUInt16(filebytes,i));
-                }
+            for (int i = 0; i < filebytes.Length; i += 2)
+            {
+                parentfile.RDTSpriteFrameDurations.Add(BitConverter.ToUInt16(filebytes, i));
+            }
         }
 
-        public void LoadImage(Color[] palette) {
+        public void LoadImage(Color[] palette)
+        {
 
             width = BitConverter.ToUInt16(filebytes, 0);
             height = BitConverter.ToUInt16(filebytes, 2);
             offsetX = BitConverter.ToInt16(filebytes, 4);
             offsetY = BitConverter.ToInt16(filebytes, 6);
 
-            image = parentfile.form1.NBFCtoImage(filebytes, 8, width, height, palette,parentfile.RDTSpriteBPP);
+            image = parentfile.form1.NBFCtoImage(filebytes, 8, width, height, palette, parentfile.RDTSpriteBPP);
         }
     }
 }

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -20,7 +15,8 @@ namespace EPFExplorer
             InitializeComponent();
         }
 
-        public void Init() {
+        public void Init()
+        {
             if (colors.Count > 0)
             {
                 colorBox.BackColor = colors[form1.alphaColorIndexForGifImport];
@@ -45,9 +41,9 @@ namespace EPFExplorer
         private void decreaseButton_Click(object sender, EventArgs e)
         {
             if (form1.alphaColorIndexForGifImport > 0)
-                {
+            {
                 form1.alphaColorIndexForGifImport--;
-                }
+            }
 
             colorBox.BackColor = colors[form1.alphaColorIndexForGifImport];
         }

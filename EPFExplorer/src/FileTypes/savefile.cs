@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using DSDecmp;
 
 
 namespace EPFExplorer
@@ -26,7 +21,8 @@ namespace EPFExplorer
         public string oldOnlineName2 = ""; //so that it can be erased before the new one is put in
         public string oldOnlineName3 = ""; //so that it can be erased before the new one is put in
 
-        public enum Game {
+        public enum Game
+        {
             EPF = 0x424F4E44,       //BOND
             HR = 0x474F4C44         //GOLD
         }
@@ -267,25 +263,26 @@ namespace EPFExplorer
 
 
 
-        public string GetStringAtOffset(int offset) {
+        public string GetStringAtOffset(int offset)
+        {
 
             string output = "";
 
             while (filebytes[offset] != 0x00)
-                {
+            {
                 output += (char)filebytes[offset];
                 offset += 2;
-                }
+            }
 
             return output;
         }
 
 
         void GetUnlocks(Byte b) //for EPF at least
-            {
-            if ((b & 0x01) == 0x01) 
-            {saveFileEditor.mapUnlockable.Checked = true;}
-            else{saveFileEditor.mapUnlockable.Checked = false;}
+        {
+            if ((b & 0x01) == 0x01)
+            { saveFileEditor.mapUnlockable.Checked = true; }
+            else { saveFileEditor.mapUnlockable.Checked = false; }
 
             if ((b & 0x02) == 0x02)
             { saveFileEditor.HQteleportUnlockable.Checked = true; }
@@ -342,7 +339,7 @@ namespace EPFExplorer
         {
             currentMission = 0;
             currentMission += missionValue & 0x0001;
-            currentMission += (missionValue & 0x0002) >>1;
+            currentMission += (missionValue & 0x0002) >> 1;
             currentMission += (missionValue & 0x0004) >> 2;
             currentMission += (missionValue & 0x0008) >> 3;
             currentMission += (missionValue & 0x0010) >> 4;
@@ -360,26 +357,26 @@ namespace EPFExplorer
         }
 
         public ushort GetNewHRMissionValue(int missionIndex)   //convert the index back into a mission value
-            {
+        {
             ushort output = 0;
 
             int ORvalue = 1;
 
             for (int i = 0; i < missionIndex; i++)
-                {
+            {
                 output = (ushort)(output | ORvalue);
 
                 ORvalue *= 2;
-                }
+            }
 
             //results in a value where the number of bits set is equal to the index of the mission
 
             return output;
-            }
+        }
 
 
         public void LoadFromFile(string FileName)
-            {
+        {
             filebytes = File.ReadAllBytes(FileName);
             filepath = FileName;
 
@@ -395,7 +392,7 @@ namespace EPFExplorer
                 {
                     reader.BaseStream.Position = 0x100;
 
-                    if (reader.ReadInt32() == 0x00000000)   
+                    if (reader.ReadInt32() == 0x00000000)
                     {
                         //there's no embedded arc file
                         embeddedArc = null;
@@ -418,16 +415,16 @@ namespace EPFExplorer
                         int sizeToAddToTotalSize = reader.ReadInt32();
 
                         if (sizeToAddToTotalSize < 0)   //if it's one of those weird FF sizes (for LZ11-compressed files I guess)
-                             {
+                        {
                             sizeToAddToTotalSize += (-2 * sizeToAddToTotalSize);
-                             }
+                        }
 
                         filesize += sizeToAddToTotalSize;
 
                         while ((filesize % 4) != 0)
-                            {
+                        {
                             filesize++;
-                            }
+                        }
 
                         filesize += 4;  //account for checksum
 
@@ -438,20 +435,20 @@ namespace EPFExplorer
 
                         //the arc is then padded with 0x00 until the end of the line, and then the CRC-32 of the arc file follows.
 
-                        
+
                         GetDownloadableMissionName();
 
                         saveFileEditor.exportDownloadArc.Enabled = true;
 
 
                         if (embeddedArc.filebytes.Length > 0xF540)
-                            {
+                        {
                             extendedSaveMode = true;
-                            }
+                        }
                         else
-                            {
+                        {
                             extendedSaveMode = false;
-                            }
+                        }
                     }
 
                     //LOAD NEWSLETTER
@@ -504,7 +501,7 @@ namespace EPFExplorer
                     for (int i = 0; i < ItemsEPF.Length; i++)
                     {
                         saveFileEditor.inventoryBox.Items.Add(ItemsEPF[i]);
-                        if (reader.ReadByte() == 0x01) { saveFileEditor.inventoryBox.SetItemChecked(i,true);}
+                        if (reader.ReadByte() == 0x01) { saveFileEditor.inventoryBox.SetItemChecked(i, true); }
                     }
 
 
@@ -619,14 +616,14 @@ namespace EPFExplorer
                     saveFileEditor.currentMissionChooser.Items.Clear();
 
                     foreach (string s in MissionNamesHR)
-                        {
+                    {
                         saveFileEditor.currentMissionChooser.Items.Add(s);
-                        }
+                    }
 
                     while (currentMission > saveFileEditor.currentMissionChooser.Items.Count - 1)
-                        {
+                    {
                         saveFileEditor.currentMissionChooser.Items.Add("Dummy mission");
-                        }
+                    }
 
                     saveFileEditor.currentMissionChooser.SelectedIndex = currentMission;
 
@@ -645,19 +642,20 @@ namespace EPFExplorer
                 {
                     filepath = null;
                     filebytes = null;
-                MessageBox.Show("That is not a Club Penguin DS save file!", "File magic not recognised", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                saveFileEditor.importDownloadArc.Enabled = false;
+                    MessageBox.Show("That is not a Club Penguin DS save file!", "File magic not recognised", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    saveFileEditor.importDownloadArc.Enabled = false;
                 }
             }
         }
 
-        public void SaveToFile(){  //========================== WRITING TO A NEW FILE FOLLOWS ==========================
+        public void SaveToFile()
+        {  //========================== WRITING TO A NEW FILE FOLLOWS ==========================
 
             if (filepath == null)
-                {
+            {
                 MessageBox.Show("You need to open a valid save file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
-                }
+            }
 
             Byte[] checksumArea;
             uint checksum;
@@ -683,7 +681,7 @@ namespace EPFExplorer
                 WriteU32ToArray(filebytes, 0xF704, (uint)saveFileEditor.lifetimeCoins.Value); //lifetime coins
 
                 //WRITE MINIGAME HIGH SCORES
-                WriteU32ToArray(filebytes,0xF708,(uint)saveFileEditor.highScore1.Value); //snowboarding
+                WriteU32ToArray(filebytes, 0xF708, (uint)saveFileEditor.highScore1.Value); //snowboarding
                 WriteU32ToArray(filebytes, 0xF710, (uint)saveFileEditor.highScore2.Value); //cart surfer
                 WriteU32ToArray(filebytes, 0xF70C, (uint)saveFileEditor.highScore3.Value); //ice fishing
                 WriteU32ToArray(filebytes, 0xF714, (uint)saveFileEditor.highScore5.Value); //dance challenge
@@ -702,17 +700,17 @@ namespace EPFExplorer
 
                 //ERASE OLD ONLINE NAMES (otherwise, if the new names are shorter, it won't overwrite the entire lengths of the old names)
                 for (int i = 0; i < oldOnlineName1.Length * 2; i++)
-                    {
+                {
                     filebytes[0xF73A + i] = 0x00;
-                    }
+                }
                 for (int i = 0; i < oldOnlineName2.Length * 2; i++)
-                    {
+                {
                     filebytes[0xF754 + i] = 0x00;
-                    }
+                }
                 for (int i = 0; i < oldOnlineName3.Length * 2; i++)
-                    {
+                {
                     filebytes[0xF76E + i] = 0x00;
-                    }
+                }
 
                 //WRITE NEW ONLINE NAMES
                 WriteU16StringToArray(filebytes, 0xF73A, saveFileEditor.onlineName1.Text);
@@ -739,7 +737,7 @@ namespace EPFExplorer
                 //However, the initial availability of the mission is somewhere else.
                 //supposedly a bitfield, here are the bitmasks for now:
 
-                
+
                 //0x0001: A Wrench in the Works (ski village)
                 //0x0002: Cart surfing mission (mine)
                 //0x0004: Tour guide lost in forest mission (forest)
@@ -786,7 +784,7 @@ namespace EPFExplorer
                 int unlocks = 0x00;
 
                 if (saveFileEditor.mapUnlockable.Checked)
-                    {unlocks = unlocks | 0x01;}
+                { unlocks = unlocks | 0x01; }
 
                 if (saveFileEditor.HQteleportUnlockable.Checked)
                 { unlocks = unlocks | 0x02; }
@@ -801,23 +799,23 @@ namespace EPFExplorer
 
 
                 if (embeddedArc == null || (embeddedArc != null && embeddedArc.filebytes.Length < 0xC860))
-                    {
+                {
                     //if it's safe to write the newsletter, do so
 
                     //write the text
 
                     for (int i = 0; i < 0x96; i++)
-                        {
+                    {
                         if (i < saveFileEditor.topStoryBox.Text.Length)
-                            {
-                            filebytes[0xC960 + (i * 2)] = (byte)saveFileEditor.topStoryBox.Text[i]; 
-                            }
-                        else 
-                            {
-                            filebytes[0xC960 + (i * 2)] = 0x00;
-                            }
-                        filebytes[0xC961 + (i * 2)] = 0x00;
+                        {
+                            filebytes[0xC960 + (i * 2)] = (byte)saveFileEditor.topStoryBox.Text[i];
                         }
+                        else
+                        {
+                            filebytes[0xC960 + (i * 2)] = 0x00;
+                        }
+                        filebytes[0xC961 + (i * 2)] = 0x00;
+                    }
 
                     for (int i = 0; i < 0x96; i++)
                     {
@@ -882,16 +880,16 @@ namespace EPFExplorer
 
                     checksum = Crc32.Compute(checksumArea);
                     WriteU32ToArray(filebytes, endOfDownloadArc, checksum);
-                    }
+                }
 
                 //CHECKSUM CALCULATION EPF
 
                 int checksumAreaSize = 0xF700;
 
                 if (extendedSaveMode)
-                    {
+                {
                     checksumAreaSize = 0xFF00;
-                    }
+                }
 
                 checksumArea = new Byte[checksumAreaSize];
 
@@ -900,10 +898,10 @@ namespace EPFExplorer
                 checksum = Crc32.Compute(checksumArea);
                 WriteU32ToArray(filebytes, 0x0C, checksum);
             }
-        else if (game == Game.HR)   //============ HERBERT'S REVENGE ============
+            else if (game == Game.HR)   //============ HERBERT'S REVENGE ============
             {
                 //WRITE NEW COINS
-                WriteU32ToArray(filebytes,0x28,(uint)saveFileEditor.coinsChooser.Value);
+                WriteU32ToArray(filebytes, 0x28, (uint)saveFileEditor.coinsChooser.Value);
 
                 //ERASE OLD PENGUIN NAME (otherwise, if the new name is shorter, it won't overwrite the entire length old name)
                 for (int i = 0; i < oldPenguinName.Length * 2; i++)
@@ -939,18 +937,19 @@ namespace EPFExplorer
                 //CHECKSUM CALCULATION HR
 
                 checksumArea = new Byte[0x130];
-                
-                Array.Copy(filebytes,0x20,checksumArea,0x0,0x130);
+
+                Array.Copy(filebytes, 0x20, checksumArea, 0x0, 0x130);
 
                 checksum = Crc32.Compute(checksumArea);
-                WriteU32ToArray(filebytes,0x08,checksum);
+                WriteU32ToArray(filebytes, 0x08, checksum);
             }
 
             File.WriteAllBytes(filepath, filebytes);
         }
 
 
-        public void WriteU16ToArray(Byte[] array, int offset, ushort input) {
+        public void WriteU16ToArray(Byte[] array, int offset, ushort input)
+        {
 
             array[offset] = (byte)(input & 0x00FF);
             array[offset + 1] = (byte)((input & 0xFF00) >> 8);
@@ -966,29 +965,30 @@ namespace EPFExplorer
 
         public void WriteU16StringToArray(Byte[] array, int offset, string input)
         {
-        for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-            array[offset + (i * 2)] = (byte)input[i];
-            array[offset + (i * 2) + 1] = 0x00;
+                array[offset + (i * 2)] = (byte)input[i];
+                array[offset + (i * 2) + 1] = 0x00;
             }
-        array[offset + (input.Length * 2)] = 0x00;
-        array[offset + (input.Length * 2) + 1] = 0x00;
+            array[offset + (input.Length * 2)] = 0x00;
+            array[offset + (input.Length * 2) + 1] = 0x00;
         }
 
-        public void GetDownloadableMissionName() {
+        public void GetDownloadableMissionName()
+        {
 
             archivedfile downloadstrings = embeddedArc.GetFileByName("/strings/downloadstrings.st");
 
             if (downloadstrings == null)
-                {
+            {
                 Console.WriteLine("downloadstrings was not found in that arc!");
                 saveFileEditor.downloadableMissionNameDisplay.Text = "Downloadable Mission: No name found";
-                }
+            }
             else
-                {
+            {
                 downloadstrings.ReadFile();
                 saveFileEditor.downloadableMissionNameDisplay.Text = "Downloadable Mission: " + downloadstrings.STstrings[0];
-                }
+            }
         }
 
         public void SetAuthorDetails()
@@ -1015,7 +1015,7 @@ namespace EPFExplorer
 
                 if (splitAuthorFile.Length > 1)
                 {
-                    saveFileEditor.authorNote.Text = "Author's note: " + splitAuthorFile[1].Replace("[newline]","\n");
+                    saveFileEditor.authorNote.Text = "Author's note: " + splitAuthorFile[1].Replace("[newline]", "\n");
                 }
             }
         }

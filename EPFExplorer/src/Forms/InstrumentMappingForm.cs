@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace EPFExplorer
 {
@@ -17,7 +9,8 @@ namespace EPFExplorer
             InitializeComponent();
         }
 
-        public void InitializeLists(xmfile xm) {
+        public void InitializeLists(xmfile xm)
+        {
 
             sourceInstrumentsBox.Items.Clear();
 
@@ -30,7 +23,7 @@ namespace EPFExplorer
 
             for (int i = 0; i < xm.parentbinfile.samplecount; i++)
             {
-                IngameInstrumentsBox.Items.Add("Instrument_"+i);
+                IngameInstrumentsBox.Items.Add("Instrument_" + i);
             }
         }
     }

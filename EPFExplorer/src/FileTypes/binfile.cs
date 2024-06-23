@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EPFExplorer
@@ -39,9 +36,10 @@ namespace EPFExplorer
 
         int offset_of_end_of_index_table = 0;
 
-        public enum binmode { 
-        sfx = 0x00,
-        music = 0x01
+        public enum binmode
+        {
+            sfx = 0x00,
+            music = 0x01
         }
 
         public void ReadMusicBin()
@@ -49,11 +47,11 @@ namespace EPFExplorer
             using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
             {
                 filemagic = reader.ReadUInt16();
-                   
+
                 if (filemagic == 0x0103)
-                    {
+                {
                     isHR = true;
-                    }
+                }
 
                 samplecount = reader.ReadByte();
                 filecount = reader.ReadByte();  //music file count
@@ -77,13 +75,13 @@ namespace EPFExplorer
                 for (int i = 0; i < xmfiles.Count; i++)
                 {
                     if (i < xmfiles.Count - 1)
-                        {
+                    {
                         xmfiles[i].size = xmfiles[i + 1].offset - xmfiles[i].offset;
-                        }
+                    }
                     else
-                        {
+                    {
                         xmfiles[i].size = (uint)(filebytes.Length - xmfiles[i].offset); //it might be bigger than its intended size, but it won't matter once it's exported to XM
-                        }
+                    }
 
                     reader.BaseStream.Position = xmfiles[i].offset;
 
@@ -96,31 +94,32 @@ namespace EPFExplorer
 
 
                 if (xmfiles.Count >= 3 && xmfiles[2].offset == 2054556)
-                    {
+                {
                     ApplyEPFMusicFileNames();
-                    }
+                }
                 else if (xmfiles.Count >= 3 && xmfiles[2].offset == 2339468)
-                    {
+                {
                     ApplyHRMusicFileNames();
-                    }
+                }
                 else if (xmfiles.Count >= 3 && xmfiles[2].offset == 2041152)
                 {
                     ApplyZCCOSMusicFileNames();
                 }
                 else
-                    {
+                {
                     foreach (xmfile xm in xmfiles)
-                        {
+                    {
                         xm.name = Path.GetFileName(filename) + xm.offset;
-                        }
                     }
+                }
 
 
                 samples = new sfxfile[samplecount];
 
                 int pos = offset_of_end_of_index_table;
 
-                for (int i = 0; i < samplecount; i++) {
+                for (int i = 0; i < samplecount; i++)
+                {
 
                     sfxfile newSample = new sfxfile();
 
@@ -183,7 +182,8 @@ namespace EPFExplorer
 
                     // Hot-patch for Snake Game samples, which have the wrong transpose
                     // (also changing finetune since that seems to make it sound better)
-                    if (isHR) {
+                    if (isHR)
+                    {
                         if (i == 54 || i == 58 || i == 59) newSample.transpose--;
                         if (i == 54 || i == 57 || i == 58 || i == 59) newSample.defaultpan = 0x80;
                         if (i == 54) newSample.finetune = -16;
@@ -195,15 +195,17 @@ namespace EPFExplorer
                     newSample.volenv.sustainPoint = filebytes[pos + 3];
                     newSample.volenv.loopStart = filebytes[pos + 4];
                     newSample.volenv.loopEnd = filebytes[pos + 5];
-                    for (int j = 0; j < 24; j++) {
-                        newSample.volenv.nodes[j] = (short)(filebytes[pos + j*2 + 6] | (filebytes[pos + j * 2 + 7] << 8));
+                    for (int j = 0; j < 24; j++)
+                    {
+                        newSample.volenv.nodes[j] = (short)(filebytes[pos + j * 2 + 6] | (filebytes[pos + j * 2 + 7] << 8));
                     }
 
                     newSample.panenv.count = filebytes[pos + 54];
                     newSample.panenv.sustainPoint = filebytes[pos + 55];
                     newSample.panenv.loopStart = filebytes[pos + 56];
                     newSample.panenv.loopEnd = filebytes[pos + 57];
-                    for (int j = 0; j < 24; j++) {
+                    for (int j = 0; j < 24; j++)
+                    {
                         newSample.panenv.nodes[j] = (short)(filebytes[pos + j * 2 + 58] | (filebytes[pos + j * 2 + 59] << 8));
                     }
 
@@ -216,12 +218,13 @@ namespace EPFExplorer
                     Array.Copy(filebytes, pos, newSample.filebytes, 0, length);
                     newSample.offset = offset;
                     pos += length;
-                    
+
 
                     samples[i] = newSample;
-                    }
+                }
 
-                foreach (xmfile xm in xmfiles) {
+                foreach (xmfile xm in xmfiles)
+                {
                     xm.samples = new List<sfxfile>(samples);
                 }
             }
@@ -232,9 +235,9 @@ namespace EPFExplorer
             using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
             {
                 filemagic = reader.ReadUInt16();
-               
+
                 filecount = reader.ReadUInt16();
-                
+
                 for (int i = 0; i < filecount; i++)
                 {
                     sfxfile newsfxfile = new sfxfile();
@@ -243,10 +246,10 @@ namespace EPFExplorer
                     newsfxfile.offset = reader.ReadUInt32();
                     newsfxfile.sizedividedby4 = reader.ReadUInt32();
                     if (filemagic == 0x0103)    //hr only
-                        {
+                    {
                         isHR = true;
                         reader.BaseStream.Position += 0x04;
-                        }
+                    }
                     newsfxfile.samplerate = reader.ReadUInt16();
                     newsfxfile.indexInBin = i;
                     newsfxfile.isPCM = reader.ReadUInt16() != 2;    //because 0x02 is ADPCM format
@@ -277,19 +280,20 @@ namespace EPFExplorer
             saveFileDialog1.Filter = "ADPCM WAV (*.wav)|*.wav|All files (*.*)|*.*";
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                {
+            {
                 for (int i = 0; i < samples.Length; i++)
-                    {
+                {
                     if (samples[i] != null)
-                        {
+                    {
                         samples[i].ConvertToWAV();
-                        File.WriteAllBytes(saveFileDialog1.FileName.Replace(".wav","")+"_"+i+".wav", samples[i].filebytes);
-                        }
+                        File.WriteAllBytes(saveFileDialog1.FileName.Replace(".wav", "") + "_" + i + ".wav", samples[i].filebytes);
                     }
                 }
+            }
         }
 
-        public void ApplyEPFMusicFileNames() {
+        public void ApplyEPFMusicFileNames()
+        {
 
             for (int i = 0; i < xmfiles.Count; i++)
             {
@@ -297,12 +301,13 @@ namespace EPFExplorer
             }
         }
 
-        public void ApplyHRMusicFileNames() { 
-        
+        public void ApplyHRMusicFileNames()
+        {
+
             for (int i = 0; i < xmfiles.Count; i++)
-                {
+            {
                 xmfiles[i].name = MusicNamesHR[i] + ".xm";
-                }
+            }
 
         }
         public void ApplyZCCOSMusicFileNames()
@@ -427,16 +432,18 @@ namespace EPFExplorer
 
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    File.WriteAllBytes(saveFileDialog1.FileName,output);
+                    File.WriteAllBytes(saveFileDialog1.FileName, output);
                 }
             }
         }
 
-        public class potentialNewInstrument {
+        public class potentialNewInstrument
+        {
             public xmfile xm;
             public xmfile.InstrumentForImport instrument;
         }
-        public List<byte> RebuildMusicDataSections() {
+        public List<byte> RebuildMusicDataSections()
+        {
 
             List<byte> rowData = new List<byte>();
             List<byte> songInfos = new List<byte>();
@@ -446,39 +453,39 @@ namespace EPFExplorer
             List<int> partialSongInfoOffsets = new List<int>();
 
             foreach (xmfile xm in xmfiles)
-                {
+            {
                 partialSongInfoOffsets.Add(songInfos.Count);
 
                 songInfos.AddRange(xm.MakeEPFXMHeader());
 
                 foreach (xmfile.Pattern p in xm.patterns)
-                    {
+                {
                     songInfos.Add((byte)p.number_of_rows);
                     songInfos.Add((byte)(p.number_of_rows >> 8));
                     songInfos.Add((byte)(p.number_of_rows >> 16));
                     songInfos.Add((byte)(p.number_of_rows >> 24));
 
                     for (int i = 0; i < p.number_of_rows; i++)
-                        {
+                    {
                         bool emptyRow = true;
 
                         foreach (byte b in p.rows[i])
-                            {
+                        {
                             if (b != 0x80)
-                                {
+                            {
                                 emptyRow = false;
                                 break;
-                                }
                             }
+                        }
 
                         if (emptyRow)   //if the row is empty, just add FFs instead of an offset
-                            {
+                        {
                             songInfos.Add(0xFF);
                             songInfos.Add(0xFF);
                             songInfos.Add(0xFF);
                             songInfos.Add(0xFF);
                             continue;
-                            }
+                        }
 
                         //but if the row isn't empty, convert the row data to EPF format, add it to the row data list and store its offset here
 
@@ -492,14 +499,14 @@ namespace EPFExplorer
                         songInfos.Add((byte)(offset_in_row_data >> 8));
                         songInfos.Add((byte)(offset_in_row_data >> 16));
                         songInfos.Add((byte)(offset_in_row_data >> 24));
-                        }
-                    }
-
-                foreach (xmfile.InstrumentForImport instr in xm.usedInstrumentsOnImport)  //add its instruments for consideration
-                    {
-                    potentialNewInstruments.Add(new potentialNewInstrument (){ instrument = instr, xm = xm});
                     }
                 }
+
+                foreach (xmfile.InstrumentForImport instr in xm.usedInstrumentsOnImport)  //add its instruments for consideration
+                {
+                    potentialNewInstruments.Add(new potentialNewInstrument() { instrument = instr, xm = xm });
+                }
+            }
 
             //correct the row data section size at the start of music.bin
 
@@ -511,7 +518,7 @@ namespace EPFExplorer
             //correct the song info offsets at the start of music.bin
 
             for (int i = 0; i < xmfiles.Count; i++)
-                {
+            {
                 int offset = 0x10 + (4 * i);
 
                 uint offset_of_songInfo = offsetOfMusicInstructionData + (uint)rowData.Count + (uint)partialSongInfoOffsets[i];
@@ -520,7 +527,7 @@ namespace EPFExplorer
                 filebytes[offset + 1] = (byte)(offset_of_songInfo >> 8);
                 filebytes[offset + 2] = (byte)(offset_of_songInfo >> 16);
                 filebytes[offset + 3] = (byte)(offset_of_songInfo >> 24);
-                }
+            }
 
 
             List<byte> output = new List<byte>();
