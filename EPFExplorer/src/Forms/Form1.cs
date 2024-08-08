@@ -68,6 +68,36 @@ namespace EPFExplorer
             stringsEPF.Add("/WifiLogos.rdt");
             stringsEPF.Add("/BlackList.txt");
 
+            string[] langs = new string[] { "English", "Spanish", "Italian", "French", "German", "Dutch", "Japanese", "Chinese", "Korean", "Hangul", "Norwegian", "Swedish", "UKEnglish"};
+
+            List<string> levelsLanguagePermutations = new List<string>();
+
+            foreach (string s in stringsEPF)
+            {
+                if (s.Contains("/levels/"))
+                {
+                    foreach (string lang in langs)
+                    {
+                        levelsLanguagePermutations.Add(s.Replace("/levels/", "/levels/" + lang + "/"));
+                    }
+                }
+            }
+            foreach (string s in stringsHR)
+            {
+                if (s.Contains("/levels/"))
+                {
+                    foreach (string lang in langs)
+                    {
+                        levelsLanguagePermutations.Add(s.Replace("/levels/", "/levels/" + lang + "/"));
+                    }
+                }
+            }
+
+            foreach (string entry in levelsLanguagePermutations)
+            {
+                stringsEPF.Add(entry);
+            }
+
             extensions.Add(".txt");
             extensions.Add(".st");
             extensions.Add(".char");
@@ -1368,12 +1398,12 @@ namespace EPFExplorer
                                 {
                                     string childfilename = treeNodesAndArchivedFiles[child].filename;
                                     string replacementPathSection = e.Node.FullPath.Replace(FileTree.Nodes[0].Text, "").Replace('\\', '/');
-                                    Console.WriteLine(replacementPathSection);
-                                    Console.WriteLine(childfilename);
+                                    //Console.WriteLine(replacementPathSection);
+                                    //Console.WriteLine(childfilename);
                                     childfilename = childfilename.Replace(Path.GetDirectoryName(childfilename).Replace('\\', '/'), replacementPathSection);
                                     treeNodesAndArchivedFiles[child].filename = childfilename;
 
-                                    Console.WriteLine("new child filename: " + childfilename);
+                                    //Console.WriteLine("new child filename: " + childfilename);
                                 }
                             }
                         }

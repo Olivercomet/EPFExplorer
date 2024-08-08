@@ -81,9 +81,6 @@ namespace EPFExplorer
             }
         }
 
-
-
-
         public void ExportFolder(TreeNode topnode)
         {
             NodesForBatchExport = new List<TreeNode>();
@@ -163,7 +160,6 @@ namespace EPFExplorer
             return null;
         }
 
-
         public void ExportAll()
         {
 
@@ -232,7 +228,7 @@ namespace EPFExplorer
             {
                 if (archivedfiles[targetFileIndex].filename != "FILENAME_NOT_SET")
                 {
-                    Console.WriteLine(archivedfiles[targetFileIndex].filename + " and " + s_for_filename + " are contesting the same hash!");
+                    //Console.WriteLine(archivedfiles[targetFileIndex].filename + " and " + s_for_filename + " are contesting the same hash!");
                 }
 
                 number_of_filenames_successfully_applied++;
@@ -258,7 +254,7 @@ namespace EPFExplorer
 
             string s_for_filename = s;
 
-            Console.WriteLine(s);
+            //Console.WriteLine(s);
 
             //ok, this bit is actually pretty fragile. I changed it once and half the filenames disappeared. Maybe don't change it.
 
