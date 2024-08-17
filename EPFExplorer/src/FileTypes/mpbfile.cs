@@ -19,9 +19,7 @@ namespace EPFExplorer
 
         public void Load()
         {
-
             //check for compression
-
 
             if (filebytes[0] == 0x11)
             {

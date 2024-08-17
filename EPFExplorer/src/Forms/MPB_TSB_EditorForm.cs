@@ -35,6 +35,12 @@ namespace EPFExplorer
 
             public bool hasSimilarTile = false;
             public Tile SimilarTile;    //the master tile that this one stores a reference to. (although this one can still have its own unique flipping etc)
+
+            public void fill8x8ImageWithAlphaColour() {
+                for (int i = 0; i < 64; i++) {
+                    tileImage[i] = 0; //where 0 is always the index of the alpha colour
+                }                        
+            }
         }
 
         public Dictionary<string, int> MPBFilesAndWidthsInTiles = new Dictionary<string, int>()
@@ -419,8 +425,11 @@ namespace EPFExplorer
 
                 int pos = 0;
 
-
                 List<Tile> uniqueTiles = new List<Tile>();
+
+                Tile boilerplateAlphaTile = new Tile();
+                boilerplateAlphaTile.fill8x8ImageWithAlphaColour();
+                uniqueTiles.Add(boilerplateAlphaTile);
 
                 for (int y = 0; y < height_in_tiles; y++)
                 {
@@ -486,7 +495,6 @@ namespace EPFExplorer
                 }
 
                 //now we should have a list of tiles, some of which are mirrors of each other if applicable
-
 
                 activeTsb.filebytes = new byte[0x200 + (uniqueTiles.Count * 64)];
 

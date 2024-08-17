@@ -15,11 +15,8 @@ namespace EPFExplorer
 
         public int number_of_tiles;
 
-
-
         public void Load()
         {
-
             palette = new Color[256];   //create palette and fill it with the colours from the tsb
 
             for (int i = 0; i < 256; i++)
