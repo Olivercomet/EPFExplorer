@@ -224,6 +224,13 @@ namespace EPFExplorer
         public void SetArchivedFileName(int targetFileIndex, string s_for_filename)
         {
 
+            //foreach (string lang in form1.langs) {
+            //    string firstTwo = "_"+lang.Substring(0, 2).ToLower();
+            //    if (s_for_filename.ToLower().Contains(firstTwo)) {
+             //       form1.masterListOfSuccessfulMultilangSuffixNames += "\"" + s_for_filename + "\"";
+            //    }            
+           // }
+
             if (targetFileIndex < filecount)
             {
                 if (archivedfiles[targetFileIndex].filename != "FILENAME_NOT_SET")
@@ -243,8 +250,6 @@ namespace EPFExplorer
 
         public void TryToFindFilename(string s)
         {
-
-
             foundMatch = false;
 
             s = s.Replace("/scripts/", "/chunks/");
@@ -477,6 +482,8 @@ namespace EPFExplorer
                     TryToFindFilename(s);
                 }
             }
+
+            //Console.WriteLine(form1.masterListOfSuccessfulMultilangSuffixNames);
 
             //if tuxedoDL exists in this arc, read some lua filenames out of it
             archivedfile tuxedoDL = GetFileByName("/chunks/tuxedoDL.luc");
