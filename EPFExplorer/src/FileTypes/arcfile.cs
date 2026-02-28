@@ -421,6 +421,11 @@ namespace EPFExplorer
                 endOfOriginalFileData++;
             }
 
+            while (endOfOriginalFileData % 0x04 == 0 && endOfOriginalFileData <= filebytes.Length - 4 && form1.readU32FromArray(filebytes, endOfOriginalFileData) == 0) // to account for proto builds of HR, skip the null data that can sometimes occur in the region that I previously repurposed as a filename table
+            {
+                endOfOriginalFileData += 4;
+            }
+            
             endOfOriginalFileData += 4; //skip checksum
 
             byte[] customFilenameTable = null;
